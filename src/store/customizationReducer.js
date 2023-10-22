@@ -64,7 +64,8 @@ export const initialState = {
   notificationCount: 0,
   pageSize: 10,
   infoHocSinh: null,
-  report: []
+  report: [],
+  up_vbcc: ''
 };
 
 // ==============================|| CUSTOMIZATION REDUCER ||============================== //
@@ -446,6 +447,11 @@ const customizationReducer = (state = initialState, action) => {
       return {
         ...state,
         isNew: action.isNew
+      };
+    case actionTypes.UPDATE_VBCC:
+      return {
+        ...state,
+        up_vbcc: action.up_vbcc
       };
     // Default
     default:

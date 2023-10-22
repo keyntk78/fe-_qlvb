@@ -68,6 +68,7 @@ export const NOTIFICATION_COUNT = '@customization/NOTIFICATION_COUNT';
 export const PAGE_SIZE = '@customization/PAGE_SIZE';
 export const SELECTED_INFO_MESSAGE = '@customization/SELECTED_INFO_MESSAGE';
 export const INFO_HOCSINH = '@customization/INFO_HOCSINH';
+export const UPDATE_VBCC = '@customization/UPDATE_VBCC';
 
 // actions.js
 export const setUsers = (data) => ({ type: SET_USERS, users: data });
@@ -157,4 +158,8 @@ export const setDonvi = (donvi) => ({
 export const userLogin = (user) => ({
   type: USER_LOGIN,
   user: user
+});
+export const upDateVBCC = (up_vbcc) => ({
+  type: UPDATE_VBCC,
+  up_vbcc: up_vbcc
 });
