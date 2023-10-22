@@ -10,7 +10,7 @@ import { setLoading, setOpenPopup, showAlert } from 'store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { IconFilePlus } from '@tabler/icons';
 import { useTranslation } from 'react-i18next';
-import { getAllDanhmucTN } from 'services/danhmuctotnghiepService';
+import { getAllDanhmucTN } from 'services/sharedService';
 import { getAllKhoathiByDMTN } from 'services/khoathiService';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 
@@ -33,7 +33,7 @@ function Import() {
     const fetchDataDL = async () => {
       try {
         dispatch(setLoading(true));
-        const danhmuc = await getAllDanhmucTN();
+        const danhmuc = await getAllDanhmucTN(user ? user.username : '');
         const dataDM = danhmuc.data;
         setDataDMTNs(dataDM);
         setSelectDanhmuc(dataDM && dataDM.length > 0 ? dataDM[0].id : '');

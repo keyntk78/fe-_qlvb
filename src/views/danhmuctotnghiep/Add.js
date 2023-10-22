@@ -20,6 +20,7 @@ import InputForm1 from 'components/form/InputForm1';
 import InputForm from 'components/form/InputForm';
 import { getAllHinhthucdaotao } from 'services/hinhthucdaotaoService';
 import SelectForm from 'components/form/SelectForm';
+import { getAllHeDaoTao } from 'services/sharedService';
 
 const Add = () => {
   const isXs = useMediaQuery('(max-width:800px)');
@@ -32,12 +33,15 @@ const Add = () => {
   const [pageState, setPageState] = useState({
     isLoading: false,
     namThi: [],
-    hinhthucdaotao: []
+    hinhthucdaotao: [],
+    hedaotao: []
   });
   const formik = useFormik({
     initialValues: {
       IdNamThi: '',
       IdHinhThucDaoTao: '',
+      MaHeDaoTao: '',
+      TenKyThi: '',
       TieuDe: '',
       GhiChu: '',
       NgayCapBang: '',
@@ -71,7 +75,10 @@ const Add = () => {
     const idHinhThucDaoTao = event.target.value;
     formik.setFieldValue('IdHinhThucDaoTao', idHinhThucDaoTao);
   };
-
+  const handleChangeHDT = async (event) => {
+    const maHeDaoTao = event.target.value;
+    formik.setFieldValue('MaHeDaoTao', maHeDaoTao);
+  };
   useEffect(() => {
     if (openPopup) {
       formik.resetForm();
@@ -84,7 +91,7 @@ const Add = () => {
 
       const namThi = await getAllNamthi();
       const dataNamthi = await namThi.data;
-      const dataWithhdt = dataNamthi.map((row, index) => ({
+      const dataWithnt = dataNamthi.map((row, index) => ({
         idIndex: index + 1,
         ...row
       }));
@@ -95,17 +102,31 @@ const Add = () => {
         idIndex: index + 1,
         ...row
       }));
+
+      //hedaotao
+      const hedaotao = await getAllHeDaoTao();
+      console.log(hedaotao);
+      const datahedaotao = await hedaotao.data;
+      const dataWithhdt = datahedaotao.map((row, index) => ({
+        idIndex: index + 1,
+        ...row
+      }));
       dispatch(setReloadData(false));
       setPageState((old) => ({
         ...old,
         isLoading: false,
-        namThi: dataWithhdt,
-        hinhthucdaotao: dataWithhtdt
+        namThi: dataWithnt,
+        hinhthucdaotao: dataWithhtdt,
+        hedaotao: dataWithhdt
       }));
     };
 
     fetchData();
   }, [reloadData]);
+
+  useEffect(() => {
+    console.log(formik.values);
+  });
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -152,7 +173,27 @@ const Add = () => {
               </FormControlComponent>
             </Grid>
           </Grid>
-
+          <Grid item xs={12} container spacing={1}>
+            <Grid item xs={isXs ? 12 : 6}>
+              <FormControlComponent xsLabel={0} xsForm={12} isRequire label={t('hedaotao.title')}>
+                <SelectForm
+                  formik={formik}
+                  fullWidth
+                  keyProp="ma"
+                  valueProp="ten"
+                  item={pageState.hedaotao}
+                  name="MaHeDaoTao"
+                  value={formik.values.MaHeDaoTao}
+                  onChange={handleChangeHDT}
+                />
+              </FormControlComponent>
+            </Grid>
+            <Grid item xs={isXs ? 12 : 6}>
+              <FormControlComponent xsLabel={0} xsForm={12} isRequire label={t('Tên kỳ thi')}>
+                <InputForm formik={formik} name="TenKyThi" type="text" placeholder={t('Tên kỳ thi')} />
+              </FormControlComponent>
+            </Grid>
+          </Grid>
           <InputForm1
             formik={formik}
             isMulltiline

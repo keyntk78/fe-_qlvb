@@ -32,7 +32,7 @@ import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { convertISODateToFormattedDate, formatDate } from 'utils/formatDate';
 import MainCard from 'components/cards/MainCard';
 // import { getAllDonvi } from 'services/donvitruongService';
-import { getAllDanhmucTN } from 'services/danhmuctotnghiepService';
+import { getAllDanhmucTN } from 'services/sharedService';
 import BackToTop from 'components/scroll/BackToTop';
 import { styled } from '@mui/system';
 import AnimateButton from 'components/extended/AnimateButton';
@@ -138,7 +138,6 @@ export default function SoGoc() {
       dispatch(setLoading(true));
       // const donvi = await getAllDonvi();
       const donvi = await getAllTruong(user.username);
-      
 
       if (donvi.data && donvi.data.length > 0) {
         setDonvis(donvi.data);
@@ -157,7 +156,7 @@ export default function SoGoc() {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const danhmuc = await getAllDanhmucTN();
+      const danhmuc = await getAllDanhmucTN(user ? user.username : '');
       if (danhmuc.data && danhmuc.data.length > 0) {
         setDMTN(danhmuc.data);
         setPageState((old) => ({ ...old, DMTN: danhmuc.data[0].id }));

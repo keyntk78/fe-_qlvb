@@ -2,7 +2,6 @@ import React from 'react';
 import { Grid, MenuItem, Select } from '@mui/material';
 import { useFormik } from 'formik';
 import { createSogoc } from 'services/sogocService';
-import { getAllDanhmucTN } from 'services/danhmuctotnghiepService';
 import { showAlert, setReloadData, setOpenSubPopup } from 'store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSocapbangValidationSchema } from 'components/validations/socapbangValidation';
@@ -20,7 +19,7 @@ import BootstrapInput from 'components/form/BootrapInput';
 import { useState } from 'react';
 import InputForm1 from 'components/form/InputForm1';
 import SelectList from 'components/form/SelectList';
-import { getAllHinhthucdaotao } from 'services/hinhthucdaotaoService';
+import { getAllDanhmucTN } from 'services/sharedService';
 
 const Add = () => {
   const openSubPopup = useSelector(openSubPopupSelector);
@@ -89,7 +88,7 @@ const Add = () => {
         ...row
       }));
 
-      const danhmuctn = await getAllDanhmucTN();
+      const danhmuctn = await getAllDanhmucTN(user ? user.username : '');
       const datadanhmuc = await danhmuctn.data;
       const hinhthucdt = await getAllHinhthucdaotao();
       const datahtdt = await hinhthucdt.data;

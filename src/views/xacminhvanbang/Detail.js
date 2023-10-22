@@ -30,7 +30,7 @@ import { getAllHinhthucdaotao } from 'services/hinhthucdaotaoService';
 import { getAllKhoathi } from 'services/khoathiService';
 import InputForm from 'components/form/InputForm';
 import ExitButton from 'components/button/ExitButton';
-import { getAllDanhmucTN } from 'services/danhmuctotnghiepService';
+import { getAllDanhmucTN } from 'services/sharedService';
 import SelectForm from 'components/form/SelectForm';
 import { getHocSinhXacMinhByCCCD } from 'services/xacminhvanbangService';
 
@@ -153,7 +153,7 @@ const Detail = () => {
       setMonThi(monthi.data);
       const donvi = await getAllDonvi();
       setDonVi(donvi.data);
-      const danhmuc = await getAllDanhmucTN();
+      const danhmuc = await getAllDanhmucTN(user ? user.username : '');
       setDanhMuc(danhmuc.data);
       const hedaotao = await getAllHedaotao();
       setHeDaoTao(hedaotao.data);

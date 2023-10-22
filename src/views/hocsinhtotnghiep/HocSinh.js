@@ -7,7 +7,7 @@ import Popup from 'components/controls/popup';
 import GuiDuyet from './GuiDuyet';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { donviSelector, openPopupSelector, reloadDataSelector, selectedInfoMessageSelector } from 'store/selectors';
+import { donviSelector, openPopupSelector, reloadDataSelector, selectedInfoMessageSelector, userLoginSelector } from 'store/selectors';
 import { selectedCCCD, selectedDanhmuc, selectedHocsinh, setOpenPopup, setReloadData, setSelectedInfoMessage } from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import Import from './Import';
@@ -24,7 +24,7 @@ import DeleteAll from './DeleteAll';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { IconCertificate, IconClick, IconDownload, IconPlus, IconSearch, IconSend, IconTrash } from '@tabler/icons';
 import Detail from './Detail';
-import { getAllDanhmucTN } from 'services/danhmuctotnghiepService';
+import { getAllDanhmucTN } from 'services/sharedService';
 import BackToTop from 'components/scroll/BackToTop';
 import InGCNAll from './InGCNAll';
 import ActionButtons from 'components/button/ActionButtons';
@@ -65,6 +65,7 @@ export default function HocSinh() {
   const [disabledSearch, setDisabledSearch] = useState(true);
   const [disabledInGCN, setDisabledInGCN] = useState(true);
   const [loadData, setLoadData] = useState(false);
+  const user = useSelector(userLoginSelector);
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -252,14 +253,14 @@ export default function HocSinh() {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const danhmuc = await getAllDanhmucTN();
+      const danhmuc = await getAllDanhmucTN(user ? user.username : '');
       setDMTN(danhmuc.data);
     };
     fetchDataDL();
   }, []);
 
   useEffect(() => {
-    if (dMTN.length > 0) {
+    if (dMTN && dMTN.length > 0) {
       if (infoMessage) {
         setPageState((old) => ({ ...old, DMTN: infoMessage.IdDanhMucTotNghiep }));
         setPageState((old) => ({ ...old, trangThai: infoMessage.TrangThai }));

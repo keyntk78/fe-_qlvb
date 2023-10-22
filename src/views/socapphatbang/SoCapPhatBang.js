@@ -24,14 +24,14 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { donviSelector, reloadDataSelector } from 'store/selectors';
+import { donviSelector, reloadDataSelector, userLoginSelector } from 'store/selectors';
 import { setLoading, setReloadData } from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import { createSearchParams } from 'utils/createSearchParams';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { convertISODateToFormattedDate, formatDate } from 'utils/formatDate';
 import MainCard from 'components/cards/MainCard';
-import { getAllDanhmucTN } from 'services/danhmuctotnghiepService';
+import { getAllDanhmucTN } from 'services/sharedService';
 import BackToTop from 'components/scroll/BackToTop';
 import { styled } from '@mui/system';
 import AnimateButton from 'components/extended/AnimateButton';
@@ -53,6 +53,7 @@ export default function SoCapPhatBang() {
   const [firstLoad, setFirstLoad] = useState(false);
   const [selectDanhmuc, setSelectDanhmuc] = useState('');
   const [disable, setDisable] = useState(false);
+  const user = useSelector(userLoginSelector);
 
   const TableCell2 = styled(TableCell)(
     () => `
@@ -129,7 +130,7 @@ export default function SoCapPhatBang() {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const danhmuc = await getAllDanhmucTN();
+      const danhmuc = await getAllDanhmucTN(user ? user.username : '');
       if (danhmuc.data && danhmuc.data.length > 0) {
         setDMTN(danhmuc.data);
         setPageState((old) => ({ ...old, DMTN: danhmuc.data[0].id }));

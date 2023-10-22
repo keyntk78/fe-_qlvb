@@ -23,7 +23,7 @@ import InputForm1 from 'components/form/InputForm1';
 import BootstrapInput from 'components/form/BootrapInput';
 import useSocapbangValidationSchema from 'components/validations/socapbangValidation';
 import { getAllNamthi } from 'services/namthiService';
-import { getAllDanhmucTN } from 'services/danhmuctotnghiepService';
+import { getAllDanhmucTN } from 'services/sharedService';
 import { getAllHinhthucdaotao } from 'services/hinhthucdaotaoService';
 import { editSogoc, getSogocById } from 'services/sogocService';
 import { convertFormattedDateToISODate, convertISODateToFormattedDate } from 'utils/formatDate';
@@ -97,7 +97,7 @@ const EditAction = () => {
         ...row
       }));
 
-      const danhmuctn = await getAllDanhmucTN();
+      const danhmuctn = await getAllDanhmucTN(user ? user.username : '');
       const datadanhmuc = await danhmuctn.data;
       const hinhthucdt = await getAllHinhthucdaotao();
       const datahtdt = await hinhthucdt.data;

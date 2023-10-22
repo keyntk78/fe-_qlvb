@@ -16,7 +16,7 @@ import { editHocSinh, getHocSinhByCCCD } from 'services/nguoihoctotnghiepService
 import useHocSinhValidationSchema from 'components/validations/hocsinhValidation';
 import { getAllKhoathi } from 'services/khoathiService';
 import InputForm from 'components/form/InputForm';
-import { getAllDanhmucTN } from 'services/danhmuctotnghiepService';
+import { getAllDanhmucTN } from 'services/sharedService';
 import { getAllDanToc } from 'services/dantocService';
 import SelectForm from 'components/form/SelectForm';
 
@@ -141,7 +141,7 @@ const EditHocSinh = () => {
       // setMonThi(monthi.data);
       const dantoc = await getAllDanToc();
       setDanToc(dantoc.data);
-      const danhmuc = await getAllDanhmucTN();
+      const danhmuc = await getAllDanhmucTN(user ? user.username : '');
       setDanhMuc(danhmuc.data);
       const khoathi = await getAllKhoathi();
       setKhoaThi(khoathi.data);

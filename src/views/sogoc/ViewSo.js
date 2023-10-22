@@ -32,7 +32,7 @@ import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { convertISODateToFormattedDate, formatDate } from 'utils/formatDate';
 import MainCard from 'components/cards/MainCard';
 import { getAllDonvi } from 'services/donvitruongService';
-import { getAllDanhmucTN } from 'services/danhmuctotnghiepService';
+import { getAllDanhmucTN } from 'services/sharedService';
 import BackToTop from 'components/scroll/BackToTop';
 import { styled } from '@mui/system';
 import AnimateButton from 'components/extended/AnimateButton';
@@ -55,6 +55,7 @@ export default function ViewSo() {
   const [selectDonvi, setSelectDonvi] = useState('');
   const [selectDanhmuc, setSelectDanhmuc] = useState('');
   const [disable, setDisable] = useState(false);
+  const user = useSelector(userLoginSelector);
 
   const TableCell2 = styled(TableCell)(
     () => `
@@ -140,7 +141,7 @@ export default function ViewSo() {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const danhmuc = await getAllDanhmucTN();
+      const danhmuc = await getAllDanhmucTN(user ? user.username : '');
       if (danhmuc.data && danhmuc.data.length > 0) {
         setDMTN(danhmuc.data);
         setPageState((old) => ({ ...old, DMTN: danhmuc.data[0].id }));

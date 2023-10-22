@@ -40,7 +40,6 @@ import { getAllHinhthucdaotao } from 'services/hinhthucdaotaoService';
 import { getAllKhoathi } from 'services/khoathiService';
 import InputForm from 'components/form/InputForm';
 import ExitButton from 'components/button/ExitButton';
-import { getAllDanhmucTN } from 'services/danhmuctotnghiepService';
 import AnimateButton from 'components/extended/AnimateButton';
 import Popup from 'components/controls/popup';
 import BackToTop from 'components/scroll/BackToTop';
@@ -51,6 +50,7 @@ import InBangTungNguoi from './InBangTungNguoi';
 import SelectForm from 'components/form/SelectForm';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { convertDateTimeToDate } from 'utils/formatDate';
+import { getAllDanhmucTN } from 'services/sharedService';
 
 const hocLucOptions = [
   { value: 'Giỏi', label: 'Giỏi' },
@@ -191,7 +191,7 @@ const Detail = ({ type }) => {
       setMonThi(monthi.data);
       const donvi = await getAllDonvi();
       setDonVi(donvi.data);
-      const danhmuc = await getAllDanhmucTN();
+      const danhmuc = await getAllDanhmucTN(user ? user.username : '');
       setDanhMuc(danhmuc.data);
       const hedaotao = await getAllHedaotao();
       setHeDaoTao(hedaotao.data);

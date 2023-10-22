@@ -40,7 +40,7 @@ import FileExcel from '../FileMau/FileMau_ThemHocSinh.xlsx';
 import { getAllTruong } from 'services/sharedService';
 
 import DuyetAll from './DuyetAll';
-import { getAllDanhmucTN } from 'services/danhmuctotnghiepService';
+import { getAllDanhmucTN } from 'services/sharedService';
 import BackToTop from 'components/scroll/BackToTop';
 import Import from './Import';
 import Duyet from './Duyet';
@@ -246,9 +246,9 @@ export default function HocSinh() {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const response = await getAllDanhmucTN();
+      const response = await getAllDanhmucTN(user ? user.username : '');
       setDMTN(response.data);
-     const donvi = await getAllTruong(user.username);
+      const donvi = await getAllTruong(user.username);
       setDonvis(donvi.data);
     };
     fetchDataDL();

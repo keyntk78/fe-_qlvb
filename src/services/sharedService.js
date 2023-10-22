@@ -15,7 +15,7 @@ export async function getLoaiDonVi() {
 
 export async function getAllTruong(username) {
   try {
-    const response = await sendRequest(`Shared/GetAllTruong/?username=${username}`, 'GET');
+    const response = await sendRequest(`Shared/GetAllTruong?username=${username}`, 'GET');
     return response;
   } catch (error) {
     console.error('Error creating Donvi:', error);
@@ -63,7 +63,6 @@ export async function getAllDonViByUsername(username) {
   }
 }
 
-
 export async function getAllHeDaoTao() {
   try {
     const response = await sendRequest(`Shared/GetAllHeDaoTao`, 'GET');
@@ -80,6 +79,16 @@ export async function getAllHinhThucDaoTao() {
     return response;
   } catch (error) {
     console.error('Error creating DVC:', error);
+    throw error;
+  }
+}
+
+export async function getAllDanhmucTN(username) {
+  try {
+    const response = await sendRequest(`Shared/GetAllDanhMucTotNghiep?username=${username}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating Donvi:', error);
     throw error;
   }
 }
