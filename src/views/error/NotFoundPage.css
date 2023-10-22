@@ -1,0 +1,39 @@
+/* NotFoundPage.css */
+
+.not-found-page {
+  background-color: #e0e0e0; /* Màu nền của trang */
+  height: 100vh; /* Đặt chiều cao cho trang bằng chiều cao của viewport */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.not-found-container {
+  text-align: center;
+  background-color: #f0f0f0;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  display: inline-block;
+  margin-top: 8px;
+  width: 50%;
+  height: 50%;
+}
+
+.number-404 {
+  font-size: 100px;
+  color: #ff5722; /* Màu cam */
+  margin: 0;
+  animation: zoomIn 0.5s ease-in-out;
+}
+
+@keyframes zoomIn {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
