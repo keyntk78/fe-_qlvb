@@ -58,3 +58,4 @@ export const notificationsSelector = (state) => state.customization.notification
 export const notificationCountSelector = (state) => state.customization.notificationCount;
 export const pageSizeSelector = (state) => state.customization.pageSize;
 export const infoHocSinhSelector = (state) => state.customization.infoHocSinh;
+export const upDateVBCCSelector = (state) => state.customization.up_vbcc;
