@@ -8,7 +8,6 @@ import HocSinhTruong from 'views/hocsinhtotnghiep/HocSinh';
 import CapPhatBang from 'views/capphatbang/CapPhatBang';
 import CapBangSao from 'views/capbangbansao/CapBangSao';
 import Xacminhvanbang from 'views/xacminhvanbang/Xacminhvanbang';
-
 // dashboard routing
 // const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 
@@ -47,6 +46,7 @@ const HocSinhTotNghiep = Loadable(lazy(() => import('views/thongke/phong/hocSinh
 const HocSinhDoTotNghiep = Loadable(lazy(() => import('views/thongke/truong/HocSinhDoTotNghiep/index')));
 const PhatBang = Loadable(lazy(() => import('views/thongke/phong/phatBang/index')));
 const InPhoiBang = Loadable(lazy(() => import('views/thongke/phong/inPhoiBang/index')));
+const ImportDanhSachVanBang = Loadable(lazy(() => import('views/ImportDanhSachVanBang/DanhSachImport')));
 const Report = Loadable(lazy(() => import('views/report/Report')));
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
@@ -96,6 +96,10 @@ const MainRoutes = {
     {
       path: 'user',
       element: <User />
+    },
+    {
+      path: 'Import',
+      element: <ImportDanhSachVanBang />
     },
     {
       path: 'function',

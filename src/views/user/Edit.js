@@ -117,8 +117,8 @@ const EditUser = () => {
 
   const handleSchoolChange = (event) => {
     const selectedValue = event.target.value;
-    // const truongId = selectedValue === 'phongGDDT' ? '' : selectedValue;
-    formik.setFieldValue('truongId', selectedValue);
+    const truongId = selectedValue === 'nochoose' ? '' : selectedValue;
+    formik.setFieldValue('truongId', truongId);
   };
 
   return (
@@ -202,13 +202,14 @@ const EditUser = () => {
               <FormControl fullWidth variant="outlined">
                 <SelectForm
                   name="truongId"
-                  value={formik.values.truongId}
+                  value={formik.values.truongId === '' ? 'nochoose' : formik.values.truongId}
                   onChange={handleSchoolChange}
                   onBlur={formik.handleBlur}
                   formik={formik}
                   item={donvi}
-                  keyProp={'id'}
-                  valueProp={'ten'}
+                  keyProp="id"
+                  valueProp="ten"
+                  nochoose
                 />
               </FormControl>
             </FormControlComponent>

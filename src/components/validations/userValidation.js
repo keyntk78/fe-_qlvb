@@ -5,7 +5,7 @@ export const useUserValidationSchema = (isUpdate = false) => {
   const { t } = useTranslation();
 
   let userValidationSchema = Yup.object({
-    truongId: Yup.string().max(255).required(t('validation.donvitruong')),
+    // truongId: Yup.string().max(255).required(t('validation.donvitruong')),
     userName: Yup.string().max(255).required(t('validation.user.username')),
     fullName: Yup.string().max(255).required(t('validation.user.fullname')),
     email: Yup.string().email(t('validation.user.email.valid')).max(255).required(t('validation.user.email.required')),

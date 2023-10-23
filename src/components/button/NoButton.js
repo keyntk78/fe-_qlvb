@@ -4,15 +4,17 @@ import AnimateButton from 'components/extended/AnimateButton';
 import { useTranslation } from 'react-i18next';
 import { IconBan } from '@tabler/icons';
 import { useDispatch } from 'react-redux';
-import { setOpenPopup, setOpenSubPopup } from 'store/actions';
+import { setOpenPopup, setOpenSubPopup, setOpenSubSubPopup } from 'store/actions';
 
-const NoButton = ({ color , type }) => {
+const NoButton = ({ color, type }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const handleCancelClick = () => {
     if (type === 'subpopup') {
       dispatch(setOpenSubPopup(false));
+    } else if (type === 'subsubpopup') {
+      dispatch(setOpenSubSubPopup(false));
     } else {
       dispatch(setOpenPopup(false));
     }

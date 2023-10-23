@@ -77,3 +77,60 @@ export async function getLichSuXacMinhVanBangByID(id) {
     throw error;
   }
 }
+export async function ImportDanhSachVanBang(data) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`XacMinhVanBang/ImportHocSinh`, 'POST', data);
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating history access:', error);
+    throw error;
+  }
+}
+export async function getDanhSachVanBangTmp(params) {
+  try {
+    const response = await sendRequest(`XacMinhVanBang/GetSearchHocSinhTmp?${params}`, 'GET', null);
+    return response;
+  } catch (error) {
+    console.error('Error creating User:', error);
+    throw error;
+  }
+}
+export async function ThongKeDanhSachVanBangTmp(idtruong, nguoithuchien, iddanhmuc) {
+  try {
+    const response = await sendRequest(
+      `XacMinhVanBang/GetThongKeHocSinhTmp?idTruong=${idtruong}&nguoiThucHien=${nguoithuchien}&idDanhMucTotNghiep=${iddanhmuc}`,
+      'GET',
+      null
+    );
+    return response;
+  } catch (error) {
+    console.error('Error creating User:', error);
+    throw error;
+  }
+}
+export async function SaveImport(idtruong, nguoithuchien, iddanhmuc) {
+  try {
+    const response = await sendRequest(
+      `XacMinhVanBang/SaveImport?idTruong=${idtruong}&nguoiThucHien=${nguoithuchien}&idDanhMucTotNghiep=${iddanhmuc}`,
+      'POST',
+      null
+    );
+    return response;
+  } catch (error) {
+    console.error('Error creating User:', error);
+    throw error;
+  }
+}
+export async function DeleteImport(nguoiThucHien) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`XacMinhVanBang/DeleteImport?nguoiThucHien=${nguoiThucHien}`, 'POST');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error delete Namthi:', error);
+    throw error;
+  }
+}

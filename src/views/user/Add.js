@@ -99,8 +99,12 @@ const AddUser = () => {
 
   const handleSchoolChange = (event) => {
     const selectedValue = event.target.value;
-    formik.setFieldValue('truongId', selectedValue);
+    const truongId = selectedValue === 'nochoose' ? '' : selectedValue;
+    formik.setFieldValue('truongId', truongId);
   };
+  useEffect(() => {
+    console.log(formik.values);
+  });
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -190,9 +194,10 @@ const AddUser = () => {
                   item={donvi}
                   placeholder={t('user.label.school')}
                   name="truongId"
-                  value={formik.values.school}
+                  value={formik.values.truongId === '' ? 'nochoose' : formik.values.truongId}
                   onChange={handleSchoolChange}
                   onBlur={formik.handleBlur}
+                  nochoose
                 />
               </FormControl>
             </FormControlComponent>

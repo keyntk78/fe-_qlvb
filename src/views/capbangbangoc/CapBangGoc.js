@@ -271,7 +271,7 @@ export default function CapBangGoc() {
       }
     };
     fetchDataDL();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (namHoc.length > 0 && htdt.length > 0 && donvis.length > 0 && infoHocSinh) {

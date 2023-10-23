@@ -15,7 +15,22 @@ const CustomSelect = styled(Select)({
   }
 });
 
-function SelectForm({ placeholder, name, value, onChange, onBlur, label, disabled, item, formik, keyProp, valueProp, fullWidth, convert }) {
+function SelectForm({
+  placeholder,
+  name,
+  value,
+  onChange,
+  onBlur,
+  label,
+  disabled,
+  item,
+  formik,
+  keyProp,
+  valueProp,
+  fullWidth,
+  convert,
+  nochoose
+}) {
   const hasFormik = !!formik; // Kiểm tra xem formik có tồn tại hay không
 
   return (
@@ -32,6 +47,7 @@ function SelectForm({ placeholder, name, value, onChange, onBlur, label, disable
         disabled={disabled}
         error={hasFormik && formik.touched[name] && Boolean(formik.errors[name])}
       >
+        {nochoose && <MenuItem value="nochoose">Không thuộc đơn vị nào</MenuItem>}
         {item && item.length > 0 ? (
           item.map((data) => (
             <MenuItem key={data[keyProp]} value={data[keyProp]}>

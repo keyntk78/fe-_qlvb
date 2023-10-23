@@ -253,11 +253,15 @@ export default function HocSinh() {
 
   useEffect(() => {
     const fetchDataDL = async () => {
+      console.log(user.username);
       const danhmuc = await getAllDanhmucTN(user ? user.username : '');
+      console.log(danhmuc);
       setDMTN(danhmuc.data);
     };
-    fetchDataDL();
-  }, []);
+    if (user) {
+      fetchDataDL();
+    }
+  }, [user]);
 
   useEffect(() => {
     if (dMTN && dMTN.length > 0) {

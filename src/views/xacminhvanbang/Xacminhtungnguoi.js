@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { AddLichSuXacMinh, getCauHinhXacMinhVanBang, getHocSinhXacMinhByCCCD } from 'services/xacminhvanbangService';
 import '../../index.css';
 import useXacMinhVanBangValidationSchema from 'components/validations/xacminhvanbangValidation';
-import { getKhoathiById } from 'services/khoathiService';
+//import { getKhoathiById } from 'services/khoathiService';
 const Xacminhtungnguoi = () => {
   const isXs = useMediaQuery('(max-width:800px)');
   const { t } = useTranslation();
@@ -65,7 +65,8 @@ const Xacminhtungnguoi = () => {
       const datas = response.data;
       const response_cauhinh = await getCauHinhXacMinhVanBang(donvi.id);
       const data_cauhinh = response_cauhinh.data;
-      const response_khoaThi = await getKhoathiById(datas.soGoc.idNamThi, datas.idKhoaThi);
+      console.log(data_cauhinh, datas);
+      //const response_khoaThi = await getKhoathiById(datas.soGoc.idNamThi, datas.idKhoaThi);
       setDatas({
         uyBanNhanDan: data_cauhinh.uyBanNhanDan.toUpperCase(),
         coQuanCapBang: data_cauhinh.coQuanCapBang.toUpperCase(),
@@ -75,7 +76,7 @@ const Xacminhtungnguoi = () => {
         ngaySinh: convertISODateToFormattedDate(datas.ngaySinh),
         noiSinh: datas.noiSinh,
         queQuan: datas.diaChi,
-        khoaThi: convertISODateToFormattedDate(response_khoaThi.data.ngay),
+        khoaThi: convertISODateToFormattedDate(datas.khoaThi),
         nguoiKy: data_cauhinh.nguoiKyBang.toUpperCase(),
         hoiDong: datas.hoiDong.toUpperCase()
       });

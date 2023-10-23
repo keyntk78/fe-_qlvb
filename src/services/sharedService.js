@@ -44,7 +44,7 @@ export async function getAllDonViCha() {
 export async function GetCauHinhByIdDonVi(username) {
   try {
     store.dispatch(setLoading(true));
-    const response = await axiosClient(`Shared/GetAllDonViByUsername?username=${username}`, 'GET', null);
+    const response = await axiosClient(`Shared/GetCauHinhByUsername?username=${username}`, 'GET', null);
     store.dispatch(setLoading(false));
     return response;
   } catch (error) {

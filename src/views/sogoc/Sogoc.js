@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IconFileExport, IconSearch } from '@tabler/icons';
+import { IconClick, IconDownload, IconFileExport, IconSearch } from '@tabler/icons';
 import {
   Button,
   Divider,
@@ -24,8 +24,8 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { reloadDataSelector, userLoginSelector } from 'store/selectors';
-import { setLoading, setReloadData } from 'store/actions';
+import { openPopupSelector, reloadDataSelector, userLoginSelector } from 'store/selectors';
+import { setLoading, setOpenPopup, setReloadData } from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import { createSearchParams } from 'utils/createSearchParams';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
@@ -42,7 +42,10 @@ import { getHocSinhTheoSoGoc } from 'services/sogocService';
 import ExportExcel from './ExportExcel';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { getAllTruong } from 'services/sharedService';
-
+import Popup from 'components/controls/popup';
+import Import from 'views/ImportDanhSachVanBang/Import';
+import ButtonSecondary from 'components/buttoncolor/ButtonSecondary';
+import FileMau from '../FileMau/FileMau_ThemDanhSachVanBang.xlsx';
 export default function SoGoc() {
   const isXs = useMediaQuery('(max-width:600px)');
   const { t } = useTranslation();
@@ -57,6 +60,10 @@ export default function SoGoc() {
   const [selectDanhmuc, setSelectDanhmuc] = useState('');
   const [disable, setDisable] = useState(false);
   const user = useSelector(userLoginSelector);
+  const [title, setTitle] = useState('');
+  const [form, setForm] = useState('');
+  const openPopup = useSelector(openPopupSelector);
+
   const TableCell2 = styled(TableCell)(
     () => `
       border: 1px solid #ddd;
@@ -191,7 +198,11 @@ export default function SoGoc() {
       NgayCapBang: ''
     }
   });
-
+  const handleImport = () => {
+    setTitle(t('Import danh sách văn bằng'));
+    setForm('import');
+    dispatch(setOpenPopup(true));
+  };
   useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
@@ -313,6 +324,19 @@ export default function SoGoc() {
                   </Tooltip>
                 </AnimateButton>
               </Grid>
+              <Grid item>
+                <ButtonSecondary
+                  title={t('button.download')}
+                  href={FileMau}
+                  download="File_Mau"
+                  target="_blank"
+                  rel="noreferrer"
+                  icon={IconDownload}
+                />
+              </Grid>
+              <Grid item>
+                <ButtonSuccess title={t('button.import')} onClick={handleImport} icon={IconClick} />
+              </Grid>
             </Grid>
           )
         }
@@ -330,6 +354,19 @@ export default function SoGoc() {
                   </Button>
                 </Tooltip>
               </AnimateButton>
+            </Grid>
+            <Grid item>
+              <ButtonSecondary
+                title={t('button.download')}
+                href={FileMau}
+                download="File_Mau"
+                target="_blank"
+                rel="noreferrer"
+                icon={IconDownload}
+              />
+            </Grid>
+            <Grid item>
+              <ButtonSuccess title={t('button.import')} onClick={handleImport} icon={IconClick} />
             </Grid>
           </Grid>
         ) : (
@@ -533,6 +570,17 @@ export default function SoGoc() {
           </Grid>
         </Grid>
       </MainCard>
+      {form !== '' && (
+        <Popup
+          title={title}
+          form={form}
+          openPopup={openPopup}
+          maxWidth={form === 'xemlichsu' ? 'lg' : 'md'}
+          bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
+        >
+          {form === 'import' ? <Import /> : ''}
+        </Popup>
+      )}
       <BackToTop />
     </>
   );

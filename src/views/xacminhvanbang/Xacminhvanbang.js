@@ -5,7 +5,7 @@ import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typ
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { infoHocSinhSelector, openPopupSelector, reloadDataSelector } from 'store/selectors';
+import { infoHocSinhSelector, openPopupSelector, reloadDataSelector, userLoginSelector } from 'store/selectors';
 import {
   selectedDanhmuc,
   selectedDonvitruong,
@@ -22,7 +22,7 @@ import useLocalText from 'utils/localText';
 import i18n from 'i18n';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import MainCard from 'components/cards/MainCard';
-import { getAllDonvi } from 'services/donvitruongService';
+//import { getAllDonvi } from 'services/donvitruongService';
 import BackToTop from 'components/scroll/BackToTop';
 import Popup from 'components/controls/popup';
 import { getAllNamthi } from 'services/namthiService';
@@ -35,6 +35,8 @@ import Xacminhtungnguoi from './Xacminhtungnguoi';
 import LichSuXacMinh from './LichSuXacMinh';
 import Xacminhnhieunguoi from './Xacminhnhieunguoi';
 import { getHocSinhXacMinhVanBang } from 'services/xacminhvanbangService';
+import Import from 'views/ImportDanhSachVanBang/Import';
+import { getAllTruong } from 'services/sharedService';
 
 export default function Xacminhvanbang() {
   const isXs = useMediaQuery('(max-width:800px)');
@@ -62,6 +64,8 @@ export default function Xacminhvanbang() {
   const [loadData, setLoadData] = useState(false);
   const infoHocSinh = useSelector(infoHocSinhSelector);
   const existingHocSinhs = JSON.parse(localStorage.getItem('hocsinhs')) || [];
+  const user = useSelector(userLoginSelector);
+
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -134,7 +138,6 @@ export default function Xacminhvanbang() {
     dispatch(selectedHocsinh(hocsinh));
     dispatch(setOpenPopup(true));
   };
-  //
   const buttonConfigurations = [
     {
       type: 'detail',
@@ -258,7 +261,7 @@ export default function Xacminhvanbang() {
       setNamHoc(namhoc.data);
       const htdt = await getAllHinhthucdaotao();
       setHTDT(htdt.data);
-      const donvi = await getAllDonvi();
+      const donvi = await getAllTruong(user ? user.username : '');
       if (donvi.data && donvi.data.length > 0) {
         setDonvis(donvi.data);
       } else {
@@ -266,7 +269,7 @@ export default function Xacminhvanbang() {
       }
     };
     fetchDataDL();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (namHoc.length > 0 && htdt.length > 0 && donvis.length > 0 && infoHocSinh) {
@@ -424,14 +427,6 @@ export default function Xacminhvanbang() {
       setFirstLoad1(false);
     }
   }, [search, reloadData, loadData]);
-
-  // useEffect(() => {
-  //   if (pageState.DMTN && pageState.donVi) {
-  //     setDisabledSearch(false);
-  //   } else {
-  //     setDisabledSearch(true);
-  //   }
-  // }, [pageState.DMTN, pageState.donVi]);
 
   return (
     <>
@@ -650,6 +645,8 @@ export default function Xacminhvanbang() {
             <LichSuXacMinh />
           ) : form == 'xacminhnhieunguoi' ? (
             <Xacminhnhieunguoi />
+          ) : form === 'import' ? (
+            <Import />
           ) : (
             ''
           )}
