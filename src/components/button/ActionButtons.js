@@ -24,7 +24,9 @@ import {
   IconUserCheck,
   IconHistory,
   IconSquareRoundedPlus,
-  IconCurrencyEuro
+  IconCurrencyEuro,
+  IconCertificateOff,
+  IconCertificate2
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { useTranslation } from 'react-i18next';
@@ -406,6 +408,42 @@ const ActionButtons = ({
           {
             title: 'Hiển thị tin tức',
             icon: <IconEye size={'20px'} />,
+            color: 'success',
+            onClick: () => {
+              handleClick(params);
+              onClose();
+            }
+          }
+        ];
+      case 'chinhsuavbcc':
+        return [
+          {
+            title: 'Chỉnh sửa VBCC',
+            icon: <IconEdit size={'20px'} />,
+            color: 'success',
+            onClick: () => {
+              handleClick(params);
+              onClose();
+            }
+          }
+        ];
+      case 'caplaivbcc':
+        return [
+          {
+            title: 'Cấp lại VBCC',
+            icon: <IconCertificate2 size={'20px'} />,
+            color: 'success',
+            onClick: () => {
+              handleClick(params);
+              onClose();
+            }
+          }
+        ];
+      case 'thuhoi':
+        return [
+          {
+            title: 'Thu hồi/hủy bỏ',
+            icon: <IconCertificateOff size={'20px'} />,
             color: 'success',
             onClick: () => {
               handleClick(params);

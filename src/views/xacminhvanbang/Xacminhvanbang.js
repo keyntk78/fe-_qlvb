@@ -35,8 +35,8 @@ import Xacminhtungnguoi from './Xacminhtungnguoi';
 import LichSuXacMinh from './LichSuXacMinh';
 import Xacminhnhieunguoi from './Xacminhnhieunguoi';
 import { getHocSinhXacMinhVanBang } from 'services/xacminhvanbangService';
-import Import from 'views/ImportDanhSachVanBang/Import';
 import { getAllTruong } from 'services/sharedService';
+import ChinhSuaVBCC from 'views/chinhsuavbcc/ChinhSuaVBCC';
 
 export default function Xacminhvanbang() {
   const isXs = useMediaQuery('(max-width:800px)');
@@ -138,6 +138,14 @@ export default function Xacminhvanbang() {
     dispatch(selectedHocsinh(hocsinh));
     dispatch(setOpenPopup(true));
   };
+
+  const handleChinhSuaVBCC = (hocsinh) => {
+    setTitle(t('Chỉnh sửa VBCC') + '[' + hocsinh.hoTen + ']');
+    setForm('chinhsuavbcc');
+    dispatch(selectedHocsinh(hocsinh));
+    dispatch(setOpenPopup(true));
+  };
+
   const buttonConfigurations = [
     {
       type: 'detail',
@@ -154,6 +162,22 @@ export default function Xacminhvanbang() {
     {
       type: 'addlist',
       handleClick: handleThemVaoDSXM
+    }
+  ];
+
+  //button chỉnh sửa, cấp lại, thu hồi hủy bỏ văn bằng
+  const buttonConfigurations2 = [
+    {
+      type: 'chinhsuavbcc',
+      handleClick: handleChinhSuaVBCC
+    },
+    {
+      type: 'caplaivbcc',
+      handleClick: handleXemLichSu
+    },
+    {
+      type: 'thuhoi',
+      handleClick: handleXemLichSu
     }
   ];
 
@@ -232,13 +256,18 @@ export default function Xacminhvanbang() {
     {
       field: 'actions',
       headerName: t('action'),
-      width: 90,
+      width: 120,
       sortable: false,
       filterable: false,
       renderCell: (params) => (
         <>
-          <Grid container justifyContent="center">
-            <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
+          <Grid container justifyContent="center" spacing={1}>
+            <Grid item>
+              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
+            </Grid>
+            <Grid item>
+              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations2} />
+            </Grid>
           </Grid>
         </>
       )
@@ -634,7 +663,7 @@ export default function Xacminhvanbang() {
           title={title}
           form={form}
           openPopup={openPopup}
-          maxWidth={form === 'xemlichsu' ? 'lg' : 'md'}
+          maxWidth={form === 'xemlichsu' || form === 'chinhsuavbcc' ? 'lg' : 'md'}
           bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
         >
           {form === 'detail' ? (
@@ -645,8 +674,12 @@ export default function Xacminhvanbang() {
             <LichSuXacMinh />
           ) : form == 'xacminhnhieunguoi' ? (
             <Xacminhnhieunguoi />
-          ) : form === 'import' ? (
-            <Import />
+          ) : form == 'chinhsuavbcc' ? (
+            <ChinhSuaVBCC />
+          ) : form == 'thuhoi' ? (
+            <LichSuXacMinh />
+          ) : form == 'caplaivbcc' ? (
+            <LichSuXacMinh />
           ) : (
             ''
           )}
