@@ -11,6 +11,7 @@ import {
   selectedDonvitruong,
   selectedHocsinh,
   setInfoHocSinh,
+  setLoading,
   setOpenPopup,
   setReloadData,
   showAlert
@@ -65,7 +66,7 @@ export default function Xacminhvanbang() {
   const infoHocSinh = useSelector(infoHocSinhSelector);
   const existingHocSinhs = JSON.parse(localStorage.getItem('hocsinhs')) || [];
   const user = useSelector(userLoginSelector);
-
+  const [firstLoad3, setFirstLoad3] = useState(true);
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -288,14 +289,40 @@ export default function Xacminhvanbang() {
     const fetchDataDL = async () => {
       const namhoc = await getAllNamthi();
       setNamHoc(namhoc.data);
-      const htdt = await getAllHinhthucdaotao();
-      setHTDT(htdt.data);
-      const donvi = await getAllTruong(user ? user.username : '');
-      if (donvi.data && donvi.data.length > 0) {
-        setDonvis(donvi.data);
-      } else {
-        setDonvis([]);
-      }
+      // const htdt = await getAllHinhthucdaotao();
+      //setHTDT(htdt.data);
+      // const donvi = await getAllTruong(user ? user.username : '');
+      // if (donvi.data && donvi.data.length > 0) {
+      //   setDonvis(donvi.data);
+      // } else {
+      //   setDonvis([]);
+      // }
+    };
+    fetchDataDL();
+  }, [user]);
+  useEffect(() => {
+    const fetchDataDL = async () => {
+      setTimeout(
+        async () => {
+          try {
+            setLoading(true);
+            const htdt = await getAllHinhthucdaotao();
+            setHTDT(htdt.data);
+            const donvi = await getAllTruong(user ? user.username : '');
+            if (donvi.data && donvi.data.length > 0) {
+              setDonvis(donvi.data);
+            } else {
+              setDonvis([]);
+            }
+            setFirstLoad3(false);
+            setLoading(false);
+          } catch (error) {
+            console.error(error);
+            setLoading(false);
+          }
+        },
+        firstLoad3 ? 2500 : 0
+      );
     };
     fetchDataDL();
   }, [user]);
