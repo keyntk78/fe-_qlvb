@@ -200,7 +200,7 @@ const Config = () => {
             </Grid>
             <Grid item container spacing={2}>
               <Grid item xs={isXs ? 12 : 6}>
-                <FormControlComponent xsLabel={0} xsForm={12} label={t('Ngày Ban Hành')}>
+                <FormControlComponent xsLabel={0} xsForm={12} label={t('Ngày ban hành')}>
                   <InputForm
                     formik={formik}
                     name="NgayBanHanh"
