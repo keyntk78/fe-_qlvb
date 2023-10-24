@@ -134,3 +134,15 @@ export async function getAllDanToc() {
     throw error;
   }
 }
+
+export async function GetPhoiGocDangSuDung(username) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(`Shared/GetPhoiGocDangSuDung?username=${username}`, 'GET');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating hocsinh:', error);
+    throw error;
+  }
+}

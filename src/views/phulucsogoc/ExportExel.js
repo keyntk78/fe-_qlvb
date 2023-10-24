@@ -104,7 +104,7 @@ const ExportExcelPhuLuc = async (donvi, pageState, selectNamThi) => {
 
   const newRowNumber1 = numberOfRows + 10;
   const text1 = worksheet.getRow(newRowNumber1);
-  text1.getCell(8).value = 'NGƯỜI KÝ';
+  text1.getCell(8).value = donvi.donViQuanLy == 1 ? 'GIÁM ĐỐC' : 'TRƯỞNG PHÒNG';
   text1.getCell(8).alignment = { horizontal: 'center' };
   text1.getCell(8).font = { bold: true };
   worksheet.mergeCells(`H${newRowNumber1}:J${newRowNumber1}`);

@@ -38,6 +38,9 @@ import Xacminhnhieunguoi from './Xacminhnhieunguoi';
 import { getHocSinhXacMinhVanBang } from 'services/xacminhvanbangService';
 import { getAllTruong } from 'services/sharedService';
 import ChinhSuaVBCC from 'views/chinhsuavbcc/ChinhSuaVBCC';
+import Thuhoihuybo from 'views/thuhoihuybo/Thuhoihuybo';
+import LichSuThuHoi from 'views/thuhoihuybo/LichSuThuHoi';
+import CapLaiVBCC from 'views/caplaivbcc/CapLaiVBCC';
 
 export default function Xacminhvanbang() {
   const isXs = useMediaQuery('(max-width:800px)');
@@ -111,10 +114,22 @@ export default function Xacminhvanbang() {
     dispatch(selectedHocsinh(hocsinh));
     dispatch(setOpenPopup(true));
   };
+  const handleThuHoiHuyBo = (hocsinh) => {
+    setTitle(t('Thu hồi hủy bỏ văn bằng chứng chỉ'));
+    setForm('thuhoi');
+    dispatch(selectedHocsinh(hocsinh));
+    dispatch(setOpenPopup(true));
+  };
 
   const handleXacMinh = (hocsinh) => {
     setTitle(t('Xác Minh'));
     setForm('xacminh');
+    dispatch(selectedHocsinh(hocsinh));
+    dispatch(setOpenPopup(true));
+  };
+  const handleXemLichSuHuyBo = (hocsinh) => {
+    setTitle(t('Xem lịch sử thu hồi hủy bỏ'));
+    setForm('xemlichsuhuybo');
     dispatch(selectedHocsinh(hocsinh));
     dispatch(setOpenPopup(true));
   };
@@ -141,8 +156,15 @@ export default function Xacminhvanbang() {
   };
 
   const handleChinhSuaVBCC = (hocsinh) => {
-    setTitle(t('Chỉnh sửa văn bằng chứng chỉ') + ' [' + hocsinh.hoTen + ']');
+    setTitle(t('Chỉnh sửa văn bằng chứng chỉ') + ' của [' + hocsinh.hoTen + ']');
     setForm('chinhsuavbcc');
+    dispatch(selectedHocsinh(hocsinh));
+    dispatch(setOpenPopup(true));
+  };
+
+  const handleCapLaiVBCC = (hocsinh) => {
+    setTitle(t('Cấp lại văn bằng') + ' của [' + hocsinh.hoTen + ']');
+    setForm('caplaivbcc');
     dispatch(selectedHocsinh(hocsinh));
     dispatch(setOpenPopup(true));
   };
@@ -153,7 +175,7 @@ export default function Xacminhvanbang() {
       handleGetbyId: handleDetail
     },
     {
-      type: 'xemlichsu',
+      type: 'xemlichsuxacminh',
       handleClick: handleXemLichSu
     },
     {
@@ -174,11 +196,26 @@ export default function Xacminhvanbang() {
     },
     {
       type: 'caplaivbcc',
-      handleClick: handleXemLichSu
+      handleClick: handleCapLaiVBCC
     },
     {
       type: 'thuhoi',
+      handleClick: handleThuHoiHuyBo
+    }
+  ];
+
+  const buttonConfigurations1 = [
+    {
+      type: 'detail',
+      handleGetbyId: handleDetail
+    },
+    {
+      type: 'xemlichsuxacminh',
       handleClick: handleXemLichSu
+    },
+    {
+      type: 'xemlichsuhuybo',
+      handleClick: handleXemLichSuHuyBo
     }
   ];
 
@@ -260,16 +297,25 @@ export default function Xacminhvanbang() {
       width: 120,
       sortable: false,
       filterable: false,
+      align: 'right',
       renderCell: (params) => (
         <>
-          <Grid container justifyContent="center" spacing={1}>
-            <Grid item>
-              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
+          {params.row.trangThai !== -1 ? (
+            <Grid container spacing={1}>
+              <Grid item>
+                <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
+              </Grid>
+              <Grid item>
+                <CombinedActionButtons params={params.row} buttonConfigurations2={buttonConfigurations2} />
+              </Grid>
             </Grid>
-            <Grid item>
-              <CombinedActionButtons params={params.row} buttonConfigurations2={buttonConfigurations2} />
+          ) : (
+            <Grid container spacing={1}>
+              <Grid item>
+                <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations1} />
+              </Grid>
             </Grid>
-          </Grid>
+          )}
         </>
       )
     }
@@ -395,6 +441,7 @@ export default function Xacminhvanbang() {
       params.append('danToc', pageState.danToc);
       params.append('idDanhMucTotNghiep', pageState.DMTN);
       params.append('idTruong', pageState.donVi);
+      params.append('nguoiThucHien', user.username);
       const response = await getHocSinhXacMinhVanBang(params);
       const check = handleResponseStatus(response, navigate);
       const data = await response.data;
@@ -690,7 +737,7 @@ export default function Xacminhvanbang() {
           title={title}
           form={form}
           openPopup={openPopup}
-          maxWidth={form === 'xemlichsu' || form === 'chinhsuavbcc' ? 'lg' : 'md'}
+          maxWidth={form === 'xemlichsu' || form === 'chinhsuavbcc' || form === 'caplaivbcc' ? 'lg' : 'md'}
           bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
         >
           {form === 'detail' ? (
@@ -699,14 +746,16 @@ export default function Xacminhvanbang() {
             <Xacminhtungnguoi />
           ) : form == 'xemlichsu' ? (
             <LichSuXacMinh />
+          ) : form == 'xemlichsuhuybo' ? (
+            <LichSuThuHoi />
           ) : form == 'xacminhnhieunguoi' ? (
             <Xacminhnhieunguoi />
           ) : form == 'chinhsuavbcc' ? (
             <ChinhSuaVBCC />
           ) : form == 'thuhoi' ? (
-            <LichSuXacMinh />
+            <Thuhoihuybo />
           ) : form == 'caplaivbcc' ? (
-            <LichSuXacMinh />
+            <CapLaiVBCC />
           ) : (
             ''
           )}

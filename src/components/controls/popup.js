@@ -137,6 +137,8 @@ export default function Popup(props) {
                   <IconEye sx={{ order: 2 }} />
                 ) : form === 'xemlichsu' ? (
                   <IconHistory sx={{ order: 2 }} />
+                ) : form === 'xemlichsuhuybo' ? (
+                  <IconHistory sx={{ order: 2 }} />
                 ) : form === 'xacminh' ? (
                   <IconCheckbox sx={{ order: 2 }} />
                 ) : form === 'xacminhnhieunguoi' ? (
@@ -145,6 +147,8 @@ export default function Popup(props) {
                   <IconCheckbox sx={{ order: 2 }} />
                 ) : form === 'hide' ? (
                   <IconEyeOff sx={{ order: 2 }} />
+                ) : form === 'thuhoi' ? (
+                  <IconArrowBack sx={{ order: 2 }} />
                 ) : (
                   ''
                 )}

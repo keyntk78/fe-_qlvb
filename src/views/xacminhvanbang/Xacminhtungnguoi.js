@@ -106,6 +106,7 @@ const Xacminhtungnguoi = () => {
   useEffect(() => {
     if (openPopup) {
       formik.resetForm();
+      setSelectedFileName('');
     }
   }, [openPopup]);
   const { hoTen, ngaySinh, queQuan, khoaThi, hoiDong, coQuanCapBang } = datas || {};

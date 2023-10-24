@@ -11,19 +11,18 @@ import useLocalText from 'utils/localText';
 import { createSearchParams } from 'utils/createSearchParams';
 import i18n from 'i18n';
 import React from 'react';
-import AddDonChinhSua from './AddDon';
+import AddDonChinhSua from '../chinhsuavbcc/AddDon';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { Grid } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
-import { getSearchLichSuChinhSuaVanBang } from 'services/chinhsuavbccService';
-import ActionButtons from 'components/button/ActionButtons';
 import Popup from 'components/controls/popup';
 import AddButton from 'components/button/AddButton';
-import DetailHistory from './Detail';
+import DetailHistory from '../chinhsuavbcc/Detail';
+import { getSearchCapLaiVanBang } from 'services/caplaivbccService';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
-import InLaiVBCC from 'views/caplaivbcc/InlaiVBCC';
+import InLaiVBCC from './InlaiVBCC';
 //import config from 'config';
-const ChinhSuaVBCC = () => {
+const CapLaiVBCC = () => {
   const language = i18n.language;
   const { t } = useTranslation();
   const localeText = useLocalText();
@@ -114,12 +113,6 @@ const ChinhSuaVBCC = () => {
       minWidth: 100
     },
     {
-      flex: 0.5,
-      field: 'noiDungChinhSua',
-      headerName: t('Nội dung'),
-      minWidth: 100
-    },
-    {
       field: 'actions',
       headerName: t('action'),
       width: 90,
@@ -128,11 +121,7 @@ const ChinhSuaVBCC = () => {
       renderCell: (params) => (
         <>
           <Grid container justifyContent="center">
-            {params.row.loaiHanhDong == 1 ? (
-              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
-            ) : (
-              <ActionButtons type="detail" handleGetbyId={handleDetail} params={params.row} />
-            )}
+            <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
           </Grid>
         </>
       )
@@ -149,12 +138,11 @@ const ChinhSuaVBCC = () => {
       handleClick: handleCapLai
     }
   ];
-
   useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
-      const response = await getSearchLichSuChinhSuaVanBang(selectHocsinh.cccd, params);
+      const response = await getSearchCapLaiVanBang(selectHocsinh.cccd, params);
       const data = await response.data;
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -203,7 +191,7 @@ const ChinhSuaVBCC = () => {
     <>
       <MainCard
         sx={{ mt: 2 }}
-        title={t(`Lịch sử chỉnh sửa văn bằng chứng chỉ`)}
+        title={t(`Lịch sử Cấp lại văn bằng chứng chỉ`)}
         secondary={<Grid item>{<AddButton handleClick={handelUpdate} />}</Grid>}
       >
         {isAccess ? (
@@ -257,4 +245,4 @@ const ChinhSuaVBCC = () => {
   );
 };
 
-export default ChinhSuaVBCC;
+export default CapLaiVBCC;
