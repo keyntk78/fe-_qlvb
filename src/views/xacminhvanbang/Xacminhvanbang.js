@@ -137,7 +137,7 @@ export default function Xacminhvanbang() {
   };
 
   const handleChinhSuaVBCC = (hocsinh) => {
-    setTitle(t('Chỉnh sửa VBCC') + '[' + hocsinh.hoTen + ']');
+    setTitle(t('Chỉnh sửa văn bằng chứng chỉ') + ' [' + hocsinh.hoTen + ']');
     setForm('chinhsuavbcc');
     dispatch(selectedHocsinh(hocsinh));
     dispatch(setOpenPopup(true));
@@ -263,7 +263,7 @@ export default function Xacminhvanbang() {
               <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
             </Grid>
             <Grid item>
-              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations2} />
+              <CombinedActionButtons params={params.row} buttonConfigurations2={buttonConfigurations2} />
             </Grid>
           </Grid>
         </>
@@ -483,7 +483,7 @@ export default function Xacminhvanbang() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item md={3} sm={3} lg={1.8} xs={isXs ? 7 : 1.5}>
+          <Grid item md={3.5} sm={3.5} lg={2.5} xs={isXs ? 7 : 2.5}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('hinhthucdaotao.title')}</InputLabel>
               <Select name="truongId" value={selectHTDT} onChange={handleHTDTChange} label={t('hinhthucdaotao.title')}>
@@ -515,7 +515,7 @@ export default function Xacminhvanbang() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item md={6} sm={6} lg={4} xs={isXs ? 8 : 4}>
+          <Grid item md={6} sm={6} lg={4} xs={isXs ? 12 : 4}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('donvitruong.title')}</InputLabel>
               <Select

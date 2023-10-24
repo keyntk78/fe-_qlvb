@@ -16,7 +16,7 @@ export async function getSearchLichSuChinhSuaVanBang(cccd, params) {
 export async function getByIdHistory(cccd, id) {
   try {
     store.dispatch(setLoading(true));
-    const response = await sendRequest(`ChinhSuaVanBang/GetChinhSuaVanBangById?cccd=${cccd}&idLichSuChinhSua=${id}`, 'GET');
+    const response = await sendRequest(`ChinhSuaVanBang/GetChinhSuaVanBangById?cccd=${cccd}&idPhuLuc=${id}`, 'GET');
     store.dispatch(setLoading(false));
     return response;
   } catch (error) {

@@ -6,8 +6,8 @@ import { IconButton, Tooltip } from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useTranslation } from 'react-i18next';
 import ActionButtons from './ActionButtons';
-
-const CombinedActionButtons = ({ params, buttonConfigurations }) => {
+import DehazeIcon from '@mui/icons-material/Dehaze';
+const CombinedActionButtons = ({ params, buttonConfigurations, buttonConfigurations2 }) => {
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -24,7 +24,7 @@ const CombinedActionButtons = ({ params, buttonConfigurations }) => {
       <AnimateButton>
         <Tooltip title={t('button.title.action')} placement="bottom">
           <IconButton onClick={handleClick} style={{ border: '1px solid black' }} size="small">
-            <MoreHorizIcon fontSize="small" />
+            {buttonConfigurations2 ? <DehazeIcon fontSize="small" /> : <MoreHorizIcon fontSize="small" />}
           </IconButton>
         </Tooltip>
       </AnimateButton>
@@ -43,9 +43,13 @@ const CombinedActionButtons = ({ params, buttonConfigurations }) => {
           horizontal: 'right'
         }}
       >
-        {buttonConfigurations.map((buttonConfig) => (
-          <ActionButtons menu key={buttonConfig.type} params={params} onClose={handleClose} {...buttonConfig} />
-        ))}
+        {buttonConfigurations2
+          ? buttonConfigurations2.map((buttonConfig) => (
+              <ActionButtons menu key={buttonConfig.type} params={params} onClose={handleClose} {...buttonConfig} />
+            ))
+          : buttonConfigurations.map((buttonConfig) => (
+              <ActionButtons menu key={buttonConfig.type} params={params} onClose={handleClose} {...buttonConfig} />
+            ))}
       </Menu>
     </>
   );

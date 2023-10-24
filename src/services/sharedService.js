@@ -92,3 +92,45 @@ export async function getAllDanhmucTN(username) {
     throw error;
   }
 }
+
+export async function getByCCCD(cccd) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(`Shared/GetByCccd?cccd=${cccd}`, 'GET');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating hocsinh:', error);
+    throw error;
+  }
+}
+
+export async function getAllNamThi() {
+  try {
+    const response = await sendRequest(`Shared/GetAllNamThi`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating NamThi:', error);
+    throw error;
+  }
+}
+
+export async function getKhoaThiByNamThi(idnam) {
+  try {
+    const response = await sendRequest(`Shared/GetAllKhoaThiByNamThi?idNamThi=${idnam}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating NamThi:', error);
+    throw error;
+  }
+}
+
+export async function getAllDanToc() {
+  try {
+    const response = await sendRequest(`Shared/GetAllDanToc`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating DanToc:', error);
+    throw error;
+  }
+}

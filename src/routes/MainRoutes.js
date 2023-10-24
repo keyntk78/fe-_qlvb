@@ -50,6 +50,7 @@ const InPhoiBang = Loadable(lazy(() => import('views/thongke/phong/inPhoiBang/in
 const Report = Loadable(lazy(() => import('views/report/Report')));
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
+const PhuLucSoGoc = Loadable(lazy(() => import('views/phulucsogoc/PhuLucSoGoc')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -200,6 +201,10 @@ const MainRoutes = {
     {
       path: 'thongkeinphoibang',
       element: <InPhoiBang />
+    },
+    {
+      path: 'phulucsogoc',
+      element: <PhuLucSoGoc />
     },
     {
       path: 'xacminhvanbang',
