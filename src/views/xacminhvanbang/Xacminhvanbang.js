@@ -156,14 +156,14 @@ export default function Xacminhvanbang() {
   };
 
   const handleChinhSuaVBCC = (hocsinh) => {
-    setTitle(t('Chỉnh sửa văn bằng chứng chỉ') + ' của [' + hocsinh.hoTen + ']');
+    setTitle(t('Chỉnh sửa văn bằng chứng chỉ'));
     setForm('chinhsuavbcc');
     dispatch(selectedHocsinh(hocsinh));
     dispatch(setOpenPopup(true));
   };
 
   const handleCapLaiVBCC = (hocsinh) => {
-    setTitle(t('Cấp lại văn bằng') + ' của [' + hocsinh.hoTen + ']');
+    setTitle(t('Cấp lại văn bằng'));
     setForm('caplaivbcc');
     dispatch(selectedHocsinh(hocsinh));
     dispatch(setOpenPopup(true));

@@ -203,7 +203,7 @@ const ChinhSuaVBCC = () => {
     <>
       <MainCard
         sx={{ mt: 2 }}
-        title={t(`Lịch sử chỉnh sửa văn bằng chứng chỉ`)}
+        title={t(`Lịch sử chỉnh sửa văn bằng chứng chỉ`) + ' [' + selectHocsinh.hoTen + ']'}
         secondary={<Grid item>{<AddButton handleClick={handelUpdate} />}</Grid>}
       >
         {isAccess ? (
@@ -249,7 +249,7 @@ const ChinhSuaVBCC = () => {
           maxWidth={'md'}
           bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
         >
-          {form === 'add' ? <AddDonChinhSua /> : form === 'detail' ? <DetailHistory /> : form === 'caplai' ? <InLaiVBCC /> : ''}
+          {form === 'add' ? <AddDonChinhSua thaotac={0} /> : form === 'detail' ? <DetailHistory /> : form === 'caplai' ? <InLaiVBCC /> : ''}
         </Popup>
       )}
       <BackToTop />
