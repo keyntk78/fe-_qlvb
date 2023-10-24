@@ -83,7 +83,6 @@ const AddUser = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log(user.username);
         const response = await getAllDonViByUsername(user.username);
         setDonvi(response.data);
       } catch (error) {
@@ -102,9 +101,6 @@ const AddUser = () => {
     const truongId = selectedValue === 'nochoose' ? '' : selectedValue;
     formik.setFieldValue('truongId', truongId);
   };
-  useEffect(() => {
-    console.log(formik.values);
-  });
 
   return (
     <form onSubmit={formik.handleSubmit}>

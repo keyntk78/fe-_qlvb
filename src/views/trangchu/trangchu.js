@@ -9,7 +9,7 @@ import MainCard from 'components/cards/MainCard';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { GetTraCuuHocSinhTotNghiep } from 'services/thongkeService';
-import { donviSelector, openPopupSelector, reloadDataSelector } from 'store/selectors';
+import { donviSelector, openPopupSelector, reloadDataSelector, userLoginSelector } from 'store/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
@@ -69,6 +69,7 @@ const TrangChu = () => {
   const openPopup = useSelector(openPopupSelector);
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
+  const user = useSelector(userLoginSelector);
 
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -194,6 +195,8 @@ const TrangChu = () => {
       const params = await createSearchParams(pageState);
       params.append('cccd', pageState.cccd);
       params.append('hoTen', pageState.hoTen);
+      params.append('nguoiThucHien', user ? user.username : '');
+
       const response = await GetTraCuuHocSinhTotNghiep(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {

@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import SkeletonTotalGrowthBarChart from 'components/cards/Skeleton/TotalGrowthBarChart';
 import { GetSoLuongHocSinhQuaTungNam } from 'services/thongkeService';
 import { useState } from 'react';
-import { selectedHedaotaoSelector } from 'store/selectors';
+import { userLoginSelector } from 'store/selectors';
 
 const ThongKeSoLuongNguoiHoc = () => {
   const { t } = useTranslation();
@@ -17,7 +17,6 @@ const ThongKeSoLuongNguoiHoc = () => {
   const [soluonghocsinh, setSLHS] = useState('');
   const [isLoading, setLoading] = useState(true);
   const customization = useSelector((state) => state.customization);
-  const hedaotao = useSelector(selectedHedaotaoSelector);
   const [firstLoad, setFirstLoad] = useState(true);
 
   const { navType } = customization;
@@ -30,11 +29,11 @@ const ThongKeSoLuongNguoiHoc = () => {
   const primaryDark = theme.palette.primary.dark;
   const secondaryMain = theme.palette.secondary.main;
   const secondaryLight = theme.palette.secondary.light;
-
+  const user = useSelector(userLoginSelector);
   useEffect(() => {
     const fetchDataDL = async () => {
       const params = new URLSearchParams();
-      params.append('maHeDaoTao', hedaotao);
+      params.append('nguoiThucHien', user ? user.username : '');
       setTimeout(
         async () => {
           try {
@@ -50,10 +49,8 @@ const ThongKeSoLuongNguoiHoc = () => {
         firstLoad ? 2500 : 0
       );
     };
-    if (hedaotao) {
-      fetchDataDL();
-    }
-  }, [hedaotao]);
+    fetchDataDL();
+  }, []);
 
   const chartData = {
     height: 400,

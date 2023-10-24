@@ -212,12 +212,12 @@ export default function SoGoc() {
       const response = await getHocSinhTheoSoGoc(params);
       const data = response.data;
       formik.setValues({
-        UyBanNhanDan: data.SoGoc.UyBanNhanDan || '',
-        CoQuanCapBang: data.SoGoc.CoQuanCapBang || '',
+        UyBanNhanDan: data.CauHinh.TenUyBanNhanDan || '',
+        CoQuanCapBang: data.CauHinh.TenCoQuanCapBang || '',
         NamThi: data.DanhMucTotNghiep.NamThi || '',
         QuyetDinh: data.DanhMucTotNghiep.SoQuyetDinh || '',
-        NguoiKyBang: data.SoGoc.NguoiKyBang || '',
-        DiaPhuongCapBang: data.SoGoc.DiaPhuongCapBang || '',
+        NguoiKyBang: data.CauHinh.HoTenNguoiKySoGoc || '',
+        DiaPhuongCapBang: data.CauHinh.TenDiaPhuongCapBang || '',
         HeDaoTao: data.Truong.HeDaoTao.toUpperCase() || '',
         HinhThucDaoTao: data.Truong.HinhThucDaoTao || '',
         NgayCapBang: formatDate(data.DanhMucTotNghiep.NgayCapBang) || ''

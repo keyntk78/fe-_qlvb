@@ -1,23 +1,24 @@
 import { Card, FormControl, Grid, InputLabel, MenuItem, Paper, Select, Typography, useMediaQuery } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getAllHedaotao } from 'services/hedaotaoService';
+// import { getAllHedaotao } from 'services/hedaotaoService';
 import SkeletonTotalCard from 'components/cards/Skeleton/TotalCard';
 import { getAllNamthi } from 'services/namthiService';
 import { GetThongKeTongQuatByPhong } from 'services/thongkeService';
 import { IconAlbum, IconBuildingCommunity, IconFileDescription, IconUserExclamation } from '@tabler/icons';
-import { useDispatch } from 'react-redux';
-import { selectedHedaotao, selectedNamthi, setLoading } from 'store/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import {  selectedNamthi, setLoading } from 'store/actions';
 import { useNavigate } from 'react-router';
+import { userLoginSelector } from 'store/selectors';
 
 const ThongKePhong = () => {
   const isMd = useMediaQuery('(max-width:1220px)');
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [heDaoTao, setHeDaoTao] = useState([]);
+  // const [heDaoTao, setHeDaoTao] = useState([]);
   const [namHoc, setNamHoc] = useState([]);
-  const [selectHeDaoTao, setSelectHeDaoTao] = useState('');
+  // const [selectHeDaoTao, setSelectHeDaoTao] = useState('');
   const [selectNamHoc, setSelectNamHoc] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [firstLoad, setFirstLoad] = useState(true);
@@ -29,7 +30,7 @@ const ThongKePhong = () => {
     donCapBanSao: 0,
     hocSinhChoDuyet: 0
   });
-
+  const user = useSelector(userLoginSelector);
   const styles = {
     paper: {
       background: 'white',
@@ -56,13 +57,13 @@ const ThongKePhong = () => {
     const fetchDataDL = async () => {
       setTimeout(async () => {
         try {
-          const hedaotao = await getAllHedaotao();
-          setHeDaoTao(hedaotao.data);
+          // const hedaotao = await getAllHedaotao();
+          // setHeDaoTao(hedaotao.data);
           const namhoc = await getAllNamthi();
           setNamHoc(namhoc.data);
-          if (hedaotao && hedaotao.data.length > 0) {
-            setSelectHeDaoTao(hedaotao.data[0].ma);
-          }
+          // if (hedaotao && hedaotao.data.length > 0) {
+          //   setSelectHeDaoTao(hedaotao.data[0].ma);
+          // }
           if (namhoc && namhoc.data.length > 0) {
             const matchingYear = namhoc.data.find((year) => year.ten === currentYear.toString());
             if (matchingYear) {
@@ -87,7 +88,7 @@ const ThongKePhong = () => {
       }
       const params = new URLSearchParams();
       params.append('idNamThi', selectNamHoc);
-      params.append('maHeDaoTao', selectHeDaoTao);
+      params.append('nguoiThucHien', user ? user.username : '');
       setTimeout(
         async () => {
           try {
@@ -112,25 +113,25 @@ const ThongKePhong = () => {
         firstLoad ? 2000 : 0
       );
     };
-    if (selectNamHoc && selectHeDaoTao) {
+    if (selectNamHoc) {
       fetchData();
     }
-  }, [selectNamHoc, selectHeDaoTao]);
+  }, [selectNamHoc]);
 
   useEffect(() => {
-    if (selectHeDaoTao && selectNamHoc) dispatch(selectedHedaotao(selectHeDaoTao));
+    // if (selectHeDaoTao && selectNamHoc) dispatch(selectedHedaotao(selectHeDaoTao));
     dispatch(selectedNamthi(selectNamHoc));
-  }, [selectHeDaoTao, selectNamHoc]);
+  }, [selectNamHoc]);
 
   const handleNamHocChange = (event) => {
     const selectValue = event.target.value;
     setSelectNamHoc(selectValue);
   };
 
-  const handleHeDaoTaoChange = (event) => {
-    const selectValue = event.target.value;
-    setSelectHeDaoTao(selectValue);
-  };
+  // const handleHeDaoTaoChange = (event) => {
+  //   const selectValue = event.target.value;
+  //   setSelectHeDaoTao(selectValue);
+  // };
 
   const handleClick = (nav) => {
     navigate(nav);
@@ -166,7 +167,7 @@ const ThongKePhong = () => {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item>
+            {/* <Grid item>
               <FormControl fullWidth variant="outlined" size="small">
                 <InputLabel>{t('Hệ đào tạo')}</InputLabel>
                 <Select
@@ -186,7 +187,7 @@ const ThongKePhong = () => {
                   )}
                 </Select>
               </FormControl>
-            </Grid>
+            </Grid> */}
           </Grid>
           <Grid container justifyContent={'center'}>
             <Grid item xs={11.4} container spacing={1}>

@@ -5,7 +5,7 @@ import Chart from 'react-apexcharts';
 import { useTranslation } from 'react-i18next';
 import SkeletonTotalPieChart from 'components/cards/Skeleton/TotalPieCard';
 import { GetSoLuongHocSinhCapPhatBang } from 'services/thongkeService';
-import { selectedHedaotaoSelector, selectedNamthiSelector } from 'store/selectors';
+import { selectedNamthiSelector, userLoginSelector } from 'store/selectors';
 import { useSelector } from 'react-redux';
 
 const ThongKeSoBangDaPhatChuaPhat = () => {
@@ -13,9 +13,9 @@ const ThongKeSoBangDaPhatChuaPhat = () => {
   const { t } = useTranslation();
   const [sobangdaphat, setSBDP] = useState('');
   const [isLoading, setLoading] = useState(true);
-  const hedaotao = useSelector(selectedHedaotaoSelector);
   const namhoc = useSelector(selectedNamthiSelector);
   const [firstLoad, setFirstLoad] = useState(true);
+  const user = useSelector(userLoginSelector);
 
   useEffect(() => {
     setChartHeight(300);
@@ -24,7 +24,7 @@ const ThongKeSoBangDaPhatChuaPhat = () => {
   useEffect(() => {
     const fetchDataDL = async () => {
       const params = new URLSearchParams();
-      params.append('maHeDaoTao', hedaotao);
+      params.append('nguoiThucHien', user ? user.username : '');
       params.append('idNamThi', namhoc);
       setTimeout(
         async () => {
@@ -41,10 +41,10 @@ const ThongKeSoBangDaPhatChuaPhat = () => {
         firstLoad ? 2500 : 0
       );
     };
-    if (hedaotao && namhoc) {
+    if (namhoc) {
       fetchDataDL();
     }
-  }, [hedaotao, namhoc]);
+  }, [namhoc]);
 
   const sobangdaphat_fm = [
     { name: 'Đã phát', y: sobangdaphat && sobangdaphat.TongBangDaPhat ? sobangdaphat.TongBangDaPhat : 0 },

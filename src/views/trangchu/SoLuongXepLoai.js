@@ -6,16 +6,16 @@ import { useTranslation } from 'react-i18next';
 import SkeletonTotalPieChart from 'components/cards/Skeleton/TotalPieCard';
 import { GetSoLuongHocSinhTheoXepLoai } from 'services/thongkeService';
 import { useSelector } from 'react-redux';
-import { selectedHedaotaoSelector, selectedNamthiSelector } from 'store/selectors';
+import { selectedNamthiSelector, userLoginSelector } from 'store/selectors';
 
 const ThongKeSoLuongXepLoai = () => {
   const [chartHeight, setChartHeight] = useState(300);
   const { t } = useTranslation();
   const [xepLoaiTotNghiep, setXLTN] = useState('');
   const [isLoading, setLoading] = useState(true);
-  const hedaotao = useSelector(selectedHedaotaoSelector);
   const namhoc = useSelector(selectedNamthiSelector);
   const [firstLoad, setFirstLoad] = useState(true);
+  const user = useSelector(userLoginSelector);
 
   useEffect(() => {
     setChartHeight(300);
@@ -24,7 +24,7 @@ const ThongKeSoLuongXepLoai = () => {
   useEffect(() => {
     const fetchDataDL = async () => {
       const params = new URLSearchParams();
-      params.append('maHeDaoTao', hedaotao);
+      params.append('nguoiThucHien', user ? user.username : '');
       params.append('idNamThi', namhoc);
       setTimeout(
         async () => {
@@ -41,10 +41,10 @@ const ThongKeSoLuongXepLoai = () => {
         firstLoad ? 2500 : 0
       );
     };
-    if (hedaotao && namhoc) {
+    if (namhoc) {
       fetchDataDL();
     }
-  }, [hedaotao, namhoc]);
+  }, [namhoc]);
 
   const xepLoaiTotNghiep_fm = [
     { name: 'Trung bình', y: xepLoaiTotNghiep && xepLoaiTotNghiep.XepLoaiTrungBinh ? xepLoaiTotNghiep.XepLoaiTrungBinh : 0 },
