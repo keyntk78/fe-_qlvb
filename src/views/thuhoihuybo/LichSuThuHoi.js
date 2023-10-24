@@ -53,7 +53,7 @@ const LichSuThuHoi = () => {
     {
       flex: 1,
       field: 'pathFileVanBan',
-      headerName: t('File xác minh'),
+      headerName: t('File quyết định'),
       minWidth: 100,
       align: 'center',
       renderCell: (params) => {

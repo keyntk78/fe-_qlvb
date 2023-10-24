@@ -456,7 +456,7 @@ export default function CapBangGoc() {
     <>
       <MainCard title={t('capbanggoc.title')}>
         <Grid item container mb={1} spacing={1} justifyContent={'center'}>
-          <Grid item md={3} sm={3} lg={1.2} xs={isXs ? 5 : 1.5}>
+          <Grid item md={3} sm={3} lg={1.4} xs={isXs ? 5 : 1.5}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('namhoc')}</InputLabel>
               <Select name="truongId" value={selectNamHoc} onChange={handleNamHocChange} label={t('Năm học')}>
@@ -472,7 +472,7 @@ export default function CapBangGoc() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item md={3} sm={3} lg={1.8} xs={isXs ? 7 : 1.5}>
+          <Grid item md={3} sm={3} lg={2} xs={isXs ? 7 : 1.5}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('hinhthucdaotao.title')}</InputLabel>
               <Select name="truongId" value={selectHTDT} onChange={handleHTDTChange} label={t('hinhthucdaotao.title')}>
@@ -504,7 +504,7 @@ export default function CapBangGoc() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item md={6} sm={6} lg={4} xs={isXs ? 8 : 4}>
+          <Grid item md={6} sm={6} lg={3.6} xs={isXs ? 8 : 4}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('donvitruong.title')}</InputLabel>
               <Select

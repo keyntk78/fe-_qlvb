@@ -27,6 +27,8 @@ import ThongKeTruong from './ThongKeTruong';
 import Popup from 'components/controls/popup';
 import EditHocSinh from 'views/hocsinh/Edit';
 import ActionButtons from 'components/button/ActionButtons';
+import '../../index.css';
+
 // import { Component } from 'react';
 
 // class Demo extends Component {
@@ -268,7 +270,13 @@ const TrangChu = () => {
     <>
       {/* <Demo></Demo> */}
       {donvi === 0 ? (
-        <>Test</>
+        <div className="wrapper">
+          <svg>
+            <text x="50%" y="50%" dy=".35em" textAnchor="middle">
+              Chào mừng bạn đến với quản trị hế thống
+            </text>
+          </svg>
+        </div>
       ) : (
         <>
           {' '}

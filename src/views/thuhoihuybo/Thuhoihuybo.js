@@ -79,9 +79,9 @@ const Thuhoihuybo = () => {
       </div>
       <Grid container spacing={1}>
         <Grid item xs={12} container spacing={2}>
-          <Grid xs={isXs ? 4 : 3}>
+          <Grid xs={isXs ? 4 : 2.4}>
             {' '}
-            <p style={{ marginTop: '55px', marginLeft: '17px' }}>
+            <p style={{ marginTop: '55px', marginLeft: '17px', color: 'black' }}>
               File quyết định hủy bỏ <span style={{ color: 'red' }}>(*)</span>
             </p>
           </Grid>
@@ -92,13 +92,13 @@ const Thuhoihuybo = () => {
                 {t('button.upload')}
               </Button>
             </label>
-            <Grid item mt={'20px'} ml={'2px'}>
+            <Grid item mt={'17px'} ml={'4px'}>
               {selectedFileName && <span>{selectedFileName}</span>}
             </Grid>
           </Grid>
         </Grid>
 
-        <Grid item xs={12} container spacing={2}>
+        <Grid item xs={12} container spacing={2} mt={-4}>
           <InputForm1
             formik={formik}
             minRows={3}

@@ -9,8 +9,7 @@ import { setLoading, setOpenPopup, showAlert } from 'store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { IconFilePlus } from '@tabler/icons';
 import { useTranslation } from 'react-i18next';
-import { getAllDanhmucTN } from 'services/sharedService';
-import { getAllDonvi } from 'services/donvitruongService';
+import { getAllDanhmucTN, getAllTruong } from 'services/sharedService';
 import { ImportHocSinhByPhong } from 'services/hocsinhService';
 import { getAllKhoathiByDMTN } from 'services/khoathiService';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
@@ -37,7 +36,7 @@ function Import() {
         dispatch(setLoading(true));
         const danhmuc = await getAllDanhmucTN(user ? user.username : '');
         setDataDMTNs(danhmuc.data);
-        const donvi = await getAllDonvi();
+        const donvi = await getAllTruong(user ? user.username : '');
         setDataDonvis(donvi.data);
         setSelectDanhmuc(danhmuc && danhmuc.data.length > 0 ? danhmuc.data[0].id : '');
       } catch (error) {
