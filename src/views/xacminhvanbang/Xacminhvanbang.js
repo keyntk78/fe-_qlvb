@@ -40,6 +40,7 @@ import { getAllTruong } from 'services/sharedService';
 import ChinhSuaVBCC from 'views/chinhsuavbcc/ChinhSuaVBCC';
 import Thuhoihuybo from 'views/thuhoihuybo/Thuhoihuybo';
 import LichSuThuHoi from 'views/thuhoihuybo/LichSuThuHoi';
+import CapLaiVBCC from 'views/caplaivbcc/CapLaiVBCC';
 
 export default function Xacminhvanbang() {
   const isXs = useMediaQuery('(max-width:800px)');
@@ -155,8 +156,15 @@ export default function Xacminhvanbang() {
   };
 
   const handleChinhSuaVBCC = (hocsinh) => {
-    setTitle(t('Chỉnh sửa văn bằng chứng chỉ') + ' [' + hocsinh.hoTen + ']');
+    setTitle(t('Chỉnh sửa văn bằng chứng chỉ') + ' của [' + hocsinh.hoTen + ']');
     setForm('chinhsuavbcc');
+    dispatch(selectedHocsinh(hocsinh));
+    dispatch(setOpenPopup(true));
+  };
+
+  const handleCapLaiVBCC = (hocsinh) => {
+    setTitle(t('Cấp lại văn bằng') + ' của [' + hocsinh.hoTen + ']');
+    setForm('caplaivbcc');
     dispatch(selectedHocsinh(hocsinh));
     dispatch(setOpenPopup(true));
   };
@@ -188,7 +196,7 @@ export default function Xacminhvanbang() {
     },
     {
       type: 'caplaivbcc',
-      handleClick: handleXemLichSu
+      handleClick: handleCapLaiVBCC
     },
     {
       type: 'thuhoi',
@@ -728,7 +736,7 @@ export default function Xacminhvanbang() {
           title={title}
           form={form}
           openPopup={openPopup}
-          maxWidth={form === 'xemlichsu' || form === 'chinhsuavbcc' ? 'lg' : 'md'}
+          maxWidth={form === 'xemlichsu' || form === 'chinhsuavbcc' || form === 'caplaivbcc' ? 'lg' : 'md'}
           bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
         >
           {form === 'detail' ? (
@@ -746,7 +754,7 @@ export default function Xacminhvanbang() {
           ) : form == 'thuhoi' ? (
             <Thuhoihuybo />
           ) : form == 'caplaivbcc' ? (
-            <LichSuXacMinh />
+            <CapLaiVBCC />
           ) : (
             ''
           )}
