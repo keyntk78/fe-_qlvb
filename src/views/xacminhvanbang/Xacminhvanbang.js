@@ -441,6 +441,7 @@ export default function Xacminhvanbang() {
       params.append('danToc', pageState.danToc);
       params.append('idDanhMucTotNghiep', pageState.DMTN);
       params.append('idTruong', pageState.donVi);
+      params.append('nguoiThucHien', user.username);
       const response = await getHocSinhXacMinhVanBang(params);
       const check = handleResponseStatus(response, navigate);
       const data = await response.data;
