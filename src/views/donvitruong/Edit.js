@@ -170,13 +170,13 @@ const EditDonvi = () => {
       <Grid container>
         <Grid item xs={12} container spacing={2} mt={1}>
           <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('Mã đơn vị')}>
-              <InputForm formik={formik} name="ma" type="text" placeholder={t('Mã đơn vị')} />
+            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('donvitruong.field.ma')}>
+              <InputForm formik={formik} name="ma" type="text" placeholder={t('donvitruong.field.ma')} />
             </FormControlComponent>
           </Grid>
           <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('Tên đơn vị')}>
-              <InputForm formik={formik} name="ten" type="text" placeholder={t('Tên đơn vị')} />
+            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('donvitruong.field.ten')}>
+              <InputForm formik={formik} name="ten" type="text" placeholder={t('donvitruong.field.ten')} />
             </FormControlComponent>
           </Grid>
         </Grid>
@@ -196,8 +196,8 @@ const EditDonvi = () => {
             </FormControlComponent>
           </Grid>
           <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('Địa chỉ')}>
-              <InputForm formik={formik} name="diaChi" type="text" placeholder={t('Địa chỉ')} />
+            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvi.title.address')}>
+              <InputForm formik={formik} name="diaChi" type="text" placeholder={t('donvi.title.address')} />
             </FormControlComponent>
           </Grid>
         </Grid>
@@ -215,21 +215,21 @@ const EditDonvi = () => {
         </Grid>
         <Grid item xs={12} container spacing={2} mt={1}>
           <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('Đơn vị quản lý')} isRequire>
+            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvitruong.field.donviquanly')} isRequire>
               <SelectList
                 data={pageState.donviquanly}
                 name="donviquanly"
                 value="giaTri"
                 request={'giaTri'}
                 optionName="tenLoai"
-                placeholder={t('Đơn vị quản lý')}
+                placeholder={t('donvitruong.field.donviquanly')}
                 formik={formik}
                 openPopup
               />
             </FormControlComponent>
           </Grid>
           <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('Là đơn vị quản lý')}>
+            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvitruong.field.isManager')}>
               <Checkbox
                 checked={formik.values.laPhong} // Kiểm tra giá trị isPhong để quyết định trạng thái checked của checkbox
                 onChange={(event) => {

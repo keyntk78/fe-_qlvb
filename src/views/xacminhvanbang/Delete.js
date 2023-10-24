@@ -22,9 +22,9 @@ const DeleteHocSinhDuocChon = () => {
         existingData.splice(indexToDelete, 1);
         localStorage.setItem('hocsinhs', JSON.stringify(existingData));
         dispatch(setOpenSubPopup(false));
-        dispatch(showAlert(new Date().getTime().toString(), 'success', 'Xóa học sinh thành công'));
+        dispatch(showAlert(new Date().getTime().toString(), 'success', t('xacminhvanbang.title.deleteSuc')));
       } else {
-        dispatch(showAlert(new Date().getTime().toString(), 'error', 'Xóa học sinh thất bại'));
+        dispatch(showAlert(new Date().getTime().toString(), 'error', t('xacminhvanbang.title.deleteErr')));
       }
     } catch (error) {
       console.error('Error updating Function:', error);

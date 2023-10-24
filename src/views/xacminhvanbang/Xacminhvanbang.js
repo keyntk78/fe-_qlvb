@@ -109,7 +109,7 @@ export default function Xacminhvanbang() {
   };
 
   const handleXemLichSu = (hocsinh) => {
-    setTitle(t('Xem lịch sử'));
+    setTitle(t('xacminhvanbang.title.xemlichsu'));
     setForm('xemlichsu');
     dispatch(selectedHocsinh(hocsinh));
     dispatch(setOpenPopup(true));
@@ -122,7 +122,7 @@ export default function Xacminhvanbang() {
   };
 
   const handleXacMinh = (hocsinh) => {
-    setTitle(t('Xác Minh'));
+    setTitle(t('xacminhvanbang.title'));
     setForm('xacminh');
     dispatch(selectedHocsinh(hocsinh));
     dispatch(setOpenPopup(true));
@@ -149,7 +149,7 @@ export default function Xacminhvanbang() {
   };
 
   const handleXacMinhNhieuNguoi = (hocsinh) => {
-    setTitle(t('Xác Minh'));
+    setTitle(t('xacminhvanbang.title'));
     setForm('xacminhnhieunguoi');
     dispatch(selectedHocsinh(hocsinh));
     dispatch(setOpenPopup(true));
@@ -239,24 +239,6 @@ export default function Xacminhvanbang() {
             <Grid item xs={12}>
               <Typography variant="body1">{params.value}</Typography>
             </Grid>
-            {/* <Grid item xs={12} mt={0.2}>
-              <Chip
-                // variant='outlined'
-                size="small"
-                label={params.row.trangThai_fm}
-                color={
-                  params.row.trangThai == 2
-                    ? 'success'
-                    : params.row.trangThai == 3
-                    ? 'info'
-                    : params.row.trangThai == 4
-                    ? 'success'
-                    : params.row.trangThai == 5
-                    ? 'primary'
-                    : 'secondary'
-                }
-              />
-            </Grid> */}
           </Grid>
         </>
       )
@@ -533,7 +515,7 @@ export default function Xacminhvanbang() {
 
   return (
     <>
-      <MainCard title={t('Tra cứu văn bằng')}>
+      <MainCard title={t('tracuuvanbang.title')}>
         <Grid item container mb={1} spacing={1} justifyContent={'center'}>
           <Grid item md={3} sm={3} lg={1.2} xs={isXs ? 5 : 1.5}>
             <FormControl fullWidth variant="outlined" size="small">
@@ -579,7 +561,7 @@ export default function Xacminhvanbang() {
                     </MenuItem>
                   ))
                 ) : (
-                  <MenuItem value="nodata">Không có dữ liệu</MenuItem>
+                  <MenuItem value="nodata">{t('selected.nodata')}</MenuItem>
                 )}
               </Select>
             </FormControl>
@@ -606,23 +588,6 @@ export default function Xacminhvanbang() {
               </Select>
             </FormControl>
           </Grid>
-          {/* <Grid item md={6} sm={6} lg={2} xs={isXs ? 4 : 2}>
-            <FormControl fullWidth variant="outlined" size="small">
-              <InputLabel>{t('status.title')}</InputLabel>
-              <Select
-                name="trangThai"
-                value={pageState.trangThai ? pageState.trangThai : 2}
-                onChange={handleTrangThaiChange}
-                label={t('status.title')}
-              >
-                {trangThaiOptions.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid> */}
           <Grid item container spacing={1} justifyContent={'center'}>
             <Grid item md={6} sm={6} lg={3} container xs={isXs ? 12 : 3}>
               <TextField
@@ -677,7 +642,6 @@ export default function Xacminhvanbang() {
                 color="info"
                 sx={{ marginTop: '2px' }}
                 startIcon={<IconSearch />}
-                //disabled={disabledSearch}
               >
                 {t('button.search')}
               </Button>

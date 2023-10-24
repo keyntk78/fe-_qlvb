@@ -68,13 +68,13 @@ const LichSuXacMinh = () => {
     {
       flex: 1.5,
       field: 'donViYeuCauXacMinh',
-      headerName: t('Đơn vị yêu cầu xác minh'),
+      headerName: t('xacminhvanbang.field.donvixacminh'),
       minWidth: 180
     },
     {
       flex: 1,
       field: 'congVanSo',
-      headerName: t('Công văn số'),
+      headerName: t('xacminhvanbang.field.congvanso'),
       minWidth: 100
     },
     {
@@ -92,7 +92,7 @@ const LichSuXacMinh = () => {
     {
       flex: 0.1,
       field: 'pathFileYeuCau',
-      headerName: t('File xác minh'),
+      headerName: t('xacminhvanbang.field.file'),
       minWidth: 100,
       align: 'center',
       renderCell: (params) => {
@@ -105,7 +105,19 @@ const LichSuXacMinh = () => {
         );
       }
     },
+    {
 
+      flex: 1,
+      field: 'NgayXacMinh_fm',
+      headerName: t('xacminhvanbang.field.ngayxacminh'),
+      minWidth: 100
+    },
+    {
+      flex: 1,
+      field: 'nguoiTao',
+      headerName: t('xacminhvanbang.field.nguoixacminh'),
+      minWidth: 100
+    },
     {
       field: 'actions',
       headerName: t('action'),

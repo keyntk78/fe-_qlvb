@@ -260,7 +260,7 @@ const Detail = () => {
           <InputForm1 formik={formik} xs={3} label={t('hocsinh.field.nation')} name="danToc" isDisabled />
         </Grid>
         <Grid xs={12} item container spacing={2}>
-          <InputForm1 formik={formik} xs={6} label={'Địa chỉ'} name="diaChi" isDisabled />
+          <InputForm1 formik={formik} xs={6} label={'hocsinh.label.diaChi'} name="diaChi" isDisabled />
         </Grid>
         <Grid item container spacing={1} xs={12} mt={4} alignItems={'center'}>
           <Grid item>
@@ -281,7 +281,7 @@ const Detail = () => {
               </FormControl>
             </FormControlComponent>
           </Grid>
-          <InputForm1 formik={formik} xs={6} label={t('Lớp')} name="lop" isDisabled />
+          <InputForm1 formik={formik} xs={6} label={t('hocsinh.label.lop')} name="lop" isDisabled />
         </Grid>
         <Grid xs={12} item container spacing={2}>
           {formik.values.ketQuaHocTaps.map((ketQua, index) => (

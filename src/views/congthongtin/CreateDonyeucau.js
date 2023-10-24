@@ -74,7 +74,7 @@ const CreateDonyeucau = () => {
       FileDonYeuCau: '',
       DonYeuCau: '',
       HinhAnhCCCD: '',
-      PhuongThucNhan: 0,
+      PhuongThucNhan: '',
       DiaChiNhan: ''
     },
     validationSchema: useDonyeucauValidationSchema(),
@@ -412,21 +412,23 @@ const CreateDonyeucau = () => {
                     value={formik.values.PhuongThucNhan ? formik.values.PhuongThucNhan : 0}
                     onChange={formik.handleChange}
                   >
-                    <FormControlLabel style={{ marginTop: '-4px' }} value={0} control={<Radio />} label={t('tructiep')} />
-                    <FormControlLabel style={{ marginTop: '-4px' }} value={1} control={<Radio />} label={t('dichvucong')} />
+                    <FormControlLabel value={0} style={{ marginTop: '-4px' }} control={<Radio />} label={t('tructiep')} />
+                    <FormControlLabel value={1} style={{ marginTop: '-4px' }} control={<Radio />} label={t('dichvucong')} />
                   </RadioGroup>
                 </FormControlComponent>
               </Grid>
-              <Grid item xs={12} sm={12} md={12} lg={12}>
-                <FormControlComponent
-                  xsLabel={isSmallScreen ? 0 : 2}
-                  xsForm={isSmallScreen ? 12 : 10}
-                  isRequire
-                  label={t('user.label.addressrecevice')}
-                >
-                  <InputForm formik={formik} name="DiaChiNhan" type="text" placeholder={t('user.label.addressrecevice')} />
-                </FormControlComponent>
-              </Grid>
+              {formik.values.PhuongThucNhan && formik.values.PhuongThucNhan == 1 && (
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <FormControlComponent
+                    xsLabel={isSmallScreen ? 0 : 2}
+                    xsForm={isSmallScreen ? 12 : 10}
+                    isRequire
+                    label={t('user.label.addressrecevice')}
+                  >
+                    <InputForm formik={formik} name="DiaChiNhan" type="text" placeholder={t('user.label.addressrecevice')} />
+                  </FormControlComponent>
+                </Grid>
+              )}
             </Grid>
 
             <div style={{ borderBottom: '2px solid black', fontWeight: 'bold', marginTop: '30px' }}>

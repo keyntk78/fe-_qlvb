@@ -123,23 +123,23 @@ const Xacminhtungnguoi = () => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <div style={{ borderBottom: '2px solid black', fontWeight: 'bold', paddingTop: 3 }}>
-        <p>{t('Thông tin cần bổ sung')}</p>
+        <p>{t('xacminhvanbang.title.thongtinbosung')}</p>
       </div>
       <Grid container spacing={1}>
         <Grid item xs={6} sm={12} md={12}>
           <InputForm1
             xs={12}
-            label={'Kính gửi đơn vị cần xác minh'}
+            label={t('xacminhvanbang.field.kinhgui')}
             name="donViXacMinh"
             formik={formik}
-            placeholder={t('Kính gửi đơn vị cần xác minh')}
+            placeholder={t('xacminhvanbang.field.kinhgui')}
           />
         </Grid>
         <Grid item xs={6} sm={4} md={4.5}>
-          <InputForm1 xs={12} label={'Công văn số'} name="congVanSo" formik={formik} placeholder={t('Công văn số')} />
+          <InputForm1 xs={12} label={t('xacminhvanbang.field.congvanso')} name="congVanSo" formik={formik} placeholder={t('Công văn số')} />
         </Grid>
         <Grid item xs={6} sm={4} md={4.5}>
-          <InputForm1 xs={12} label={'Ngày ra công văn'} name="ngayBanHanh" formik={formik} type="date" />
+          <InputForm1 xs={12} label={t('xacminhvanbang.field.ngayracongvan')} name="ngayBanHanh" formik={formik} type="date" />
         </Grid>
 
         <Grid item container xs={isXs ? 5 : 3} mt={'30px'}>
@@ -155,10 +155,10 @@ const Xacminhtungnguoi = () => {
         <Grid item>{selectedFileName && <span>{selectedFileName}</span>}</Grid>
       </Grid>
       <div style={{ borderBottom: '2px solid black', fontWeight: 'bold', paddingTop: 3 }}>
-        <p>{t('Thông tin nội dung văn bằng')}</p>
+        <p>{t('xacminhvanbang.title.danhsachxacminh')}</p>
       </div>
       <Grid container spacing={1}>
-        <Grid item xs={6} sm={3} md={12}>
+        <Grid item xs={12} sm={12} md={12}>
           <p style={{ fontSize: '17px' }}>{result}</p>
         </Grid>
       </Grid>
@@ -170,9 +170,9 @@ const Xacminhtungnguoi = () => {
           <Grid item xs={12} container spacing={2} justifyContent="flex-end" mt={1}>
             <Grid item>
               <AnimateButton>
-                <Tooltip title={'Tạo văn bản'} placement="bottom">
+                <Tooltip title={t('button.create')} placement="bottom">
                   <Button type="submit" color="info" variant="contained" size="medium" startIcon={<IconPrinter />}>
-                    Tạo văn bản
+                    {t('button.create')}
                   </Button>
                 </Tooltip>
               </AnimateButton>
