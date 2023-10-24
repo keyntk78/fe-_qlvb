@@ -59,7 +59,8 @@ const DetailHistory = () => {
       IdKhoaThi: '',
       NoiDungChinhSua: '',
       XepLoai: '',
-      NgayCapBang: ''
+      NgayCapBang: '',
+      LoaiHanhDong: 0
     }
   });
   useEffect(() => {
@@ -96,7 +97,8 @@ const DetailHistory = () => {
           XepLoai: dataHocsinh.xepLoai || '',
           NguoiThucHien: user.username,
           NoiDungChinhSua: dataHocsinh.noiDungChinhSua || '',
-          LyDo: dataHocsinh.lyDo || ''
+          LyDo: dataHocsinh.lyDo || '',
+          LoaiHanhDong: dataHocsinh.loaiHanhDong
         });
       }
     };
@@ -267,6 +269,20 @@ const DetailHistory = () => {
           </Table>
         </TableContainer>
       </div>
+      <Grid item xs={12} sm={4} md={4}>
+        <FormControlComponent isRequire label={t('Hành động')}>
+          <RadioGroup
+            style={{ display: 'flex', justifyContent: 'flex-start' }}
+            row
+            name="LoaiHanhDong"
+            value={formik.values.LoaiHanhDong}
+            onChange={formik.handleChange}
+          >
+            <FormControlLabel value={0} control={<Radio />} label={t('Chỉnh sửa')} />
+            <FormControlLabel value={1} control={<Radio />} label={t('Cấp lại')} />
+          </RadioGroup>
+        </FormControlComponent>
+      </Grid>
       <Grid item xs={12} container spacing={2}>
         <InputForm1
           isDisabled

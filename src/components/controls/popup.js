@@ -28,7 +28,8 @@ import {
   IconUsers,
   IconHistory,
   IconCheckbox,
-  IconCurrencyEuro
+  IconCurrencyEuro,
+  IconCertificate2
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { setOpenPopup, setOpenProfile, setOpenSubPopup, setOpenSubSubPopup } from '../../store/actions';
@@ -149,6 +150,10 @@ export default function Popup(props) {
                   <IconEyeOff sx={{ order: 2 }} />
                 ) : form === 'thuhoi' ? (
                   <IconArrowBack sx={{ order: 2 }} />
+                ) : form === 'chinhsuavbcc' ? (
+                  <IconEdit sx={{ order: 2 }} />
+                ) : form === 'caplaivbcc' ? (
+                  <IconCertificate2 sx={{ order: 2 }} />
                 ) : (
                   ''
                 )}

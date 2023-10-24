@@ -1,4 +1,5 @@
 import {
+  Divider,
   FormControl,
   FormControlLabel,
   Grid,
@@ -10,7 +11,8 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
+  Typography
 } from '@mui/material';
 import InputForm1 from 'components/form/InputForm1';
 import { useFormik } from 'formik';
@@ -32,7 +34,8 @@ import { convertJsonToFormData } from 'utils/convertJsonToFormData';
 import useChinhSuaVanBangValidationSchema from 'components/validations/chinhsuavbccValidation';
 import { getAllHinhThucDaoTao, getAllNamThi, getByCCCD, getKhoaThiByNamThi } from 'services/sharedService';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
-const AddDonChinhSua = () => {
+import { IconBook, IconCertificate, IconFile, IconUser } from '@tabler/icons';
+const AddDonChinhSua = ({ thaotac }) => {
   const { t } = useTranslation();
   const openSubPopup = useSelector(openSubPopupSelector);
   const selectedHocsinh = useSelector(selectedHocsinhSelector);
@@ -67,11 +70,13 @@ const AddDonChinhSua = () => {
     },
     validationSchema: useChinhSuaVanBangValidationSchema(),
     onSubmit: async (values) => {
-      if (formik.values.FileVanBan !== null) {
-        if (!formik.values.FileVanBan.name.endsWith('.docx') && !formik.values.FileVanBan.name.endsWith('.pdf')) {
-          dispatch(showAlert(new Date().getTime().toString(), 'error', t('Định dạng file không hợp lệ')));
-          return;
-        }
+      if (!formik.values.FileVanBan) {
+        dispatch(showAlert(new Date().getTime().toString(), 'error', t('Vui lòng chọn tệp')));
+        return;
+      }
+      if (!formik.values.FileVanBan.name.endsWith('.docx') && !formik.values.FileVanBan.name.endsWith('.pdf')) {
+        dispatch(showAlert(new Date().getTime().toString(), 'error', t('Định dạng file không hợp lệ')));
+        return;
       }
       try {
         const formData = await convertJsonToFormData(values);
@@ -177,9 +182,17 @@ const AddDonChinhSua = () => {
   }, [openSubPopup]);
   return (
     <form onSubmit={formik.handleSubmit}>
-      <div style={{ borderBottom: '2px solid black', fontWeight: 'bold', paddingTop: 3 }}>
-        <p>{t('Thông tin học sinh')}</p>
-      </div>
+      <Grid item container spacing={1} xs={12} mt={4} alignItems={'center'}>
+        <Grid item>
+          <IconUser />
+        </Grid>
+        <Grid item>
+          <Typography variant="h4">{t('thongtinhocsinh')}</Typography>
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Divider />
+      </Grid>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={4} md={4}>
           <InputForm1 isRequired xs={12} label={'Họ tên'} name="HoTen" formik={formik} />
@@ -233,9 +246,17 @@ const AddDonChinhSua = () => {
           </FormControlComponent>
         </Grid>
       </Grid>
-      <div style={{ borderBottom: '2px solid black', fontWeight: 'bold', paddingTop: 3 }}>
-        <p>{t('Thông tin văn bằng')}</p>
-      </div>
+      <Grid item container spacing={1} xs={12} mt={4} alignItems={'center'}>
+        <Grid item>
+          <IconCertificate />
+        </Grid>
+        <Grid item>
+          <Typography variant="h4">{t('hocsinh.degreeinfo')}</Typography>
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Divider />
+      </Grid>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={4} md={4}>
           <InputForm1 isRequired xs={12} label={'Số cấp bằng'} name="SoVaoSoCapBang" formik={formik} />
@@ -310,10 +331,18 @@ const AddDonChinhSua = () => {
           </FormControlComponent>{' '}
         </Grid>
       </Grid>
-      <div style={{ borderBottom: '2px solid black', fontWeight: 'bold', paddingTop: 3 }}>
-        <p>{t('hosodinhkem')}</p>
-      </div>
-      <div style={{ overflowX: 'auto' }}>
+      <Grid item container spacing={1} xs={12} mt={4} alignItems={'center'}>
+        <Grid item>
+          <IconFile />
+        </Grid>
+        <Grid item>
+          <Typography variant="h4">{t('hosodinhkem')}</Typography>
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Divider />
+      </Grid>
+      <Grid container xs={12}>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -332,17 +361,25 @@ const AddDonChinhSua = () => {
             </TableBody>
           </Table>
         </TableContainer>
-      </div>
-      <div style={{ borderBottom: '2px solid black', fontWeight: 'bold', paddingTop: 3 }}>
-        <p>{t('Noidungchinhsua')}</p>
-      </div>
+      </Grid>
+      <Grid item container spacing={1} xs={12} mt={4} alignItems={'center'}>
+        <Grid item>
+          <IconBook />
+        </Grid>
+        <Grid item>
+          <Typography variant="h4">{t('Noidungchinhsua')}</Typography>
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Divider />
+      </Grid>
       <Grid item xs={12} sm={4} md={4}>
         <FormControlComponent isRequire label={t('Hành động')}>
           <RadioGroup
             style={{ display: 'flex', justifyContent: 'flex-start' }}
             row
             name="LoaiHanhDong"
-            value={formik.values.LoaiHanhDong ? formik.values.LoaiHanhDong : 0}
+            value={formik.values.LoaiHanhDong ? formik.values.LoaiHanhDong : thaotac}
             onChange={formik.handleChange}
           >
             <FormControlLabel value={0} control={<Radio />} label={t('Chỉnh sửa')} />
