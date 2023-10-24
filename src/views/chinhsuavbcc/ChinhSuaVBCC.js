@@ -42,11 +42,7 @@ const ChinhSuaVBCC = () => {
     order: 1,
     orderDir: 'ASC',
     startIndex: 0,
-    pageSize: 10,
-    fromDate: '',
-    toDate: ''
-    //idHocSinh: ''
-    //userName: ''
+    pageSize: 10
   });
   const handleDetail = (hocsinh) => {
     setTitle(t('Xem chi tiết'));
@@ -70,30 +66,30 @@ const ChinhSuaVBCC = () => {
     },
     {
       flex: 1,
-      field: 'hoTenCu',
+      field: 'hoTen',
       headerName: t('Họ tên'),
       minWidth: 180
     },
     {
       flex: 0.5,
-      field: 'cccdCu',
+      field: 'cccd',
       headerName: t('CCCD'),
       minWidth: 100
     },
     {
       flex: 0.3,
-      field: 'gioiTinhCu',
-      headerName: t('Giới tính')
+      field: 'gioiTinh',
+      headerName: t('Giới tính'),
+      renderCell: (params) => <>{params.row.gioiTinh ? t('gender.male') : t('gender.female')}</>
     },
     {
       flex: 0.3,
-      field: 'danTocCu',
-      headerName: t('Dân tộc'),
-      minWidth: 100
+      field: 'danToc',
+      headerName: t('Dân tộc')
     },
     {
       flex: 0.5,
-      field: 'NgaySinhCu',
+      field: 'NgaySinh',
       headerName: t('Ngày sinh'),
       minWidth: 100
     },
@@ -112,7 +108,7 @@ const ChinhSuaVBCC = () => {
     {
       field: 'actions',
       headerName: t('action'),
-      width: 90,
+      width: 120,
       sortable: false,
       filterable: false,
       renderCell: (params) => (
@@ -135,7 +131,7 @@ const ChinhSuaVBCC = () => {
         if (data && data.lichSus.length > 0) {
           const dataWithIds = data.lichSus.map((row, index) => ({
             idx: index + 1,
-            NgaySinhCu: convertISODateToFormattedDate(row.ngaySinhCu),
+            NgaySinh: convertISODateToFormattedDate(row.ngaySinh),
             NgayTao: convertISODateToFormattedDate(row.ngayTao),
 
             ...row
@@ -146,7 +142,7 @@ const ChinhSuaVBCC = () => {
             ...old,
             isLoading: false,
             data: dataWithIds,
-            total: data.lichSus.totalRow || 0
+            total: data.totalRow || 0
           }));
         } else {
           setPageState((old) => ({
@@ -175,7 +171,11 @@ const ChinhSuaVBCC = () => {
 
   return (
     <>
-      <MainCard sx={{ mt: 2 }} title={t(`Lịch sử chỉnh sửa VBCC`)} secondary={<Grid item>{<AddButton handleClick={handelUpdate} />}</Grid>}>
+      <MainCard
+        sx={{ mt: 2 }}
+        title={t(`Lịch sử chỉnh sửa văn bằng chứng chỉ`)}
+        secondary={<Grid item>{<AddButton handleClick={handelUpdate} />}</Grid>}
+      >
         {isAccess ? (
           <DataGrid
             autoHeight
