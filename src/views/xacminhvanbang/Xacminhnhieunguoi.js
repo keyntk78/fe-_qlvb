@@ -180,6 +180,7 @@ const Xacminhnhieunguoi = () => {
   useEffect(() => {
     if (openPopup) {
       formik.resetForm();
+      setSelectedFileName('');
     }
   }, [openPopup]);
 

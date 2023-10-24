@@ -298,10 +298,22 @@ const ActionButtons = ({
             }
           }
         ];
-      case 'xemlichsu':
+      case 'xemlichsuxacminh':
         return [
           {
-            title: 'Xem lịch sử',
+            title: 'Xem lịch sử xác minh',
+            icon: <IconHistory size={'20px'} />,
+            color: 'warning',
+            onClick: () => {
+              handleClick(params);
+              onClose();
+            }
+          }
+        ];
+      case 'xemlichsuhuybo':
+        return [
+          {
+            title: 'Xem lịch sử thu hồi',
             icon: <IconHistory size={'20px'} />,
             color: 'warning',
             onClick: () => {

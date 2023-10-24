@@ -38,6 +38,8 @@ import Xacminhnhieunguoi from './Xacminhnhieunguoi';
 import { getHocSinhXacMinhVanBang } from 'services/xacminhvanbangService';
 import { getAllTruong } from 'services/sharedService';
 import ChinhSuaVBCC from 'views/chinhsuavbcc/ChinhSuaVBCC';
+import Thuhoihuybo from 'views/thuhoihuybo/Thuhoihuybo';
+import LichSuThuHoi from 'views/thuhoihuybo/LichSuThuHoi';
 
 export default function Xacminhvanbang() {
   const isXs = useMediaQuery('(max-width:800px)');
@@ -111,10 +113,22 @@ export default function Xacminhvanbang() {
     dispatch(selectedHocsinh(hocsinh));
     dispatch(setOpenPopup(true));
   };
+  const handleThuHoiHuyBo = (hocsinh) => {
+    setTitle(t('Thu hồi hủy bỏ văn bằng chứng chỉ'));
+    setForm('thuhoi');
+    dispatch(selectedHocsinh(hocsinh));
+    dispatch(setOpenPopup(true));
+  };
 
   const handleXacMinh = (hocsinh) => {
     setTitle(t('Xác Minh'));
     setForm('xacminh');
+    dispatch(selectedHocsinh(hocsinh));
+    dispatch(setOpenPopup(true));
+  };
+  const handleXemLichSuHuyBo = (hocsinh) => {
+    setTitle(t('Xem lịch sử thu hồi hủy bỏ'));
+    setForm('xemlichsuhuybo');
     dispatch(selectedHocsinh(hocsinh));
     dispatch(setOpenPopup(true));
   };
@@ -153,7 +167,7 @@ export default function Xacminhvanbang() {
       handleGetbyId: handleDetail
     },
     {
-      type: 'xemlichsu',
+      type: 'xemlichsuxacminh',
       handleClick: handleXemLichSu
     },
     {
@@ -178,7 +192,22 @@ export default function Xacminhvanbang() {
     },
     {
       type: 'thuhoi',
+      handleClick: handleThuHoiHuyBo
+    }
+  ];
+
+  const buttonConfigurations1 = [
+    {
+      type: 'detail',
+      handleGetbyId: handleDetail
+    },
+    {
+      type: 'xemlichsuxacminh',
       handleClick: handleXemLichSu
+    },
+    {
+      type: 'xemlichsuhuybo',
+      handleClick: handleXemLichSuHuyBo
     }
   ];
 
@@ -260,16 +289,25 @@ export default function Xacminhvanbang() {
       width: 120,
       sortable: false,
       filterable: false,
+      align: 'right',
       renderCell: (params) => (
         <>
-          <Grid container justifyContent="center" spacing={1}>
-            <Grid item>
-              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
+          {params.row.trangThai !== -1 ? (
+            <Grid container spacing={1}>
+              <Grid item>
+                <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
+              </Grid>
+              <Grid item>
+                <CombinedActionButtons params={params.row} buttonConfigurations2={buttonConfigurations2} />
+              </Grid>
             </Grid>
-            <Grid item>
-              <CombinedActionButtons params={params.row} buttonConfigurations2={buttonConfigurations2} />
+          ) : (
+            <Grid container spacing={1}>
+              <Grid item>
+                <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations1} />
+              </Grid>
             </Grid>
-          </Grid>
+          )}
         </>
       )
     }
@@ -699,12 +737,14 @@ export default function Xacminhvanbang() {
             <Xacminhtungnguoi />
           ) : form == 'xemlichsu' ? (
             <LichSuXacMinh />
+          ) : form == 'xemlichsuhuybo' ? (
+            <LichSuThuHoi />
           ) : form == 'xacminhnhieunguoi' ? (
             <Xacminhnhieunguoi />
           ) : form == 'chinhsuavbcc' ? (
             <ChinhSuaVBCC />
           ) : form == 'thuhoi' ? (
-            <LichSuXacMinh />
+            <Thuhoihuybo />
           ) : form == 'caplaivbcc' ? (
             <LichSuXacMinh />
           ) : (

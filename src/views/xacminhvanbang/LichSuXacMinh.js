@@ -13,7 +13,7 @@ import i18n from 'i18n';
 import React from 'react';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { Button, FormControl, Grid, TextField } from '@mui/material';
-import { IconFileExport, IconSearch } from '@tabler/icons';
+import { IconDownload, IconFileExport, IconSearch } from '@tabler/icons';
 import * as XLSX from 'xlsx';
 import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
@@ -78,21 +78,6 @@ const LichSuXacMinh = () => {
       minWidth: 100
     },
     {
-      flex: 2,
-      field: 'pathFileYeuCau',
-      headerName: t('File xác minh'),
-      minWidth: 100,
-      renderCell: (params) => {
-        const pathFileYeuCau = config.urlImages + params.row.pathFileYeuCau;
-        return (
-          <a href={pathFileYeuCau} download>
-            {params.row.pathFileYeuCau}
-          </a>
-        );
-      }
-    },
-
-    {
       flex: 1,
       field: 'NgayXacMinh_fm',
       headerName: t('Ngày xác minh'),
@@ -104,6 +89,23 @@ const LichSuXacMinh = () => {
       headerName: t('Người xác minh'),
       minWidth: 100
     },
+    {
+      flex: 0.1,
+      field: 'pathFileYeuCau',
+      headerName: t('File xác minh'),
+      minWidth: 100,
+      align: 'center',
+      renderCell: (params) => {
+        const pathFileYeuCau = config.urlImages + params.row.pathFileYeuCau;
+
+        return (
+          <a href={pathFileYeuCau} download title="Tải xuống">
+            {params.row.pathFileYeuCau ? <IconDownload /> : ''}
+          </a>
+        );
+      }
+    },
+
     {
       field: 'actions',
       headerName: t('action'),
