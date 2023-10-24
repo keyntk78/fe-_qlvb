@@ -310,15 +310,15 @@ export default function PhuLucSoGoc() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell1 style={{ width: 'auto' }}>STT</TableCell1>
+                <TableCell1 style={{ width: '60PX' }}>STT</TableCell1>
                 <TableCell1 style={{ width: 'auto' }}>Họ và tên</TableCell1>
-                <TableCell1 style={{ width: 'auto' }}>CCCD</TableCell1>
-                <TableCell1 style={{ width: 'auto' }}>Ngày tháng năm sinh</TableCell1>
-                <TableCell1 style={{ width: 'auto' }}>Số hiệu văn bằng đã được cấp</TableCell1>
-                <TableCell1 style={{ width: 'auto' }}>Số hiệu văn bằng được cấp lại (nếu có)</TableCell1>
-                <TableCell1 style={{ width: 'auto' }}>Số vào sổ gốc cấp bằng mới (nếu có)</TableCell1>
+                <TableCell1 style={{ width: '120PX' }}>CCCD</TableCell1>
+                <TableCell1 style={{ width: '90PX' }}>Ngày tháng năm sinh</TableCell1>
+                <TableCell1 style={{ width: '90PX' }}>Số hiệu văn bằng đã được cấp</TableCell1>
+                <TableCell1 style={{ width: '90PX' }}>Số hiệu văn bằng được cấp lại (nếu có)</TableCell1>
+                <TableCell1 style={{ width: '100PX' }}>Số vào sổ gốc cấp bằng mới (nếu có)</TableCell1>
                 <TableCell1 style={{ width: 'auto' }}>Nội dung</TableCell1>
-                <TableCell1 style={{ width: 'auto' }}>Chữ ký người nhận</TableCell1>
+                <TableCell1 style={{ width: '120PX' }}>Chữ ký người nhận</TableCell1>
                 <TableCell1 style={{ width: 'auto' }}>Ghi chú</TableCell1>
               </TableRow>
             </TableHead>
@@ -361,7 +361,7 @@ export default function PhuLucSoGoc() {
             </Grid>
             <Grid item mt={0.4}>
               <Typography variant="body1" fontSize={15} style={{ fontWeight: 'bold' }}>
-                TRƯỞNG PHÒNG
+                {donvi.donViQuanLy == 1 ? 'GIÁM ĐỐC' : 'TRƯỞNG PHÒNG'}
               </Typography>
             </Grid>
             <Grid item mt={10}>
