@@ -17,10 +17,10 @@ import { convertISODateToFormattedDate } from 'utils/formatDate';
 import FormGroupButton from 'components/button/FormGroupButton';
 import { useFormik } from 'formik';
 import InputForm1 from 'components/form/InputForm1';
-import { getAllConfigs } from 'services/configService';
 import { convertJsonToFormData } from 'utils/convertJsonToFormData';
 import ExportSoGoc from './ExportSoGoc';
 import { getPreviewHocSinh, putIntoSoGoc } from 'services/capbangbanchinhService';
+import { GetCauHinhByIdDonVi } from 'services/sharedService';
 const VaoSoGoc = () => {
   const language = i18n.language;
   const navigate = useNavigate();
@@ -230,19 +230,14 @@ const VaoSoGoc = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getAllConfigs();
-      const cauhinh = response.data;
-      const configValues = {};
-      cauhinh.forEach((config) => {
-        configValues[config.configKey] = config.configValue;
-      });
+      const response_cauhinh = await GetCauHinhByIdDonVi(user.username);
+      const cauhinh_donvi = response_cauhinh.data;
       formik.setValues({
-        UyBanNhanDan: configValues['TENUYBANNHANDAN'] || '',
-        CoQuanCapBang: configValues['TENCOQUANCAPBANG'] || '',
-        KyHieu: configValues['KYHIEU'] || '',
+        UyBanNhanDan: cauhinh_donvi.tenUyBanNhanDan || '',
+        CoQuanCapBang: cauhinh_donvi.tenCoQuanCapBang || '',
         ngayQD: '',
-        NguoiKyBang: configValues['HOTENNGUOIKYSOGOC'] || '',
-        DiaPhuongCapBang: configValues['TENDIAPHUONGCAPBANG'] || '',
+        NguoiKyBang: cauhinh_donvi.hoTenNguoiKySoGoc || '',
+        DiaPhuongCapBang: cauhinh_donvi.tenDiaPhuongCapBang || '',
         nguoiThucHien: user.username
       });
     };
