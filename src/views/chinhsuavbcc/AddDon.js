@@ -31,6 +31,7 @@ import SelectForm from 'components/form/SelectForm';
 import { convertJsonToFormData } from 'utils/convertJsonToFormData';
 import useChinhSuaVanBangValidationSchema from 'components/validations/chinhsuavbccValidation';
 import { getAllHinhThucDaoTao, getAllNamThi, getByCCCD, getKhoaThiByNamThi } from 'services/sharedService';
+import { convertISODateToFormattedDate } from 'utils/formatDate';
 const AddDonChinhSua = () => {
   const { t } = useTranslation();
   const openSubPopup = useSelector(openSubPopupSelector);
@@ -56,19 +57,21 @@ const AddDonChinhSua = () => {
       SoHieuVanbang: '',
       SoVaoSoCapBang: '',
       MaHTDT: '',
-      HoiDongThi: '',
+      HoiDong: '',
       IdNamThi: '',
       IdKhoaThi: '',
       NoiDungChinhSua: '',
       XepLoai: '',
+      LoaiHanhDong: '',
       NgayCapBang: ''
     },
     validationSchema: useChinhSuaVanBangValidationSchema(),
     onSubmit: async (values) => {
-      console.log(values);
-      if (!formik.values.FileVanBan.name.endsWith('.docx') && !formik.values.FileVanBan.name.endsWith('.pdf')) {
-        dispatch(showAlert(new Date().getTime().toString(), 'error', t('Định dạng file không hợp lệ')));
-        return;
+      if (formik.values.FileVanBan !== null) {
+        if (!formik.values.FileVanBan.name.endsWith('.docx') && !formik.values.FileVanBan.name.endsWith('.pdf')) {
+          dispatch(showAlert(new Date().getTime().toString(), 'error', t('Định dạng file không hợp lệ')));
+          return;
+        }
       }
       try {
         const formData = await convertJsonToFormData(values);
@@ -87,10 +90,6 @@ const AddDonChinhSua = () => {
       }
     }
   });
-
-  const handleGenderChange = (event) => {
-    formik.setFieldValue('GioiTinh', event.target.value);
-  };
 
   const handleHinhThucDaoTaoChange = async (event) => {
     const maHTDT = event.target.value;
@@ -146,6 +145,7 @@ const AddDonChinhSua = () => {
           XepLoai: dataHocsinh.xepLoai || '',
           NguoiThucHien: user.username,
           LyDo: '',
+          LoaiHanhDong: 0,
           NoiDungChinhSua: ''
         });
       }
@@ -159,7 +159,13 @@ const AddDonChinhSua = () => {
     const fetchData1 = async () => {
       //get khóa thi theo năm thi
       const khoaThi = await getKhoaThiByNamThi(formik.values.IdNamThi);
-      setKhoaThi(khoaThi.data);
+      const dataWithIds = khoaThi.data.map((row, index) => ({
+        idindex: index + 1,
+        Ngay: convertISODateToFormattedDate(row.ngay),
+        ...row
+      }));
+      setKhoaThi(dataWithIds);
+      // setKhoaThi(khoaThi.data);
     };
     fetchData1();
   }, [formik.values.IdNamThi]);
@@ -195,20 +201,17 @@ const AddDonChinhSua = () => {
       </Grid>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={4} md={4}>
-          <FormControlComponent isRequired xsLabel={0} xsForm={12} label={t('user.label.gender')}>
-            <FormControl fullWidth variant="outlined">
-              <RadioGroup
-                name="GioiTinh"
-                value={formik.values.GioiTinh ? 'true' : 'false'}
-                onChange={handleGenderChange}
-                onBlur={formik.handleBlur}
-              >
-                <Grid container>
-                  <FormControlLabel size="small" value="true" control={<Radio size="small" />} label={t('gender.male')} />
-                  <FormControlLabel size="small" value="false" control={<Radio size="small" />} label={t('gender.female')} />
-                </Grid>
-              </RadioGroup>
-            </FormControl>
+          <FormControlComponent isRequire label={t('user.label.gender')}>
+            <RadioGroup
+              style={{ display: 'flex', justifyContent: 'flex-start' }}
+              row
+              name="GioiTinh"
+              value={formik.values.GioiTinh ? formik.values.GioiTinh : 'true'}
+              onChange={formik.handleChange}
+            >
+              <FormControlLabel value={true} control={<Radio />} label={t('gender.male')} />
+              <FormControlLabel value={false} control={<Radio />} label={t('gender.female')} />
+            </RadioGroup>
           </FormControlComponent>
         </Grid>
         <Grid item xs={12} sm={4} md={4}>
@@ -291,13 +294,13 @@ const AddDonChinhSua = () => {
             </FormControl>
           </FormControlComponent>{' '}
         </Grid>
-        <Grid item xs={12} sm={4} md={4}>
+        <Grid item xs={12} sm={4} md={2.5}>
           <FormControlComponent xsForm={12} isRequire label={t('Khóa thi')}>
             <FormControl fullWidth variant="outlined">
               <SelectForm
                 formik={formik}
                 keyProp="id"
-                valueProp="ngay"
+                valueProp="Ngay"
                 item={khoaThi}
                 name="IdKhoaThi"
                 value={formik.values.IdKhoaThi}
@@ -330,6 +333,23 @@ const AddDonChinhSua = () => {
           </Table>
         </TableContainer>
       </div>
+      <div style={{ borderBottom: '2px solid black', fontWeight: 'bold', paddingTop: 3 }}>
+        <p>{t('Noidungchinhsua')}</p>
+      </div>
+      <Grid item xs={12} sm={4} md={4}>
+        <FormControlComponent isRequire label={t('Hành động')}>
+          <RadioGroup
+            style={{ display: 'flex', justifyContent: 'flex-start' }}
+            row
+            name="LoaiHanhDong"
+            value={formik.values.LoaiHanhDong ? formik.values.LoaiHanhDong : 0}
+            onChange={formik.handleChange}
+          >
+            <FormControlLabel value={0} control={<Radio />} label={t('Chỉnh sửa')} />
+            <FormControlLabel value={1} control={<Radio />} label={t('Cấp lại')} />
+          </RadioGroup>
+        </FormControlComponent>
+      </Grid>
       <Grid item xs={12} container spacing={2}>
         <InputForm1
           formik={formik}

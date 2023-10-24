@@ -661,9 +661,10 @@
   "tongtruong": "Đơn vị gửi duyệt",
   "tongphoiin": "Phôi đã in",
   "thongkeinphoibang": "Thống kê in phôi bằng",
-  "quyetdinhchinhsuavbcc": "Biên bản quyết định chỉnh sửa/cấp lại/thu hồi VBCC",
+  "quyetdinhchinhsuavbcc": "Biên bản quyết định chỉnh sửa/cấp lại VBCC",
   "sovaoso.valid": "Số vào sổ không được trống",
   "sohieuvb.valid": "Số hiệu không được trống",
   "hoidongthi.valid": "Hội đồng thi không đực trống",
-  "phulucsogoc.title": "Phụ lục số gốc"
+  "phulucsogoc.title": "Phụ lục số gốc",
+  "Noidungchinhsua": "Nội dung chỉnh sửa"
 }
