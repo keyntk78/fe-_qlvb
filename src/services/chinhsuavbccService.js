@@ -36,3 +36,16 @@ export async function updateVBCC(data) {
     throw error;
   }
 }
+
+export async function getByCCCD(cccd) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`ChinhSuaVanBang/GetHocSinhByCccd?cccd=${cccd}`, 'GET');
+    console.log(response);
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating hocsinh:', error);
+    throw error;
+  }
+}
