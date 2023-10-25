@@ -80,13 +80,13 @@ const LichSuXacMinh = () => {
     {
       flex: 1,
       field: 'NgayXacMinh_fm',
-      headerName: t('Ngày xác minh'),
+      headerName: t('xacminhvanbang.field.ngayxacminh'),
       minWidth: 100
     },
     {
       flex: 1,
       field: 'nguoiTao',
-      headerName: t('Người xác minh'),
+      headerName: t('xacminhvanbang.field.nguoixacminh'),
       minWidth: 100
     },
     {
@@ -104,19 +104,6 @@ const LichSuXacMinh = () => {
           </a>
         );
       }
-    },
-    {
-
-      flex: 1,
-      field: 'NgayXacMinh_fm',
-      headerName: t('xacminhvanbang.field.ngayxacminh'),
-      minWidth: 100
-    },
-    {
-      flex: 1,
-      field: 'nguoiTao',
-      headerName: t('xacminhvanbang.field.nguoixacminh'),
-      minWidth: 100
     },
     {
       field: 'actions',
