@@ -65,7 +65,7 @@ const AddDonChinhSua = ({ thaotac }) => {
       IdKhoaThi: '',
       XepLoai: '',
       LoaiHanhDong: thaotac,
-      NgayCapBang: ''
+      NgayCap: ''
     },
     validationSchema: useChinhSuaVanBangValidationSchema(),
     onSubmit: async (values) => {
@@ -144,7 +144,7 @@ const AddDonChinhSua = ({ thaotac }) => {
           HoiDongThi: dataHocsinh.hoiDong || '',
           IdNamThi: dataHocsinh.danhMucTotNghiep.idNamThi || '',
           IdKhoaThi: dataHocsinh.idKhoaThi || '',
-          NgayCapBang: dataHocsinh.danhMucTotNghiep.ngayCapBang || '',
+          NgayCap: dataHocsinh.danhMucTotNghiep.ngayCapBang || '',
           MaHTDT: dataHocsinh.maHinhThucDaoTao || '',
           XepLoai: dataHocsinh.xepLoai || '',
           NguoiThucHien: user.username,
@@ -269,9 +269,9 @@ const AddDonChinhSua = ({ thaotac }) => {
             isRequired
             label={'Ngày cấp'}
             formik={formik}
-            name="NgayCapBang"
+            name="NgayCap"
             type="date"
-            value={formik.values.NgayCapBang ? new Date(formik.values.NgayCapBang).toISOString().slice(0, 10) : ''}
+            value={formik.values.NgayCap ? new Date(formik.values.NgayCap).toISOString().slice(0, 10) : ''}
           />
         </Grid>
       </Grid>
