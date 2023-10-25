@@ -43,7 +43,7 @@ const Xacminhtungnguoi = () => {
       values.append('CongVanSo', formik.values.congVanSo);
       values.append('NgayTrenCongVan', formik.values.ngayBanHanh);
       values.append('FileYeuCau', selectFile);
-      values.append('HoTenNguoiThucHien', user.username);
+      values.append('NguoiThucHien', user.username);
       await AddLichSuXacMinh(values);
       setLoading(true);
       generateDocument(DataToExportWord);
@@ -66,7 +66,6 @@ const Xacminhtungnguoi = () => {
       const response_cauhinh = await getCauHinhXacMinhVanBang(donvi.id);
       const data_cauhinh = response_cauhinh.data;
       console.log(data_cauhinh, datas);
-      //const response_khoaThi = await getKhoathiById(datas.soGoc.idNamThi, datas.idKhoaThi);
       setDatas({
         uyBanNhanDan: data_cauhinh.uyBanNhanDan.toUpperCase(),
         coQuanCapBang: data_cauhinh.coQuanCapBang.toUpperCase(),

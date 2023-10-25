@@ -146,3 +146,14 @@ export async function GetPhoiGocDangSuDung(username) {
     throw error;
   }
 }
+export async function getByIdNamThi(idnam, maHtdt, nguoiThucHien) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(`Shared/GetByIdNamThi/${idnam}/${maHtdt}?nguoiThucHien=${nguoiThucHien}`, 'GET');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating DanhmucTN:', error);
+    throw error;
+  }
+}

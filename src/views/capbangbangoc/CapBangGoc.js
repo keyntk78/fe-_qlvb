@@ -6,7 +6,15 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { infoHocSinhSelector, openPopupSelector, reloadDataSelector, userLoginSelector } from 'store/selectors';
-import { selectedDanhmuc, selectedDonvitruong, selectedHocsinh, setInfoHocSinh, setOpenPopup, setReloadData } from 'store/actions';
+import {
+  selectedDanhmuc,
+  selectedDonvitruong,
+  selectedHocsinh,
+  setInfoHocSinh,
+  setLoading,
+  setOpenPopup,
+  setReloadData
+} from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import { createSearchParams } from 'utils/createSearchParams';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
@@ -24,13 +32,12 @@ import Detail from './Detail';
 import XacNhanIn from './XacNhanIn';
 import { getHocSinhCapBang } from 'services/capbangbanchinhService';
 import { getAllHinhthucdaotao } from 'services/hinhthucdaotaoService';
-import { getByIdNamThi } from 'services/danhmuctotnghiepService';
 import ActionButtons from 'components/button/ActionButtons';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import CapBangAll from './CapBangAll';
 import ButtonSecondary from 'components/buttoncolor/ButtonSecondary';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
-import { getAllTruong } from 'services/sharedService';
+import { getAllTruong, getByIdNamThi } from 'services/sharedService';
 
 const trangThaiOptions = [
   // { value: '1', label: 'Chưa duyệt' },
@@ -74,6 +81,7 @@ export default function CapBangGoc() {
   const [loadData, setLoadData] = useState(false);
   const infoHocSinh = useSelector(infoHocSinhSelector);
   const user = useSelector(userLoginSelector);
+  const [firstLoad3, setFirstLoad3] = useState(true);
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -260,15 +268,32 @@ export default function CapBangGoc() {
     const fetchDataDL = async () => {
       const namhoc = await getAllNamthi();
       setNamHoc(namhoc.data);
-      const htdt = await getAllHinhthucdaotao();
-      setHTDT(htdt.data);
-      // const donvi = await getAllDonvi();
-      const donvi = await getAllTruong(user.username);
-      if (donvi.data && donvi.data.length > 0) {
-        setDonvis(donvi.data);
-      } else {
-        setDonvis([]);
-      }
+    };
+    fetchDataDL();
+  }, []);
+  useEffect(() => {
+    const fetchDataDL = async () => {
+      setTimeout(
+        async () => {
+          try {
+            setLoading(true);
+            const htdt = await getAllHinhthucdaotao();
+            setHTDT(htdt.data);
+            const donvi = await getAllTruong(user ? user.username : '');
+            if (donvi.data && donvi.data.length > 0) {
+              setDonvis(donvi.data);
+            } else {
+              setDonvis([]);
+            }
+            setFirstLoad3(false);
+            setLoading(false);
+          } catch (error) {
+            console.error(error);
+            setLoading(false);
+          }
+        },
+        firstLoad3 ? 2500 : 0
+      );
     };
     fetchDataDL();
   }, [user]);
@@ -288,7 +313,7 @@ export default function CapBangGoc() {
           }));
           setSelectNamHoc(infoHocSinh.idNamThi);
           setSelectHTDT(infoHocSinh.maHinhThucDaoTao);
-          const danhmuc = await getByIdNamThi(infoHocSinh.idNamThi, infoHocSinh.maHinhThucDaoTao);
+          const danhmuc = await getByIdNamThi(infoHocSinh.idNamThi, infoHocSinh.maHinhThucDaoTao, user.username);
           if (danhmuc.data && danhmuc.data.length > 0) {
             const selectDanhmuc = danhmuc.data.find((item) => item.id === infoHocSinh.idDanhMucTotNghiep);
             setDMTN(danhmuc.data);
@@ -313,7 +338,7 @@ export default function CapBangGoc() {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const danhmuc = await getByIdNamThi(selectNamHoc, selectHTDT);
+      const danhmuc = await getByIdNamThi(selectNamHoc, selectHTDT, user.username);
       if (danhmuc.data && danhmuc.data.length > 0) {
         setDMTN(danhmuc.data);
       } else {

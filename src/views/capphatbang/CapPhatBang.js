@@ -5,7 +5,7 @@ import { Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select, TextFiel
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { donviSelector, openPopupSelector, reloadDataSelector, selectedInfoMessageSelector } from 'store/selectors';
+import { donviSelector, openPopupSelector, reloadDataSelector, selectedInfoMessageSelector, userLoginSelector } from 'store/selectors';
 import { selectedDanhmuc, selectedHocsinh, setOpenPopup, setReloadData, setSelectedInfoMessage } from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import { createSearchParams } from 'utils/createSearchParams';
@@ -21,10 +21,10 @@ import BackToTop from 'components/scroll/BackToTop';
 import Popup from 'components/controls/popup';
 import { getAllNamthi } from 'services/namthiService';
 import { getAllHinhthucdaotao } from 'services/hinhthucdaotaoService';
-import { getByIdNamThi } from 'services/danhmuctotnghiepService';
 import PhatBang from './PhatBang';
 import { getSearchHocSinhCapPhatBang } from 'services/capphatbangService';
 import ActionButtons from 'components/button/ActionButtons';
+import { getByIdNamThi } from 'services/sharedService';
 
 const trangThaiOptions = [
   // { value: '1', label: 'Chưa duyệt' },
@@ -56,6 +56,7 @@ export default function CapPhatBang() {
   const [daCapCount, setDaCapCount] = useState(0);
   const [chuaCapCount, setChuaCapCount] = useState(0);
   const donvi = useSelector(donviSelector);
+  const user = useSelector(userLoginSelector);
   const infoMessage = useSelector(selectedInfoMessageSelector);
   const [loadData, setLoadData] = useState(false);
   const [pageState, setPageState] = useState({
@@ -218,7 +219,7 @@ export default function CapPhatBang() {
           }));
           setSelectNamHoc(infoMessage.IdNamThi);
           setSelectHTDT(infoMessage.MaHinhThucDaoTao);
-          const danhmuc = await getByIdNamThi(infoMessage.IdNamThi, infoMessage.MaHinhThucDaoTao);
+          const danhmuc = await getByIdNamThi(infoMessage.IdNamThi, infoMessage.MaHinhThucDaoTao, user.username);
           if (danhmuc.data && danhmuc.data.length > 0) {
             setDMTN(danhmuc.data);
             setPageState((old) => ({
@@ -240,7 +241,7 @@ export default function CapPhatBang() {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const danhmuc = await getByIdNamThi(selectNamHoc, selectHTDT);
+      const danhmuc = await getByIdNamThi(selectNamHoc, selectHTDT, user.username);
       if (danhmuc.data && danhmuc.data.length > 0) {
         setDMTN(danhmuc.data);
       } else {

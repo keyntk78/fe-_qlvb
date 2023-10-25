@@ -12,6 +12,7 @@ import { GetConfigPhoi } from 'services/phoigocService';
 import ExitButton from 'components/button/ExitButton';
 
 const InThu = ({ duLieuHocSinh }) => {
+  console.log(duLieuHocSinh);
   const phoigoc = useSelector(selectedPhoigocSelector);
   const [duLieuConFig, setDuLieuConFig] = useState([]);
   useEffect(() => {

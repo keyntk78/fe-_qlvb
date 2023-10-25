@@ -1,19 +1,26 @@
 import React, { useRef } from 'react';
-import ReactToPrint, { useReactToPrint } from 'react-to-print';
+import { useReactToPrint } from 'react-to-print';
 import MainCard from 'components/cards/MainCard';
 import { IconPrinter } from '@tabler/icons';
 import { Button, Grid } from '@mui/material';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { selectedPhoigocSelector } from 'store/selectors';
+import { selectedDanhmucSelector, selectedDonvitruongSelector, selectedPhoigocSelector } from 'store/selectors';
 import { useState } from 'react';
 import { GetConfigPhoi } from 'services/phoigocService';
 import ExitButton from 'components/button/ExitButton';
 import DuLieuInTungNguoi from './XuLyDuLieuInTungNguoi';
+import { CapBang } from 'services/capbangbanchinhService';
 
 const InBangTungNguoi = ({ duLieuHocSinh }) => {
   const phoigoc = useSelector(selectedPhoigocSelector);
   const [duLieuConFig, setDuLieuConFig] = useState([]);
+  const donvi = useSelector(selectedDonvitruongSelector);
+  const danhmuc = useSelector(selectedDanhmucSelector);
+  console.log(duLieuHocSinh);
+  console.log(donvi);
+  console.log(danhmuc);
+  console.log(phoigoc);
   useEffect(() => {
     const fetchDataDLHS = async () => {
       const response_cf = await GetConfigPhoi(phoigoc.id);
@@ -56,20 +63,38 @@ const InBangTungNguoi = ({ duLieuHocSinh }) => {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current
   });
+  const handlePrintAndCallApi = async () => {
+    console.log('123');
+    handlePrint();
+    const cccd = [duLieuHocSinh.cccd];
+    console.log('123');
+    try {
+      const params = new URLSearchParams();
+      params.append('idDanhMucTotNghiep', danhmuc.id);
+      params.append('idTruong', donvi.id);
+      await CapBang(params, cccd);
+      dispatch(setReloadData(true));
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   return (
     <>
       <MainCard sx={{ backgroundColor: '#4d3b3b1f' }}>
         <Grid container spacing={1}>
           <Grid item>
-            <ReactToPrint
+            {/* <ReactToPrint
               trigger={() => (
-                <Button variant="contained" title="In" startIcon={<IconPrinter />} onClick={handlePrint}>
+                <Button variant="contained" title="In" startIcon={<IconPrinter />} onClick={handlePrintAndCallApi}>
                   In
                 </Button>
               )}
               content={() => componentRef.current}
-            />
+            /> */}
+            <Button variant="contained" title="In" startIcon={<IconPrinter />} onClick={handlePrintAndCallApi}>
+              In
+            </Button>
           </Grid>
         </Grid>
         <div>

@@ -137,47 +137,52 @@ const Detail = ({ type }) => {
   });
 
   useEffect(() => {
+    console.log(selectedHocSinh);
+  }, [selectedHocSinh]);
+
+  useEffect(() => {
     const fetchData = async () => {
       const userbyid = await getHocSinhByCCCD(selectedHocSinh.cccd);
-      if (type == 'phong') {
-        const hocsinhSoGocid = await getHocSinhDuaVaoSoGoc(donvi.id, danhmuc.id, selectedHocSinh.id);
-        const phoidata = await getPhoiDangSuDung(donvi.id);
-        dispatch(selectedPhoigoc(phoidata.data));
-        setHsSoGoc(hocsinhSoGocid.data);
-      }
       const datauser = userbyid.data;
-      if (selectedHocSinh && openPopup) {
-        formik.setValues({
-          ho: datauser.ho || '',
-          ten: datauser.ten || '',
-          hoTen: datauser.hoTen || '',
-          cccd: datauser.cccd || '',
-          ngaySinh: datauser.ngaySinh || '',
-          noiSinh: datauser.noiSinh || '',
-          diaChi: datauser.diaChi || '',
-          lop: datauser.lop || '',
-          gioiTinh: datauser.gioiTinh || '',
-          danToc: datauser.danToc || '',
-          hanhKiem: datauser.hanhKiem || '',
-          hocLuc: datauser.hocLuc || '',
-          soHieu: datauser.soHieuVanBang || '',
-          soVaoSo: datauser.soVaoSoCapBang || '',
-          khoaThi: datauser.idKhoaThi || '',
-          ghiChu: datauser.ghiChu || '',
-          idDanhMucTotNghiep: datauser.idDanhMucTotNghiep || '',
-          xepLoai: datauser.xepLoai || '',
-          ketqua: datauser.ketqua || '',
-          idTruong: datauser.idTruong || '',
-          heDaoTao: datauser.truong.maHeDaoTao || '',
-          hinhThucDaoTao: datauser.truong.maHinhThucDaoTao || '',
-          nguoiThucHien: user.username,
-          ketQuaHocTaps: datauser.ketQuaHocTaps || [],
-          noiCap: datauser.soGoc.diaPhuongCapBang || '',
-          nguoiKy: datauser.soGoc.nguoiKyBang || '',
-          ngayCapBang: convertDateTimeToDate(datauser.danhMucTotNghiep.ngayCapBang) || '',
-          trangThai: datauser.trangThai || ''
-        });
+      if (type == 'phong') {
+        if (datauser && datauser.trangThai && (datauser.trangThai == 3 || datauser.trangThai == 4)) {
+          const hocsinhSoGocid = await getHocSinhDuaVaoSoGoc(donvi.id, danhmuc.id, selectedHocSinh.id);
+          setHsSoGoc(hocsinhSoGocid.data);
+          const phoidata = await getPhoiDangSuDung(donvi.id);
+          dispatch(selectedPhoigoc(phoidata.data));
+        }
       }
+
+      formik.setValues({
+        ho: datauser.ho || '',
+        ten: datauser.ten || '',
+        hoTen: datauser.hoTen || '',
+        cccd: datauser.cccd || '',
+        ngaySinh: datauser.ngaySinh || '',
+        noiSinh: datauser.noiSinh || '',
+        diaChi: datauser.diaChi || '',
+        lop: datauser.lop || '',
+        gioiTinh: datauser.gioiTinh || '',
+        danToc: datauser.danToc || '',
+        hanhKiem: datauser.hanhKiem || '',
+        hocLuc: datauser.hocLuc || '',
+        soHieu: datauser.soHieuVanBang || '',
+        soVaoSo: datauser.soVaoSoCapBang || '',
+        khoaThi: datauser.idKhoaThi || '',
+        ghiChu: datauser.ghiChu || '',
+        idDanhMucTotNghiep: datauser.idDanhMucTotNghiep || '',
+        xepLoai: datauser.xepLoai || '',
+        ketqua: datauser.ketqua || '',
+        idTruong: datauser.idTruong || '',
+        heDaoTao: datauser.truong.maHeDaoTao || '',
+        hinhThucDaoTao: datauser.truong.maHinhThucDaoTao || '',
+        nguoiThucHien: user.username || '',
+        ketQuaHocTaps: datauser.ketQuaHocTaps || [],
+        noiCap: datauser.soGoc.diaPhuongCapBang || '',
+        nguoiKy: datauser.soGoc.nguoiKyBang || '',
+        ngayCapBang: convertDateTimeToDate(datauser.danhMucTotNghiep.ngayCapBang) || '',
+        trangThai: datauser.trangThai || ''
+      });
       dispatch(setReloadData(false));
     };
     if (openPopup) {
@@ -187,18 +192,21 @@ const Detail = ({ type }) => {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const monthi = await getAllMonthi();
-      setMonThi(monthi.data);
-      const donvi = await getAllDonvi();
-      setDonVi(donvi.data);
-      const danhmuc = await getAllDanhmucTN(user ? user.username : '');
-      setDanhMuc(danhmuc.data);
-      const hedaotao = await getAllHedaotao();
-      setHeDaoTao(hedaotao.data);
-      const htdt = await getAllHinhthucdaotao();
-      setHTDT(htdt.data);
-      const khoathi = await getAllKhoathi();
-      setKhoaThi(khoathi.data);
+      // Đợi 2 giây trước khi bắt đầu cuộc gọi API
+      setTimeout(async () => {
+        const monthi = await getAllMonthi();
+        setMonThi(monthi.data);
+        const donvi = await getAllDonvi();
+        setDonVi(donvi.data);
+        const danhmuc = await getAllDanhmucTN(user ? user.username : '');
+        setDanhMuc(danhmuc.data);
+        const hedaotao = await getAllHedaotao();
+        setHeDaoTao(hedaotao.data);
+        const htdt = await getAllHinhthucdaotao();
+        setHTDT(htdt.data);
+        const khoathi = await getAllKhoathi();
+        setKhoaThi(khoathi.data);
+      }, 2000); // Đợi 2 giây trước khi thực hiện các cuộc gọi API
     };
     fetchDataDL();
   }, []);
@@ -487,12 +495,12 @@ const Detail = ({ type }) => {
           </Grid>
         </Grid>
         <Grid container item xs={12} mt={2} justifyContent="flex-end">
-          {formik.values.trangThai == 3 && (
+          {(formik.values.trangThai == 3 || formik.values.trangThai == 4) && (
             <Grid item sx={{ mr: '5px' }}>
               <ButtonSuccess onClick={handlePreview} icon={IconPrinter} title={t('In thử')} />
             </Grid>
           )}
-          {formik.values.trangThai == 3 && (
+          {(formik.values.trangThai == 3 || formik.values.trangThai == 4) && (
             <Grid item sx={{ mr: '5px' }}>
               <AnimateButton>
                 <Tooltip title={t('In Bằng')} placement="bottom">

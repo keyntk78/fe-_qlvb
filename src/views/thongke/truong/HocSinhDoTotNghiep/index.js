@@ -5,7 +5,7 @@ import { Button, FormControl, Grid, InputLabel, MenuItem, Select, useMediaQuery 
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { donviSelector, reloadDataSelector } from 'store/selectors';
+import { donviSelector, reloadDataSelector, userLoginSelector } from 'store/selectors';
 import { setLoading, setReloadData } from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import { createSearchParams } from 'utils/createSearchParams';
@@ -18,9 +18,9 @@ import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { getAllNamthi } from 'services/namthiService';
 import ExportExcel from './ExportExcel';
-import { getByIdNamThi } from 'services/danhmuctotnghiepService';
 import { GetHocSinhDTNByTruongAndNamOrDMTN } from 'services/thongkeService';
 import { getAllHinhthucdaotao } from 'services/hinhthucdaotaoService';
+import { getByIdNamThi } from 'services/sharedService';
 
 export default function ThongKeHocSinhTotNghiep() {
   const isXs = useMediaQuery('(max-width:700px)');
@@ -32,6 +32,7 @@ export default function ThongKeHocSinhTotNghiep() {
   const [search, setSearch] = useState(false);
   const [firstLoad, setFirstLoad] = useState(true);
   const reloadData = useSelector(reloadDataSelector);
+  const user = useSelector(userLoginSelector);
   const dispatch = useDispatch();
   const localeText = useLocalText();
   const navigate = useNavigate();
@@ -128,7 +129,7 @@ export default function ThongKeHocSinhTotNghiep() {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const danhmuc = await getByIdNamThi(pageState.namHoc, pageState.HTDT);
+      const danhmuc = await getByIdNamThi(pageState.namHoc, pageState.HTDT, user.username);
       if (danhmuc.data && danhmuc.data.length > 0) {
         setDanhMuc(danhmuc.data);
       } else {

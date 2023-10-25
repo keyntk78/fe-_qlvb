@@ -29,14 +29,13 @@ import Popup from 'components/controls/popup';
 import { getAllNamthi } from 'services/namthiService';
 import Detail from './Detail';
 import { getAllHinhthucdaotao } from 'services/hinhthucdaotaoService';
-import { getByIdNamThi } from 'services/danhmuctotnghiepService';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import Xacminhtungnguoi from './Xacminhtungnguoi';
 import LichSuXacMinh from './LichSuXacMinh';
 import Xacminhnhieunguoi from './Xacminhnhieunguoi';
 import { getHocSinhXacMinhVanBang } from 'services/xacminhvanbangService';
-import { getAllTruong } from 'services/sharedService';
+import { getAllTruong, getByIdNamThi } from 'services/sharedService';
 import ChinhSuaVBCC from 'views/chinhsuavbcc/ChinhSuaVBCC';
 import Thuhoihuybo from 'views/thuhoihuybo/Thuhoihuybo';
 import LichSuThuHoi from 'views/thuhoihuybo/LichSuThuHoi';
@@ -239,24 +238,6 @@ export default function Xacminhvanbang() {
             <Grid item xs={12}>
               <Typography variant="body1">{params.value}</Typography>
             </Grid>
-            {/* <Grid item xs={12} mt={0.2}>
-              <Chip
-                // variant='outlined'
-                size="small"
-                label={params.row.trangThai_fm}
-                color={
-                  params.row.trangThai == 2
-                    ? 'success'
-                    : params.row.trangThai == 3
-                    ? 'info'
-                    : params.row.trangThai == 4
-                    ? 'success'
-                    : params.row.trangThai == 5
-                    ? 'primary'
-                    : 'secondary'
-                }
-              />
-            </Grid> */}
           </Grid>
         </>
       )
@@ -335,17 +316,9 @@ export default function Xacminhvanbang() {
     const fetchDataDL = async () => {
       const namhoc = await getAllNamthi();
       setNamHoc(namhoc.data);
-      // const htdt = await getAllHinhthucdaotao();
-      //setHTDT(htdt.data);
-      // const donvi = await getAllTruong(user ? user.username : '');
-      // if (donvi.data && donvi.data.length > 0) {
-      //   setDonvis(donvi.data);
-      // } else {
-      //   setDonvis([]);
-      // }
     };
     fetchDataDL();
-  }, [user]);
+  }, []);
   useEffect(() => {
     const fetchDataDL = async () => {
       setTimeout(
@@ -388,7 +361,7 @@ export default function Xacminhvanbang() {
           }));
           setSelectNamHoc(infoHocSinh.idNamThi);
           setSelectHTDT(infoHocSinh.maHinhThucDaoTao);
-          const danhmuc = await getByIdNamThi(infoHocSinh.idNamThi, infoHocSinh.maHinhThucDaoTao);
+          const danhmuc = await getByIdNamThi(infoHocSinh.idNamThi, infoHocSinh.maHinhThucDaoTao, user.username);
           if (danhmuc.data && danhmuc.data.length > 0) {
             const selectDanhmuc = danhmuc.data.find((item) => item.id === infoHocSinh.idDanhMucTotNghiep);
             setDMTN(danhmuc.data);
@@ -413,7 +386,7 @@ export default function Xacminhvanbang() {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const danhmuc = await getByIdNamThi(selectNamHoc, selectHTDT);
+      const danhmuc = await getByIdNamThi(selectNamHoc, selectHTDT, user.username);
       if (danhmuc.data && danhmuc.data.length > 0) {
         setDMTN(danhmuc.data);
       } else {

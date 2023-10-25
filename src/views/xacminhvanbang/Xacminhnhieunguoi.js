@@ -131,7 +131,7 @@ const Xacminhnhieunguoi = () => {
       values.append('CongVanSo', formik.values.congVanSo);
       values.append('NgayTrenCongVan', formik.values.ngayBanHanh);
       values.append('FileYeuCau', selectFile);
-      values.append('HoTenNguoiThucHien', user.username);
+      values.append('NguoiThucHien', user.username);
       await AddListLichSuXacMinh(values);
       setLoading(true);
       generateDocument(rows, DataToExportWord);
