@@ -1,5 +1,6 @@
 import {
   Button,
+  Divider,
   FormControl,
   FormControlLabel,
   Grid,
@@ -11,14 +12,15 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
+  Typography
 } from '@mui/material';
 import InputForm1 from 'components/form/InputForm1';
 import { useFormik } from 'formik';
 import React from 'react';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { openPopupSelector, selectedHocsinhSelector, upDateVBCCSelector, userLoginSelector } from 'store/selectors';
+import { openSubPopupSelector, selectedHocsinhSelector, upDateVBCCSelector, userLoginSelector } from 'store/selectors';
 import { useTranslation } from 'react-i18next';
 import { getByIdHistory } from 'services/chinhsuavbccService';
 import '../../index.css';
@@ -27,8 +29,9 @@ import config from 'config';
 import { useState } from 'react';
 import SelectForm from 'components/form/SelectForm';
 import { getAllDanToc, getAllHinhThucDaoTao, getAllNamThi, getKhoaThiByNamThi } from 'services/sharedService';
-import { IconDownload } from '@tabler/icons';
+import { IconBook, IconCertificate, IconDownload, IconFile, IconUser } from '@tabler/icons';
 import ResetButton from 'components/button/ExitButton';
+import { convertISODateToFormattedDate } from 'utils/formatDate';
 const DetailHistory = () => {
   const [hinhThucDaoTao, setHinhThucDaoTao] = useState([]);
   const user = useSelector(userLoginSelector);
@@ -36,7 +39,7 @@ const DetailHistory = () => {
   const [namThi, setNamThi] = useState([]);
   const [khoaThi, setKhoaThi] = useState([]);
   const { t } = useTranslation();
-  const openPopup = useSelector(openPopupSelector);
+  const openSubPopup = useSelector(openSubPopupSelector);
   const selectedHocsinh = useSelector(selectedHocsinhSelector);
   const history = useSelector(upDateVBCCSelector);
   const [pathFileHistory, setPathFileHistory] = useState('');
@@ -54,13 +57,12 @@ const DetailHistory = () => {
       SoHieuVanbang: '',
       SoVaoSoCapBang: '',
       MaHTDT: '',
-      HoiDongThi: '',
+      HoiDong: '',
       IdNamThi: '',
       IdKhoaThi: '',
       NoiDungChinhSua: '',
       XepLoai: '',
-      NgayCapBang: '',
-      LoaiHanhDong: 0
+      NgayCapBang: ''
     }
   });
   useEffect(() => {
@@ -76,6 +78,7 @@ const DetailHistory = () => {
       setNamThi(namThi.data);
       const hocSinh = await getByIdHistory(selectedHocsinh.cccd, history.id);
       const dataHocsinh = hocSinh.data.lichSus;
+      console.log(dataHocsinh);
       //   setPathFileHistory(config.urlImages + dataHocsinh.pathFileVanBan);
       setPathFileHistory(config.urlImages + dataHocsinh.pathFileVanBan);
       if (history) {
@@ -97,33 +100,47 @@ const DetailHistory = () => {
           XepLoai: dataHocsinh.xepLoai || '',
           NguoiThucHien: user.username,
           NoiDungChinhSua: dataHocsinh.noiDungChinhSua || '',
-          LyDo: dataHocsinh.lyDo || '',
-          LoaiHanhDong: dataHocsinh.loaiHanhDong
+          LyDo: dataHocsinh.lyDo || ''
         });
       }
     };
-    fetchData();
-  }, [history.id]);
+    if (openSubPopup) {
+      fetchData();
+    }
+  }, [history.id, openSubPopup]);
 
   useEffect(() => {
     const fetchData1 = async () => {
       //get khóa thi theo năm thi
       const khoaThi = await getKhoaThiByNamThi(formik.values.IdNamThi);
-      setKhoaThi(khoaThi.data);
+      const dataWithIds = khoaThi.data.map((row, index) => ({
+        idindex: index + 1,
+        Ngay: convertISODateToFormattedDate(row.ngay),
+        ...row
+      }));
+      setKhoaThi(dataWithIds);
     };
     fetchData1();
   }, [formik.values.IdNamThi]);
 
   useEffect(() => {
-    if (openPopup) {
+    if (openSubPopup) {
       formik.resetForm();
     }
-  }, [openPopup]);
+  }, [openSubPopup]);
   return (
     <form onSubmit={formik.handleSubmit}>
-      <div style={{ borderBottom: '2px solid black', fontWeight: 'bold', paddingTop: 3 }}>
-        <p>{t('Thông tin học sinh')}</p>
-      </div>
+      <Grid item container spacing={1} xs={12} mt={4} alignItems={'center'}>
+        <Grid item>
+          <IconUser />
+        </Grid>
+        <Grid item>
+          <Typography variant="h4">{t('thongtinhocsinh')}</Typography>
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Divider />
+      </Grid>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={4} md={4}>
           <InputForm1 isDisabled xs={12} label={'Họ tên'} name="HoTen" formik={formik} />
@@ -167,9 +184,17 @@ const DetailHistory = () => {
           </FormControlComponent>
         </Grid>
       </Grid>
-      <div style={{ borderBottom: '2px solid black', fontWeight: 'bold', paddingTop: 3 }}>
-        <p>{t('Thông tin văn bằng')}</p>
-      </div>
+      <Grid item container spacing={1} xs={12} mt={4} alignItems={'center'}>
+        <Grid item>
+          <IconCertificate />
+        </Grid>
+        <Grid item>
+          <Typography variant="h4">{t('hocsinh.degreeinfo')}</Typography>
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Divider />
+      </Grid>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={4} md={4}>
           <InputForm1 isDisabled xs={12} label={'Số cấp bằng'} name="SoVaoSoCapBang" formik={formik} />
@@ -228,14 +253,14 @@ const DetailHistory = () => {
             </FormControl>
           </FormControlComponent>{' '}
         </Grid>
-        <Grid item xs={12} sm={4} md={4}>
-          <FormControlComponent xsForm={12} label={t('Khóa thi')}>
+        <Grid item xs={12} sm={4} md={2.5}>
+          <FormControlComponent xsForm={12} label={t('khoathi.title')}>
             <FormControl fullWidth variant="outlined">
               <SelectForm
                 disabled
                 formik={formik}
                 keyProp="id"
-                valueProp="ngay"
+                valueProp="Ngay"
                 item={khoaThi}
                 name="IdKhoaThi"
                 value={formik.values.IdKhoaThi}
@@ -244,48 +269,50 @@ const DetailHistory = () => {
           </FormControlComponent>{' '}
         </Grid>
       </Grid>
-      <div style={{ borderBottom: '2px solid black', fontWeight: 'bold', paddingTop: 3 }}>
-        <p>{t('hosodinhkem')}</p>
-      </div>
-      <div style={{ overflowX: 'auto' }}>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableCell style={{ width: '22.5%' }}>{t('tentep')}</TableCell>
-              <TableCell style={{ width: '55%' }}>{t('donyeucau.title.tenfile')}</TableCell>
-              <TableCell style={{ width: '22.5%' }}>{t('donyeucau.title.ghichu')}</TableCell>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell>{t('quyetdinhchinhsuavbcc')}</TableCell>
-                <TableCell>
-                  <Button href={pathFileHistory} startIcon={<IconDownload />}>
-                    Tải xuống
-                  </Button>
-                </TableCell>
-                <TableCell>{t('ghichuguidon')}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </div>
-      <Grid item xs={12} sm={4} md={4}>
-        <FormControlComponent isRequire label={t('Hành động')}>
-          <RadioGroup
-            style={{ display: 'flex', justifyContent: 'flex-start' }}
-            row
-            name="LoaiHanhDong"
-            value={formik.values.LoaiHanhDong}
-            onChange={formik.handleChange}
-          >
-            <FormControlLabel value={0} control={<Radio />} label={t('Chỉnh sửa')} />
-            <FormControlLabel value={1} control={<Radio />} label={t('Cấp lại')} />
-          </RadioGroup>
-        </FormControlComponent>
+      <Grid item container spacing={1} xs={12} mt={4} alignItems={'center'}>
+        <Grid item>
+          <IconFile />
+        </Grid>
+        <Grid item>
+          <Typography variant="h4">{t('hosodinhkem')}</Typography>
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Divider />
+      </Grid>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableCell style={{ width: '22.5%' }}>{t('tentep')}</TableCell>
+            <TableCell style={{ width: '55%' }}>{t('donyeucau.title.tenfile')}</TableCell>
+            <TableCell style={{ width: '22.5%' }}>{t('donyeucau.title.ghichu')}</TableCell>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell>{t('quyetdinhchinhsuavbcc')}</TableCell>
+              <TableCell>
+                <Button href={pathFileHistory} startIcon={<IconDownload />}>
+                  Tải xuống
+                </Button>
+              </TableCell>
+              <TableCell>{t('ghichuguidon')}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Grid item container spacing={1} xs={12} mt={4} alignItems={'center'}>
+        <Grid item>
+          <IconBook />
+        </Grid>
+        <Grid item>
+          <Typography variant="h4">{t('Noidungchinhsua')}</Typography>
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Divider />
       </Grid>
       <Grid item xs={12} container spacing={2}>
         <InputForm1
-          isDisabled
           formik={formik}
           minRows={3}
           maxRows={10}
@@ -299,7 +326,6 @@ const DetailHistory = () => {
       </Grid>
       <Grid item xs={12} container spacing={2}>
         <InputForm1
-          isDisabled
           formik={formik}
           minRows={3}
           maxRows={10}

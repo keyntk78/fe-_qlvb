@@ -8,12 +8,10 @@ export const useChinhSuaVanBangValidationSchema = () => {
     CCCD: Yup.string().required(t('validation.hocsinh.cccd')),
     NgaySinh: Yup.string().required(t('validation.config.tendiaphuongcapbang')),
     NoiSinh: Yup.string().required(t('validation.config.tenuybannhandan')),
-    DanToc: Yup.string().required(t('validation.config.thutusogoc')),
-    LyDo: Yup.string().required(t('validation.config.thutucaplai')),
-    NoiDungChinhSua: Yup.string().required(t('validation.messageconfig.body')),
+    LyDo: Yup.string().required(t('validation.phoivanbang.lydo')),
     SoHieuVanbang: Yup.string().required(t('sohieuvb.valid')),
     SoVaoSoCapBang: Yup.string().required(t('sovaoso.valid')),
-    HoiDong: Yup.string().required(t('hoidongthi.valid')),
+    HoiDongThi: Yup.string().required(t('hoidongthi.valid')),
     XepLoai: Yup.string().required(t('validation.hocsinh.xeploai'))
   });
 

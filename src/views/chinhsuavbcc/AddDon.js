@@ -60,12 +60,11 @@ const AddDonChinhSua = ({ thaotac }) => {
       SoHieuVanbang: '',
       SoVaoSoCapBang: '',
       MaHTDT: '',
-      HoiDong: '',
+      HoiDongThi: '',
       IdNamThi: '',
       IdKhoaThi: '',
-      NoiDungChinhSua: '',
       XepLoai: '',
-      LoaiHanhDong: '',
+      LoaiHanhDong: thaotac,
       NgayCapBang: ''
     },
     validationSchema: useChinhSuaVanBangValidationSchema(),
@@ -142,7 +141,7 @@ const AddDonChinhSua = ({ thaotac }) => {
           IdHocSinh: selectedHocsinh.id,
           SoHieuVanbang: dataHocsinh.soHieuVanBang || '',
           SoVaoSoCapBang: dataHocsinh.soVaoSoCapBang || '',
-          HoiDong: dataHocsinh.hoiDong || '',
+          HoiDongThi: dataHocsinh.hoiDong || '',
           IdNamThi: dataHocsinh.danhMucTotNghiep.idNamThi || '',
           IdKhoaThi: dataHocsinh.idKhoaThi || '',
           NgayCapBang: dataHocsinh.danhMucTotNghiep.ngayCapBang || '',
@@ -150,8 +149,8 @@ const AddDonChinhSua = ({ thaotac }) => {
           XepLoai: dataHocsinh.xepLoai || '',
           NguoiThucHien: user.username,
           LyDo: '',
-          LoaiHanhDong: 0,
-          NoiDungChinhSua: ''
+          LoaiHanhDong: thaotac
+          // NoiDungChinhSua: ''
         });
       }
     };
@@ -293,7 +292,7 @@ const AddDonChinhSua = ({ thaotac }) => {
           </FormControlComponent>{' '}
         </Grid>
         <Grid item xs={12} sm={4} md={4}>
-          <InputForm1 isRequired xs={12} label={'Hội đồng thi'} name="HoiDong" formik={formik} />
+          <InputForm1 isRequired xs={12} label={'Hội đồng thi'} name="HoiDongThi" formik={formik} />
         </Grid>
         <Grid item xs={12} sm={2.5} md={2.5}>
           <InputForm1 isRequired xs={12} label={'Xếp loại'} name="XepLoai" formik={formik} />
@@ -372,34 +371,6 @@ const AddDonChinhSua = ({ thaotac }) => {
       </Grid>
       <Grid item xs={12}>
         <Divider />
-      </Grid>
-      <Grid item xs={12} sm={4} md={4}>
-        <FormControlComponent isRequire label={t('Hành động')}>
-          <RadioGroup
-            style={{ display: 'flex', justifyContent: 'flex-start' }}
-            row
-            name="LoaiHanhDong"
-            value={formik.values.LoaiHanhDong ? formik.values.LoaiHanhDong : thaotac}
-            onChange={formik.handleChange}
-          >
-            <FormControlLabel value={0} control={<Radio />} label={t('Chỉnh sửa')} />
-            <FormControlLabel value={1} control={<Radio />} label={t('Cấp lại')} />
-          </RadioGroup>
-        </FormControlComponent>
-      </Grid>
-      <Grid item xs={12} container spacing={2}>
-        <InputForm1
-          formik={formik}
-          minRows={3}
-          maxRows={10}
-          xs={12}
-          name="NoiDungChinhSua"
-          type="text"
-          isMulltiline
-          placeholder={t('danhmuctotnghiep.field.noidung')}
-          isRequired
-          label={t('danhmuctotnghiep.field.noidung')}
-        />
       </Grid>
       <Grid item xs={12} container spacing={2}>
         <InputForm1

@@ -118,7 +118,7 @@ export default function PhuLucSoGoc() {
       if (namThi.data && namThi.data.length > 0) {
         setnamThi(namThi.data);
         setPageState((old) => ({ ...old, namThi: namThi.data[0].ten }));
-        setselectNamThi(namThi.data[0]);
+        setselectNamThi(namThi.data[0].ten);
       } else {
         setnamThi([]);
         setPageState((old) => ({ ...old, namThi: '' }));
@@ -189,6 +189,7 @@ export default function PhuLucSoGoc() {
     title: 'PHỤ LỤC SỔ GỐC CẤP VĂN BẰNG, CHỨNG CHỈ',
     diaPhuong: donvi.cauHinh.tenDiaPhuongCapBang,
     ngayCap: NgayHientai,
+    thutruong: donvi.donViQuanLy == 1 ? 'GIÁM ĐỐC' : 'TRƯỞNG PHÒNG',
     nguoiKy: donvi.cauHinh.hoTenNguoiKySoGoc
   };
 
@@ -239,8 +240,8 @@ export default function PhuLucSoGoc() {
         <Grid item container spacing={2} justifyContent={'flex-end'}>
           <Grid item xs={2}>
             <FormControl fullWidth variant="outlined" size="small">
-              <InputLabel>{t('namthi.title')}</InputLabel>
-              <Select name="ten" value={pageState.namThi} onChange={handleDanhMucChange} label={t('namthi.title')}>
+              <InputLabel>{t('namhoc')}</InputLabel>
+              <Select name="ten" value={pageState.namThi} onChange={handleDanhMucChange} label={t('namhoc')}>
                 {namThi && namThi.length > 0 ? (
                   namThi.map((namThi) => (
                     <MenuItem key={namThi.ten} value={namThi.ten}>
