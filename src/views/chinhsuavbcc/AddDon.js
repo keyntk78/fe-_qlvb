@@ -52,7 +52,7 @@ const AddDonChinhSua = ({ thaotac }) => {
       CCCD: '',
       NgaySinh: '',
       NoiSinh: '',
-      GioiTinh: true,
+      GioiTinh: '',
       DanToc: '',
       PathFileVanBan: '',
       FileVanBan: '',
@@ -69,6 +69,7 @@ const AddDonChinhSua = ({ thaotac }) => {
     },
     validationSchema: useChinhSuaVanBangValidationSchema(),
     onSubmit: async (values) => {
+      console.log(values);
       if (!formik.values.FileVanBan) {
         dispatch(showAlert(new Date().getTime().toString(), 'error', t('Vui lòng chọn tệp')));
         return;
@@ -129,18 +130,15 @@ const AddDonChinhSua = ({ thaotac }) => {
       const namThi = await getAllNamThi();
       setNamThi(namThi.data);
       const hocSinh = await getByCCCD(selectedHocsinh.cccd);
-  
+      console.log(hocSinh.data.gioiTinh);
       const dataHocsinh = hocSinh.data;
-          console.log(dataHocsinh.gioiTinh);
-          console.log(dataHocsinh);
-
       if (selectedHocsinh) {
         formik.setValues({
           HoTen: dataHocsinh.hoTen || '',
           CCCD: dataHocsinh.cccd || '',
           NgaySinh: dataHocsinh.ngaySinh || '',
           NoiSinh: dataHocsinh.noiSinh || '',
-          GioiTinh: dataHocsinh.gioiTinh || true,
+          GioiTinh: dataHocsinh.gioiTinh || '',
           DanToc: dataHocsinh.danToc || '',
           IdHocSinh: selectedHocsinh.id,
           SoHieuVanbang: dataHocsinh.soHieuVanBang || '',
@@ -167,11 +165,13 @@ const AddDonChinhSua = ({ thaotac }) => {
     const fetchData1 = async () => {
       //get khóa thi theo năm thi
       const khoaThi = await getKhoaThiByNamThi(formik.values.IdNamThi);
-      const dataWithIds = khoaThi && khoaThi.data.map((row, index) => ({
-        idindex: index + 1,
-        Ngay: convertISODateToFormattedDate(row.ngay),
-        ...row
-      }));
+      const dataWithIds =
+        khoaThi &&
+        khoaThi.data.map((row, index) => ({
+          idindex: index + 1,
+          Ngay: convertISODateToFormattedDate(row.ngay),
+          ...row
+        }));
       setKhoaThi(dataWithIds);
       // setKhoaThi(khoaThi.data);
     };
@@ -216,17 +216,18 @@ const AddDonChinhSua = ({ thaotac }) => {
         </Grid>
       </Grid>
       <Grid container spacing={2}>
+        {console.log(formik.values.GioiTinh)}
         <Grid item xs={12} sm={4} md={4}>
           <FormControlComponent isRequire label={t('user.label.gender')}>
             <RadioGroup
               style={{ display: 'flex', justifyContent: 'flex-start' }}
               row
               name="GioiTinh"
-              value={formik.values.GioiTinh ? formik.values.GioiTinh : 'false'}
+              value={formik.values.GioiTinh ? 'true' : 'false'}
               onChange={formik.handleChange}
             >
-              <FormControlLabel value={true} control={<Radio />} label={t('gender.male')} />
-              <FormControlLabel value={false} control={<Radio />} label={t('gender.female')} />
+              <FormControlLabel value="true" control={<Radio />} label={t('gender.male')} />
+              <FormControlLabel value="false" control={<Radio />} label={t('gender.female')} />
             </RadioGroup>
           </FormControlComponent>
         </Grid>
