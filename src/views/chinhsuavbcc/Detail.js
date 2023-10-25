@@ -78,7 +78,6 @@ const DetailHistory = () => {
       setNamThi(namThi.data);
       const hocSinh = await getByIdHistory(selectedHocsinh.cccd, history.id);
       const dataHocsinh = hocSinh.data.lichSus;
-      console.log(dataHocsinh);
       //   setPathFileHistory(config.urlImages + dataHocsinh.pathFileVanBan);
       setPathFileHistory(config.urlImages + dataHocsinh.pathFileVanBan);
       if (history) {

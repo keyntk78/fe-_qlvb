@@ -75,7 +75,6 @@ const AddDonChinhSua = ({ thaotac }) => {
     },
     validationSchema: useChinhSuaVanBangValidationSchema(),
     onSubmit: async (values) => {
-      console.log(values);
       if (!formik.values.FileVanBan) {
         dispatch(showAlert(new Date().getTime().toString(), 'error', t('Vui lòng chọn tệp')));
         return;
@@ -139,7 +138,6 @@ const AddDonChinhSua = ({ thaotac }) => {
       const namThi = await getAllNamThi();
       setNamThi(namThi.data);
       const hocSinh = await getByCCCD(selectedHocsinh.cccd);
-      console.log(hocSinh.data.gioiTinh);
       const dataHocsinh = hocSinh.data;
       if (selectedHocsinh) {
         formik.setValues({
@@ -225,7 +223,6 @@ const AddDonChinhSua = ({ thaotac }) => {
         </Grid>
       </Grid>
       <Grid container spacing={2}>
-        {console.log(formik.values.GioiTinh)}
         <Grid item xs={12} sm={4} md={4}>
           <FormControlComponent isRequire label={t('user.label.gender')}>
             <RadioGroup

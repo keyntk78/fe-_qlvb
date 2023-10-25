@@ -122,7 +122,6 @@ export default function SoGoc() {
     const selectedKhoaThiInfo = khoaThis.find((khoathi) => khoathi.id === khoaThiSelect);
     setSelectKhoaThi(selectedKhoaThiInfo);
   };
-  useEffect(() => console.log(search), [search]);
   const handleExport = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
@@ -195,9 +194,7 @@ export default function SoGoc() {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      console.log('123');
       const response = await getAllKhoathiByDMTN(selectDanhmuc);
-      console.log(response);
       if (response.data && response.data.length > 0) {
         setKhoaThis(response.data);
         setSelectKhoaThi(response.data[0].id);

@@ -37,13 +37,11 @@ import { IconFileExport } from '@tabler/icons';
 import ResetButton from 'components/button/ExitButton';
 
 export default function PhuLucSoGoc({ danhmuc, truong }) {
-  console.log(danhmuc, truong);
   const isXs = useMediaQuery('(max-width:600px)');
   const { t } = useTranslation();
   const [search, setSearch] = useState(false);
   const reloadData = useSelector(reloadDataSelector);
   const donvi = useSelector(donviSelector);
-  console.log(donvi);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [firstLoad, setFirstLoad] = useState(false);
@@ -118,7 +116,6 @@ export default function PhuLucSoGoc({ danhmuc, truong }) {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
       const response = await getSearchPhuLuc(danhmuc, truong, params);
-      console.log(response);
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;
@@ -166,15 +163,12 @@ export default function PhuLucSoGoc({ danhmuc, truong }) {
     nguoiKy: donvi.cauHinh.hoTenNguoiKySoGoc
   };
 
-  console.log(pageState.data);
   return (
     <>
       <MainCard
         title={t('phulucsogoc.title')}
         secondary={
-          isXs || pageState.data.length > 0 ? (
-            ''
-          ) : (
+          !isXs && pageState.data.length > 0 ? (
             <Grid container justifyContent="flex-end" spacing={1}>
               <Grid item>
                 <ButtonSuccess title={t('button.export.excel')} onClick={handleExport} icon={IconFileExport} />
@@ -189,6 +183,8 @@ export default function PhuLucSoGoc({ danhmuc, truong }) {
                 </AnimateButton>
               </Grid>
             </Grid>
+          ) : (
+            ''
           )
         }
       >
