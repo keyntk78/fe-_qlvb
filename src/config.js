@@ -4,7 +4,8 @@ const config = {
   defaultPath: '/',
   fontFamily: `'Roboto', sans-serif`,
   borderRadius: 12,
-  //apiUrl: 'http://localhost:5203/api',
+
+  // apiUrl: 'http://localhost:5203/api',
   // urlFile: 'http://localhost:5203/Resources/',
   apiUrl: 'https://api.quanlyvanbang.cenit.vn/api',
   urlFile: 'https://api.quanlyvanbang.cenit.vn/Resources/',

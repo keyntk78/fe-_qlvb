@@ -211,7 +211,7 @@ const MainRoutes = {
       element: <PhuLucSoGoc />
     },
     {
-      path: 'xacminhvanbang',
+      path: 'tracuuvanbang',
       element: <Xacminhvanbang />
     },
     {

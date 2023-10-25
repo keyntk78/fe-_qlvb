@@ -13,14 +13,15 @@ import i18n from 'i18n';
 import React from 'react';
 import AddDonChinhSua from '../chinhsuavbcc/AddDon';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
-import { Grid } from '@mui/material';
+import { Button, Grid, Tooltip } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
 import Popup from 'components/controls/popup';
-import AddButton from 'components/button/AddButton';
 import DetailHistory from '../chinhsuavbcc/Detail';
 import { getSearchCapLaiVanBang } from 'services/caplaivbccService';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import InLaiVBCC from './InlaiVBCC';
+import { IconEdit } from '@tabler/icons';
+import AnimateButton from 'components/extended/AnimateButton';
 //import config from 'config';
 const CapLaiVBCC = () => {
   const language = i18n.language;
@@ -59,8 +60,8 @@ const CapLaiVBCC = () => {
   };
 
   const handelUpdate = () => {
-    setTitle(t('Chỉnh sửa VBCC'));
-    setForm('add');
+    setTitle(t('Chỉnh sửa văn bằng chứng chỉ'));
+    setForm('edit');
     dispatch(setOpenSubPopup(true));
   };
   const columns = [
@@ -110,6 +111,12 @@ const CapLaiVBCC = () => {
       flex: 0.5,
       field: 'nguoiTao',
       headerName: t('Người thao tác'),
+      minWidth: 100
+    },
+    {
+      flex: 1,
+      field: 'noiDungChinhSua',
+      headerName: t('Nội dung'),
       minWidth: 100
     },
     {
@@ -192,7 +199,17 @@ const CapLaiVBCC = () => {
       <MainCard
         sx={{ mt: 2 }}
         title={t(`Lịch sử Cấp lại văn bằng chứng chỉ`) + ' [' + selectHocsinh.hoTen + ']'}
-        secondary={<Grid item>{<AddButton handleClick={handelUpdate} />}</Grid>}
+        secondary={
+          <Grid item>
+            <AnimateButton>
+              <Tooltip title={t('button.title.add')} placement="bottom">
+                <Button color="info" variant="contained" size="medium" onClick={handelUpdate} startIcon={<IconEdit />}>
+                  {t('button.title.edit')}
+                </Button>
+              </Tooltip>
+            </AnimateButton>
+          </Grid>
+        }
       >
         {isAccess ? (
           <DataGrid
@@ -237,7 +254,15 @@ const CapLaiVBCC = () => {
           maxWidth={'md'}
           bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
         >
-          {form === 'add' ? <AddDonChinhSua thaotac={1} /> : form === 'detail' ? <DetailHistory /> : form === 'caplai' ? <InLaiVBCC /> : ''}
+          {form === 'edit' ? (
+            <AddDonChinhSua thaotac={1} />
+          ) : form === 'detail' ? (
+            <DetailHistory />
+          ) : form === 'caplai' ? (
+            <InLaiVBCC />
+          ) : (
+            ''
+          )}
         </Popup>
       )}
       <BackToTop />

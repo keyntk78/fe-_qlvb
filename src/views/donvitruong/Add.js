@@ -160,13 +160,13 @@ const AddDonvi = () => {
       <Grid container>
         <Grid item xs={12} container spacing={2} mt={1}>
           <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('Mã đơn vị')}>
-              <InputForm formik={formik} name="ma" type="text" placeholder={t('Mã đơn vị')} />
+            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('donvitruong.field.ma')}>
+              <InputForm formik={formik} name="ma" type="text" placeholder={t('donvitruong.field.ma')} />
             </FormControlComponent>
           </Grid>
           <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('Tên đơn vị')}>
-              <InputForm formik={formik} name="ten" type="text" placeholder={t('Tên đơn vị')} />
+            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('donvitruong.field.ten')}>
+              <InputForm formik={formik} name="ten" type="text" placeholder={t('donvitruong.field.ten')} />
             </FormControlComponent>
           </Grid>
         </Grid>
@@ -186,8 +186,8 @@ const AddDonvi = () => {
             </FormControlComponent>
           </Grid>
           <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('Địa chỉ')}>
-              <InputForm formik={formik} name="diaChi" type="text" placeholder={t('Địa chỉ')} />
+            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvi.title.address')}>
+              <InputForm formik={formik} name="diaChi" type="text" placeholder={t('donvi.title.address')} />
             </FormControlComponent>
           </Grid>
         </Grid>
@@ -205,21 +205,21 @@ const AddDonvi = () => {
         </Grid>
         <Grid item xs={12} container spacing={2} mt={1}>
           <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('Đơn vị quản lý')} isRequire>
+            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvitruong.field.donviquanly')} isRequire>
               <SelectList
                 data={pageState.donviquanly}
                 name="donviquanly"
                 value="giaTri"
                 request={'giaTri'}
                 optionName="tenLoai"
-                placeholder={t('Đơn vị quản lý')}
+                placeholder={t('donvitruong.field.donviquanly')}
                 formik={formik}
                 openPopup
               />
             </FormControlComponent>
           </Grid>
           <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('Là đơn vị quản lý')}>
+            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvitruong.field.isManager')}>
               <Checkbox
                 checked={formik.values.laPhong} // Kiểm tra giá trị isPhong để quyết định trạng thái checked của checkbox
                 onChange={(event) => {
@@ -268,66 +268,6 @@ const AddDonvi = () => {
             </Grid>
           </>
         )}
-        {/* Đoạn này */}
-        {/* <Grid item container xs={isXs ? 12 : 10} spacing={isXs ? 0 : 2} my={1} ml={isXs ? 0 : 3}>
-          <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('donvitruong.field.ma')}>
-            <InputForm formik={formik} name="ma" type="text" placeholder={t('donvitruong.field.ma')} />
-          </FormControlComponent>
-          <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('Địa chỉ')}>
-            <InputForm formik={formik} name="diaChi" type="text" placeholder={t('Địa chỉ')} />
-          </FormControlComponent>
-          <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('donvitruong.field.ten')}>
-            <InputForm formik={formik} name="ten" type="text" placeholder={t('donvitruong.field.ten')} />
-          </FormControlComponent>
-          <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('Là phòng')}>
-            <Checkbox
-              checked={formik.values.laPhong} // Kiểm tra giá trị isPhong để quyết định trạng thái checked của checkbox
-              onChange={(event) => {
-                setIsChecked(!isChecked);
-                formik.setFieldValue('laPhong', event.target.checked); // Cập nhật giá trị isPhong tùy thuộc vào trạng thái của checkbox
-              }}
-              inputProps={{ 'aria-label': 'controlled' }}
-            />
-          </FormControlComponent>
-          <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('donvitruong.field.url')}>
-            <InputForm formik={formik} name="url" type="text" placeholder={t('donvitruong.field.url')} />
-          </FormControlComponent>
-          <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('Email')}>
-            <InputForm formik={formik} name="email" type="email" placeholder={t('Email')} /> */}
-        {/* </FormControlComponent>
-          {isChecked ? (
-            ''
-          ) : (
-            <> */}
-        {/* Hệ đào tạo */}
-        {/* <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('hedaotao.title')} isRequire>
-                <SelectList
-                  data={pageState.hedaotao}
-                  name="mahedaotao"
-                  value="ma"
-                  request={'ma'}
-                  optionName="ten"
-                  placeholder={t('hedaotao.title')}
-                  formik={formik}
-                  openPopup
-                />
-              </FormControlComponent> */}
-        {/* Hình thức đào tạo */}
-        {/* <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('hinhthucdaotao.title')} isRequire>
-                <SelectList
-                  data={pageState.hinhthucdaotao}
-                  name="mahinhthucdaotao"
-                  value="ma"
-                  request={'ma'}
-                  optionName="ten"
-                  placeholder={t('hinhthucdaotao.title')}
-                  formik={formik}
-                  openPopup
-                />
-              </FormControlComponent>
-            </>
-          )}
-        </Grid> */}
       </Grid>
       <FormGroupButton />
     </form>

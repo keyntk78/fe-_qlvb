@@ -66,7 +66,7 @@ const Detail = () => {
       FileDonYeuCau: '',
       DonYeuCau: '',
       HinhAnhCCCD: '',
-      PhuongThucNhan: '0',
+      PhuongThucNhan: 0,
       DiaChiNhan: ''
     },
     //validationSchema: donviValidationSchema,
@@ -316,7 +316,7 @@ const Detail = () => {
               style={{ display: 'flex', justifyContent: 'flex-start' }}
               row
               name="PhuongThucNhan"
-              value={formik.values.PhuongThucNhan ? formik.values.PhuongThucNhan : '0'}
+              value={formik.values.PhuongThucNhan ? formik.values.PhuongThucNhan : 0}
               onChange={formik.handleChange}
             >
               <FormControlLabel value={0} style={{ marginTop: '-4px' }} control={<Radio />} label={t('tructiep')} disabled />
@@ -324,7 +324,7 @@ const Detail = () => {
             </RadioGroup>
           </FormControlComponent>
         </Grid>
-        {formik.values.PhuongThucNhan && formik.values.PhuongThucNhan == 1 && (
+        {formik.values.PhuongThucNhan && formik.values.PhuongThucNhan == 1 ? (
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <FormControlComponent
               xsLabel={isSmallScreen ? 0 : 2}
@@ -335,6 +335,8 @@ const Detail = () => {
               <InputForm formik={formik} name="DiaChiNhan" type="text" placeholder={t('user.label.addressrecevice')} isDisabled />
             </FormControlComponent>
           </Grid>
+        ) : (
+          ''
         )}
       </Grid>
       <div style={{ borderBottom: '2px solid black', fontWeight: 'bold', marginTop: '30px' }}>

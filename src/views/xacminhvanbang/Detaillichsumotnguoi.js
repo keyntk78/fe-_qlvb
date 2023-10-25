@@ -80,23 +80,23 @@ const Detaillichsumotnguoi = ({ data }) => {
       </div>
       <Grid container spacing={1}>
         <Grid item xs={6} sm={12} md={12}>
-          <InputForm1 xs={12} label={'Kính gửi'} name="donViXacMinh" formik={formik} isDisabled />
+          <InputForm1 xs={12} label={t('xacminhvanbang.field.kinhgui')} name="donViXacMinh" formik={formik} isDisabled />
         </Grid>
         <Grid item xs={6} sm={4} md={3}>
-          <InputForm1 xs={12} label={'Công văn số'} name="congVanSo" formik={formik} isDisabled />
+          <InputForm1 xs={12} label={t('xacminhvanbang.field.congvanso')} name="congVanSo" formik={formik} isDisabled />
         </Grid>
         <Grid item xs={6} sm={4} md={3}>
-          <InputForm1 xs={12} label={'Ngày cấp'} name="ngayBanHanh" formik={formik} type="date" isDisabled />
+          <InputForm1 xs={12} label={t('xacminhvanbang.field.ngayracongvan')} name="ngayBanHanh" formik={formik} type="date" isDisabled />
         </Grid>
         <Grid item xs={6} sm={4} md={6}>
-          <InputForm1 xs={12} label={'File xác minh'} name="fileYeuCau" formik={formik} isDisabled />
+          <InputForm1 xs={12} label={t('xacminhvanbang.field.file')} name="fileYeuCau" formik={formik} isDisabled />
         </Grid>
       </Grid>
       <div style={{ borderBottom: '2px solid black', fontWeight: 'bold', paddingTop: 3 }}>
-        <p>{t('Thông tin nội dung văn bằng')}</p>
+        <p>{t('xacminhvanbang.title.thongtinvanbang')}</p>
       </div>
       <Grid container spacing={1}>
-        <Grid item xs={6} sm={3} md={12}>
+        <Grid item xs={12} sm={12} md={12}>
           <p style={{ fontSize: '17px' }}>{result}</p>
         </Grid>
       </Grid>
@@ -108,9 +108,9 @@ const Detaillichsumotnguoi = ({ data }) => {
           <Grid item xs={12} container spacing={2} justifyContent="flex-end" mt={1}>
             <Grid item>
               <AnimateButton>
-                <Tooltip title={'Tạo văn bản'} placement="bottom">
+                <Tooltip title={t('button.create')} placement="bottom">
                   <Button type="submit" color="info" variant="contained" size="medium" startIcon={<IconPrinter />}>
-                    Tạo văn bản
+                    {t('button.create')}
                   </Button>
                 </Tooltip>
               </AnimateButton>
