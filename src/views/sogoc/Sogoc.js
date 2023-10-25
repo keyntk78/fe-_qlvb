@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IconClick, IconDownload, IconFileExport, IconSearch } from '@tabler/icons';
+import { IconBook, IconClick, IconDownload, IconFileExport, IconSearch } from '@tabler/icons';
 import {
   Button,
   Divider,
@@ -43,10 +43,10 @@ import ExportExcel from './ExportExcel';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { getAllTruong } from 'services/sharedService';
 import Popup from 'components/controls/popup';
-import Import from 'views/ImportDanhSachVanBang/Import';
 import ButtonSecondary from 'components/buttoncolor/ButtonSecondary';
 import FileMau from '../FileMau/FileMau_ThemDanhSachVanBang.xlsx';
 import { getAllKhoathiByDMTN } from 'services/khoathiService';
+import PhuLucSoGoc from 'views/phulucsogoc/PhuLucSoGoc';
 export default function SoGoc() {
   const isXs = useMediaQuery('(max-width:600px)');
   const { t } = useTranslation();
@@ -128,6 +128,12 @@ export default function SoGoc() {
     dispatch(setLoading(true));
     await ExportExcel(formik, pageState1, selectDanhmuc, selectDonvi, selectKhoaThi, donvi, 'sogoc');
     dispatch(setLoading(false));
+  };
+
+  const handelPhuLuc = () => {
+    setTitle(t('button.title.phuluc'));
+    setForm('phuluc');
+    dispatch(setOpenPopup(true));
   };
 
   const handleExportWord = async (e) => {
@@ -479,6 +485,17 @@ export default function SoGoc() {
             </Button>
           </Grid>
         </Grid>
+        <Grid item xs={12} container spacing={2} justifyContent="flex-end" mt={1}>
+          <Grid item>
+            <AnimateButton>
+              <Tooltip placement="bottom">
+                <Button color="info" variant="contained" size="medium" onClick={handelPhuLuc} startIcon={<IconBook />}>
+                  {t('button.title.phuluc')}
+                </Button>
+              </Tooltip>
+            </AnimateButton>
+          </Grid>
+        </Grid>
         {pageState.data.length > 0 ? (
           <>
             <Grid container justifyContent={'flex-start'}>
@@ -508,6 +525,7 @@ export default function SoGoc() {
         ) : (
           ''
         )}
+
         <Grid item mt={pageState.data.length > 0 ? 0 : 2}>
           <Divider />
         </Grid>
@@ -663,10 +681,10 @@ export default function SoGoc() {
           title={title}
           form={form}
           openPopup={openPopup}
-          maxWidth={form === 'xemlichsu' ? 'lg' : 'md'}
+          maxWidth={form === 'phuluc' ? 'lg' : 'md'}
           bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
         >
-          {form === 'import' ? <Import /> : ''}
+          {form === 'phuluc' ? <PhuLucSoGoc danhmuc={pageState.DMTN} truong={pageState.donVi} /> : ''}
         </Popup>
       )}
       <BackToTop />

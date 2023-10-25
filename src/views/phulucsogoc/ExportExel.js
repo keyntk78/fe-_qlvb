@@ -1,12 +1,13 @@
 import ExcelJS from 'exceljs';
 
-const ExportExcelPhuLuc = async (donvi, pageState, selectNamThi) => {
+const ExportExcelPhuLuc = async (donvi, pageState) => {
   const currentDate = new Date();
   const day = currentDate.getDate();
   const month = currentDate.getMonth() + 1; // Tháng bắt đầu từ 0
   const year = currentDate.getFullYear();
 
   const NgayHientai = `ngày ${day} tháng ${month} năm ${year}`;
+  const ketthuc = { year };
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet('Phụ lục sổ gốc cấp văn bằng, chứng chỉ');
 
@@ -134,7 +135,7 @@ const ExportExcelPhuLuc = async (donvi, pageState, selectNamThi) => {
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `phulucsogoc_${selectNamThi}.xlsx`;
+  a.download = `phulucsogoc_${ketthuc}.xlsx`;
   a.click();
 };
 

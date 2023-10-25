@@ -18,7 +18,9 @@ function replaceErrors(key, value) {
   return value;
 }
 
-export function generateDocument(hocsinhs, data, selectNamThi) {
+export function generateDocument(hocsinhs, data) {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
   loadFile(FileWordMau_SoGoc, function (error, content) {
     if (error) {
       throw error;
@@ -49,7 +51,7 @@ export function generateDocument(hocsinhs, data, selectNamThi) {
       type: 'blob',
       mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     });
-    saveAs(out, `phulucsogoc_${selectNamThi}.docx`);
+    saveAs(out, `phulucsogoc_${year}.docx`);
   });
 }
 

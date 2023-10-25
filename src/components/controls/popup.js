@@ -154,6 +154,8 @@ export default function Popup(props) {
                   <IconEdit sx={{ order: 2 }} />
                 ) : form === 'caplaivbcc' ? (
                   <IconCertificate2 sx={{ order: 2 }} />
+                ) : form === 'phuluc' ? (
+                  <IconBook sx={{ order: 2 }} />
                 ) : (
                   ''
                 )}

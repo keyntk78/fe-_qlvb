@@ -2,13 +2,9 @@ import * as React from 'react';
 import {
   Button,
   Divider,
-  FormControl,
   Grid,
-  InputLabel,
-  MenuItem,
   // Pagination,
   Paper,
-  Select,
   Table,
   TableBody,
   TableCell,
@@ -30,7 +26,6 @@ import { createSearchParams } from 'utils/createSearchParams';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import MainCard from 'components/cards/MainCard';
-import { getAllNamThi } from 'services/sharedService';
 import BackToTop from 'components/scroll/BackToTop';
 import { styled } from '@mui/system';
 import AnimateButton from 'components/extended/AnimateButton';
@@ -39,8 +34,10 @@ import ExportExcel from './ExportExel';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { getSearchPhuLuc } from 'services/phulucService';
 import { IconFileExport } from '@tabler/icons';
+import ResetButton from 'components/button/ExitButton';
 
-export default function PhuLucSoGoc() {
+export default function PhuLucSoGoc({ danhmuc, truong }) {
+  console.log(danhmuc, truong);
   const isXs = useMediaQuery('(max-width:600px)');
   const { t } = useTranslation();
   const [search, setSearch] = useState(false);
@@ -49,9 +46,7 @@ export default function PhuLucSoGoc() {
   console.log(donvi);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [namThi, setnamThi] = useState([]);
   const [firstLoad, setFirstLoad] = useState(false);
-  const [selectNamThi, setselectNamThi] = useState('');
   const currentDate = new Date();
   const day = currentDate.getDate();
   const month = currentDate.getMonth() + 1; // Tháng bắt đầu từ 0
@@ -84,21 +79,21 @@ export default function PhuLucSoGoc() {
     orderDir: 'ASC',
     startIndex: 0,
     pageSize: 25,
-    namThi: '',
+    danhMuc: '',
     donVi: ''
   });
 
   const handleExport = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
-    await ExportExcel(donvi, pageState, selectNamThi);
+    await ExportExcel(donvi, pageState);
     dispatch(setLoading(false));
   };
 
   const handleExportWord = async (e) => {
     e.preventDefault();
     setLoading(true);
-    generateDocument(pageState.data, additionalData, selectNamThi);
+    generateDocument(pageState.data, additionalData);
     setLoading(false);
   };
 
@@ -113,34 +108,17 @@ export default function PhuLucSoGoc() {
   };
 
   useEffect(() => {
-    const fetchDataDL = async () => {
-      const namThi = await getAllNamThi();
-      if (namThi.data && namThi.data.length > 0) {
-        setnamThi(namThi.data);
-        setPageState((old) => ({ ...old, namThi: namThi.data[0].ten }));
-        setselectNamThi(namThi.data[0].ten);
-      } else {
-        setnamThi([]);
-        setPageState((old) => ({ ...old, namThi: '' }));
-        setselectNamThi('');
-      }
-      dispatch(setLoading(false));
-    };
-    fetchDataDL();
-  }, []);
-
-  useEffect(() => {
-    if (selectNamThi) {
+    if (danhmuc && truong) {
       setFirstLoad(true);
     }
-  }, [selectNamThi]);
+  }, [danhmuc, truong]);
 
   useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
-      params.append('namThi', pageState.namThi);
-      const response = await getSearchPhuLuc(pageState.namThi, params);
+      const response = await getSearchPhuLuc(danhmuc, truong, params);
+      console.log(response);
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;
@@ -174,14 +152,9 @@ export default function PhuLucSoGoc() {
     reloadData,
     firstLoad,
     search,
-    pageState.namThi
+    danhmuc,
+    truong
   ]);
-
-  const handleDanhMucChange = (event) => {
-    const selectedValue = event.target.value;
-    setselectNamThi(selectedValue);
-    setPageState((old) => ({ ...old, namThi: selectedValue }));
-  };
 
   const additionalData = {
     uyBanNhanDan: donvi.cauHinh.tenUyBanNhanDan.toUpperCase(),
@@ -199,7 +172,7 @@ export default function PhuLucSoGoc() {
       <MainCard
         title={t('phulucsogoc.title')}
         secondary={
-          isXs ? (
+          isXs || pageState.data.length > 0 ? (
             ''
           ) : (
             <Grid container justifyContent="flex-end" spacing={1}>
@@ -219,7 +192,7 @@ export default function PhuLucSoGoc() {
           )
         }
       >
-        {isXs ? (
+        {isXs && pageState.data.length > 0 ? (
           <Grid container justifyContent="center" spacing={1}>
             <Grid item>
               <ButtonSuccess title={t('Xuất file excel')} onClick={handleExport} icon={IconFileExport} />
@@ -237,24 +210,6 @@ export default function PhuLucSoGoc() {
         ) : (
           ''
         )}
-        <Grid item container spacing={2} justifyContent={'flex-end'}>
-          <Grid item xs={2}>
-            <FormControl fullWidth variant="outlined" size="small">
-              <InputLabel>{t('namhoc')}</InputLabel>
-              <Select name="ten" value={pageState.namThi} onChange={handleDanhMucChange} label={t('namhoc')}>
-                {namThi && namThi.length > 0 ? (
-                  namThi.map((namThi) => (
-                    <MenuItem key={namThi.ten} value={namThi.ten}>
-                      {namThi.ten}
-                    </MenuItem>
-                  ))
-                ) : (
-                  <MenuItem value="">No data available</MenuItem>
-                )}
-              </Select>
-            </FormControl>
-          </Grid>
-        </Grid>
         {pageState.data.length > 0 ? (
           <>
             <Grid container justifyContent={'flex-start'}>
@@ -373,6 +328,11 @@ export default function PhuLucSoGoc() {
           </Grid>
         </Grid>
       </MainCard>
+      <Grid item xs={12} container spacing={2} justifyContent="flex-end" mt={1}>
+        <Grid item>
+          <ResetButton />
+        </Grid>
+      </Grid>
       <BackToTop />
     </>
   );
