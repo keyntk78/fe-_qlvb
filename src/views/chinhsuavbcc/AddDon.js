@@ -46,13 +46,19 @@ const AddDonChinhSua = ({ thaotac }) => {
   const [namThi, setNamThi] = useState([]);
   const [khoaThi, setKhoaThi] = useState([]);
 
+  const hocLucOptions = [
+    { value: 'Giỏi', label: 'Giỏi' },
+    { value: 'Khá', label: 'Khá' },
+    { value: 'Trung Bình', label: 'Trung bình' }
+  ];
+
   const formik = useFormik({
     initialValues: {
       HoTen: '',
       CCCD: '',
       NgaySinh: '',
       NoiSinh: '',
-      GioiTinh: '',
+      GioiTinh: true,
       DanToc: '',
       PathFileVanBan: '',
       FileVanBan: '',
@@ -118,6 +124,9 @@ const AddDonChinhSua = ({ thaotac }) => {
     formik.setFieldValue('IdKhoaThi', selectedValue);
   };
 
+  // const handleGenderChange = (event) => {
+  //   formik.setFieldValue('gioiTinh', event.target.value === 'true');
+  // };
   useEffect(() => {
     const fetchData = async () => {
       //get dân tộc
@@ -138,7 +147,7 @@ const AddDonChinhSua = ({ thaotac }) => {
           CCCD: dataHocsinh.cccd || '',
           NgaySinh: dataHocsinh.ngaySinh || '',
           NoiSinh: dataHocsinh.noiSinh || '',
-          GioiTinh: dataHocsinh.gioiTinh || '',
+          GioiTinh: dataHocsinh.gioiTinh || false,
           DanToc: dataHocsinh.danToc || '',
           IdHocSinh: selectedHocsinh.id,
           SoHieuVanbang: dataHocsinh.soHieuVanBang || '',
@@ -223,11 +232,11 @@ const AddDonChinhSua = ({ thaotac }) => {
               style={{ display: 'flex', justifyContent: 'flex-start' }}
               row
               name="GioiTinh"
-              value={formik.values.GioiTinh ? 'true' : 'false'}
+              value={formik.values.GioiTinh}
               onChange={formik.handleChange}
             >
-              <FormControlLabel value="true" control={<Radio />} label={t('gender.male')} />
-              <FormControlLabel value="false" control={<Radio />} label={t('gender.female')} />
+              <FormControlLabel value={true} control={<Radio />} label={t('gender.male')} />
+              <FormControlLabel value={false} control={<Radio />} label={t('gender.female')} />
             </RadioGroup>
           </FormControlComponent>
         </Grid>
@@ -300,7 +309,19 @@ const AddDonChinhSua = ({ thaotac }) => {
           <InputForm1 isRequired xs={12} label={'Hội đồng thi'} name="HoiDongThi" formik={formik} />
         </Grid>
         <Grid item xs={12} sm={2.5} md={2.5}>
-          <InputForm1 isRequired xs={12} label={'Xếp loại'} name="XepLoai" formik={formik} />
+          <FormControlComponent xsLabel={0} xsForm={12} label={t('xeploai')} isRequire>
+            <FormControl fullWidth variant="outlined">
+              <SelectForm
+                formik={formik}
+                keyProp="value"
+                valueProp="label"
+                item={hocLucOptions}
+                name="XepLoai"
+                value={formik.values.XepLoai}
+                onChange={formik.handleChange}
+              />
+            </FormControl>
+          </FormControlComponent>
         </Grid>
       </Grid>
       <Grid container spacing={2}>
