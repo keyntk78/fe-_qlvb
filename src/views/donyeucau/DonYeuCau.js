@@ -5,7 +5,7 @@ import { Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select, TextFiel
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { infoHocSinhSelector, openPopupSelector, reloadDataSelector, selectedInfoMessageSelector } from 'store/selectors';
+import { infoHocSinhSelector, openPopupSelector, reloadDataSelector, selectedInfoMessageSelector, userLoginSelector } from 'store/selectors';
 import { setCapBangBanSao, setInfoHocSinh, setOpenPopup, setReloadData, setSelectedInfoMessage } from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import { createSearchParams } from 'utils/createSearchParams';
@@ -55,6 +55,7 @@ export default function DonYeuCau() {
     hoTen: '',
     trangThai: ''
   });
+  const user = useSelector(userLoginSelector);
 
   const handleSearch = () => {
     setSearch(!search);
@@ -185,6 +186,8 @@ export default function DonYeuCau() {
       params.append('HoTen', pageState.hoTen);
       params.append('Cccd', pageState.cccd);
       params.append('TrangThai', pageState.trangThai ? pageState.trangThai : 0);
+      params.append('NguoiThucHien', user ? user.username : '');
+
       const response = await GetSerachDonYeuCapBanSao(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {

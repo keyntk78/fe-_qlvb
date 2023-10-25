@@ -5,7 +5,7 @@ import { Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select, TextFiel
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { openPopupSelector, reloadDataSelector } from 'store/selectors';
+import { openPopupSelector, reloadDataSelector, userLoginSelector } from 'store/selectors';
 import { setCapBangBanSao, setOpenPopup, setReloadData } from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import { createSearchParams } from 'utils/createSearchParams';
@@ -55,6 +55,7 @@ export default function CapBangBanSao() {
     hoTen: '',
     trangThai: ''
   });
+  const user = useSelector(userLoginSelector);
 
   const handleSearch = () => {
     setSearch(!search);
@@ -241,6 +242,8 @@ export default function CapBangBanSao() {
       params.append('TrangThai', pageState.trangThai ? pageState.trangThai : 1);
       params.append('CCCD', pageState.cccd);
       params.append('HoTen', pageState.hoTen);
+      params.append('NguoiThucHien', user ? user.username : '');
+
       const response = await getSearchDonYeuCauDaDuyet(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
