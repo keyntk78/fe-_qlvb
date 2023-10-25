@@ -12,7 +12,6 @@ export const useChinhSuaVanBangValidationSchema = () => {
     LyDo: Yup.string().required(t('validation.phoivanbang.lydo')),
     SoHieuVanbang: Yup.string().required(t('sohieuvb.valid')),
     SoVaoSoCapBang: Yup.string().required(t('sovaoso.valid')),
-    HoiDongThi: Yup.string().required(t('hoidongthi.valid')),
     XepLoai: Yup.string().required(t('validation.hocsinh.xeploai'))
   });
 

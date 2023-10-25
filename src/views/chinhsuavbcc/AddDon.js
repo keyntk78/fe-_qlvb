@@ -22,7 +22,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openSubPopupSelector, selectedHocsinhSelector, userLoginSelector } from 'store/selectors';
 import { setOpenSubPopup, setReloadData, showAlert } from 'store/actions';
 import { useTranslation } from 'react-i18next';
-import { updateVBCC } from 'services/chinhsuavbccService';
+import { updateVBCC, getByCCCD } from 'services/chinhsuavbccService';
 import '../../index.css';
 import FormGroupButton from 'components/button/FormGroupButton';
 import FormControlComponent from 'components/form/FormControlComponent ';
@@ -32,7 +32,7 @@ import { useState } from 'react';
 import SelectForm from 'components/form/SelectForm';
 import { convertJsonToFormData } from 'utils/convertJsonToFormData';
 import useChinhSuaVanBangValidationSchema from 'components/validations/chinhsuavbccValidation';
-import { getAllHinhThucDaoTao, getAllNamThi, getByCCCD, getKhoaThiByNamThi } from 'services/sharedService';
+import { getAllHinhThucDaoTao, getAllNamThi, getKhoaThiByNamThi } from 'services/sharedService';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { IconBook, IconCertificate, IconFile, IconUser } from '@tabler/icons';
 const AddDonChinhSua = ({ thaotac }) => {
@@ -52,7 +52,7 @@ const AddDonChinhSua = ({ thaotac }) => {
       CCCD: '',
       NgaySinh: '',
       NoiSinh: '',
-      GioiTinh: '',
+      GioiTinh: true,
       DanToc: '',
       PathFileVanBan: '',
       FileVanBan: '',
@@ -129,14 +129,18 @@ const AddDonChinhSua = ({ thaotac }) => {
       const namThi = await getAllNamThi();
       setNamThi(namThi.data);
       const hocSinh = await getByCCCD(selectedHocsinh.cccd);
+  
       const dataHocsinh = hocSinh.data;
+          console.log(dataHocsinh.gioiTinh);
+          console.log(dataHocsinh);
+
       if (selectedHocsinh) {
         formik.setValues({
           HoTen: dataHocsinh.hoTen || '',
           CCCD: dataHocsinh.cccd || '',
           NgaySinh: dataHocsinh.ngaySinh || '',
           NoiSinh: dataHocsinh.noiSinh || '',
-          GioiTinh: dataHocsinh.gioiTinh || '',
+          GioiTinh: dataHocsinh.gioiTinh || true,
           DanToc: dataHocsinh.danToc || '',
           IdHocSinh: selectedHocsinh.id,
           SoHieuVanbang: dataHocsinh.soHieuVanBang || '',
@@ -163,7 +167,7 @@ const AddDonChinhSua = ({ thaotac }) => {
     const fetchData1 = async () => {
       //get khóa thi theo năm thi
       const khoaThi = await getKhoaThiByNamThi(formik.values.IdNamThi);
-      const dataWithIds = khoaThi.data.map((row, index) => ({
+      const dataWithIds = khoaThi && khoaThi.data.map((row, index) => ({
         idindex: index + 1,
         Ngay: convertISODateToFormattedDate(row.ngay),
         ...row
@@ -218,7 +222,7 @@ const AddDonChinhSua = ({ thaotac }) => {
               style={{ display: 'flex', justifyContent: 'flex-start' }}
               row
               name="GioiTinh"
-              value={formik.values.GioiTinh ? formik.values.GioiTinh : 'true'}
+              value={formik.values.GioiTinh ? formik.values.GioiTinh : 'false'}
               onChange={formik.handleChange}
             >
               <FormControlLabel value={true} control={<Radio />} label={t('gender.male')} />
