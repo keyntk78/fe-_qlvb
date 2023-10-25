@@ -25,7 +25,7 @@ function Import() {
   const [dataDMTN, setDataDMTN] = useState('');
   const [dataDonvi, setDataDonvi] = useState('');
   const [khoaThis, setKhoaThis] = useState([]);
-  const [khoaThi, setKhoaThi] = useState('');
+  const [selectKhoaThi, setSelectKhoaThi] = useState('');
   const [selectFile, setSelectFile] = useState('');
   const user = useSelector(userLoginSelector);
   const openPopup = useSelector(openPopupSelector);
@@ -58,8 +58,10 @@ function Import() {
       const response = await getAllKhoathiByDMTN(selectDanhmuc);
       if (response.data && response.data.length > 0) {
         setKhoaThis(response.data);
+        setSelectKhoaThi(response.data[0].id);
       } else {
         setKhoaThis([]);
+        setSelectKhoaThi('');
       }
       dispatch(setLoading(false));
     };
@@ -89,7 +91,7 @@ function Import() {
       const values = new FormData();
       values.append('IdTruong', dataDonvi ? dataDonvi : dataDonvis && dataDonvis.length > 0 ? dataDonvis[0].id : '');
       values.append('IdDanhMucTotNghiep', dataDMTN ? dataDMTN : dataDMTNs && dataDMTNs.length > 0 ? dataDMTNs[0].id : '');
-      values.append('IdKhoaThi', khoaThi ? khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : '');
+      values.append('IdKhoaThi', selectKhoaThi ? selectKhoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : '');
       values.append('NguoiThucHien', user.username);
       values.append('fileExcel', selectFile);
       dispatch(selectedDonvitruong(dataDonvi ? dataDonvi : dataDonvis && dataDonvis.length > 0 ? dataDonvis[0].id : ''));
@@ -113,7 +115,6 @@ function Import() {
     if (openPopup) {
       setDataDMTN('');
       setDataDonvi('');
-      setKhoaThi('');
       setSelectFile(null);
       setSelectedFileName(null);
     }
@@ -159,8 +160,8 @@ function Import() {
                     label={t('Khóa thi')}
                     size="small"
                     name="khoaThi"
-                    value={khoaThi ? khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : ''}
-                    onChange={(e) => setKhoaThi(e.target.value)}
+                    value={selectKhoaThi ? selectKhoaThi : ''}
+                    onChange={(e) => setSelectKhoaThi(e.target.value)}
                   >
                     {khoaThis && khoaThis.length > 0 ? (
                       khoaThis.map((data) => (

@@ -24,7 +24,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { openPopupSelector, reloadDataSelector, userLoginSelector } from 'store/selectors';
+import { donviSelector, openPopupSelector, reloadDataSelector, userLoginSelector } from 'store/selectors';
 import { setLoading, setOpenPopup, setReloadData } from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import { createSearchParams } from 'utils/createSearchParams';
@@ -46,6 +46,7 @@ import Popup from 'components/controls/popup';
 import Import from 'views/ImportDanhSachVanBang/Import';
 import ButtonSecondary from 'components/buttoncolor/ButtonSecondary';
 import FileMau from '../FileMau/FileMau_ThemDanhSachVanBang.xlsx';
+import { getAllKhoathiByDMTN } from 'services/khoathiService';
 export default function SoGoc() {
   const isXs = useMediaQuery('(max-width:600px)');
   const { t } = useTranslation();
@@ -55,7 +56,8 @@ export default function SoGoc() {
   const navigate = useNavigate();
   const [dMTN, setDMTN] = useState([]);
   const [donvis, setDonvis] = useState([]);
-  const [firstLoad, setFirstLoad] = useState(false);
+  const [khoaThis, setKhoaThis] = useState([]);
+  const [selectKhoaThi, setSelectKhoaThi] = useState([]);
   const [selectDonvi, setSelectDonvi] = useState('');
   const [selectDanhmuc, setSelectDanhmuc] = useState('');
   const [disable, setDisable] = useState(false);
@@ -63,7 +65,7 @@ export default function SoGoc() {
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
   const openPopup = useSelector(openPopupSelector);
-
+  const donvi = useSelector(donviSelector);
   const TableCell2 = styled(TableCell)(
     () => `
       border: 1px solid #ddd;
@@ -91,7 +93,8 @@ export default function SoGoc() {
     startIndex: 0,
     pageSize: 25,
     DMTN: '',
-    donVi: ''
+    donVi: '',
+    khoaThi: ''
   });
 
   const [pageState1, setPageState1] = useState({
@@ -103,7 +106,8 @@ export default function SoGoc() {
     startIndex: 0,
     pageSize: -1,
     DMTN: '',
-    donVi: ''
+    donVi: '',
+    khoaThi: ''
   });
 
   const handleSearch = () => {
@@ -114,12 +118,15 @@ export default function SoGoc() {
     const danhmucSelect = pageState.DMTN;
     const selectedDanhmucInfo = dMTN.find((dmtn) => dmtn.id === danhmucSelect);
     setSelectDanhmuc(selectedDanhmucInfo);
+    const khoaThiSelect = pageState.khoaThi;
+    const selectedKhoaThiInfo = khoaThis.find((khoathi) => khoathi.id === khoaThiSelect);
+    setSelectKhoaThi(selectedKhoaThiInfo);
   };
 
   const handleExport = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
-    await ExportExcel(formik, pageState1, selectDanhmuc, selectDonvi, 'sogoc');
+    await ExportExcel(formik, pageState1, selectDanhmuc, selectDonvi, selectKhoaThi, donvi, 'sogoc');
     dispatch(setLoading(false));
   };
 
@@ -167,7 +174,7 @@ export default function SoGoc() {
       if (danhmuc.data && danhmuc.data.length > 0) {
         setDMTN(danhmuc.data);
         setPageState((old) => ({ ...old, DMTN: danhmuc.data[0].id }));
-        setSelectDanhmuc(danhmuc.data[0]);
+        setSelectDanhmuc(danhmuc.data[0].id);
         setDisable(false);
       } else {
         setDMTN([]);
@@ -181,8 +188,20 @@ export default function SoGoc() {
   }, []);
 
   useEffect(() => {
-    if (selectDanhmuc && selectDonvi) {
-      setFirstLoad(true);
+    const fetchDataDL = async () => {
+      console.log('123');
+      const response = await getAllKhoathiByDMTN(selectDanhmuc);
+      console.log(response);
+      if (response.data && response.data.length > 0) {
+        setKhoaThis(response.data);
+        setSelectKhoaThi(response.data[0].id);
+      } else {
+        setKhoaThis([]);
+      }
+      dispatch(setLoading(false));
+    };
+    if (selectDanhmuc) {
+      fetchDataDL();
     }
   }, [selectDanhmuc]);
 
@@ -195,7 +214,9 @@ export default function SoGoc() {
       DiaPhuongCapBang: '',
       HeDaoTao: '',
       HinhThucDaoTao: '',
-      NgayCapBang: ''
+      NgayCapBang: '',
+      TenKyThi: '',
+      KhoaThi: ''
     }
   });
   const handleImport = () => {
@@ -207,8 +228,9 @@ export default function SoGoc() {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
-      params.append('idDanhMucTotNghiep', pageState.DMTN);
-      params.append('idTruong', pageState.donVi);
+      params.append('IdDanhMucTotNghiep', pageState.DMTN);
+      params.append('IdTruong', pageState.donVi);
+      params.append('IdKhoaThi', pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : '');
       const response = await getHocSinhTheoSoGoc(params);
       const data = response.data;
       formik.setValues({
@@ -220,7 +242,9 @@ export default function SoGoc() {
         DiaPhuongCapBang: data.CauHinh.TenDiaPhuongCapBang || '',
         HeDaoTao: data.Truong.HeDaoTao.toUpperCase() || '',
         HinhThucDaoTao: data.Truong.HinhThucDaoTao || '',
-        NgayCapBang: formatDate(data.DanhMucTotNghiep.NgayCapBang) || ''
+        NgayCapBang: formatDate(data.DanhMucTotNghiep.NgayCapBang) || '',
+        TenKyThi: data.DanhMucTotNghiep.TenKyThi || '',
+        KhoaThi: convertISODateToFormattedDate(data.KhoaThi.Ngay) || ''
       });
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -242,15 +266,22 @@ export default function SoGoc() {
         setIsAccess(false);
       }
     };
-    if (firstLoad || search || reloadData) {
+    if (search || reloadData) {
       fetchData();
       setSearch(false);
     }
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, firstLoad, search]);
+  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
 
   const handleDanhMucChange = (event) => {
     const selectedValue = event.target.value;
     setPageState((old) => ({ ...old, DMTN: selectedValue }));
+    setSelectDanhmuc(selectedValue);
+  };
+
+  const handleKhoaThiChange = (event) => {
+    const selectedValue = event.target.value;
+    setPageState((old) => ({ ...old, khoaThi: selectedValue }));
+    setSelectKhoaThi(selectedValue);
   };
 
   const handleSchoolChange = (event) => {
@@ -263,6 +294,7 @@ export default function SoGoc() {
       const params = await createSearchParams(pageState1);
       params.append('idDanhMucTotNghiep', pageState.DMTN);
       params.append('idTruong', pageState.donVi);
+      params.append('IdKhoaThi', pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : '');
       const response = await getHocSinhTheoSoGoc(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -283,10 +315,10 @@ export default function SoGoc() {
         setIsAccess(false);
       }
     };
-    if (firstLoad || search || reloadData) {
+    if (search || reloadData) {
       fetchData();
     }
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, firstLoad, search]);
+  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
 
   const additionalData = {
     uyBanNhanDan: formik.values.UyBanNhanDan.toUpperCase(),
@@ -389,6 +421,30 @@ export default function SoGoc() {
               </Select>
             </FormControl>
           </Grid>
+          <Grid item container xs={isXs ? 12 : 4}>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel>{t('Khóa thi')}</InputLabel>
+              <Select
+                label={t('Khóa thi')}
+                size="small"
+                name="khoaThi"
+                value={pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : ''}
+                onChange={handleKhoaThiChange}
+                // value={selectKhoaThi ? selectKhoaThi : ''}
+                // onChange={(e) => setSelectKhoaThi(e.target.value)}
+              >
+                {khoaThis && khoaThis.length > 0 ? (
+                  khoaThis.map((data) => (
+                    <MenuItem key={data.id} value={data.id}>
+                      {data && data.ngay ? convertISODateToFormattedDate(data.ngay) : ''}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value="">{t('selected.nodata')}</MenuItem>
+                )}
+              </Select>
+            </FormControl>
+          </Grid>
           <Grid item xs={isXs ? 12 : 4}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('donvitruong.title')}</InputLabel>
@@ -482,35 +538,63 @@ export default function SoGoc() {
             </Typography>
           </Grid>
         </Grid>
-        <Grid item container mb={3} spacing={1} mt={3}>
-          <Grid item lg={9} md={8.8} sm={8} xs={7} flexDirection={'column'}>
-            <Typography variant="body1" fontSize={14}>
-              Quyết định công nhận tốt nghiệp số {formik.values.QuyetDinh}
-            </Typography>
-            <Typography variant="body1" fontSize={14}>
-              Học sinh trường: {selectDonvi ? selectDonvi.ten : ''}
-            </Typography>
-          </Grid>
-          <Grid item lg={3} md={3.2} sm={4} xs={5} flexDirection={'column'}>
-            <Typography variant="body1" fontSize={14}>
-              Năm tốt nghiệp: {formik.values.NamThi}
-            </Typography>
-            <Typography variant="body1" fontSize={14}>
+        {donvi.donViQuanLy == 1 ? (
+          <Grid item container mb={3} spacing={1} mt={3}>
+            <Grid item lg={8} md={8} sm={8} xs={7} flexDirection={'column'}>
+              <Typography variant="body1" fontSize={14}>
+                Quyết định công nhận tốt nghiệp số {formik.values.QuyetDinh}
+              </Typography>
+              <Typography variant="body1" fontSize={14}>
+                Kỳ thi: {formik.values.TenKyThi}
+              </Typography>
+              <Typography variant="body1" fontSize={14}>
+                Năm tốt nghiệp: {formik.values.NamThi}
+              </Typography>
+            </Grid>
+            <Grid item lg={4} md={4} sm={4} xs={5} flexDirection={'column'}>
+              <Typography variant="body1" fontSize={14}>
+                Khóa thi: {formik.values.KhoaThi}
+              </Typography>
+              <Typography variant="body1" fontSize={14}>
+                Học sinh trường: {selectDonvi ? selectDonvi.ten : ''}
+              </Typography>
+              {/* <Typography variant="body1" fontSize={14}>
               Hình thức học: {formik.values.HinhThucDaoTao}
-            </Typography>
+            </Typography> */}
+            </Grid>
           </Grid>
-        </Grid>
+        ) : (
+          <Grid item container mb={3} spacing={1} mt={3}>
+            <Grid item lg={8} md={8} sm={8} xs={7} flexDirection={'column'}>
+              <Typography variant="body1" fontSize={14}>
+                Quyết định công nhận tốt nghiệp số {formik.values.QuyetDinh}
+              </Typography>
+              <Typography variant="body1" fontSize={14}>
+                Học sinh trường: {selectDonvi ? selectDonvi.ten : ''}
+              </Typography>
+            </Grid>
+            <Grid item lg={4} md={4} sm={4} xs={5} flexDirection={'column'}>
+              <Typography variant="body1" fontSize={14}>
+                Năm tốt nghiệp: {formik.values.NamThi}
+              </Typography>
+              <Typography variant="body1" fontSize={14}>
+                Hình thức học: {formik.values.HinhThucDaoTao}
+              </Typography>
+            </Grid>
+          </Grid>
+        )}
         <TableContainer component={Paper} style={{ border: '1px solid #ddd', borderRadius: 0 }}>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell1 style={{ width: '30px' }}>STT</TableCell1>
-                <TableCell1 style={{ width: 'auto' }}>Họ và tên</TableCell1>
-                <TableCell1 style={{ width: '110px' }}>CCCD</TableCell1>
+                <TableCell1 style={{ width: 'auto' }}>Họ và tên người học</TableCell1>
+                {/* <TableCell1 style={{ width: '110px' }}>CCCD</TableCell1> */}
                 <TableCell1 style={{ width: '83px' }}>Ngày tháng năm sinh</TableCell1>
                 <TableCell1 style={{ width: 'auto' }}>Nơi sinh</TableCell1>
                 <TableCell1 style={{ width: '45px' }}>Giới tính</TableCell1>
                 <TableCell1 style={{ width: 'auto' }}>Dân tộc</TableCell1>
+                {donvi.donViQuanLy == 1 && <TableCell1 style={{ width: 'auto' }}>Điểm thi</TableCell1>}
                 <TableCell1 style={{ width: '80px' }}>Xếp loại tốt nghiệp</TableCell1>
                 <TableCell1 style={{ width: '100px' }}>Số hiệu văn bằng</TableCell1>
                 <TableCell1 style={{ width: 'auto' }}>Số vào sổ gốc</TableCell1>
@@ -523,11 +607,12 @@ export default function SoGoc() {
                 <TableRow key={row.idx}>
                   <TableCell2 style={{ textAlign: 'center' }}>{row.idx}</TableCell2>
                   <TableCell2>{row.HoTen}</TableCell2>
-                  <TableCell2>{row.CCCD}</TableCell2>
+                  {/* <TableCell2>{row.CCCD}</TableCell2> */}
                   <TableCell2>{row.ngaySinh_fm}</TableCell2>
                   <TableCell2>{row.NoiSinh}</TableCell2>
                   <TableCell2>{row.gioiTinh_fm}</TableCell2>
                   <TableCell2>{row.DanToc}</TableCell2>
+                  {donvi.donViQuanLy == 1 && <TableCell2>{row.HoiDong}</TableCell2>}
                   <TableCell2>{row.XepLoai}</TableCell2>
                   <TableCell2>{row.SoHieuVanBang}</TableCell2>
                   <TableCell2 style={{ textAlign: 'center' }}>{row.SoVaoSoCapBang}</TableCell2>
@@ -559,7 +644,7 @@ export default function SoGoc() {
             </Grid>
             <Grid item mt={0.4}>
               <Typography variant="body1" fontSize={15} style={{ fontWeight: 'bold' }}>
-                TRƯỞNG PHÒNG
+                {donvi.donViQuanLy == 1 ? 'GIÁM ĐỐC' : 'TRƯỞNG PHÒNG'}
               </Typography>
             </Grid>
             <Grid item mt={10}>

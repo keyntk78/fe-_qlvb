@@ -5,7 +5,7 @@ import { store } from '../store/index';
 
 export async function getSearchSogoc(idtruong, params) {
   try {
-    const response = await sendRequest(`SoGoc/GetSearch?idTruong=${idtruong}&${params}`, 'GET');
+    const response = await sendRequest(`SoGoc/GetSearch?=${idtruong}&${params}`, 'GET');
     return response;
   } catch (error) {
     console.error('Error creating Sogoc:', error);

@@ -12,8 +12,11 @@ import '../../index.css';
 import useXacMinhVanBangValidationSchema from 'components/validations/xacminhvanbangValidation';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { donviSelector } from 'store/selectors';
 
 const Detaillichsumotnguoi = ({ data }) => {
+  const donvi = useSelector(donviSelector);
   const { t } = useTranslation();
   const formik = useFormik({
     initialValues: {
@@ -46,9 +49,9 @@ const Detaillichsumotnguoi = ({ data }) => {
     }
   }, [data]);
   const DataToExportWord = {
-    uyBanNhanDan: data ? data.uyBanNhanDan : '',
-    coQuanCapBang: data ? data.coQuanCapBang : '',
-    diaPhuongCapBang: data ? data.diaPhuongCapBang : '',
+    uyBanNhanDan: data ? data.uyBanNhanDan.toUpperCase() : '',
+    coQuanCapBang: data ? data.coQuanCapBang.toUpperCase() : '',
+    diaPhuongCapBang: data ? data.diaPhuongCapBang.toUpperCase() : '',
     donViXacMinh: formik.values.donViXacMinh ? formik.values.donViXacMinh.toUpperCase() : '',
     hoTen: data.hocSinhs ? data.hocSinhs[0].hoTen : '',
     gioiTinh: data.hocSinhs ? (data.hocSinhs[0].gioiTinh ? 'Nam' : 'Nữ') : '',
@@ -60,15 +63,16 @@ const Detaillichsumotnguoi = ({ data }) => {
     congVanSo: formik.values.congVanSo ? formik.values.congVanSo.toUpperCase() : '',
     khoaThi: data.hocSinhs ? convertISODateToFormattedDate(data.hocSinhs[0].khoaThi) : '',
     nguoiKy: data ? data.nguoiKyBang : '',
-    hoiDong: data.hocSinhs ? data.hocSinhs[0].hoiDong : ''
+    hoiDong: data.hocSinhs ? data.hocSinhs[0].hoiDong : '',
+    maHeDaoTao: donvi ? donvi.maHeDaoTao : ''
   };
-  const { hoTen, ngaySinh, noiSinh, khoaThi, hoiDong, coQuanCapBang } = DataToExportWord || {};
+  const { hoTen, ngaySinh, noiSinh, khoaThi, hoiDong, coQuanCapBang, maHeDaoTao } = DataToExportWord || {};
   const result = (
     <p>
       Ông/bà:<span className="highlight"> {hoTen || ''}</span>, sinh ngày<span className="highlight"> {ngaySinh || ''} </span>
       tại
-      <span className="highlight"> {noiSinh || ''} </span> có tên trong danh sách tốt nghiệp Kỳ thi THPT khóa thi ngày{' '}
-      <span className="highlight"> {khoaThi || ''} </span>
+      <span className="highlight"> {noiSinh || ''} </span> có tên trong danh sách tốt nghiệp Kỳ thi{' '}
+      <span className="hightlight">{maHeDaoTao || ''}</span> khóa thi ngày <span className="highlight"> {khoaThi || ''} </span>
       tại Hội đồng thi <span className="highlight">{hoiDong || ''}</span>; có hồ sơ lưu tại
       <span className="highlight"> {coQuanCapBang || ''}</span>.
     </p>

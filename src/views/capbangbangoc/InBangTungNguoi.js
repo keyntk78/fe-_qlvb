@@ -4,7 +4,7 @@ import MainCard from 'components/cards/MainCard';
 import { IconPrinter } from '@tabler/icons';
 import { Button, Grid } from '@mui/material';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectedDanhmucSelector, selectedDonvitruongSelector, selectedPhoigocSelector } from 'store/selectors';
 import { useState } from 'react';
 import { GetConfigPhoi } from 'services/phoigocService';
@@ -17,10 +17,8 @@ const InBangTungNguoi = ({ duLieuHocSinh }) => {
   const [duLieuConFig, setDuLieuConFig] = useState([]);
   const donvi = useSelector(selectedDonvitruongSelector);
   const danhmuc = useSelector(selectedDanhmucSelector);
-  console.log(duLieuHocSinh);
-  console.log(donvi);
-  console.log(danhmuc);
-  console.log(phoigoc);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const fetchDataDLHS = async () => {
       const response_cf = await GetConfigPhoi(phoigoc.id);

@@ -16,12 +16,13 @@ import useXacMinhVanBangValidationSchema from 'components/validations/xacminhvan
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import ExportExcel from './ExportExcel';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { donviSelector } from 'store/selectors';
 
 const Detaillichsunhieunguoi = ({ data }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-
+  const donvi = useSelector(donviSelector);
   const formik = useFormik({
     initialValues: {
       donViXacMinh: '',
@@ -104,16 +105,17 @@ const Detaillichsunhieunguoi = ({ data }) => {
   }, [data]);
 
   const DataToExportWord = {
-    uyBanNhanDan: data ? data.uyBanNhanDan : '',
-    coQuanCapBang: data ? data.coQuanCapBang : '',
-    diaPhuongCapBang: data ? data.diaPhuongCapBang : '',
+    uyBanNhanDan: data ? data.uyBanNhanDan.toUpperCase() : '',
+    coQuanCapBang: data ? data.coQuanCapBang.toUpperCase() : '',
+    diaPhuongCapBang: data ? data.diaPhuongCapBang.toUpperCase() : '',
     donViXacMinh: formik.values.donViXacMinh ? formik.values.donViXacMinh.toUpperCase() : '',
     ngay: formik.values.ngayBanHanh ? new Date(formik.values.ngayBanHanh).getDate() : 0,
     thang: formik.values.ngayBanHanh ? new Date(formik.values.ngayBanHanh).getMonth() + 1 : 0,
     nam: formik.values.ngayBanHanh ? new Date(formik.values.ngayBanHanh).getFullYear() : 0,
     congVanSo: formik.values.congVanSo ? formik.values.congVanSo.toUpperCase() : '',
     nguoiKy: data ? data.nguoiKyBang : '',
-    soLuong: data && data.hocSinhs ? data.hocSinhs.length : 0
+    soLuong: data && data.hocSinhs ? data.hocSinhs.length : 0,
+    maHeDaoTao: donvi ? donvi.maHeDaoTao : ''
   };
   return (
     <form onSubmit={formik.handleSubmit}>

@@ -62,6 +62,7 @@ const Xacminhtungnguoi = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await getHocSinhXacMinhByCCCD(selectedHocsinh.cccd);
+      console.log(response);
       const datas = response.data;
       const response_cauhinh = await getCauHinhXacMinhVanBang(donvi.id);
       const data_cauhinh = response_cauhinh.data;
@@ -77,7 +78,9 @@ const Xacminhtungnguoi = () => {
         queQuan: datas.diaChi,
         khoaThi: convertISODateToFormattedDate(datas.khoaThi),
         nguoiKy: data_cauhinh.nguoiKyBang.toUpperCase(),
-        hoiDong: datas.hoiDong.toUpperCase()
+        hoiDong: datas.hoiDong.toUpperCase(),
+        tenKyThi: datas.danhMucTotNghiep.tenKyThi,
+        maHeDaoTao: datas.danhMucTotNghiep.maHeDaoTao
       });
     };
     fetchData();
@@ -99,7 +102,8 @@ const Xacminhtungnguoi = () => {
     congVanSo: formik.values.congVanSo ? formik.values.congVanSo.toUpperCase() : '',
     khoaThi: datas ? datas.khoaThi : '',
     nguoiKy: datas ? datas.nguoiKy : '',
-    hoiDong: datas ? datas.hoiDong : ''
+    hoiDong: datas ? datas.hoiDong : '',
+    maHeDaoTao: donvi ? donvi.maHeDaoTao : ''
   };
 
   useEffect(() => {
@@ -108,13 +112,13 @@ const Xacminhtungnguoi = () => {
       setSelectedFileName('');
     }
   }, [openPopup]);
-  const { hoTen, ngaySinh, queQuan, khoaThi, hoiDong, coQuanCapBang } = datas || {};
+  const { hoTen, ngaySinh, queQuan, khoaThi, hoiDong, coQuanCapBang, maHeDaoTao } = datas || {};
   const result = (
     <p>
       Ông/bà:<span className="highlight"> {hoTen || ''}</span>, sinh ngày<span className="highlight"> {ngaySinh || ''} </span>
       tại
-      <span className="highlight"> {queQuan || ''} </span> có tên trong danh sách tốt nghiệp Kỳ thi THPT khóa thi ngày{' '}
-      <span className="highlight"> {khoaThi || ''} </span>
+      <span className="highlight"> {queQuan || ''} </span> có tên trong danh sách tốt nghiệp Kỳ thi{' '}
+      <span className="hightlight">{maHeDaoTao || ''}</span> khóa thi ngày <span className="highlight"> {khoaThi || ''} </span>
       tại Hội đồng thi <span className="highlight">{hoiDong || ''}</span>; có hồ sơ lưu tại
       <span className="highlight"> {coQuanCapBang || ''}</span>.
     </p>

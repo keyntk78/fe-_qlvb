@@ -37,7 +37,7 @@ const InGCN = () => {
     },
     validationSchema: useInGiayChungNhanValidationSchema(),
     onSubmit: () => {
-      generateDocument(DataToExportWord, paperSize);
+      generateDocument(DataToExportWord, paperSize, donvi.donViQuanLy);
       dispatch(setOpenPopup(false));
       dispatch(showAlert(new Date().getTime().toString(), 'success', 'In Thành Công'));
     }

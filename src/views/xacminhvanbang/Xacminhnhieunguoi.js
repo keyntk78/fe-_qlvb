@@ -97,6 +97,7 @@ const Xacminhnhieunguoi = () => {
     }
   ];
   const data = JSON.parse(localStorage.getItem('hocsinhs')) || [];
+  console.log(data);
   const rows = data.map((row, index) => ({
     id: index + 1,
     idx: row.idx,
@@ -165,16 +166,17 @@ const Xacminhnhieunguoi = () => {
   }, [donvi.id]);
 
   const DataToExportWord = {
-    uyBanNhanDan: datas ? datas.uyBanNhanDan : '',
-    coQuanCapBang: datas ? datas.coQuanCapBang : '',
-    diaPhuongCapBang: datas ? datas.diaPhuongCapBang : '',
+    uyBanNhanDan: datas ? datas.uyBanNhanDan.toUpperCase() : '',
+    coQuanCapBang: datas ? datas.coQuanCapBang.toUpperCase() : '',
+    diaPhuongCapBang: datas ? datas.diaPhuongCapBang.toUpperCase() : '',
     donViXacMinh: formik.values.donViXacMinh ? formik.values.donViXacMinh.toUpperCase() : '',
     ngay: formik.values.ngayBanHanh ? new Date(formik.values.ngayBanHanh).getDate() : 0,
     thang: formik.values.ngayBanHanh ? new Date(formik.values.ngayBanHanh).getMonth() + 1 : 0,
     nam: formik.values.ngayBanHanh ? new Date(formik.values.ngayBanHanh).getFullYear() : 0,
     congVanSo: formik.values.congVanSo ? formik.values.congVanSo.toUpperCase() : '',
     nguoiKy: datas ? datas.nguoiKy : '',
-    soLuong: data ? data.length : 0
+    soLuong: data ? data.length : 0,
+    maHeDaoTao: donvi ? donvi.maHeDaoTao : ''
   };
 
   useEffect(() => {
