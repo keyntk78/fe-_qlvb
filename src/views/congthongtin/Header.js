@@ -2,7 +2,7 @@ import { Box, Container, useTheme } from '@mui/system';
 import React, { useState } from 'react';
 import { Grid, List, ListItemText, useMediaQuery, Drawer, IconButton, Typography, ListItemButton, ListItemIcon } from '@mui/material';
 import { useNavigate } from 'react-router';
-import { IconPhone, IconMenu2, IconHome, IconCertificate, IconFileCertificate, IconPencil } from '@tabler/icons';
+import { IconMenu2, IconHome, IconCertificate, IconFileCertificate, IconPencil } from '@tabler/icons';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import moment from 'moment';
 import 'moment/locale/vi';
@@ -161,13 +161,6 @@ export default function Header() {
                 {phong}
               </Typography>
             </Grid>
-            {!isSmallScreen && (
-              <Grid container item xs={3.5} justifyContent="flex-end">
-                <Typography style={{ display: 'flex', alignItems: 'center' }}>
-                  <IconPhone /> Hotline: 03258789
-                </Typography>
-              </Grid>
-            )}
           </Grid>
           {isSmallScreen && (
             <IconButton onClick={toggleMenu} sx={{ marginTop: '1px' }}>

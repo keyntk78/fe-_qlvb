@@ -79,12 +79,24 @@ export default function Thongtintintuc() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const tinTucNew = await getLatest4News();
-      setTinTucNew(tinTucNew.data);
-      const getAllTintuc = await getAllTinTuc();
-      setTinTucAll(getAllTintuc.data);
-      const loaiTinData = await getAllLoaiTinTuc();
-      setLoaiTin(loaiTinData.data);
+      setTimeout(async () => {
+        try {
+          const tinTucNew = await getLatest4News();
+          setTinTucNew(tinTucNew.data);
+        } catch (error) {
+          console.error(error);
+        }
+      }, 800);
+      setTimeout(async () => {
+        try {
+          const getAllTintuc = await getAllTinTuc();
+          setTinTucAll(getAllTintuc.data);
+          const loaiTinData = await getAllLoaiTinTuc();
+          setLoaiTin(loaiTinData.data);
+        } catch (error) {
+          console.error(error);
+        }
+      }, 1800);
     };
     fetchData();
   }, []);
@@ -95,7 +107,6 @@ export default function Thongtintintuc() {
       const params = await createSearchParams(pageState);
       const response = await getSearchTinTuc(params);
       const data = response.data;
-      console.log(data);
       if (data) {
         setPageState((old) => ({
           ...old,
@@ -110,63 +121,67 @@ export default function Thongtintintuc() {
   }, [pageState.startIndex]);
 
   return (
-    <div>
+    <>
       <style>{styles}</style>
       <Container sx={{ paddingBottom: 1, backgroundColor: '#FFFFFF', mb: '10px', minHeight: `calc(100vh - 285px)` }}>
         <Grid container mt={1} spacing={2}>
           <Grid item lg={8.5} md={8.5} sm={12} xs={12}>
-            <Grid container columnSpacing={3} onClick={() => handleBoxClick(tinTucNew[0].id)}>
-              <Grid item xs={7}>
-                <img
-                  src={tinTucNew && tinTucNew[0] ? `${urlimg}${tinTucNew[0].hinhAnh}` : ''}
-                  alt="tin tức"
-                  style={{ width: '100%', height: '250px', objectFit: 'cover', cursor: 'pointer' }} // Thêm thuộc tính style cho ảnh
-                />
-              </Grid>
-              <Grid item xs={5} sx={{ bgcolor: '#F0F0F0' }} mb={'5px'}>
-                <Typography className="title" variant="h4" sx={{ mt: '20px' }}>
-                  {tinTucNew && tinTucNew[0] ? tinTucNew[0].tieuDe : ''}
-                </Typography>
-                <Typography
-                  sx={{
-                    mt: '10px',
-                    overflow: 'hidden',
-                    display: '-webkit-box',
-                    WebkitLineClamp: '7', // Limit to 3 lines
-                    WebkitBoxOrient: 'vertical',
-                    whiteSpace: 'normal' // Ensure text wraps within the 3 lines }} variant="body1" style={{
-                  }}
-                >
-                  {tinTucNew && tinTucNew[0] ? tinTucNew[0].moTaNgan : ''}
-                </Typography>
-              </Grid>
-            </Grid>
-            <Divider height={'2px'} sx={{ mb: '12px', mt: '7px' }} />
-            <Grid container columnSpacing={3}>
-              {tinTucNew.slice(1, 4).map((tinTuc) => (
-                <Grid key={tinTuc.id} item xs={4} onClick={() => handleBoxClick(tinTuc.id)} mt={isSmallScreen ? 1 : ''}>
-                  <img
-                    src={`${urlimg}${tinTuc.hinhAnh}`}
-                    alt="tin tức"
-                    style={{ width: '100%', height: '120px', objectFit: 'cover', cursor: 'pointer' }}
-                  />
-                  <Grid item>
+            {tinTucNew &&
+              tinTucNew.slice(0, 1).map((tinTuc) => (
+                <Grid key={tinTuc.id} container columnSpacing={3} onClick={() => handleBoxClick(tinTuc.id)}>
+                  <Grid item xs={7}>
+                    <img
+                      src={`${urlimg}${tinTuc.hinhAnh}`}
+                      alt="tin tức"
+                      style={{ width: '100%', height: '250px', objectFit: 'cover', cursor: 'pointer' }} // Thêm thuộc tính style cho ảnh
+                    />
+                  </Grid>
+                  <Grid item xs={5} sx={{ bgcolor: '#F0F0F0' }} mb={'5px'}>
+                    <Typography className="title" variant="h4" sx={{ mt: '20px' }}>
+                      {tinTuc.tieuDe}
+                    </Typography>
                     <Typography
-                      className="title"
-                      variant="h5"
-                      style={{
+                      sx={{
+                        mt: '10px',
                         overflow: 'hidden',
                         display: '-webkit-box',
-                        WebkitLineClamp: '3',
+                        WebkitLineClamp: '7', // Limit to 3 lines
                         WebkitBoxOrient: 'vertical',
-                        whiteSpace: 'normal'
+                        whiteSpace: 'normal' // Ensure text wraps within the 3 lines }} variant="body1" style={{
                       }}
                     >
-                      {tinTuc.tieuDe}
+                      {tinTuc.moTaNgan}
                     </Typography>
                   </Grid>
                 </Grid>
               ))}
+            <Divider height={'2px'} sx={{ mb: '12px', mt: '7px' }} />
+            <Grid container columnSpacing={3}>
+              {tinTucNew &&
+                tinTucNew.slice(1, 4).map((tinTuc) => (
+                  <Grid key={tinTuc.id} item xs={4} onClick={() => handleBoxClick(tinTuc.id)} mt={isSmallScreen ? 1 : ''}>
+                    <img
+                      src={`${urlimg}${tinTuc.hinhAnh}`}
+                      alt="tin tức"
+                      style={{ width: '100%', height: '120px', objectFit: 'cover', cursor: 'pointer' }}
+                    />
+                    <Grid item>
+                      <Typography
+                        className="title"
+                        variant="h5"
+                        style={{
+                          overflow: 'hidden',
+                          display: '-webkit-box',
+                          WebkitLineClamp: '3',
+                          WebkitBoxOrient: 'vertical',
+                          whiteSpace: 'normal'
+                        }}
+                      >
+                        {tinTuc.tieuDe}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                ))}
             </Grid>
           </Grid>
           <Grid item lg={3.5} md={3.5} sm={12} xs={12}>
@@ -188,7 +203,7 @@ export default function Thongtintintuc() {
                   autoScroll: {
                     pauseOnHover: true,
                     pauseOnFocus: true,
-                    speed: 0.5
+                    speed: 1
                   }
                 }}
                 extensions={{ AutoScroll }}
@@ -231,7 +246,6 @@ export default function Thongtintintuc() {
                         </Grid>
                       </Grid>
                     </SplideSlide>
-                    <Divider />
                   </>
                 ))}
               </Splide>
@@ -357,7 +371,7 @@ export default function Thongtintintuc() {
                   autoScroll: {
                     pauseOnHover: true,
                     pauseOnFocus: true,
-                    speed: 0.5
+                    speed: 1
                   }
                 }}
                 extensions={{ AutoScroll }}
@@ -400,7 +414,6 @@ export default function Thongtintintuc() {
                         </Grid>
                       </Grid>
                     </SplideSlide>
-                    <Divider />
                   </>
                 ))}
               </Splide>
@@ -502,6 +515,6 @@ export default function Thongtintintuc() {
       </Container>
       <BackToTop />
       {/* </div> */}
-    </div>
+    </>
   );
 }
