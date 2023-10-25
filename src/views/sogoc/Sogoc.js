@@ -122,7 +122,7 @@ export default function SoGoc() {
     const selectedKhoaThiInfo = khoaThis.find((khoathi) => khoathi.id === khoaThiSelect);
     setSelectKhoaThi(selectedKhoaThiInfo);
   };
-
+  useEffect(() => console.log(search), [search]);
   const handleExport = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
@@ -133,7 +133,7 @@ export default function SoGoc() {
   const handleExportWord = async (e) => {
     e.preventDefault();
     setLoading(true);
-    generateDocument(pageState1.data, additionalData, 'sogoc');
+    generateDocument(pageState1.data, additionalData, donvi, 'sogoc');
     setLoading(false);
   };
 
@@ -326,11 +326,13 @@ export default function SoGoc() {
     quyetDinh: formik.values.QuyetDinh,
     donVi: selectDonvi ? selectDonvi.ten : '',
     namThi: formik.values.NamThi,
-    title: `SỔ CẤP PHÁT BẰNG ${formik.values.HeDaoTao.toUpperCase()}`,
+    title: `SỔ GỐC CẤP BẰNG TỐT NGHIỆP ${formik.values.HeDaoTao.toUpperCase()}`,
     hinhThucDaoTao: formik.values.HinhThucDaoTao,
     diaPhuong: formik.values.DiaPhuongCapBang,
     ngayCap: formik.values.NgayCapBang,
-    nguoiKy: formik.values.NguoiKyBang
+    nguoiKy: formik.values.NguoiKyBang,
+    khoaThi: formik.values.KhoaThi,
+    tenKyThi: formik.values.TenKyThi
   };
 
   // const count = pageState.total ? Math.floor(parseInt(pageState.total) / parseInt(pageState.pageSize)) + 1 : 0;
@@ -356,6 +358,7 @@ export default function SoGoc() {
                   </Tooltip>
                 </AnimateButton>
               </Grid>
+
               <Grid item>
                 <ButtonSecondary
                   title={t('button.download')}
@@ -421,7 +424,7 @@ export default function SoGoc() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item container xs={isXs ? 12 : 4}>
+          <Grid item container xs={isXs ? 12 : 2}>
             <FormControl fullWidth variant="outlined">
               <InputLabel>{t('Khóa thi')}</InputLabel>
               <Select

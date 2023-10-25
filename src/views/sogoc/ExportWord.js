@@ -3,6 +3,7 @@ import PizZip from 'pizzip';
 import PizZipUtils from 'pizzip/utils/index.js';
 import { saveAs } from 'file-saver';
 import FileWordMau_SoGoc from '../FileMau/FileMauSoGoc.docx';
+import FileWordMau_SoGocSGD from '../FileMau/FileMauSoGoc_SGD.docx';
 
 function loadFile(url, callback) {
   PizZipUtils.getBinaryContent(url, callback);
@@ -18,8 +19,8 @@ function replaceErrors(key, value) {
   return value;
 }
 
-export function generateDocument(hocsinhs, data, type) {
-  loadFile(FileWordMau_SoGoc, function (error, content) {
+export function generateDocument(hocsinhs, data, donvi, type) {
+  loadFile(donvi.donViQuanLy == 1 ? FileWordMau_SoGocSGD : FileWordMau_SoGoc, function (error, content) {
     if (error) {
       throw error;
     }
