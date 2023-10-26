@@ -22,7 +22,7 @@ const CombinedActionButtons = ({ params, buttonConfigurations, buttonConfigurati
   return (
     <>
       <AnimateButton>
-        <Tooltip title={t('button.title.action')} placement="bottom">
+        <Tooltip title={buttonConfigurations2 ? t('button.title.chinhsua.huybo') : t('button.title.xacminh')} placement="bottom">
           <IconButton onClick={handleClick} style={{ border: '1px solid black' }} size="small">
             {buttonConfigurations2 ? <DehazeIcon fontSize="small" /> : <MoreHorizIcon fontSize="small" />}
           </IconButton>

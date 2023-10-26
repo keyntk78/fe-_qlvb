@@ -689,5 +689,7 @@
   "Noidungchinhsua": "Nội dung chỉnh sửa",
   "thongtinhocsinh": "Thông tin học sinh",
   "xeploai": "Xếp loai",
-  "button.title.phuluc": "Phụ lục sổ gốc"
+  "button.title.phuluc": "Phụ lục sổ gốc",
+  "button.title.chinhsua.huybo": "Chỉnh sửa/hủy bỏ văn bằng",
+  "button.title.xacminh": "Xác minh văn bằng"
 }
