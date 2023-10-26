@@ -27,7 +27,7 @@ const Congthongtin = {
       element: <CreateDonyeucau />
     },
     {
-      path: '/congthongtin',
+      path: '/',
       element: <Thongtintintuc />
     },
     {

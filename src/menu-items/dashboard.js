@@ -9,7 +9,7 @@ const icons = { IconDashboard };
 const dashboard = {
   id: 'dashboard',
   title: 'Trang chủ',
-  url: '/',
+  url: '/admin',
   type: 'item',
   icon: icons.IconDashboard,
   breadcrumbs: false

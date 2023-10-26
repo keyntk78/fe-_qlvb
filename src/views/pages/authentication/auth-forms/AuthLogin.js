@@ -50,7 +50,7 @@ const FirebaseLogin = ({ ...others }) => {
   useEffect(() => {
     if (token) {
       // Điều hướng người dùng đến trang chính hoặc trang đã đăng nhập
-      navigate('/'); // Sử dụng react-router-dom
+      navigate('/admin'); // Sử dụng react-router-dom
     } else {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -132,7 +132,7 @@ const FirebaseLogin = ({ ...others }) => {
               localStorage.setItem('reports', reports);
 
               dispatch(showAlert(new Date().getTime().toString(), 'success', loggedInUser.message.toString()));
-              navigate('/');
+              navigate('/admin');
             } else {
               if (loggedInUser?.errors) {
                 setErrorBE(loggedInUser?.errors);

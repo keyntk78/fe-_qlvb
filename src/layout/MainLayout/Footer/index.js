@@ -19,7 +19,7 @@ const Footer = () => {
       <footer style={{ display: 'flex', justifyContent: 'space-between', height: '30px' }}>
         <span style={{ marginLeft: '20px', marginTop: '5px', color: '#1565c0' }}>&copy; VNPT Cert</span>
         <a
-          href="/congthongtin"
+          href="/"
           target="_blank"
           rel="noopener noreferrer"
           style={{ marginTop: '5px', marginRight: '20px', textDecoration: 'none', color: '#1565c0' }}

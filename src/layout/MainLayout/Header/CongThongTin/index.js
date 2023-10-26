@@ -8,7 +8,7 @@ const CongThongTin = () => {
   const theme = useTheme();
 
   const handleOpenNewTab = () => {
-    window.open('/congthongtin', '_blank');
+    window.open('/', '_blank');
   };
 
   return (

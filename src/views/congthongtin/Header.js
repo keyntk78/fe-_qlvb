@@ -33,10 +33,10 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [urlImage, setUrlImage] = useState('');
   const [phong, setPhong] = useState([]);
-  const [selectedItem, setSelectedItem] = useState('/congthongtin');
+  const [selectedItem, setSelectedItem] = useState('/');
   const [isHeaderFixed, setIsHeaderFixed] = useState(false);
   const menuItems = [
-    { path: '/congthongtin', icon: <IconHome />, text: 'Trang chủ' },
+    { path: '/', icon: <IconHome />, text: 'Trang chủ' },
     { path: '/tracuu-vanbang', icon: <IconCertificate />, text: 'Tra cứu văn bằng' },
     { path: '/tracuu-donyeucau', icon: <IconFileCertificate />, text: 'Tra cứu đơn cấp bản sao' },
     { path: '/dangky-donyeucau', icon: <IconPencil />, text: 'Đăng ký cấp bản sao' }

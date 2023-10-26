@@ -55,11 +55,11 @@ const PhuLucSoGoc = Loadable(lazy(() => import('views/phulucsogoc/PhuLucSoGoc'))
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
-  path: '/',
+  path: '/admin/',
   element: <MainLayout />,
   children: [
     {
-      path: '/',
+      path: '/admin/',
       element: <TrangChu />
     },
     // {

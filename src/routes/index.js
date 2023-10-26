@@ -9,5 +9,5 @@ import Congthongtin from './Congthongtin';
 // ==============================|| ROUTING RENDER ||============================== //
 
 export default function ThemeRoutes() {
-  return useRoutes([MainRoutes, AuthenticationRoutes, ErrorPageRoutes, Congthongtin]);
+  return useRoutes([Congthongtin, MainRoutes, AuthenticationRoutes, ErrorPageRoutes]);
 }
