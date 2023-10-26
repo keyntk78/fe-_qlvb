@@ -6,7 +6,7 @@ import { IconPrinter } from '@tabler/icons';
 import { Button, Grid } from '@mui/material';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { capBangBansaoSelector } from 'store/selectors';
+import { capBangBansaoSelector, userLoginSelector } from 'store/selectors';
 import { useState } from 'react';
 import { GetConfigPhoi, getPhoiBanSaoDangSuDung } from 'services/phoisaoService';
 import ExitButton from 'components/button/ExitButton';
@@ -17,7 +17,7 @@ const InBanSao = () => {
   const hocsinhid = useSelector(capBangBansaoSelector);
   const [phoisao, setPhoiSao] = useState('');
   const [duLieuConFig, setDuLieuConFig] = useState([]);
-
+  const user = useSelector(userLoginSelector);
   useEffect(() => {
     const fetchDataDLHS = async () => {
       const phoidata = await getPhoiBanSaoDangSuDung(hocsinhid.idTruong);
@@ -30,8 +30,9 @@ const InBanSao = () => {
     const fetchDataDLHS = async () => {
       const response_cf = await GetConfigPhoi(phoisao.id);
       setDuLieuConFig(response_cf.data);
-      const hocSinhSoBanSao = await getHocSinhDaDuaVaoSobanSao(hocsinhid.idHocSinh, hocsinhid.id);
+      const hocSinhSoBanSao = await getHocSinhDaDuaVaoSobanSao(hocsinhid.idHocSinh, hocsinhid.id, user.username);
       setHsSoBanSao(hocSinhSoBanSao.data);
+      console.log(response_cf, hocSinhSoBanSao);
     };
     fetchDataDLHS();
   }, [phoisao.id, hocsinhid.hocSinh.id]);

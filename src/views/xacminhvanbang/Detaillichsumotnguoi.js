@@ -49,8 +49,8 @@ const Detaillichsumotnguoi = ({ data }) => {
     }
   }, [data]);
   const DataToExportWord = {
-    uyBanNhanDan: data ? data.uyBanNhanDan : '',
-    coQuanCapBang: data ? data.coQuanCapBang : '',
+    uyBanNhanDan: data && data.uyBanNhanDan ? data.uyBanNhanDan.toUpperCase() : '',
+    coQuanCapBang: data && data.coQuanCapBang ? data.coQuanCapBang.toUpperCase() : '',
     diaPhuongCapBang: data ? data.diaPhuongCapBang : '',
     donViXacMinh: formik.values.donViXacMinh ? formik.values.donViXacMinh : '',
     hoTen: data.hocSinhs ? data.hocSinhs[0].hoTen : '',

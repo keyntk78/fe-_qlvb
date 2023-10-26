@@ -48,7 +48,7 @@ const Xacminhnhieunguoi = () => {
   const handleExport = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
-    await ExportExcel(rows, DataToExportWord);
+    await ExportExcel(rows, DataToExportWord, donvi);
     dispatch(setLoading(false));
   };
   const columns = [

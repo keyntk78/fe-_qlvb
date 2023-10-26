@@ -74,7 +74,7 @@ const CreateDonyeucau = () => {
       FileDonYeuCau: '',
       DonYeuCau: '',
       HinhAnhCCCD: '',
-      PhuongThucNhan: '',
+      PhuongThucNhan: 0,
       DiaChiNhan: ''
     },
     validationSchema: useDonyeucauValidationSchema(),

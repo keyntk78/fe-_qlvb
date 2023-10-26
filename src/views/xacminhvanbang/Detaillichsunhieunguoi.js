@@ -41,7 +41,7 @@ const Detaillichsunhieunguoi = ({ data }) => {
   const handleExport = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
-    await ExportExcel(rows, DataToExportWord);
+    await ExportExcel(rows, DataToExportWord, donvi);
     dispatch(setLoading(false));
   };
   const columns = [
@@ -105,8 +105,8 @@ const Detaillichsunhieunguoi = ({ data }) => {
   }, [data]);
 
   const DataToExportWord = {
-    uyBanNhanDan: data ? data.uyBanNhanDan : '',
-    coQuanCapBang: data ? data.coQuanCapBang : '',
+    uyBanNhanDan: data && data.uyBanNhanDan ? data.uyBanNhanDan.toUpperCase() : '',
+    coQuanCapBang: data && data.coQuanCapBang ? data.coQuanCapBang.toUpperCase() : '',
     diaPhuongCapBang: data ? data.diaPhuongCapBang : '',
     donViXacMinh: formik.values.donViXacMinh ? formik.values.donViXacMinh : '',
     ngay: formik.values.ngayBanHanh ? new Date(formik.values.ngayBanHanh).getDate() : 0,

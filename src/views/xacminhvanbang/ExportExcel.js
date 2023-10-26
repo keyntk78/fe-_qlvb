@@ -1,5 +1,5 @@
 import ExcelJS from 'exceljs';
-const ExportExcel = async (data, config) => {
+const ExportExcel = async (data, config, donvi) => {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet('Danh Sách xác minh');
 
@@ -27,7 +27,7 @@ const ExportExcel = async (data, config) => {
   worksheet.mergeCells('D2:L2');
 
   const title = worksheet.getCell('A4');
-  title.value = `DANH SÁCH HỌC SINH TỐT NGHIỆP THPT TẠI CÁC HỘI ĐỒNG THI CỦA ${config.diaPhuongCapBang}`;
+  title.value = `DANH SÁCH HỌC SINH TỐT NGHIỆP ${donvi.maHeDaoTao} TẠI CÁC HỘI ĐỒNG THI CỦA ${config.diaPhuongCapBang}`;
   title.alignment = { horizontal: 'center' };
   worksheet.mergeCells('A4:J4');
 

@@ -66,10 +66,13 @@ export async function getDonyeucauById(id) {
   }
 }
 
-export async function getHocSinhDaDuaVaoSobanSao(idHocSinh, idDonYeuCau) {
+export async function getHocSinhDaDuaVaoSobanSao(idHocSinh, idDonYeuCau, nguoiThucHien) {
   try {
     store.dispatch(setLoading(true));
-    const response = await axiosClient(`CapBangBanSao/GetHocSinhDaDuaVaoSoBanSao?idHocSinh=${idHocSinh}&idDonYeuCau=${idDonYeuCau}`, 'GET');
+    const response = await axiosClient(
+      `CapBangBanSao/GetHocSinhDaDuaVaoSoBanSao?idHocSinh=${idHocSinh}&idDonYeuCau=${idDonYeuCau}&nguoiThucHien=${nguoiThucHien}`,
+      'GET'
+    );
     store.dispatch(setLoading(false));
     return response;
   } catch (error) {
