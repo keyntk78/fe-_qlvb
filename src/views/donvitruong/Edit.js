@@ -8,7 +8,7 @@ import { editDonvi, getById } from 'services/donvitruongService';
 import { getAllHinhthucdaotao } from 'services/hinhthucdaotaoService';
 import { getAllHedaotao } from 'services/hedaotaoService';
 import { showAlert, setOpenPopup, setReloadData } from 'store/actions';
-import { openPopupSelector, selectedDonvitruongSelector } from 'store/selectors';
+import { donviSelector, openPopupSelector, selectedDonvitruongSelector } from 'store/selectors';
 import { useTranslation } from 'react-i18next';
 import { userLoginSelector, reloadDataSelector } from 'store/selectors';
 import { convertJsonToFormData } from 'utils/convertJsonToFormData';
@@ -30,7 +30,8 @@ const EditDonvi = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [isChecked, setIsChecked] = useState(false);
-  const donviValidationSchema = useDonviValidationSchema(isChecked ? true : false);
+  const dvql = useSelector(donviSelector);
+  const donviValidationSchema = useDonviValidationSchema(isChecked ? true : false, dvql);
   const user = useSelector(userLoginSelector);
   const reloadData = useSelector(reloadDataSelector);
   const donvi = useSelector(selectedDonvitruongSelector);
@@ -45,10 +46,8 @@ const EditDonvi = () => {
     initialValues: {
       mahedaotao: '',
       mahinhthucdaotao: '',
-      // giatridonviquanly: '',
-      // madonvicha: '',
-      donviquanly: 0,
-      idcha: 0,
+      donviquanly: dvql === 0 ? '' : dvql.donViQuanLy,
+      idcha: dvql === 0 ? '' : dvql.id,
       email: '',
       url: '',
       ma: '',
@@ -213,53 +212,57 @@ const EditDonvi = () => {
             </FormControlComponent>
           </Grid>
         </Grid>
-        <Grid item xs={12} container spacing={2} mt={1}>
-          <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvitruong.field.donviquanly')} isRequire>
-              <SelectList
-                data={pageState.donviquanly}
-                name="donviquanly"
-                value="giaTri"
-                request={'giaTri'}
-                optionName="tenLoai"
-                placeholder={t('donvitruong.field.donviquanly')}
-                formik={formik}
-                openPopup
-              />
-            </FormControlComponent>
+        {dvql === 0 && (
+          <Grid item xs={12} container spacing={2} mt={1}>
+            <Grid item xs={isSmallScreen ? 12 : 6}>
+              <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvitruong.field.donviquanly')} isRequire>
+                <SelectList
+                  data={pageState.donviquanly}
+                  name="donviquanly"
+                  value="giaTri"
+                  request={'giaTri'}
+                  optionName="tenLoai"
+                  placeholder={t('donvitruong.field.donviquanly')}
+                  formik={formik}
+                  openPopup
+                />
+              </FormControlComponent>
+            </Grid>
+            <Grid item xs={isSmallScreen ? 12 : 6}>
+              <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvitruong.field.isManager')}>
+                <Checkbox
+                  checked={formik.values.laPhong} // Kiểm tra giá trị isPhong để quyết định trạng thái checked của checkbox
+                  onChange={(event) => {
+                    setIsChecked(!isChecked);
+                    formik.setFieldValue('laPhong', event.target.checked); // Cập nhật giá trị isPhong tùy thuộc vào trạng thái của checkbox
+                  }}
+                  inputProps={{ 'aria-label': 'controlled' }}
+                />
+              </FormControlComponent>
+            </Grid>
           </Grid>
-          <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvitruong.field.isManager')}>
-              <Checkbox
-                checked={formik.values.laPhong} // Kiểm tra giá trị isPhong để quyết định trạng thái checked của checkbox
-                onChange={(event) => {
-                  setIsChecked(!isChecked);
-                  formik.setFieldValue('laPhong', event.target.checked); // Cập nhật giá trị isPhong tùy thuộc vào trạng thái của checkbox
-                }}
-                inputProps={{ 'aria-label': 'controlled' }}
-              />
-            </FormControlComponent>
-          </Grid>
-        </Grid>
+        )}
         {isChecked ? (
           ''
         ) : (
           <>
             <Grid item xs={12} container spacing={2} mt={1}>
-              <Grid item xs={isSmallScreen ? 12 : 6}>
-                <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('Thuộc đơn vị')} isRequire>
-                  <SelectList
-                    data={pageState.donviquanlycha}
-                    name="idcha"
-                    value="id"
-                    request={'id'}
-                    optionName="ten"
-                    placeholder={t('thuộc đơn vị')}
-                    formik={formik}
-                    openPopup
-                  />
-                </FormControlComponent>
-              </Grid>
+              {dvql === 0 && (
+                <Grid item xs={isSmallScreen ? 12 : 6}>
+                  <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('Thuộc đơn vị')} isRequire>
+                    <SelectList
+                      data={pageState.donviquanlycha}
+                      name="idcha"
+                      value="id"
+                      request={'id'}
+                      optionName="ten"
+                      placeholder={t('Thuộc đơn vị')}
+                      formik={formik}
+                      openPopup
+                    />
+                  </FormControlComponent>
+                </Grid>
+              )}
               <Grid item xs={isSmallScreen ? 12 : 6}>
                 {/* Hình thức đào tạo */}
                 <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('hinhthucdaotao.title')} isRequire>

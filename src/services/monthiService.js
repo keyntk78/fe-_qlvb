@@ -62,7 +62,7 @@ export async function editMonthi(data) {
 export async function deleteMonthi(id, useraction) {
   try {
     store.dispatch(setLoading(true));
-    const response = await axiosClient(`Monthi/Delete?Id=${id}&UserAction=${useraction}`, 'POST');
+    const response = await axiosClient(`Monthi/Delete?Id=${id}&nguoiThucHien=${useraction}`, 'DELETE');
     store.dispatch(setLoading(false));
     return response;
   } catch (error) {

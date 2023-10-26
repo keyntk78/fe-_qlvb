@@ -412,7 +412,7 @@ const CreateDonyeucau = () => {
                   </RadioGroup>
                 </FormControlComponent>
               </Grid>
-              {formik.values.PhuongThucNhan && formik.values.PhuongThucNhan == 1 && (
+              {formik.values.PhuongThucNhan && formik.values.PhuongThucNhan == 1 ? (
                 <Grid item xs={12} sm={12} md={12} lg={12}>
                   <FormControlComponent
                     xsLabel={isSmallScreen ? 0 : 2}
@@ -423,6 +423,8 @@ const CreateDonyeucau = () => {
                     <InputForm formik={formik} name="DiaChiNhan" type="text" placeholder={t('user.label.addressrecevice')} />
                   </FormControlComponent>
                 </Grid>
+              ) : (
+                ''
               )}
             </Grid>
 

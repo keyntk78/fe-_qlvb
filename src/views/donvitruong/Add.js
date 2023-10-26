@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useDonviValidationSchema } from 'components/validations/donvivalidation';
 import { setOpenPopup, showAlert, setReloadData } from 'store/actions';
 import { convertJsonToFormData } from 'utils/convertJsonToFormData';
-import { userLoginSelector, openPopupSelector } from 'store/selectors';
+import { userLoginSelector, openPopupSelector, donviSelector } from 'store/selectors';
 import InputForm from 'components/form/InputForm';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { useNavigate } from 'react-router-dom';
@@ -29,8 +29,8 @@ const AddDonvi = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [isChecked, setIsChecked] = useState(false);
-
-  const donviValidationSchema = useDonviValidationSchema(isChecked ? true : false);
+  const donvi = useSelector(donviSelector);
+  const donviValidationSchema = useDonviValidationSchema(isChecked ? true : false, donvi);
 
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -46,8 +46,8 @@ const AddDonvi = () => {
     initialValues: {
       mahedaotao: '',
       mahinhthucdaotao: '',
-      donviquanly: '',
-      idcha: '',
+      donviquanly: donvi === 0 ? '' : donvi.donViQuanLy,
+      idcha: donvi === 0 ? '' : donvi.id,
       email: '',
       url: '',
       ma: '',
@@ -126,8 +126,8 @@ const AddDonvi = () => {
         formik.setValues({
           mahedaotao: pageState.hedaotao[0].ma || '',
           mahinhthucdaotao: pageState.hinhthucdaotao[0].ma || '',
-          donviquanly: pageState.donviquanly[0].giaTri || '',
-          idcha: pageState.donviquanlycha[0].id || '',
+          donviquanly: donvi && donvi === 0 ? pageState.donviquanly[0].giaTri : donvi.donViQuanLy,
+          idcha: donvi && donvi === 0 ? pageState.donviquanlycha[0].id : donvi.id,
           nguoithuchien: userlogin.username
         });
       } else {
@@ -137,6 +137,9 @@ const AddDonvi = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    console.log(formik.values);
+  });
   useEffect(() => {
     if (openPopup) {
       formik.resetForm();
@@ -203,53 +206,57 @@ const AddDonvi = () => {
             </FormControlComponent>
           </Grid>
         </Grid>
-        <Grid item xs={12} container spacing={2} mt={1}>
-          <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvitruong.field.donviquanly')} isRequire>
-              <SelectList
-                data={pageState.donviquanly}
-                name="donviquanly"
-                value="giaTri"
-                request={'giaTri'}
-                optionName="tenLoai"
-                placeholder={t('donvitruong.field.donviquanly')}
-                formik={formik}
-                openPopup
-              />
-            </FormControlComponent>
+        {donvi === 0 && (
+          <Grid item xs={12} container spacing={2} mt={1}>
+            <Grid item xs={isSmallScreen ? 12 : 6}>
+              <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvitruong.field.donviquanly')} isRequire>
+                <SelectList
+                  data={pageState.donviquanly}
+                  name="donviquanly"
+                  value="giaTri"
+                  request={'giaTri'}
+                  optionName="tenLoai"
+                  placeholder={t('donvitruong.field.donviquanly')}
+                  formik={formik}
+                  openPopup
+                />
+              </FormControlComponent>
+            </Grid>
+            <Grid item xs={isSmallScreen ? 12 : 6}>
+              <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvitruong.field.isManager')}>
+                <Checkbox
+                  checked={formik.values.laPhong} // Kiểm tra giá trị isPhong để quyết định trạng thái checked của checkbox
+                  onChange={(event) => {
+                    setIsChecked(!isChecked);
+                    formik.setFieldValue('laPhong', event.target.checked); // Cập nhật giá trị isPhong tùy thuộc vào trạng thái của checkbox
+                  }}
+                  inputProps={{ 'aria-label': 'controlled' }}
+                />
+              </FormControlComponent>
+            </Grid>
           </Grid>
-          <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvitruong.field.isManager')}>
-              <Checkbox
-                checked={formik.values.laPhong} // Kiểm tra giá trị isPhong để quyết định trạng thái checked của checkbox
-                onChange={(event) => {
-                  setIsChecked(!isChecked);
-                  formik.setFieldValue('laPhong', event.target.checked); // Cập nhật giá trị isPhong tùy thuộc vào trạng thái của checkbox
-                }}
-                inputProps={{ 'aria-label': 'controlled' }}
-              />
-            </FormControlComponent>
-          </Grid>
-        </Grid>
+        )}
         {isChecked ? (
           ''
         ) : (
           <>
             <Grid item xs={12} container spacing={2} mt={1}>
-              <Grid item xs={isSmallScreen ? 12 : 6}>
-                <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('Thuộc đơn vị')} isRequire>
-                  <SelectList
-                    data={pageState.donviquanlycha}
-                    name="idcha"
-                    value="id"
-                    request={'id'}
-                    optionName="ten"
-                    placeholder={t('Thuộc đơn vị')}
-                    formik={formik}
-                    openPopup
-                  />
-                </FormControlComponent>
-              </Grid>
+              {donvi === 0 && (
+                <Grid item xs={isSmallScreen ? 12 : 6}>
+                  <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('Thuộc đơn vị')} isRequire>
+                    <SelectList
+                      data={pageState.donviquanlycha}
+                      name="idcha"
+                      value="id"
+                      request={'id'}
+                      optionName="ten"
+                      placeholder={t('Thuộc đơn vị')}
+                      formik={formik}
+                      openPopup
+                    />
+                  </FormControlComponent>
+                </Grid>
+              )}
               <Grid item xs={isSmallScreen ? 12 : 6}>
                 {/* Hình thức đào tạo */}
                 <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('hinhthucdaotao.title')} isRequire>

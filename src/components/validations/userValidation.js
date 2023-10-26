@@ -15,7 +15,8 @@ export const useUserValidationSchema = (isUpdate = false) => {
       .required(t('validation.user.phone.required'))
       .matches(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/, t('validation.user.phone.valid')),
     address: Yup.string(),
-    cccd: Yup.string()
+    cccd: Yup.string(),
+    truongId: Yup.string().required(t('Đơn vị không được để trống'))
   });
 
   if (!isUpdate) {

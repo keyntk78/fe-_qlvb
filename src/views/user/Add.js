@@ -11,7 +11,7 @@ import InputForm from 'components/form/InputForm';
 import ImageForm from 'components/form/ImageForm';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { openPopupSelector, userLoginSelector } from 'store/selectors';
+import { donviSelector, openPopupSelector, userLoginSelector } from 'store/selectors';
 import { convertJsonToFormData } from 'utils/convertJsonToFormData';
 import FormControlComponent from 'components/form/FormControlComponent ';
 import { useState } from 'react';
@@ -32,7 +32,7 @@ const AddUser = () => {
   const [donvi, setDonvi] = useState([]);
   const navigate = useNavigate();
   const user = useSelector(userLoginSelector);
-
+  const donviquanly = useSelector(donviSelector);
   const formik = useFormik({
     initialValues: {
       fullName: '',
@@ -45,7 +45,7 @@ const AddUser = () => {
       birthday: '',
       gender: '',
       avatar: '',
-      truongId: '',
+      truongId: '0',
       fileImage: '',
       createdBy: userLogin.username
     },
@@ -98,7 +98,7 @@ const AddUser = () => {
 
   const handleSchoolChange = (event) => {
     const selectedValue = event.target.value;
-    const truongId = selectedValue === 'nochoose' ? '' : selectedValue;
+    const truongId = selectedValue === 'nochoose' ? '0' : selectedValue;
     formik.setFieldValue('truongId', truongId);
   };
 
@@ -180,24 +180,44 @@ const AddUser = () => {
             </FormControlComponent>
           </Grid>
           {/* School */}
-          <Grid item xs={12}>
-            <FormControlComponent xsLabel={isXs ? 0 : 2} xsForm={isXs ? 12 : 10} label={t('user.label.school')} isRequire>
-              <FormControl fullWidth variant="outlined">
-                <SelectForm
-                  formik={formik}
-                  keyProp="id"
-                  valueProp="ten"
-                  item={donvi}
-                  placeholder={t('user.label.school')}
-                  name="truongId"
-                  value={formik.values.truongId === '' ? 'nochoose' : formik.values.truongId}
-                  onChange={handleSchoolChange}
-                  onBlur={formik.handleBlur}
-                  nochoose
-                />
-              </FormControl>
-            </FormControlComponent>
-          </Grid>
+          {donviquanly === 0 ? (
+            <Grid item xs={12}>
+              <FormControlComponent xsLabel={isXs ? 0 : 2} xsForm={isXs ? 12 : 10} label={t('user.label.school')} isRequire>
+                <FormControl fullWidth variant="outlined">
+                  <SelectForm
+                    formik={formik}
+                    keyProp="id"
+                    valueProp="ten"
+                    item={donvi}
+                    placeholder={t('user.label.school')}
+                    name="truongId"
+                    value={formik.values.truongId === '0' ? 'nochoose' : formik.values.truongId}
+                    onChange={handleSchoolChange}
+                    onBlur={formik.handleBlur}
+                    nochoose
+                  />
+                </FormControl>
+              </FormControlComponent>
+            </Grid>
+          ) : (
+            <Grid item xs={12}>
+              <FormControlComponent xsLabel={isXs ? 0 : 2} xsForm={isXs ? 12 : 10} label={t('user.label.school')} isRequire>
+                <FormControl fullWidth variant="outlined">
+                  <SelectForm
+                    formik={formik}
+                    keyProp="id"
+                    valueProp="ten"
+                    item={donvi}
+                    placeholder={t('user.label.school')}
+                    name="truongId"
+                    value={formik.values.truongId === '' ? 'nochoose' : formik.values.truongId}
+                    onChange={handleSchoolChange}
+                    onBlur={formik.handleBlur}
+                  />
+                </FormControl>
+              </FormControlComponent>
+            </Grid>
+          )}
         </Grid>
         <Grid
           mt={isXs ? 1 : 0}
