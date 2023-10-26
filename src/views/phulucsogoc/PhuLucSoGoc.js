@@ -35,6 +35,7 @@ import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { getSearchPhuLuc } from 'services/phulucService';
 import { IconFileExport } from '@tabler/icons';
 import ResetButton from 'components/button/ExitButton';
+import { ThayDoiChuoi } from 'utils/changeTextDownLine';
 
 export default function PhuLucSoGoc({ danhmuc, truong }) {
   const isXs = useMediaQuery('(max-width:600px)');
@@ -123,8 +124,10 @@ export default function PhuLucSoGoc({ danhmuc, truong }) {
           idx: pageState.startIndex * pageState.pageSize + index + 1,
           gioiTinh_fm: row.gioiTinh ? t('gender.male') : t('gender.female'),
           ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
+          NoiDung: ThayDoiChuoi(row.noiDungChinhSua),
           ...row
         }));
+        console.log(dataWithIds);
         dispatch(setReloadData(false));
         setPageState((old) => ({
           ...old,
@@ -152,7 +155,7 @@ export default function PhuLucSoGoc({ danhmuc, truong }) {
     danhmuc,
     truong
   ]);
-
+  console.log(pageState.data);
   const additionalData = {
     uyBanNhanDan: donvi.cauHinh.tenUyBanNhanDan.toUpperCase(),
     coQuanCapBang: donvi.cauHinh.tenCoQuanCapBang.toUpperCase(),
@@ -284,7 +287,7 @@ export default function PhuLucSoGoc({ danhmuc, truong }) {
                   <TableCell2>{row.soHieuVanBangCu}</TableCell2>
                   <TableCell2>{row.soHieuVanBangCapLai}</TableCell2>
                   <TableCell2>{row.soVaoSoCapBangCapLai}</TableCell2>
-                  <TableCell2>{row.noiDungChinhSua}</TableCell2>
+                  <TableCell2>{row.NoiDung}</TableCell2>
                   <TableCell2></TableCell2>
                   <TableCell2></TableCell2>
                 </TableRow>
