@@ -7,7 +7,7 @@ import { Grid, RadioGroup, Radio, FormControlLabel, FormControl, Typography, Div
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import SaveButton from 'components/button/SaveButton';
-import { openProfileSelector, reloadDataSelector } from 'store/selectors';
+import { donviSelector, openProfileSelector, reloadDataSelector } from 'store/selectors';
 import { useState } from 'react';
 import { profile, updateProfile } from 'services/authService';
 import config from 'config';
@@ -32,7 +32,7 @@ const Profile = () => {
   const [donvi, setDonvi] = useState({});
   const reloadData = useSelector(reloadDataSelector);
   const [urlImage, setUrlImage] = useState('');
-
+  const dvql = useSelector(donviSelector);
   const formik = useFormik({
     initialValues: {
       fullName: '',
@@ -185,13 +185,15 @@ const Profile = () => {
               <InputForm formik={formik} name="address" type="text" />
             </FormControlComponent>
           </Grid>
-          <Grid item xs={12}>
-            <FormControlComponent xsLabel={isXs ? 0 : 2} xsForm={isXs ? 12 : 10} label={t('user.label.school')}>
-              <Typography variant="subtitle1" gutterBottom mt={'6px'} ml={'14px'}>
-                {donvi}
-              </Typography>
-            </FormControlComponent>
-          </Grid>
+          {dvql !== 0 && (
+            <Grid item xs={12}>
+              <FormControlComponent xsLabel={isXs ? 0 : 2} xsForm={isXs ? 12 : 10} label={t('user.label.school')}>
+                <Typography variant="subtitle1" gutterBottom mt={'6px'} ml={'14px'}>
+                  {donvi}
+                </Typography>
+              </FormControlComponent>
+            </Grid>
+          )}
         </Grid>
         <Grid
           mt={isXs ? 1 : 0}

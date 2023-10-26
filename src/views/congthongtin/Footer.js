@@ -22,8 +22,14 @@ export default function Footer() {
     const fetchData = async () => {
       const donvibyid = await getPhong();
       const dataphong = donvibyid.data.cauHinh;
-      setPhong(donvibyid.data);
-      setUrlImage(dataphong.logoDonvi ? config.urlFile + 'Logo/' + dataphong.logoDonvi : '');
+      setTimeout(async () => {
+        try {
+          setPhong(donvibyid.data);
+          setUrlImage(dataphong.logoDonvi ? config.urlFile + 'Logo/' + dataphong.logoDonvi : '');
+        } catch (error) {
+          console.error(error);
+        }
+      }, 300);
     };
     fetchData();
   }, []);

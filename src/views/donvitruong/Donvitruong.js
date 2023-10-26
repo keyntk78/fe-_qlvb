@@ -4,7 +4,7 @@ import Popup from 'components/controls/popup';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setOpenPopup, setReloadData, selectedDonvitruong } from 'store/actions';
-import { openPopupSelector, reloadDataSelector, userLoginSelector } from 'store/selectors';
+import { openPopupSelector, donviSelector, reloadDataSelector, userLoginSelector } from 'store/selectors';
 import Add from './Add';
 import Edit from './Edit';
 import Delete from './Delete';
@@ -30,6 +30,8 @@ const DonVi = () => {
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
   const reloadData = useSelector(reloadDataSelector);
+  const donvi = useSelector(donviSelector);
+  console.log(donvi);
   const { t } = useTranslation();
   const [isAccess, setIsAccess] = useState(true);
   const [pageState, setPageState] = useState({
@@ -79,9 +81,15 @@ const DonVi = () => {
       filterable: false,
       renderCell: (params) => (
         <>
-          <Grid container justifyContent="center">
-            <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
-          </Grid>
+          {params.row.id === donvi.id ? (
+            <Grid container justifyContent="center">
+              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations1} />
+            </Grid>
+          ) : (
+            <Grid container justifyContent="center">
+              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
+            </Grid>
+          )}
         </>
       )
     }
@@ -153,6 +161,16 @@ const DonVi = () => {
     {
       type: 'delete',
       handleDelete: handleDeleteDonvi
+    }
+  ];
+  const buttonConfigurations1 = [
+    {
+      type: 'config',
+      handleClick: handleGetById
+    },
+    {
+      type: 'edit',
+      handleEdit: handleEditDonvi
     }
   ];
 

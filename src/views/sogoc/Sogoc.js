@@ -47,6 +47,7 @@ import ButtonSecondary from 'components/buttoncolor/ButtonSecondary';
 import FileMau from '../FileMau/FileMau_ThemDanhSachVanBang.xlsx';
 import { getAllKhoathiByDMTN } from 'services/khoathiService';
 import PhuLucSoGoc from 'views/phulucsogoc/PhuLucSoGoc';
+import Import from 'views/ImportDanhSachVanBang/Import';
 export default function SoGoc() {
   const isXs = useMediaQuery('(max-width:600px)');
   const { t } = useTranslation();
@@ -682,6 +683,7 @@ export default function SoGoc() {
           bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
         >
           {form === 'phuluc' ? <PhuLucSoGoc danhmuc={pageState.DMTN} truong={pageState.donVi} /> : ''}
+          {form === 'import' ? <Import /> : ''}
         </Popup>
       )}
       <BackToTop />

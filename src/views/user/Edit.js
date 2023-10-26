@@ -5,7 +5,7 @@ import { useUserValidationSchema } from '../../components/validations/userValida
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { setOpenPopup, setReloadData, showAlert } from 'store/actions';
-import { openPopupSelector, selectedUserSelector } from 'store/selectors';
+import { donviSelector, openPopupSelector, selectedUserSelector } from 'store/selectors';
 import InputForm from 'components/form/InputForm';
 import ImageForm from 'components/form/ImageForm';
 import { useTranslation } from 'react-i18next';
@@ -31,6 +31,7 @@ const EditUser = () => {
   const openPopup = useSelector(openPopupSelector);
   const [donvi, setDonvi] = useState([]);
   const navigate = useNavigate();
+  const donviquanly = useSelector(donviSelector);
 
   const formik = useFormik({
     initialValues: {
@@ -86,7 +87,7 @@ const EditUser = () => {
           address: datauser.address || '',
           cccd: datauser.cccd || '',
           avatar: datauser.avatar || '',
-          truongId: datauser.truongID || '',
+          truongId: datauser.truongID || '0',
           fileImage: ''
         });
         setUrlImage(config.urlFile + 'Users/' + datauser.avatar);
@@ -117,7 +118,7 @@ const EditUser = () => {
 
   const handleSchoolChange = (event) => {
     const selectedValue = event.target.value;
-    const truongId = selectedValue === 'nochoose' ? '' : selectedValue;
+    const truongId = selectedValue === 'nochoose' ? '0' : selectedValue;
     formik.setFieldValue('truongId', truongId);
   };
 
@@ -197,23 +198,44 @@ const EditUser = () => {
             </FormControlComponent>
           </Grid>
           {/* School */}
-          <Grid item xs={12}>
-            <FormControlComponent xsLabel={isXs ? 0 : 2} xsForm={isXs ? 12 : 10} label={t('user.label.school')} isRequire>
-              <FormControl fullWidth variant="outlined">
-                <SelectForm
-                  name="truongId"
-                  value={formik.values.truongId === '' ? 'nochoose' : formik.values.truongId}
-                  onChange={handleSchoolChange}
-                  onBlur={formik.handleBlur}
-                  formik={formik}
-                  item={donvi}
-                  keyProp="id"
-                  valueProp="ten"
-                  nochoose
-                />
-              </FormControl>
-            </FormControlComponent>
-          </Grid>
+          {donviquanly === 0 ? (
+            <Grid item xs={12}>
+              <FormControlComponent xsLabel={isXs ? 0 : 2} xsForm={isXs ? 12 : 10} label={t('user.label.school')} isRequire>
+                <FormControl fullWidth variant="outlined">
+                  <SelectForm
+                    formik={formik}
+                    keyProp="id"
+                    valueProp="ten"
+                    item={donvi}
+                    placeholder={t('user.label.school')}
+                    name="truongId"
+                    value={formik.values.truongId === '0' ? 'nochoose' : formik.values.truongId}
+                    onChange={handleSchoolChange}
+                    onBlur={formik.handleBlur}
+                    nochoose
+                  />
+                </FormControl>
+              </FormControlComponent>
+            </Grid>
+          ) : (
+            <Grid item xs={12}>
+              <FormControlComponent xsLabel={isXs ? 0 : 2} xsForm={isXs ? 12 : 10} label={t('user.label.school')} isRequire>
+                <FormControl fullWidth variant="outlined">
+                  <SelectForm
+                    formik={formik}
+                    keyProp="id"
+                    valueProp="ten"
+                    item={donvi}
+                    placeholder={t('user.label.school')}
+                    name="truongId"
+                    value={formik.values.truongId === '' ? 'nochoose' : formik.values.truongId}
+                    onChange={handleSchoolChange}
+                    onBlur={formik.handleBlur}
+                  />
+                </FormControl>
+              </FormControlComponent>
+            </Grid>
+          )}
         </Grid>
         <Grid
           mt={isXs ? 3 : 0}

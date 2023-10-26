@@ -101,7 +101,7 @@ export default function DetailDonyeucau() {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={12} md={3.5} lg={3.5} pb={19}>
-            <Grid container sx={{ position: 'sticky', top: '70px' }}>
+            <Grid container sx={{ top: '70px' }}>
               <Grid item xs={12} sx={{ bgcolor: '#0287d0' }}>
                 <Typography variant="h4" sx={{ color: '#FFFFFF', padding: '8px 0 8px 10px' }}>
                   {t('danhmuctintuc')}
@@ -127,7 +127,7 @@ export default function DetailDonyeucau() {
                   : ''}
               </Grid>
             </Grid>
-            <Grid container mt={2} sx={{ position: 'sticky', top: '294px', zIndex: 999 }} bgcolor={'#FFFFFF'}>
+            <Grid container mt={2} sx={{ top: '294px', zIndex: 999 }} bgcolor={'#FFFFFF'}>
               <Grid item xs={12} sx={{ bgcolor: '#0287d0' }}>
                 <Typography variant="h4" sx={{ color: '#FFFFFF', padding: '8px 0 8px 10px' }}>
                   {t('tinmoinhat')}

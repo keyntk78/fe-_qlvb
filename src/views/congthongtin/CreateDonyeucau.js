@@ -262,19 +262,14 @@ const CreateDonyeucau = () => {
               </Grid>
               <Grid item xs={12} container spacing={2}>
                 <Grid item xs={6} sm={12} md={12} lg={6}>
-                  <FormControlComponent
-                    xsLabel={isSmallScreen ? 0 : 3}
-                    xsForm={isSmallScreen ? 12 : 9}
-                    isRequire
-                    label={t('khoathi.title')}
-                  >
+                  <FormControlComponent xsLabel={isSmallScreen ? 0 : 3} xsForm={isSmallScreen ? 12 : 9} isRequire label={t('namthi.title')}>
                     <SelectList
                       data={namthi}
                       name="IdNamThi"
                       value="id"
                       request={'id'}
                       optionName="ten"
-                      placeholder={t('khoathi.title')}
+                      placeholder={t('namthi.title')}
                       formik={formik}
                       openPopup
                     />
@@ -417,7 +412,7 @@ const CreateDonyeucau = () => {
                   </RadioGroup>
                 </FormControlComponent>
               </Grid>
-              {formik.values.PhuongThucNhan && formik.values.PhuongThucNhan == 1 && (
+              {formik.values.PhuongThucNhan && formik.values.PhuongThucNhan == 1 ? (
                 <Grid item xs={12} sm={12} md={12} lg={12}>
                   <FormControlComponent
                     xsLabel={isSmallScreen ? 0 : 2}
@@ -428,6 +423,8 @@ const CreateDonyeucau = () => {
                     <InputForm formik={formik} name="DiaChiNhan" type="text" placeholder={t('user.label.addressrecevice')} />
                   </FormControlComponent>
                 </Grid>
+              ) : (
+                ''
               )}
             </Grid>
 
