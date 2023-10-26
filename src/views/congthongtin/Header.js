@@ -247,7 +247,7 @@ export default function Header() {
                   {currentDateTime}
                 </Typography>
               </Box>
-              <Box sx={{ width: '100%' }}>
+              <Box sx={{ width: '100%', pointerEvents: 'none' }}>
                 <Splide
                   options={{
                     type: 'loop',
@@ -259,12 +259,15 @@ export default function Header() {
                     autoScroll: {
                       pauseOnHover: false,
                       pauseOnFocus: false,
+                      autoStart: true,
                       rewind: false,
                       speed: 1
                     },
-                    width: '100%'
+                    width: '100%',
+                    readOnly: true
                   }}
                   extensions={{ AutoScroll }}
+                  onDrag={() => false}
                 >
                   <SplideSlide style={{ fontSize: isSmallScreen ? '12px' : '', textAlign: isSmallScreen ? 'center' : '' }}>
                     {t('chaomung') + ' ' + phong}
