@@ -57,10 +57,8 @@ export default function TracuuVBCC() {
 
   const handleChange = (value) => {
     if (value && namHoc && hoTen && ngaSinh) {
-      setError('');
       setIsChecked(true);
     } else {
-      setError('Chưa nhập đầy đủ thông tin');
       setIsChecked(false);
     }
   };
@@ -142,10 +140,10 @@ export default function TracuuVBCC() {
       setShowmain(true);
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
-      params.append('cccd', cccd);
+      params.append('Cccd', cccd);
       params.append('HoTen', hoTen);
       params.append('NgaySinh', ngaSinh);
-      params.append('soHieuVanBang', soHieuVanbang);
+      params.append('SoHieuVanBang', soHieuVanbang);
       const response = await getSearchVBCC(selectNamHoc, params);
 
       const check = handleResponseStatus(response, navigate);

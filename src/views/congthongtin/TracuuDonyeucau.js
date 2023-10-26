@@ -55,7 +55,6 @@ export default function TracuuDonyeucau() {
       setIsChecked(true);
       setError('');
     } else {
-      setError('Chưa nhập đầy đủ thông tin');
       setIsChecked(false);
     }
   };
