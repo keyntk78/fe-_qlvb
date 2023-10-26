@@ -1,6 +1,17 @@
 import { Box, Container, useTheme } from '@mui/system';
 import React, { useState } from 'react';
-import { Grid, List, ListItemText, useMediaQuery, Drawer, IconButton, Typography, ListItemButton, ListItemIcon } from '@mui/material';
+import {
+  Grid,
+  List,
+  ListItemText,
+  useMediaQuery,
+  Drawer,
+  IconButton,
+  Typography,
+  ListItemButton,
+  ListItemIcon,
+  Avatar
+} from '@mui/material';
 import { useNavigate } from 'react-router';
 import { IconMenu2, IconHome, IconCertificate, IconFileCertificate, IconPencil } from '@tabler/icons';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
@@ -161,7 +172,7 @@ export default function Header() {
         >
           <Grid container my={isSmallScreen ? 2 : 1} alignItems={'center'}>
             <Grid item xs={isSmallScreen ? 12 : 8.5} justifyContent={'flex-start'} sx={{ display: 'flex', alignItems: 'center' }}>
-              <img alt="Logo" src={urlImage} style={{ width: 80, height: 'auto', marginRight: 2, border: 'none' }}></img>
+              <Avatar alt="Logo" src={urlImage} sx={{ width: 80, height: 'auto', border: 'none', marginRight: 2 }} />
               <Typography variant={isSmallScreen ? 'h6' : 'h4'} component="h1" ml={1}>
                 {phong}
               </Typography>
