@@ -129,9 +129,14 @@ export default function Header() {
     const fetchData = async () => {
       const donvibyid = await getPhong();
       const dataphong = donvibyid.data.cauHinh;
-
-      setPhong(donvibyid.data.ten);
-      setUrlImage(dataphong.logoDonvi ? config.urlFile + 'Logo/' + dataphong.logoDonvi : '');
+      setTimeout(async () => {
+        try {
+          setPhong(donvibyid.data.ten);
+          setUrlImage(dataphong.logoDonvi ? config.urlFile + 'Logo/' + dataphong.logoDonvi : '');
+        } catch (error) {
+          console.error(error);
+        }
+      }, 300);
     };
     fetchData();
   }, []);

@@ -86,7 +86,7 @@ export default function Thongtintintuc() {
         } catch (error) {
           console.error(error);
         }
-      }, 800);
+      }, 900);
       setTimeout(async () => {
         try {
           const getAllTintuc = await getAllTinTuc();
