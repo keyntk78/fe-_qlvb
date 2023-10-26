@@ -115,10 +115,11 @@ const ChinhSuaVBCC = () => {
       minWidth: 100
     },
     {
-      flex: 1,
-      field: 'noiDungChinhSua',
-      headerName: t('Nội dung'),
-      minWidth: 100
+      flex: 0.5,
+      field: 'soHieuVanBangCapLai',
+      headerName: t('Số hiệu văn bằng'),
+      minWidth: 100,
+      renderCell: (params) => <>{params.row.soHieuVanBangCapLai ? params.row.soHieuVanBangCapLai : params.row.soHieuVanBangCu}</>
     },
     {
       field: 'actions',
@@ -164,7 +165,6 @@ const ChinhSuaVBCC = () => {
             idx: index + 1,
             NgaySinh: convertISODateToFormattedDate(row.ngaySinh),
             NgayTao: convertISODateToFormattedDate(row.ngayTao),
-
             ...row
           }));
           // Lưu trữ dữ liệu gốc vào state
