@@ -52,6 +52,7 @@ const User = () => {
     startIndex: 0,
     pageSize: 10
   });
+  const user = useSelector(userLoginSelector);
 
   const handleEdit = (user) => {
     setTitle(t('user.title.edit'));
@@ -218,6 +219,8 @@ const User = () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       setUrlFileImage(config.urlFile + 'Users/');
       const params = await createSearchParams(pageState);
+      params.append('nguoiThucHien', user ? user.username : '');
+
       const response = await getUsers(params);
       const check = await handleResponseStatus(response, navigate);
       if (check) {

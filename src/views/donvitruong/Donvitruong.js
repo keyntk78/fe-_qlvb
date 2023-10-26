@@ -4,7 +4,7 @@ import Popup from 'components/controls/popup';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setOpenPopup, setReloadData, selectedDonvitruong } from 'store/actions';
-import { openPopupSelector, reloadDataSelector } from 'store/selectors';
+import { openPopupSelector, reloadDataSelector, userLoginSelector } from 'store/selectors';
 import Add from './Add';
 import Edit from './Edit';
 import Delete from './Delete';
@@ -41,6 +41,8 @@ const DonVi = () => {
     startIndex: 0,
     pageSize: 10
   });
+
+  const user = useSelector(userLoginSelector);
 
   const columns = [
     {
@@ -89,6 +91,7 @@ const DonVi = () => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
+      params.append('nguoiThucHien', user ? user.username : '');
       const response = await getSearchDonvi(params);
       const check = await handleResponseStatus(response, navigate);
       if (check) {
