@@ -27,7 +27,11 @@ const CustomAutocomplete = styled(Autocomplete)({
 
 const SelectList = ({ data, isFirst, formik, name, placeholder, value, optionName, request, openPopup, isDisables }) => {
   const [curentValue, setCurentValue] = useState('');
-
+  const getOptionLabel = (option) => {
+    // Kiểm tra nếu option tồn tại và có thuộc tính optionName thì trả về giá trị của option[optionName],
+    // ngược lại trả về một chuỗi rỗng.
+    return option && option[optionName] !== undefined ? option[optionName] : '';
+  };
   useEffect(() => {
     if (!openPopup) {
       setCurentValue('');
@@ -60,7 +64,7 @@ const SelectList = ({ data, isFirst, formik, name, placeholder, value, optionNam
         onChange={(event, value) => {
           formik.setFieldValue(name, value ? value[request] : 0);
         }}
-        getOptionLabel={(option) => option[optionName]} // Chỉ định tên thuộc tính dùng làm nhãn
+        getOptionLabel={(option) => getOptionLabel(option)} // Chỉ định tên thuộc tính dùng làm nhãn
         renderOption={(props, option) => (
           <MenuItem key={option[value]} value={option[value]} sx={{ justifyContent: 'space-between' }} {...props}>
             {option[optionName]}

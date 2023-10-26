@@ -20,11 +20,9 @@ import { Container, useTheme } from '@mui/system';
 import { IconArrowLeft, IconSend } from '@tabler/icons';
 import { createDonyeucau, getAllDanToc, getAllNam, getAllTruong, getPhong } from 'services/congthongtinService';
 import Alert from 'components/controls/alert';
-import SelectForm from 'components/form/SelectForm';
 import BackToTop from 'components/scroll/BackToTop';
 
 const CreateDonyeucau = () => {
-  // const [uploadedFiles, setUploadedFiles] = useState([]);
   const theme = useTheme();
   const navigate = useNavigate();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -96,12 +94,6 @@ const CreateDonyeucau = () => {
         return;
       }
       try {
-        //
-        // formik.setValues((prevValues) => ({
-        //   ...prevValues,
-        //   ngaySinh: '2001-04-25T17:00:00.000+00:00'
-        // }));
-        //
         const formData = await convertJsonToFormData(values);
         const addDonyeucau = await createDonyeucau(formData);
 
@@ -204,16 +196,17 @@ const CreateDonyeucau = () => {
               <Grid item xs={12} spacing={2} container>
                 <Grid item xs={6} sm={12} md={12} lg={6}>
                   <FormControlComponent xsLabel={isSmallScreen ? 0 : 3} xsForm={isSmallScreen ? 12 : 9} isRequire label={t('dantoc')}>
-                    {/* <InputForm formik={formik} name="DanToc" type="text" placeholder={t('dantoc')} /> */}
                     <FormControl fullWidth variant="outlined">
-                      <SelectForm
-                        formik={formik}
-                        keyProp="ten"
-                        valueProp="ten"
-                        item={danToc}
+                      <SelectList
+                        data={danToc}
                         name="DanToc"
                         value={formik.values.DanToc}
+                        request="ten"
+                        optionName="ten"
+                        placeholder={t('dantoc')}
+                        formik={formik}
                         onChange={handleDanTocChange}
+                        openPopup
                       />
                     </FormControl>
                   </FormControlComponent>
@@ -276,19 +269,20 @@ const CreateDonyeucau = () => {
                   </FormControlComponent>
                 </Grid>
                 <Grid item xs={6} sm={12} md={12} lg={6}>
-                  <FormControlComponent xsLabel={isSmallScreen ? 0 : 3} xsForm={isSmallScreen ? 12 : 9} isRequire label={t('Xếp loại')}>
+                  <FormControlComponent xsLabel={isSmallScreen ? 0 : 3} xsForm={isSmallScreen ? 12 : 9} isRequire label={t('xeploai')}>
                     <FormControl fullWidth variant="outlined">
-                      <SelectForm
-                        formik={formik}
-                        keyProp="value"
-                        valueProp="label"
-                        item={hocLucOptions}
+                      <SelectList
+                        data={hocLucOptions}
                         name="XepLoai"
                         value={formik.values.hocLuc}
+                        request="value"
+                        optionName="label"
+                        placeholder={t('xeploai')}
+                        formik={formik}
+                        openPopup
                         onChange={handleHocLucChange}
                       />
                     </FormControl>
-                    {/* <InputForm formik={formik} name="XepLoai" type="text" placeholder={t('loaitotnghiep')} /> */}
                   </FormControlComponent>
                 </Grid>
               </Grid>
