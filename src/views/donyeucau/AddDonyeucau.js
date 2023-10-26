@@ -74,7 +74,7 @@ const AddDonyeucau = () => {
       FileDonYeuCau: '',
       DonYeuCau: '',
       HinhAnhCCCD: '',
-      PhuongThucNhan: '0',
+      PhuongThucNhan: 0,
       DiaChiNhan: ''
     },
     validationSchema: useDonyeucauValidationSchema(),
@@ -231,14 +231,14 @@ const AddDonyeucau = () => {
         </Grid>
         <Grid item xs={12} container spacing={2}>
           <Grid item xs={6}>
-            <FormControlComponent xsLabel={isSmallScreen ? 0 : 3} xsForm={isSmallScreen ? 12 : 9} isRequire label={t('khoathi.title')}>
+            <FormControlComponent xsLabel={isSmallScreen ? 0 : 3} xsForm={isSmallScreen ? 12 : 9} isRequire label={t('namthi.title')}>
               <SelectList
                 data={namthi}
                 name="IdNamThi"
                 value="id"
                 request={'id'}
                 optionName="ten"
-                placeholder={t('khoathi.title')}
+                placeholder={t('namthi.title')}
                 formik={formik}
                 openPopup
               />
