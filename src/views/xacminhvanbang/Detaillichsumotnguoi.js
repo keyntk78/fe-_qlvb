@@ -49,10 +49,10 @@ const Detaillichsumotnguoi = ({ data }) => {
     }
   }, [data]);
   const DataToExportWord = {
-    uyBanNhanDan: data ? data.uyBanNhanDan.toUpperCase() : '',
-    coQuanCapBang: data ? data.coQuanCapBang.toUpperCase() : '',
-    diaPhuongCapBang: data ? data.diaPhuongCapBang.toUpperCase() : '',
-    donViXacMinh: formik.values.donViXacMinh ? formik.values.donViXacMinh.toUpperCase() : '',
+    uyBanNhanDan: data ? data.uyBanNhanDan : '',
+    coQuanCapBang: data ? data.coQuanCapBang : '',
+    diaPhuongCapBang: data ? data.diaPhuongCapBang : '',
+    donViXacMinh: formik.values.donViXacMinh ? formik.values.donViXacMinh : '',
     hoTen: data.hocSinhs ? data.hocSinhs[0].hoTen : '',
     gioiTinh: data.hocSinhs ? (data.hocSinhs[0].gioiTinh ? 'Nam' : 'Nữ') : '',
     ngaySinh: data.hocSinhs ? convertISODateToFormattedDate(data.hocSinhs[0].ngaySinh) : '',

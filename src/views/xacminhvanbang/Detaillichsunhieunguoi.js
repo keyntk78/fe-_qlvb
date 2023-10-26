@@ -105,10 +105,10 @@ const Detaillichsunhieunguoi = ({ data }) => {
   }, [data]);
 
   const DataToExportWord = {
-    uyBanNhanDan: data ? data.uyBanNhanDan.toUpperCase() : '',
-    coQuanCapBang: data ? data.coQuanCapBang.toUpperCase() : '',
-    diaPhuongCapBang: data ? data.diaPhuongCapBang.toUpperCase() : '',
-    donViXacMinh: formik.values.donViXacMinh ? formik.values.donViXacMinh.toUpperCase() : '',
+    uyBanNhanDan: data ? data.uyBanNhanDan : '',
+    coQuanCapBang: data ? data.coQuanCapBang : '',
+    diaPhuongCapBang: data ? data.diaPhuongCapBang : '',
+    donViXacMinh: formik.values.donViXacMinh ? formik.values.donViXacMinh : '',
     ngay: formik.values.ngayBanHanh ? new Date(formik.values.ngayBanHanh).getDate() : 0,
     thang: formik.values.ngayBanHanh ? new Date(formik.values.ngayBanHanh).getMonth() + 1 : 0,
     nam: formik.values.ngayBanHanh ? new Date(formik.values.ngayBanHanh).getFullYear() : 0,
