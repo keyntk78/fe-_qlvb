@@ -34,7 +34,9 @@ import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import Xacminhtungnguoi from './Xacminhtungnguoi';
 import LichSuXacMinh from './LichSuXacMinh';
 import Xacminhnhieunguoi from './Xacminhnhieunguoi';
-import { getHocSinhXacMinhVanBang } from 'services/xacminhvanbangService';
+// import { getHocSinhXacMinhVanBang } from 'services/xacminhvanbangService';
+import { getHocSinhXacMinhVanBang } from 'services/tracuuvanbangService';
+
 import { getAllTruong, getByIdNamThi } from 'services/sharedService';
 import ChinhSuaVBCC from 'views/chinhsuavbcc/ChinhSuaVBCC';
 import Thuhoihuybo from 'views/thuhoihuybo/Thuhoihuybo';
