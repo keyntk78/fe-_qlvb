@@ -437,8 +437,6 @@ export default function SoGoc() {
                 name="khoaThi"
                 value={pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : ''}
                 onChange={handleKhoaThiChange}
-                // value={selectKhoaThi ? selectKhoaThi : ''}
-                // onChange={(e) => setSelectKhoaThi(e.target.value)}
               >
                 {khoaThis && khoaThis.length > 0 ? (
                   khoaThis.map((data) => (

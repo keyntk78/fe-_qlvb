@@ -23,7 +23,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { reloadDataSelector, userLoginSelector } from 'store/selectors';
+import { donviSelector, reloadDataSelector, userLoginSelector } from 'store/selectors';
 import { setLoading, setReloadData } from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import { createSearchParams } from 'utils/createSearchParams';
@@ -37,9 +37,10 @@ import AnimateButton from 'components/extended/AnimateButton';
 import { useFormik } from 'formik';
 import { generateDocument } from './ExportWord';
 import ExportExcel from './ExportExcel';
-import { GetHocSinhTheoCapBanSao } from 'services/sobansaoService';
+import { GetHocSinhTheoSoBanSao } from 'services/sobansaoService';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { getAllTruong } from 'services/sharedService';
+import { getAllKhoathiByDMTN } from 'services/khoathiService';
 
 export default function SoBanSao() {
   const isXs = useMediaQuery('(max-width:600px)');
@@ -50,11 +51,11 @@ export default function SoBanSao() {
   const navigate = useNavigate();
   const [dMTN, setDMTN] = useState([]);
   const [donvis, setDonvis] = useState([]);
-  const [firstLoad, setFirstLoad] = useState(false);
   const [selectDonvi, setSelectDonvi] = useState('');
   const [selectDanhmuc, setSelectDanhmuc] = useState('');
   const [disable, setDisable] = useState(false);
-
+  const donvi = useSelector(donviSelector);
+  const [selectKhoaThi, setSelectKhoaThi] = useState([]);
   const TableCell2 = styled(TableCell)(
     () => `
       border: 1px solid #ddd;
@@ -82,7 +83,8 @@ export default function SoBanSao() {
     startIndex: 0,
     pageSize: -1,
     DMTN: '',
-    donVi: ''
+    donVi: '',
+    khoaThi: ''
   });
 
   const [pageState1, setPageState1] = useState({
@@ -94,8 +96,10 @@ export default function SoBanSao() {
     startIndex: 0,
     pageSize: -1,
     DMTN: '',
-    donVi: ''
+    donVi: '',
+    khoaThi: ''
   });
+  const [khoaThis, setKhoaThis] = useState([]);
 
   const handleSearch = () => {
     setSearch(true);
@@ -110,14 +114,14 @@ export default function SoBanSao() {
   const handleExport = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
-    await ExportExcel(formik, pageState1, selectDanhmuc, selectDonvi);
+    await ExportExcel(formik, pageState1, selectDanhmuc, selectDonvi, selectKhoaThi, donvi);
     dispatch(setLoading(false));
   };
 
   const handleExportWord = async (e) => {
     e.preventDefault();
     setLoading(true);
-    generateDocument(pageState1.data, additionalData);
+    generateDocument(pageState1.data, additionalData, donvi);
     setLoading(false);
   };
 
@@ -136,7 +140,6 @@ export default function SoBanSao() {
   useEffect(() => {
     const fetchDataDL = async () => {
       dispatch(setLoading(true));
-      // const donvi = await getAllDonvi();
       const donvi = await getAllTruong(user.username);
       if (donvi.data && donvi.data.length > 0) {
         setDonvis(donvi.data);
@@ -159,7 +162,7 @@ export default function SoBanSao() {
       if (danhmuc.data && danhmuc.data.length > 0) {
         setDMTN(danhmuc.data);
         setPageState((old) => ({ ...old, DMTN: danhmuc.data[0].id }));
-        setSelectDanhmuc(danhmuc.data[0]);
+        setSelectDanhmuc(danhmuc.data[0].id);
         setDisable(false);
       } else {
         setDMTN([]);
@@ -173,8 +176,20 @@ export default function SoBanSao() {
   }, []);
 
   useEffect(() => {
-    if (selectDanhmuc && selectDonvi) {
-      setFirstLoad(true);
+    const fetchDataDL = async () => {
+      const response = await getAllKhoathiByDMTN(selectDanhmuc);
+      console.log(response);
+      console.log(selectDanhmuc);
+      if (response.data && response.data.length > 0) {
+        setKhoaThis(response.data);
+        setSelectKhoaThi(response.data[0].id);
+      } else {
+        setKhoaThis([]);
+      }
+      dispatch(setLoading(false));
+    };
+    if (selectDanhmuc) {
+      fetchDataDL();
     }
   }, [selectDanhmuc]);
 
@@ -187,7 +202,9 @@ export default function SoBanSao() {
       DiaPhuongCapBang: '',
       HeDaoTao: '',
       HinhThucDaoTao: '',
-      NgayCapBang: ''
+      NgayCapBang: '',
+      TenKyThi: '',
+      KhoaThi: ''
     }
   });
 
@@ -197,26 +214,30 @@ export default function SoBanSao() {
       const params = await createSearchParams(pageState);
       params.append('idDanhMucTotNghiep', pageState.DMTN);
       params.append('idTruong', pageState.donVi);
-      const response = await GetHocSinhTheoCapBanSao(pageState.donVi, pageState.DMTN);
+      params.append('IdKhoaThi', pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : '');
+
+      const response = await GetHocSinhTheoSoBanSao(params);
       const data = response.data;
       formik.setValues({
-        UyBanNhanDan: data.SoCapBanSao.UyBanNhanDan || '',
-        CoQuanCapBang: data.SoCapBanSao.CoQuanCapBang || '',
-        NamThi: data.DanhMucTotNghiep.NamThi || '',
-        QuyetDinh: data.DanhMucTotNghiep.SoQuyetDinh || '',
-        NguoiKyBang: data.SoCapBanSao.NguoiKyBang || '',
-        DiaPhuongCapBang: data.SoCapBanSao.DiaPhuongCapBang || '',
-        HeDaoTao: data.Truong.HeDaoTao.toUpperCase() || '',
-        HinhThucDaoTao: data.Truong.HinhThucDaoTao || '',
-        NgayCapBang: formatDate(data.DanhMucTotNghiep.NgayCapBang) || ''
+        UyBanNhanDan: data.donViQuanLy.tenUyBanNhanDan || '',
+        CoQuanCapBang: data.donViQuanLy.tenCoQuanCapBang || '',
+        NamThi: data.danhMucTotNghiep.namThi || '',
+        QuyetDinh: data.danhMucTotNghiep.SoQuyetDinh || '',
+        NguoiKyBang: data.donViQuanLy.nguoiKyXacMinh || '',
+        DiaPhuongCapBang: data.donViQuanLy.tenDiaPhuongCapBang || '',
+        HeDaoTao: data.truong.heDaoTao.toUpperCase() || '',
+        HinhThucDaoTao: data.truong.hinhThucDaoTao || '',
+        NgayCapBang: formatDate(data.danhMucTotNghiep.ngayCapBang) || '',
+        TenKyThi: data.danhMucTotNghiep.tenKyThi || '',
+        KhoaThi: convertISODateToFormattedDate(data.khoaThi.ngay) || ''
       });
       const check = handleResponseStatus(response, navigate);
       if (check) {
-        const data = await response.data.SoCapBanSao;
-        const dataWithIds = data.hocSinhs.map((row, index) => ({
+        const data = await response.data.donYeuCaus;
+        const dataWithIds = data.map((row, index) => ({
           idx: pageState.startIndex * pageState.pageSize + index + 1,
-          gioiTinh_fm: row.gioiTinh ? t('gender.male') : t('gender.female'),
-          ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
+          gioiTinh_fm: row.hocSinh.gioiTinh ? t('gender.male') : t('gender.female'),
+          ngaySinh_fm: convertISODateToFormattedDate(row.hocSinh.ngaySinh),
           ...row
         }));
         dispatch(setReloadData(false));
@@ -230,25 +251,28 @@ export default function SoBanSao() {
         setIsAccess(false);
       }
     };
-    if (firstLoad || search || reloadData) {
+    if (search || reloadData) {
       fetchData();
       setSearch(false);
     }
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, firstLoad, search]);
+  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
 
   useEffect(() => {
     const fetchData = async () => {
       const params = await createSearchParams(pageState1);
       params.append('idDanhMucTotNghiep', pageState.DMTN);
       params.append('idTruong', pageState.donVi);
-      const response = await GetHocSinhTheoCapBanSao(pageState.donVi, pageState.DMTN);
+      params.append('IdKhoaThi', pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : '');
+
+      const response = await GetHocSinhTheoSoBanSao(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
-        const data = await response.data.SoCapBanSao;
-        const dataWithIds = data.hocSinhs.map((row, index) => ({
+        const data = await response.data.donYeuCaus;
+        console.log(data);
+        const dataWithIds = data.map((row, index) => ({
           idx: index + 1,
-          gioiTinh_fm: row.GioiTinh ? t('gender.male') : t('gender.female'),
-          ngaySinh_fm: convertISODateToFormattedDate(row.NgaySinh),
+          gioiTinh_fm: row.hocSinh.gioiTinh ? t('gender.male') : t('gender.female'),
+          ngaySinh_fm: convertISODateToFormattedDate(row.hocSinh.ngaySinh),
           ...row
         }));
         dispatch(setReloadData(false));
@@ -262,21 +286,26 @@ export default function SoBanSao() {
         setIsAccess(false);
       }
     };
-    if (firstLoad || search || reloadData) {
+    if (search || reloadData) {
       fetchData();
     }
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, firstLoad, search]);
+  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
 
   const handleDanhMucChange = (event) => {
     const selectedValue = event.target.value;
     setPageState((old) => ({ ...old, DMTN: selectedValue }));
+    setSelectDanhmuc(selectedValue);
   };
 
   const handleSchoolChange = (event) => {
     const selectedValue = event.target.value;
     setPageState((old) => ({ ...old, donVi: selectedValue }));
   };
-
+  const handleKhoaThiChange = (event) => {
+    const selectedValue = event.target.value;
+    setPageState((old) => ({ ...old, khoaThi: selectedValue }));
+    setSelectKhoaThi(selectedValue);
+  };
   const additionalData = {
     uyBanNhanDan: formik.values.UyBanNhanDan.toUpperCase(),
     coQuanCapBang: formik.values.CoQuanCapBang.toUpperCase(),
@@ -287,7 +316,9 @@ export default function SoBanSao() {
     hinhThucDaoTao: formik.values.HinhThucDaoTao,
     diaPhuong: formik.values.DiaPhuongCapBang,
     ngayCap: formik.values.NgayCapBang,
-    nguoiKy: formik.values.NguoiKyBang
+    nguoiKy: formik.values.NguoiKyBang,
+    khoaThi: formik.values.KhoaThi,
+    tenKyThi: formik.values.TenKyThi
   };
 
   return (
@@ -306,7 +337,7 @@ export default function SoBanSao() {
                 <AnimateButton>
                   <Tooltip title={t('button.export.word')} placement="bottom">
                     <Button fullWidth color="info" variant="contained" onClick={handleExportWord} startIcon={<IconFileExport />}>
-                      {t('button.export.excel')}
+                      {t('button.export.word')}
                     </Button>
                   </Tooltip>
                 </AnimateButton>
@@ -346,6 +377,28 @@ export default function SoBanSao() {
                   ))
                 ) : (
                   <MenuItem value="">No data available</MenuItem>
+                )}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item container xs={isXs ? 12 : 2}>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel>{t('Khóa thi')}</InputLabel>
+              <Select
+                label={t('Khóa thi')}
+                size="small"
+                name="khoaThi"
+                value={pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : ''}
+                onChange={handleKhoaThiChange}
+              >
+                {khoaThis && khoaThis.length > 0 ? (
+                  khoaThis.map((data) => (
+                    <MenuItem key={data.id} value={data.id}>
+                      {data && data.ngay ? convertISODateToFormattedDate(data.ngay) : ''}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value="">{t('selected.nodata')}</MenuItem>
                 )}
               </Select>
             </FormControl>
@@ -435,35 +488,62 @@ export default function SoBanSao() {
             </Typography>
           </Grid>
         </Grid>
-        <Grid item container mb={3} spacing={1} mt={3}>
-          <Grid item lg={9} md={8.8} sm={8} xs={7} flexDirection={'column'}>
-            <Typography variant="body1" fontSize={14}>
-              Quyết định công nhận tốt nghiệp số {formik.values.QuyetDinh}
-            </Typography>
-            <Typography variant="body1" fontSize={14}>
-              Học sinh trường: {selectDonvi ? selectDonvi.ten : ''}
-            </Typography>
-          </Grid>
-          <Grid item lg={3} md={3.2} sm={4} xs={5} flexDirection={'column'}>
-            <Typography variant="body1" fontSize={14}>
-              Năm tốt nghiệp: {formik.values.NamThi}
-            </Typography>
-            <Typography variant="body1" fontSize={14}>
+        {donvi.donViQuanLy == 1 ? (
+          <Grid item container mb={3} spacing={1} mt={3}>
+            <Grid item lg={8} md={8} sm={8} xs={7} flexDirection={'column'}>
+              <Typography variant="body1" fontSize={14}>
+                Quyết định công nhận tốt nghiệp số {formik.values.QuyetDinh}
+              </Typography>
+              <Typography variant="body1" fontSize={14}>
+                Kỳ thi: {formik.values.TenKyThi}
+              </Typography>
+              <Typography variant="body1" fontSize={14}>
+                Năm tốt nghiệp: {formik.values.NamThi}
+              </Typography>
+            </Grid>
+            <Grid item lg={4} md={4} sm={4} xs={5} flexDirection={'column'}>
+              <Typography variant="body1" fontSize={14}>
+                Khóa thi: {formik.values.KhoaThi}
+              </Typography>
+              <Typography variant="body1" fontSize={14}>
+                Học sinh trường: {selectDonvi ? selectDonvi.ten : ''}
+              </Typography>
+              {/* <Typography variant="body1" fontSize={14}>
               Hình thức học: {formik.values.HinhThucDaoTao}
-            </Typography>
+            </Typography> */}
+            </Grid>
           </Grid>
-        </Grid>
+        ) : (
+          <Grid item container mb={3} spacing={1} mt={3}>
+            <Grid item lg={8} md={8} sm={8} xs={7} flexDirection={'column'}>
+              <Typography variant="body1" fontSize={14}>
+                Quyết định công nhận tốt nghiệp số {formik.values.QuyetDinh}
+              </Typography>
+              <Typography variant="body1" fontSize={14}>
+                Học sinh trường: {selectDonvi ? selectDonvi.ten : ''}
+              </Typography>
+            </Grid>
+            <Grid item lg={4} md={4} sm={4} xs={5} flexDirection={'column'}>
+              <Typography variant="body1" fontSize={14}>
+                Năm tốt nghiệp: {formik.values.NamThi}
+              </Typography>
+              <Typography variant="body1" fontSize={14}>
+                Hình thức học: {formik.values.HinhThucDaoTao}
+              </Typography>
+            </Grid>
+          </Grid>
+        )}
         <TableContainer component={Paper} style={{ border: '1px solid #ddd', borderRadius: 0 }}>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell1 style={{ width: '30px' }}>STT</TableCell1>
                 <TableCell1 style={{ width: 'auto' }}>Họ và tên</TableCell1>
-                <TableCell1 style={{ width: '110px' }}>CCCD</TableCell1>
                 <TableCell1 style={{ width: '83px' }}>Ngày tháng năm sinh</TableCell1>
                 <TableCell1 style={{ width: 'auto' }}>Nơi sinh</TableCell1>
                 <TableCell1 style={{ width: '45px' }}>Giới tính</TableCell1>
                 <TableCell1 style={{ width: 'auto' }}>Dân tộc</TableCell1>
+                {donvi.donViQuanLy == 1 && <TableCell1 style={{ width: 'auto' }}>Điểm thi</TableCell1>}
                 <TableCell1 style={{ width: '80px' }}>Xếp loại tốt nghiệp</TableCell1>
                 <TableCell1 style={{ width: '100px' }}>Số hiệu văn bằng</TableCell1>
                 <TableCell1 style={{ width: 'auto' }}>Số vào sổ bản sao</TableCell1>
@@ -475,15 +555,15 @@ export default function SoBanSao() {
               {pageState.data.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell2 style={{ textAlign: 'center' }}>{row.idx}</TableCell2>
-                  <TableCell2>{row.HoTen}</TableCell2>
-                  <TableCell2>{row.CCCD}</TableCell2>
+                  <TableCell2>{row.hocSinh ? row.hocSinh.hoTen : ''}</TableCell2>
                   <TableCell2>{row.ngaySinh_fm}</TableCell2>
-                  <TableCell2>{row.NoiSinh}</TableCell2>
+                  <TableCell2>{row.hocSinh ? row.hocSinh.noiSinh : ''}</TableCell2>
                   <TableCell2>{row.gioiTinh_fm}</TableCell2>
-                  <TableCell2>{row.DanToc}</TableCell2>
-                  <TableCell2>{row.XepLoai}</TableCell2>
-                  <TableCell2>{row.SoHieuVanBang}</TableCell2>
-                  <TableCell2 style={{ textAlign: 'center' }}>{row.SoVaoSoCapBang}</TableCell2>
+                  <TableCell2>{row.hocSinh ? row.hocSinh.danToc : ''}</TableCell2>
+                  {donvi.donViQuanLy == 1 && <TableCell2>{row.hocSinh ? row.hocSinh.hoiDong : ''}</TableCell2>}
+                  <TableCell2>{row.hocSinh ? row.hocSinh.xepLoai : ''}</TableCell2>
+                  <TableCell2>{row.hocSinh ? row.hocSinh.soHieuVanBang : ''}</TableCell2>
+                  <TableCell2 style={{ textAlign: 'center' }}>{row.hocSinh ? row.soVaoSoBanSao : ''}</TableCell2>
                   <TableCell2></TableCell2>
                   <TableCell2></TableCell2>
                 </TableRow>
@@ -512,7 +592,7 @@ export default function SoBanSao() {
             </Grid>
             <Grid item mt={0.4}>
               <Typography variant="body1" fontSize={15} style={{ fontWeight: 'bold' }}>
-                TRƯỞNG PHÒNG
+                {donvi.donViQuanLy == 1 ? 'GIÁM ĐỐC' : 'TRƯỞNG PHÒNG'}
               </Typography>
             </Grid>
             <Grid item mt={10}>

@@ -140,7 +140,7 @@ const ExportExcel = async (formik, pageState, danhmuc, donvi, khoathi, donviql, 
     worksheet.mergeCells('A6:C6');
 
     const khoathi = worksheet.getCell('I4');
-    khoathi.value = `Năm tốt nghiệp: ${formik.values.KhoaThi}`;
+    khoathi.value = `Khóa thi: ${formik.values.KhoaThi}`;
     worksheet.mergeCells('I4:K4');
 
     const donvitruong = worksheet.getCell('I5');
