@@ -41,6 +41,7 @@ import Thuhoihuybo from 'views/thuhoihuybo/Thuhoihuybo';
 import LichSuThuHoi from 'views/thuhoihuybo/LichSuThuHoi';
 import CapLaiVBCC from 'views/caplaivbcc/CapLaiVBCC';
 import DeleteDanhSachXacMinh from './DeleteDanhSachXacMinh';
+import ActionButtons from 'components/button/ActionButtons';
 
 export default function Xacminhvanbang() {
   const isXs = useMediaQuery('(max-width:800px)');
@@ -105,7 +106,7 @@ export default function Xacminhvanbang() {
     dispatch(selectedDonvitruong(selectedDonviInfo));
     setTrangThai(pageState.trangThai);
   };
-  //
+
   const handleDetail = (hocsinh) => {
     setTitle(t('hocsinh.title.info'));
     setForm('detail');
@@ -178,11 +179,8 @@ export default function Xacminhvanbang() {
     setForm('deleteall');
     dispatch(setOpenPopup(true));
   };
-  const buttonConfigurations = [
-    {
-      type: 'detail',
-      handleGetbyId: handleDetail
-    },
+
+  const xacminhvb = [
     {
       type: 'xemlichsuxacminh',
       handleClick: handleXemLichSu
@@ -198,7 +196,7 @@ export default function Xacminhvanbang() {
   ];
 
   //button chỉnh sửa, cấp lại, thu hồi hủy bỏ văn bằng
-  const buttonConfigurations2 = [
+  const chinhsuavb = [
     {
       type: 'chinhsuavbcc',
       handleClick: handleChinhSuaVBCC
@@ -213,11 +211,7 @@ export default function Xacminhvanbang() {
     }
   ];
 
-  const buttonConfigurations1 = [
-    {
-      type: 'detail',
-      handleGetbyId: handleDetail
-    },
+  const xacminhvb1 = [
     {
       type: 'xemlichsuxacminh',
       handleClick: handleXemLichSu
@@ -285,7 +279,7 @@ export default function Xacminhvanbang() {
     {
       field: 'actions',
       headerName: t('action'),
-      width: 120,
+      width: 170,
       sortable: false,
       filterable: false,
       align: 'right',
@@ -294,16 +288,19 @@ export default function Xacminhvanbang() {
           {params.row.trangThai !== -1 ? (
             <Grid container spacing={1}>
               <Grid item>
-                <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
+                <ActionButtons type="detail" detailvb handleGetbyId={handleDetail} params={params.row} />
               </Grid>
               <Grid item>
-                <CombinedActionButtons params={params.row} buttonConfigurations2={buttonConfigurations2} />
+                <CombinedActionButtons params={params.row} xacminhvb={xacminhvb} />
+              </Grid>
+              <Grid item>
+                <CombinedActionButtons params={params.row} chinhsuavb={chinhsuavb} />
               </Grid>
             </Grid>
           ) : (
             <Grid container spacing={1}>
               <Grid item>
-                <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations1} />
+                <CombinedActionButtons params={params.row} xacminhvb={xacminhvb1} />
               </Grid>
             </Grid>
           )}

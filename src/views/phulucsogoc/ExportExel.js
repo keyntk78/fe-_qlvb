@@ -7,7 +7,7 @@ const ExportExcelPhuLuc = async (donvi, pageState) => {
   const year = currentDate.getFullYear();
 
   const NgayHientai = `ngày ${day} tháng ${month} năm ${year}`;
-  const ketthuc = { year };
+  const ketthuc = year;
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet('Phụ lục sổ gốc cấp văn bằng, chứng chỉ');
 

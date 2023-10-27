@@ -86,17 +86,6 @@ const ChinhSuaVBCC = () => {
       minWidth: 100
     },
     {
-      flex: 0.3,
-      field: 'gioiTinh',
-      headerName: t('Giới tính'),
-      renderCell: (params) => <>{params.row.gioiTinh ? t('gender.male') : t('gender.female')}</>
-    },
-    {
-      flex: 0.3,
-      field: 'danToc',
-      headerName: t('Dân tộc')
-    },
-    {
       flex: 0.5,
       field: 'NgaySinh',
       headerName: t('Ngày sinh'),
@@ -115,11 +104,16 @@ const ChinhSuaVBCC = () => {
       minWidth: 100
     },
     {
-      flex: 0.5,
+      flex: 0.6,
       field: 'soHieuVanBangCapLai',
       headerName: t('Số hiệu văn bằng'),
       minWidth: 100,
       renderCell: (params) => <>{params.row.soHieuVanBangCapLai ? params.row.soHieuVanBangCapLai : params.row.soHieuVanBangCu}</>
+    },
+    {
+      flex: 1,
+      headerName: t('Lý do'),
+      field: 'lyDo'
     },
     {
       field: 'actions',

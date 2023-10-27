@@ -172,7 +172,7 @@ export default function Header() {
         >
           <Grid container my={isSmallScreen ? 2 : 1} alignItems={'center'}>
             <Grid item xs={isSmallScreen ? 12 : 8.5} justifyContent={'flex-start'} sx={{ display: 'flex', alignItems: 'center' }}>
-              <Avatar alt="Logo" src={urlImage} sx={{ width: 80, height: 'auto', border: 'none', marginRight: 2 }} />
+              <Avatar alt="Logo" src={urlImage} sx={{ width: 80, height: 80, border: 'none', marginRight: 2 }} />
               <Typography variant={isSmallScreen ? 'h6' : 'h4'} component="h1" ml={1}>
                 {phong}
               </Typography>

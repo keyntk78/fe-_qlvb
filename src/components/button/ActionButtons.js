@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Tooltip, ListItemIcon, MenuItem, Typography } from '@mui/material';
+import { Button, Tooltip, ListItemIcon, MenuItem, Typography, IconButton } from '@mui/material';
 import {
   IconEdit,
   IconUsers,
@@ -43,6 +43,7 @@ const ActionButtons = ({
   handleClick,
   params,
   title,
+  detailvb,
   handlePermission,
   handleGetbyId
 }) => {
@@ -524,9 +525,21 @@ const ActionButtons = ({
             <>
               <AnimateButton>
                 <Tooltip title={t(button.title)} placement="bottom">
-                  <Button key={index} color={button.color} variant="outlined" size="small" onClick={button.onClick}>
-                    {button.icon}
-                  </Button>
+                  {detailvb ? (
+                    <IconButton
+                      color={button.color}
+                      key={index}
+                      onClick={button.onClick}
+                      style={{ border: '1px solid black' }}
+                      size="small"
+                    >
+                      {<IconEye fontSize="small" />}
+                    </IconButton>
+                  ) : (
+                    <Button key={index} color={button.color} variant="outlined" size="small" onClick={button.onClick}>
+                      {button.icon}
+                    </Button>
+                  )}
                 </Tooltip>
               </AnimateButton>
             </>
