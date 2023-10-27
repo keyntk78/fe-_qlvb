@@ -10,7 +10,7 @@ import { generateDocument } from './Xulyxuatword_nhieunguoi';
 import AnimateButton from 'components/extended/AnimateButton';
 import { IconFileExport, IconFilePlus, IconPrinter } from '@tabler/icons';
 import ExitButton from 'components/button/ExitButton';
-import { selectedHocsinh, setLoading, setOpenPopup, setOpenSubPopup, showAlert } from 'store/actions';
+import { selectedHocsinh, setLoading, setOpenSubPopup, showAlert } from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { DataGrid } from '@mui/x-data-grid';
@@ -96,7 +96,7 @@ const Xacminhnhieunguoi = () => {
       )
     }
   ];
-  const data = JSON.parse(localStorage.getItem('hocsinhs')) || [];
+  const data = JSON.parse(localStorage.getItem(user.username)) || [];
   console.log(data);
   const rows = data.map((row, index) => ({
     id: index + 1,
@@ -137,9 +137,9 @@ const Xacminhnhieunguoi = () => {
       setLoading(true);
       generateDocument(rows, DataToExportWord);
       setLoading(false);
-      dispatch(setOpenPopup(false));
+      //dispatch(setOpenPopup(false));
       dispatch(showAlert(new Date().getTime().toString(), 'success', 'In Thành Công'));
-      localStorage.removeItem('hocsinhs');
+      //localStorage.removeItem('hocsinhs');
     }
   });
 

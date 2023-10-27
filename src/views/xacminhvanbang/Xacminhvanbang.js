@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { IconChecks, IconSearch } from '@tabler/icons';
+import { IconChecks, IconSearch, IconTrash } from '@tabler/icons';
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography, useMediaQuery } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -40,6 +40,7 @@ import ChinhSuaVBCC from 'views/chinhsuavbcc/ChinhSuaVBCC';
 import Thuhoihuybo from 'views/thuhoihuybo/Thuhoihuybo';
 import LichSuThuHoi from 'views/thuhoihuybo/LichSuThuHoi';
 import CapLaiVBCC from 'views/caplaivbcc/CapLaiVBCC';
+import DeleteDanhSachXacMinh from './DeleteDanhSachXacMinh';
 
 export default function Xacminhvanbang() {
   const isXs = useMediaQuery('(max-width:800px)');
@@ -66,8 +67,13 @@ export default function Xacminhvanbang() {
   const navigate = useNavigate();
   const [loadData, setLoadData] = useState(false);
   const infoHocSinh = useSelector(infoHocSinhSelector);
-  const existingHocSinhs = JSON.parse(localStorage.getItem('hocsinhs')) || [];
   const user = useSelector(userLoginSelector);
+  let existingHocSinhs = [];
+  if (user && user.username) {
+    existingHocSinhs = JSON.parse(localStorage.getItem(user.username)) || [];
+  } else {
+    existingHocSinhs = [];
+  }
   const [firstLoad3, setFirstLoad3] = useState(true);
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -133,16 +139,16 @@ export default function Xacminhvanbang() {
     dispatch(setOpenPopup(true));
   };
   window.addEventListener('beforeunload', () => {
-    localStorage.removeItem('hocsinhs');
+    localStorage.removeItem(user.username);
   });
   const handleThemVaoDSXM = (hocsinh) => {
-    const existingHocSinhs = JSON.parse(localStorage.getItem('hocsinhs')) || [];
+    const existingHocSinhs = JSON.parse(localStorage.getItem(user.username)) || [];
     const isHocSinhTonTai = existingHocSinhs.some((hs) => hs.id === hocsinh.id);
     if (isHocSinhTonTai) {
       dispatch(showAlert(new Date().getTime().toString(), 'error', 'Học sinh đã tồn tại trong danh sách'));
     } else {
       existingHocSinhs.push(hocsinh);
-      localStorage.setItem('hocsinhs', JSON.stringify(existingHocSinhs));
+      localStorage.setItem(user.username, JSON.stringify(existingHocSinhs));
       dispatch(showAlert(new Date().getTime().toString(), 'success', 'Thêm học sinh vào danh sách thành công'));
     }
   };
@@ -167,7 +173,11 @@ export default function Xacminhvanbang() {
     dispatch(selectedHocsinh(hocsinh));
     dispatch(setOpenPopup(true));
   };
-
+  const handleDeleteDanhSachXacMinh = () => {
+    setTitle(t('Xóa danh sách xác minh'));
+    setForm('deleteall');
+    dispatch(setOpenPopup(true));
+  };
   const buttonConfigurations = [
     {
       type: 'detail',
@@ -642,6 +652,13 @@ export default function Xacminhvanbang() {
         <Grid item container justifyContent="flex-end" spacing={1} mb={1}>
           <Grid item>
             {existingHocSinhs.length > 0 && (
+              <Button variant="contained" color="error" onClick={handleDeleteDanhSachXacMinh} startIcon={<IconTrash />}>
+                {t('Xóa ' + existingHocSinhs.length + ' học sinh')}
+              </Button>
+            )}
+          </Grid>
+          <Grid item>
+            {existingHocSinhs.length > 0 && (
               <ButtonSuccess
                 title={t('xác minh ' + existingHocSinhs.length + ' học sinh')}
                 fullWidth
@@ -692,13 +709,15 @@ export default function Xacminhvanbang() {
           title={title}
           form={form}
           openPopup={openPopup}
-          maxWidth={form === 'xemlichsu' || form === 'chinhsuavbcc' || form === 'caplaivbcc' ? 'lg' : 'md'}
-          bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
+          maxWidth={form === 'xemlichsu' || form === 'chinhsuavbcc' || form === 'caplaivbcc' ? 'lg' : form === 'deleteall' ? 'sm' : 'md'}
+          bgcolor={form === 'delete' || form === 'deleteall' ? '#F44336' : '#2196F3'}
         >
           {form === 'detail' ? (
             <Detail />
           ) : form == 'xacminh' ? (
             <Xacminhtungnguoi />
+          ) : form == 'deleteall' ? (
+            <DeleteDanhSachXacMinh />
           ) : form == 'xemlichsu' ? (
             <LichSuXacMinh />
           ) : form == 'xemlichsuhuybo' ? (

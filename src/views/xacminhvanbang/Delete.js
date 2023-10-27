@@ -2,8 +2,8 @@ import React from 'react';
 import { Grid } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { IconAlertCircle } from '@tabler/icons';
-import { setOpenSubPopup, showAlert } from 'store/actions';
-import { selectedHocsinhSelector } from 'store/selectors';
+import { setOpenPopup, setOpenSubPopup, showAlert } from 'store/actions';
+import { selectedHocsinhSelector, userLoginSelector } from 'store/selectors';
 import MuiTypography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
 import YesButton from 'components/button/YesButton';
@@ -13,16 +13,20 @@ const DeleteHocSinhDuocChon = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const selectedHocsinh = useSelector(selectedHocsinhSelector);
+  const user = useSelector(userLoginSelector);
   const handleDeleteClick = async () => {
     try {
-      const existingData = JSON.parse(localStorage.getItem('hocsinhs')) || [];
+      const existingData = JSON.parse(localStorage.getItem(user.username)) || [];
       const idToDelete = selectedHocsinh.idHocSinh;
       const indexToDelete = existingData.findIndex((item) => item.id === idToDelete);
       if (indexToDelete !== -1) {
         existingData.splice(indexToDelete, 1);
-        localStorage.setItem('hocsinhs', JSON.stringify(existingData));
+        localStorage.setItem(user.username, JSON.stringify(existingData));
         dispatch(setOpenSubPopup(false));
         dispatch(showAlert(new Date().getTime().toString(), 'success', t('xacminhvanbang.title.deleteSuc')));
+        if (existingData.length <= 0) {
+          dispatch(setOpenPopup(false));
+        }
       } else {
         dispatch(showAlert(new Date().getTime().toString(), 'error', t('xacminhvanbang.title.deleteErr')));
       }
