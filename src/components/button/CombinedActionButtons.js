@@ -6,7 +6,8 @@ import { IconButton, Tooltip } from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useTranslation } from 'react-i18next';
 import ActionButtons from './ActionButtons';
-import { IconChecks, IconEdit } from '@tabler/icons';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 const CombinedActionButtons = ({ params, buttonConfigurations, chinhsuavb, xacminhvb }) => {
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -27,12 +28,18 @@ const CombinedActionButtons = ({ params, buttonConfigurations, chinhsuavb, xacmi
           placement="bottom"
         >
           <IconButton
-            color={chinhsuavb ? 'primary' : xacminhvb ? 'success' : ''}
+            // color={chinhsuavb ? 'primary' : xacminhvb ? 'success' : ''}
             onClick={handleClick}
             style={{ border: '1px solid black' }}
             size="small"
           >
-            {chinhsuavb ? <IconEdit fontSize="small" /> : xacminhvb ? <IconChecks fontSize="small" /> : <MoreHorizIcon fontSize="small" />}
+            {chinhsuavb ? (
+              <ModeEditIcon fontSize="small" />
+            ) : xacminhvb ? (
+              <DoneAllIcon fontSize="small" />
+            ) : (
+              <MoreHorizIcon fontSize="small" />
+            )}
           </IconButton>
         </Tooltip>
       </AnimateButton>

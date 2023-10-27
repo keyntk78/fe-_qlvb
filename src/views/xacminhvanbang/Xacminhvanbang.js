@@ -281,7 +281,7 @@ export default function Xacminhvanbang() {
     {
       field: 'actions',
       headerName: t('action'),
-      width: 170,
+      width: 150,
       sortable: false,
       filterable: false,
       align: 'right',
@@ -301,6 +301,9 @@ export default function Xacminhvanbang() {
             </Grid>
           ) : (
             <Grid container spacing={1}>
+              <Grid item>
+                <ActionButtons type="detail" detailvb handleGetbyId={handleDetail} params={params.row} />
+              </Grid>
               <Grid item>
                 <CombinedActionButtons params={params.row} xacminhvb={xacminhvb1} />
               </Grid>

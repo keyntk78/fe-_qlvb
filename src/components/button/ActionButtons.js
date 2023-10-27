@@ -30,6 +30,7 @@ import {
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { useTranslation } from 'react-i18next';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const ActionButtons = ({
   menu,
@@ -527,13 +528,13 @@ const ActionButtons = ({
                 <Tooltip title={t(button.title)} placement="bottom">
                   {detailvb ? (
                     <IconButton
-                      color={button.color}
+                      // color={button.color}
                       key={index}
                       onClick={button.onClick}
                       style={{ border: '1px solid black' }}
                       size="small"
                     >
-                      {<IconEye fontSize="small" />}
+                      {<VisibilityIcon fontSize="16px" />}
                     </IconButton>
                   ) : (
                     <Button key={index} color={button.color} variant="outlined" size="small" onClick={button.onClick}>
