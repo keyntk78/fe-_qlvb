@@ -11,7 +11,7 @@ import { convertISODateToFormattedDate } from 'utils/formatDate';
 import AnimateButton from 'components/extended/AnimateButton';
 import { IconFilePlus, IconPrinter } from '@tabler/icons';
 import ExitButton from 'components/button/ExitButton';
-import { setLoading, setOpenPopup, showAlert } from 'store/actions';
+import { setLoading, showAlert } from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import { AddLichSuXacMinh, getCauHinhXacMinhVanBang, getHocSinhXacMinhByCCCD } from 'services/xacminhvanbangService';
 import '../../index.css';
@@ -48,7 +48,7 @@ const Xacminhtungnguoi = () => {
       setLoading(true);
       generateDocument(DataToExportWord);
       setLoading(false);
-      dispatch(setOpenPopup(false));
+      // dispatch(setOpenPopup(false));
       dispatch(showAlert(new Date().getTime().toString(), 'success', 'In Thành Công'));
     }
   });
@@ -136,13 +136,21 @@ const Xacminhtungnguoi = () => {
             name="donViXacMinh"
             formik={formik}
             placeholder={t('xacminhvanbang.field.kinhgui')}
+            isRequired
           />
         </Grid>
         <Grid item xs={6} sm={4} md={4.5}>
-          <InputForm1 xs={12} label={t('xacminhvanbang.field.congvanso')} name="congVanSo" formik={formik} placeholder={t('Công văn số')} />
+          <InputForm1
+            xs={12}
+            label={t('xacminhvanbang.field.congvanso')}
+            name="congVanSo"
+            formik={formik}
+            placeholder={t('Công văn số')}
+            isRequired
+          />
         </Grid>
         <Grid item xs={6} sm={4} md={4.5}>
-          <InputForm1 xs={12} label={t('xacminhvanbang.field.ngayracongvan')} name="ngayBanHanh" formik={formik} type="date" />
+          <InputForm1 xs={12} label={t('xacminhvanbang.field.ngayracongvan')} name="ngayBanHanh" formik={formik} type="date" isRequired />
         </Grid>
 
         <Grid item container xs={isXs ? 5 : 3} mt={'30px'}>

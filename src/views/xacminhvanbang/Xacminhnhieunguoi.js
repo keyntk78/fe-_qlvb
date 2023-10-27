@@ -199,13 +199,21 @@ const Xacminhnhieunguoi = () => {
             name="donViXacMinh"
             formik={formik}
             placeholder={t('xacminhvanbang.field.kinhgui')}
+            isRequired
           />
         </Grid>
         <Grid item xs={6} sm={4} md={4.5}>
-          <InputForm1 xs={12} label={t('xacminhvanbang.field.congvanso')} name="congVanSo" formik={formik} placeholder={t('Công văn số')} />
+          <InputForm1
+            xs={12}
+            label={t('xacminhvanbang.field.congvanso')}
+            name="congVanSo"
+            formik={formik}
+            placeholder={t('Công văn số')}
+            isRequired
+          />
         </Grid>
         <Grid item xs={6} sm={4} md={4.5}>
-          <InputForm1 xs={12} label={t('xacminhvanbang.field.ngayracongvan')} name="ngayBanHanh" formik={formik} type="date" />
+          <InputForm1 xs={12} label={t('xacminhvanbang.field.ngayracongvan')} name="ngayBanHanh" formik={formik} type="date" isRequired />
         </Grid>
 
         <Grid item container xs={isXs ? 5 : 3} mt={'30px'}>
