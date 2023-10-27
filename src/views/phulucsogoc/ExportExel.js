@@ -78,7 +78,7 @@ const ExportExcelPhuLuc = async (donvi, pageState) => {
         right: { style: 'thin' }
       };
 
-      if (cell.value == undefined || cell.value == null) {
+      if (cell.value == null) {
         // Đặt border cho các ô có giá trị null
         cell.border = {
           top: { style: 'thin' },

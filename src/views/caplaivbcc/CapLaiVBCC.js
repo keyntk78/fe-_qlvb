@@ -79,7 +79,7 @@ const CapLaiVBCC = () => {
       minWidth: 180
     },
     {
-      flex: 0.5,
+      flex: 0.6,
       field: 'cccd',
       headerName: t('CCCD'),
       minWidth: 100
