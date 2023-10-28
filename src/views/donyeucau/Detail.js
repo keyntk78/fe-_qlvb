@@ -408,7 +408,7 @@ const Detail = () => {
           openPopup={openSubPopup}
           type="subpopup"
           maxWidth={'sm'}
-          bgcolor={form === 'duyet' ? '	#00E473' : '#F44336'}
+          bgcolor={form === 'duyet' ? '	#2196F3' : '#F44336'}
         >
           {form === 'duyet' ? <Duyet /> : <Tuchoi />}
         </Popup>

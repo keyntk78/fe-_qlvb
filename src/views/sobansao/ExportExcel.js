@@ -69,14 +69,14 @@ const ExportExcel = async (formik, pageState, danhmuc, donvi, khoathi, donviql) 
     pageState.data.forEach((item) => {
       const dataRow = worksheet.addRow([
         item.idx,
-        item.hocSinh.hoTen,
+        item.hoTen_fm,
         item.ngaySinh_fm,
-        item.hocSinh.noiSinh,
+        item.noiSinh_fm,
         item.gioiTinh_fm,
-        item.hocSinh.danToc,
-        item.hocSinh.xepLoai,
-        item.hocSinh.soHieuVanBang,
-        item.soVaoSoBanSao,
+        item.danToc_fm,
+        item.xepLoai_fm,
+        item.soHieuVanBang_fm,
+        item.soVaoSoBanSao_fm,
         '',
         ''
       ]);
@@ -172,15 +172,15 @@ const ExportExcel = async (formik, pageState, danhmuc, donvi, khoathi, donviql) 
     pageState.data.forEach((item) => {
       const dataRow = worksheet.addRow([
         item.idx,
-        item.hocSinh.hoTen,
+        item.hoTen_fm,
         item.ngaySinh_fm,
-        item.hocSinh.noiSinh,
+        item.noiSinh_fm,
         item.gioiTinh_fm,
-        item.hocSinh.danToc,
-        item.hocSinh.hoiDong,
-        item.hocSinh.xepLoai,
-        item.hocSinh.soHieuVanBang,
-        item.soVaoSoBanSao,
+        item.danToc_fm,
+        item.hoiDong_fm,
+        item.xepLoai_fm,
+        item.soHieuVanBang_fm,
+        item.soVaoSoBanSao_fm,
         '',
         ''
       ]);

@@ -108,7 +108,10 @@ export default function SoBanSao() {
     setSelectDonvi(selectedDonviInfo);
     const danhmucSelect = pageState.DMTN;
     const selectedDanhmucInfo = dMTN.find((dmtn) => dmtn.id === danhmucSelect);
-    setSelectDanhmuc(selectedDanhmucInfo);
+    setSelectDanhmuc(selectedDanhmucInfo.id);
+    const khoaThiSelect = pageState.khoaThi;
+    const selectedKhoaThiInfo = khoaThis.find((khoathi) => khoathi.id === khoaThiSelect);
+    setSelectKhoaThi(selectedKhoaThiInfo.id);
   };
 
   const handleExport = async (e) => {
@@ -222,8 +225,8 @@ export default function SoBanSao() {
         UyBanNhanDan: data.donViQuanLy.tenUyBanNhanDan || '',
         CoQuanCapBang: data.donViQuanLy.tenCoQuanCapBang || '',
         NamThi: data.danhMucTotNghiep.namThi || '',
-        QuyetDinh: data.danhMucTotNghiep.SoQuyetDinh || '',
-        NguoiKyBang: data.donViQuanLy.nguoiKyXacMinh || '',
+        QuyetDinh: data.danhMucTotNghiep.soQuyetDinh || '',
+        NguoiKyBang: data.donViQuanLy.hoTenNguoiKySoGoc || '',
         DiaPhuongCapBang: data.donViQuanLy.tenDiaPhuongCapBang || '',
         HeDaoTao: data.truong.heDaoTao.toUpperCase() || '',
         HinhThucDaoTao: data.truong.hinhThucDaoTao || '',
@@ -238,6 +241,13 @@ export default function SoBanSao() {
           idx: pageState.startIndex * pageState.pageSize + index + 1,
           gioiTinh_fm: row.hocSinh.gioiTinh ? t('gender.male') : t('gender.female'),
           ngaySinh_fm: convertISODateToFormattedDate(row.hocSinh.ngaySinh),
+          hoTen_fm: row.hocSinh.hoTen,
+          noiSinh_fm: row.hocSinh.noiSinh,
+          danToc_fm: row.hocSinh.danToc,
+          hoiDong_fm: row.hocSinh.hoiDong,
+          xepLoai_fm: row.hocSinh.xepLoai,
+          soHieuVanBang_fm: row.hocSinh.soHieuVanBang,
+          soVaoSoBanSao_fm: row.soVaoSoBanSao,
           ...row
         }));
         dispatch(setReloadData(false));
@@ -273,6 +283,13 @@ export default function SoBanSao() {
           idx: index + 1,
           gioiTinh_fm: row.hocSinh.gioiTinh ? t('gender.male') : t('gender.female'),
           ngaySinh_fm: convertISODateToFormattedDate(row.hocSinh.ngaySinh),
+          hoTen_fm: row.hocSinh.hoTen,
+          noiSinh_fm: row.hocSinh.noiSinh,
+          danToc_fm: row.hocSinh.danToc,
+          hoiDong_fm: row.hocSinh.hoiDong,
+          xepLoai_fm: row.hocSinh.xepLoai,
+          soHieuVanBang_fm: row.hocSinh.soHieuVanBang,
+          soVaoSoBanSao_fm: row.soVaoSoBanSao,
           ...row
         }));
         dispatch(setReloadData(false));
@@ -384,13 +401,7 @@ export default function SoBanSao() {
           <Grid item container xs={isXs ? 12 : 2}>
             <FormControl fullWidth variant="outlined">
               <InputLabel>{t('Khóa thi')}</InputLabel>
-              <Select
-                label={t('Khóa thi')}
-                size="small"
-                name="khoaThi"
-                value={pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : ''}
-                onChange={handleKhoaThiChange}
-              >
+              <Select label={t('Khóa thi')} size="small" name="khoaThi" value={selectKhoaThi} onChange={handleKhoaThiChange}>
                 {khoaThis && khoaThis.length > 0 ? (
                   khoaThis.map((data) => (
                     <MenuItem key={data.id} value={data.id}>
@@ -554,16 +565,16 @@ export default function SoBanSao() {
             <TableBody>
               {pageState.data.map((row) => (
                 <TableRow key={row.id}>
-                  <TableCell2 style={{ textAlign: 'center' }}>{row.idx}</TableCell2>
-                  <TableCell2>{row.hocSinh ? row.hocSinh.hoTen : ''}</TableCell2>
+                  <TableCell2>{row.idx}</TableCell2>
+                  <TableCell2>{row.hoTen_fm}</TableCell2>
                   <TableCell2>{row.ngaySinh_fm}</TableCell2>
-                  <TableCell2>{row.hocSinh ? row.hocSinh.noiSinh : ''}</TableCell2>
+                  <TableCell2>{row.noiSinh_fm}</TableCell2>
                   <TableCell2>{row.gioiTinh_fm}</TableCell2>
-                  <TableCell2>{row.hocSinh ? row.hocSinh.danToc : ''}</TableCell2>
-                  {donvi.donViQuanLy == 1 && <TableCell2>{row.hocSinh ? row.hocSinh.hoiDong : ''}</TableCell2>}
-                  <TableCell2>{row.hocSinh ? row.hocSinh.xepLoai : ''}</TableCell2>
-                  <TableCell2>{row.hocSinh ? row.hocSinh.soHieuVanBang : ''}</TableCell2>
-                  <TableCell2 style={{ textAlign: 'center' }}>{row.hocSinh ? row.soVaoSoBanSao : ''}</TableCell2>
+                  <TableCell2>{row.danToc_fm}</TableCell2>
+                  {donvi.donViQuanLy == 1 && <TableCell2>{row.hoiDong_fm}</TableCell2>}
+                  <TableCell2>{row.xepLoai_fm}</TableCell2>
+                  <TableCell2>{row.soHieuVanBang_fm}</TableCell2>
+                  <TableCell2 style={{ textAlign: 'center' }}>{row.soVaoSoBanSao_fm}</TableCell2>
                   <TableCell2></TableCell2>
                   <TableCell2></TableCell2>
                 </TableRow>

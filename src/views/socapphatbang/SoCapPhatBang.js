@@ -106,10 +106,10 @@ export default function SoCapPhatBang() {
     setSearch(true);
     const danhmucSelect = pageState.DMTN;
     const selectedDanhmucInfo = dMTN.find((dmtn) => dmtn.id === danhmucSelect);
-    setSelectDanhmuc(selectedDanhmucInfo);
+    setSelectDanhmuc(selectedDanhmucInfo.id);
     const khoaThiSelect = pageState.khoaThi;
     const selectedKhoaThiInfo = khoaThis.find((khoathi) => khoathi.id === khoaThiSelect);
-    setSelectKhoaThi(selectedKhoaThiInfo);
+    setSelectKhoaThi(selectedKhoaThiInfo.id);
   };
 
   const handleExport = async (e) => {
@@ -180,12 +180,12 @@ export default function SoCapPhatBang() {
       const response = await getHocSinhTheoSoCapPhatBang(params);
       const data = response.data;
       formik.setValues({
-        UyBanNhanDan: data.SoCapPhatBang.UyBanNhanDan || '',
-        CoQuanCapBang: data.SoCapPhatBang.CoQuanCapBang || '',
+        UyBanNhanDan: data.CauHinh.TenUyBanNhanDan || '',
+        CoQuanCapBang: data.CauHinh.TenCoQuanCapBang || '',
         NamThi: data.DanhMucTotNghiep.NamThi || '',
         QuyetDinh: data.DanhMucTotNghiep.SoQuyetDinh || '',
-        NguoiKyBang: data.SoCapPhatBang.NguoiKyBang || '',
-        DiaPhuongCapBang: data.SoCapPhatBang.DiaPhuongCapBang || '',
+        NguoiKyBang: data.CauHinh.HoTenNguoiKySoGoc || '',
+        DiaPhuongCapBang: data.CauHinh.TenDiaPhuongCapBang || '',
         HeDaoTao: data.Truong.HeDaoTao.toUpperCase() || '',
         HinhThucDaoTao: data.Truong.HinhThucDaoTao || '',
         NgayCapBang: formatDate(data.DanhMucTotNghiep.NgayCapBang) || '',
@@ -356,13 +356,7 @@ export default function SoCapPhatBang() {
           <Grid item container xs={isXs ? 12 : 2}>
             <FormControl fullWidth variant="outlined">
               <InputLabel>{t('Khóa thi')}</InputLabel>
-              <Select
-                label={t('Khóa thi')}
-                size="small"
-                name="khoaThi"
-                value={pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : ''}
-                onChange={handleKhoaThiChange}
-              >
+              <Select label={t('Khóa thi')} size="small" name="khoaThi" value={selectKhoaThi} onChange={handleKhoaThiChange}>
                 {khoaThis && khoaThis.length > 0 ? (
                   khoaThis.map((data) => (
                     <MenuItem key={data.id} value={data.id}>

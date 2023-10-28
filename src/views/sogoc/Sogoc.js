@@ -118,10 +118,10 @@ export default function SoGoc() {
     setSelectDonvi(selectedDonviInfo);
     const danhmucSelect = pageState.DMTN;
     const selectedDanhmucInfo = dMTN.find((dmtn) => dmtn.id === danhmucSelect);
-    setSelectDanhmuc(selectedDanhmucInfo);
+    setSelectDanhmuc(selectedDanhmucInfo.id);
     const khoaThiSelect = pageState.khoaThi;
     const selectedKhoaThiInfo = khoaThis.find((khoathi) => khoathi.id === khoaThiSelect);
-    setSelectKhoaThi(selectedKhoaThiInfo);
+    setSelectKhoaThi(selectedKhoaThiInfo.id);
   };
   const handleExport = async (e) => {
     e.preventDefault();
@@ -431,13 +431,7 @@ export default function SoGoc() {
           <Grid item container xs={isXs ? 12 : 2}>
             <FormControl fullWidth variant="outlined">
               <InputLabel>{t('Khóa thi')}</InputLabel>
-              <Select
-                label={t('Khóa thi')}
-                size="small"
-                name="khoaThi"
-                value={pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : ''}
-                onChange={handleKhoaThiChange}
-              >
+              <Select label={t('Khóa thi')} size="small" name="khoaThi" value={selectKhoaThi} onChange={handleKhoaThiChange}>
                 {khoaThis && khoaThis.length > 0 ? (
                   khoaThis.map((data) => (
                     <MenuItem key={data.id} value={data.id}>

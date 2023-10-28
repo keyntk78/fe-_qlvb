@@ -79,6 +79,7 @@ const Add = () => {
     const maHeDaoTao = event.target.value;
     formik.setFieldValue('MaHeDaoTao', maHeDaoTao);
   };
+
   useEffect(() => {
     if (openPopup) {
       formik.resetForm();
@@ -105,8 +106,10 @@ const Add = () => {
 
       //hedaotao
       const hedaotao = await getAllHeDaoTao();
-      console.log(hedaotao);
       const datahedaotao = await hedaotao.data;
+      if (datahedaotao && datahedaotao.length > 0) {
+        formik.setFieldValue('MaHeDaoTao', datahedaotao[0].ma);
+      }
       const dataWithhdt = datahedaotao.map((row, index) => ({
         idIndex: index + 1,
         ...row
@@ -123,11 +126,6 @@ const Add = () => {
 
     fetchData();
   }, [reloadData]);
-
-  useEffect(() => {
-    console.log(formik.values);
-  });
-
   return (
     <form onSubmit={formik.handleSubmit}>
       <Grid container>

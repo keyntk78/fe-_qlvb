@@ -3,6 +3,7 @@ import PizZip from 'pizzip';
 import PizZipUtils from 'pizzip/utils/index.js';
 import { saveAs } from 'file-saver';
 import FileWordMau_SoCapBanSao from '../FileMau/FileMauSoBanSao.docx';
+import FileWordMau_SoCapBanSao_SGD from '../FileMau/FileMauSoBanSao_SGD.docx';
 
 function loadFile(url, callback) {
   PizZipUtils.getBinaryContent(url, callback);
@@ -18,8 +19,8 @@ function replaceErrors(key, value) {
   return value;
 }
 
-export function generateDocument(hocsinhs, data) {
-  loadFile(FileWordMau_SoCapBanSao, function (error, content) {
+export function generateDocument(hocsinhs, data, donvi) {
+  loadFile(donvi.donViQuanLy === 1 ? FileWordMau_SoCapBanSao_SGD : FileWordMau_SoCapBanSao, function (error, content) {
     if (error) {
       throw error;
     }
