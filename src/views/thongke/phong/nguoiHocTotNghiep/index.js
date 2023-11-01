@@ -18,7 +18,7 @@ import MainCard from 'components/cards/MainCard';
 import { getAllDonvi } from 'services/donvitruongService';
 import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
-import { getAllHedaotao } from 'services/hedaotaoService';
+// import { getAllHedaotao } from 'services/hedaotaoService';
 import { getAllNamthi } from 'services/namthiService';
 import ExportExcel from './ExportExcel';
 
@@ -26,7 +26,7 @@ export default function ThongKeHocSinh() {
   const isXs = useMediaQuery('(max-width:600px)');
   const language = i18n.language;
   const { t } = useTranslation();
-  const [heDaoTao, setHeDaoTao] = useState([]);
+  // const [heDaoTao, setHeDaoTao] = useState([]);
   const [namHoc, setNamHoc] = useState([]);
   const [donvis, setDonvis] = useState([]);
   const [search, setSearch] = useState(false);

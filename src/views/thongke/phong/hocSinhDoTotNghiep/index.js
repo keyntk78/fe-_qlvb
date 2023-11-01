@@ -5,7 +5,7 @@ import { Button, FormControl, Grid, InputLabel, MenuItem, Select, useMediaQuery 
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { reloadDataSelector } from 'store/selectors';
+import { reloadDataSelector, userLoginSelector } from 'store/selectors';
 import { setLoading, setReloadData } from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import { createSearchParams } from 'utils/createSearchParams';
@@ -14,10 +14,10 @@ import useLocalText from 'utils/localText';
 import i18n from 'i18n';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import MainCard from 'components/cards/MainCard';
-import { getDonViByHeDaoTao } from 'services/donvitruongService';
+import { getAllTruong } from 'services/sharedService';
 import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
-import { getAllHedaotao } from 'services/hedaotaoService';
+// import { getAllHedaotao } from 'services/hedaotaoService';
 import { getAllNamthi } from 'services/namthiService';
 import ExportExcel from './ExportExcel';
 import { GetHocSinhDoTotNghiepByTruongAndNam } from 'services/thongkeService';
@@ -26,7 +26,7 @@ export default function ThongKeHocSinh() {
   const isXs = useMediaQuery('(max-width:600px)');
   const language = i18n.language;
   const { t } = useTranslation();
-  const [heDaoTao, setHeDaoTao] = useState([]);
+  // const [heDaoTao, setHeDaoTao] = useState([]);
   const [namHoc, setNamHoc] = useState([]);
   const [donvis, setDonvis] = useState([]);
   const [search, setSearch] = useState(false);
@@ -49,6 +49,7 @@ export default function ThongKeHocSinh() {
     namHoc: '',
     donVi: ''
   });
+  const user = useSelector(userLoginSelector);
 
   const [pageState1, setPageState1] = useState({
     isLoading: false,
@@ -123,8 +124,6 @@ export default function ThongKeHocSinh() {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const response = await getAllHedaotao();
-      setHeDaoTao(response.data);
       const donvi = await getAllNamthi();
       setNamHoc(donvi.data);
     };
@@ -133,13 +132,11 @@ export default function ThongKeHocSinh() {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const donvi = await getDonViByHeDaoTao(pageState.heDaoTao);
+      const donvi = await getAllTruong(user.username);
       setDonvis(donvi.data);
     };
-    if (pageState.heDaoTao) {
-      fetchDataDL();
-    }
-  }, [pageState.heDaoTao]);
+    fetchDataDL();
+  }, []);
 
   useEffect(() => {
     if (pageState.namHoc && pageState.donVi) {
@@ -226,10 +223,10 @@ export default function ThongKeHocSinh() {
     setPageState((old) => ({ ...old, donVi: selectedValue }));
   };
 
-  const handleHeDaoTaoChange = (event) => {
-    const selectedValue = event.target.value;
-    setPageState((old) => ({ ...old, heDaoTao: selectedValue }));
-  };
+  // const handleHeDaoTaoChange = (event) => {
+  //   const selectedValue = event.target.value;
+  //   setPageState((old) => ({ ...old, heDaoTao: selectedValue }));
+  // };
 
   const handleNamHocChange = (event) => {
     const selectedValue = event.target.value;
@@ -272,7 +269,7 @@ export default function ThongKeHocSinh() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item lg={4} md={7} sm={8} xs={isXs ? 8 : 4}>
+          {/* <Grid item lg={4} md={7} sm={8} xs={isXs ? 8 : 4}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('Hệ đào tạo')}</InputLabel>
               <Select name="heDaoTao" value={pageState.heDaoTao} onChange={handleHeDaoTaoChange} label={t('Hệ đào tạo')}>
@@ -287,7 +284,7 @@ export default function ThongKeHocSinh() {
                 )}
               </Select>
             </FormControl>
-          </Grid>
+          </Grid> */}
           <Grid item lg={4} md={7} sm={8} xs={isXs ? 12 : 4}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('donvitruong.title')}</InputLabel>

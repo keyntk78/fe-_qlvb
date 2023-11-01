@@ -5,7 +5,7 @@ import { Button, FormControl, Grid, InputLabel, MenuItem, Select, useMediaQuery 
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { reloadDataSelector } from 'store/selectors';
+import { reloadDataSelector, userLoginSelector } from 'store/selectors';
 import { setLoading, setReloadData } from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import { createSearchParams } from 'utils/createSearchParams';
@@ -15,7 +15,7 @@ import i18n from 'i18n';
 import MainCard from 'components/cards/MainCard';
 import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
-import { getAllHedaotao } from 'services/hedaotaoService';
+// import { getAllHedaotao } from 'services/hedaotaoService';
 import { getAllNamthi } from 'services/namthiService';
 import ExportExcel from './ExportExcel';
 import { GetThongKeInPhoiBang } from 'services/thongkeService';
@@ -24,7 +24,7 @@ export default function ThongKeHocSinh() {
   const isXs = useMediaQuery('(max-width:700px)');
   const language = i18n.language;
   const { t } = useTranslation();
-  const [heDaoTao, setHeDaoTao] = useState([]);
+  // const [heDaoTao, setHeDaoTao] = useState([]);
   const [namHoc, setNamHoc] = useState([]);
   const [search, setSearch] = useState(false);
   const [firstLoad, setFirstLoad] = useState(true);
@@ -46,6 +46,8 @@ export default function ThongKeHocSinh() {
     namHoc: '',
     donVi: ''
   });
+
+  const user = useSelector(userLoginSelector);
 
   const [pageState1, setPageState1] = useState({
     isLoading: false,
@@ -91,8 +93,6 @@ export default function ThongKeHocSinh() {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const response = await getAllHedaotao();
-      setHeDaoTao(response.data);
       const donvi = await getAllNamthi();
       setNamHoc(donvi.data);
     };
@@ -100,19 +100,19 @@ export default function ThongKeHocSinh() {
   }, []);
 
   useEffect(() => {
-    if (pageState.namHoc && pageState.heDaoTao) {
+    if (pageState.namHoc) {
       setDisabledSearch(false);
     } else {
       setDisabledSearch(true);
     }
-  }, [pageState.namHoc, pageState.heDaoTao]);
+  }, [pageState.namHoc]);
 
   useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
       params.append('idNamThi', pageState.namHoc);
-      params.append('maHeDaoTao', pageState.heDaoTao);
+      params.append('nguoiThucHien', user.username);
       const response = await GetThongKeInPhoiBang(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -143,7 +143,7 @@ export default function ThongKeHocSinh() {
     const fetchData = async () => {
       const params = await createSearchParams(pageState1);
       params.append('idNamThi', pageState.namHoc);
-      params.append('maHeDaoTao', pageState.heDaoTao);
+      params.append('nguoiThucHien', user.username);
       const response = await GetThongKeInPhoiBang(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -175,10 +175,10 @@ export default function ThongKeHocSinh() {
     setDisabledExport(false);
   };
 
-  const handleHeDaoTaoChange = (event) => {
-    const selectedValue = event.target.value;
-    setPageState((old) => ({ ...old, heDaoTao: selectedValue }));
-  };
+  // const handleHeDaoTaoChange = (event) => {
+  //   const selectedValue = event.target.value;
+  //   setPageState((old) => ({ ...old, heDaoTao: selectedValue }));
+  // };
 
   const handleNamHocChange = (event) => {
     const selectedValue = event.target.value;
@@ -188,7 +188,7 @@ export default function ThongKeHocSinh() {
   const handleExport = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
-    const heDaoTaoSelect = pageState.heDaoTao;
+    // const heDaoTaoSelect = pageState.heDaoTao;
     const selectedHDT = heDaoTao.find((hdt) => hdt.ma === heDaoTaoSelect);
     const namhocSelect = pageState.namHoc;
     const selectedNamHoc = namHoc.find((namhoc) => namhoc.id === namhocSelect);
@@ -221,7 +221,7 @@ export default function ThongKeHocSinh() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item lg={4} md={6} sm={6} xs={isXs ? 8 : 4}>
+          {/* <Grid item lg={4} md={6} sm={6} xs={isXs ? 8 : 4}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('Hệ đào tạo')}</InputLabel>
               <Select name="heDaoTao" value={pageState.heDaoTao} onChange={handleHeDaoTaoChange} label={t('Hệ đào tạo')}>
@@ -236,7 +236,7 @@ export default function ThongKeHocSinh() {
                 )}
               </Select>
             </FormControl>
-          </Grid>
+          </Grid> */}
           <Grid item lg={2} md={3} sm={3} xs={isXs ? 6 : 2} minWidth={130}>
             <Button
               variant="contained"
