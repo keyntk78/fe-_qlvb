@@ -15,7 +15,6 @@ import i18n from 'i18n';
 import MainCard from 'components/cards/MainCard';
 import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
-// import { getAllHedaotao } from 'services/hedaotaoService';
 import { getAllNamthi } from 'services/namthiService';
 import ExportExcel from './ExportExcel';
 import { GetThongKeInPhoiBang } from 'services/thongkeService';
@@ -24,7 +23,6 @@ export default function ThongKeHocSinh() {
   const isXs = useMediaQuery('(max-width:700px)');
   const language = i18n.language;
   const { t } = useTranslation();
-  // const [heDaoTao, setHeDaoTao] = useState([]);
   const [namHoc, setNamHoc] = useState([]);
   const [search, setSearch] = useState(false);
   const [firstLoad, setFirstLoad] = useState(true);
@@ -140,6 +138,7 @@ export default function ThongKeHocSinh() {
   }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
 
   useEffect(() => {
+    console.log(pageState.namHoc);
     const fetchData = async () => {
       const params = await createSearchParams(pageState1);
       params.append('idNamThi', pageState.namHoc);
@@ -175,11 +174,6 @@ export default function ThongKeHocSinh() {
     setDisabledExport(false);
   };
 
-  // const handleHeDaoTaoChange = (event) => {
-  //   const selectedValue = event.target.value;
-  //   setPageState((old) => ({ ...old, heDaoTao: selectedValue }));
-  // };
-
   const handleNamHocChange = (event) => {
     const selectedValue = event.target.value;
     setPageState((old) => ({ ...old, namHoc: selectedValue }));
@@ -188,11 +182,9 @@ export default function ThongKeHocSinh() {
   const handleExport = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
-    // const heDaoTaoSelect = pageState.heDaoTao;
-    const selectedHDT = heDaoTao.find((hdt) => hdt.ma === heDaoTaoSelect);
     const namhocSelect = pageState.namHoc;
     const selectedNamHoc = namHoc.find((namhoc) => namhoc.id === namhocSelect);
-    await ExportExcel(selectedNamHoc.ten, selectedHDT.ten, pageState1.data);
+    await ExportExcel(selectedNamHoc.ten, pageState1.data);
     dispatch(setLoading(false));
   };
 
@@ -221,22 +213,6 @@ export default function ThongKeHocSinh() {
               </Select>
             </FormControl>
           </Grid>
-          {/* <Grid item lg={4} md={6} sm={6} xs={isXs ? 8 : 4}>
-            <FormControl fullWidth variant="outlined" size="small">
-              <InputLabel>{t('Hệ đào tạo')}</InputLabel>
-              <Select name="heDaoTao" value={pageState.heDaoTao} onChange={handleHeDaoTaoChange} label={t('Hệ đào tạo')}>
-                {heDaoTao && heDaoTao.length > 0 ? (
-                  heDaoTao.map((data) => (
-                    <MenuItem key={data.ma} value={data.ma}>
-                      {data.ten}
-                    </MenuItem>
-                  ))
-                ) : (
-                  <MenuItem value="">No data available</MenuItem>
-                )}
-              </Select>
-            </FormControl>
-          </Grid> */}
           <Grid item lg={2} md={3} sm={3} xs={isXs ? 6 : 2} minWidth={130}>
             <Button
               variant="contained"

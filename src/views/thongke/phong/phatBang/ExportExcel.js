@@ -1,6 +1,6 @@
 import ExcelJS from 'exceljs';
 
-const ExportExcel = async (namHoc, heDaoTao, data) => {
+const ExportExcel = async (namHoc, data) => {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet('Thống kê phát bằng');
 
@@ -14,11 +14,7 @@ const ExportExcel = async (namHoc, heDaoTao, data) => {
   time.value = `Năm học: ${namHoc}`;
   worksheet.mergeCells('A2:B2');
 
-  const donvi = worksheet.getCell('A3');
-  donvi.value = `Hệ đào tạo: ${heDaoTao}`;
-  worksheet.mergeCells('A3:B3');
-
-  const cell = worksheet.getCell('A4');
+  const cell = worksheet.getCell('A3');
   cell.value = '';
 
   // Adding the header row with bold formatting
@@ -54,20 +50,11 @@ const ExportExcel = async (namHoc, heDaoTao, data) => {
       })
     : '';
 
-  // const numberOfRows = data.length;
-
-  // const newRowNumber = numberOfRows + 5;
-  // const newRow = worksheet.getRow(newRowNumber);
-  // newRow.getCell(3).value = `Tổng số lượng bằng: ${total}`;
-  // newRow.getCell(3).alignment = { horizontal: 'left' };
-  // newRow.getCell(3).font = { italic: true, bold: true };
-
   // Adjust column widths
   worksheet.getColumn(1).width = 4; //stt
   worksheet.getColumn(2).width = 40; //ten truong
   worksheet.getColumn(3).width = 25; //chua phat
   worksheet.getColumn(4).width = 25; //da phat
-  // worksheet.getColumn(5).width = 30; //cccd
 
   // Create a blob and initiate download
   const buffer = await workbook.xlsx.writeBuffer();
