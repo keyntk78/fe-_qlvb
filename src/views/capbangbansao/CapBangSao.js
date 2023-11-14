@@ -1,12 +1,24 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { IconSearch } from '@tabler/icons';
-import { Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography, useMediaQuery } from '@mui/material';
+import { IconFileExport, IconSearch } from '@tabler/icons';
+import {
+  Button,
+  Chip,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Tooltip,
+  Typography,
+  useMediaQuery
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { openPopupSelector, reloadDataSelector, userLoginSelector } from 'store/selectors';
-import { setCapBangBanSao, setOpenPopup, setReloadData } from 'store/actions';
+import { setCapBangBanSao, setLoading, setOpenPopup, setReloadData } from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import { createSearchParams } from 'utils/createSearchParams';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
@@ -23,7 +35,12 @@ import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import XacNhanDaPhat from './XacNhanDaPhat';
 import ThuocYeuCauBanSao from './ThuocYeuCauBanSao';
 import LichSuCapBanSao from './LichSuCapBanSao';
-import { convertISODateToFormattedDate } from 'utils/formatDate';
+import { convertISODateToFormattedDate, formatDate } from 'utils/formatDate';
+import AnimateButton from 'components/extended/AnimateButton';
+import { GetCauHinhByIdDonVi } from 'services/sharedService';
+import { generateDocument } from './ExportWord';
+import { format } from 'date-fns';
+
 export default function CapBangBanSao() {
   const isXs = useMediaQuery('(max-width:800px)');
   const openPopup = useSelector(openPopupSelector);
@@ -43,6 +60,9 @@ export default function CapBangBanSao() {
   const localeText = useLocalText();
   const navigate = useNavigate();
   const [firstLoad, setFirstLoad] = useState(true);
+  const [dataExport, setDataExport] = useState([]);
+  const [dataConfig, setDataConfig] = useState([]);
+
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -290,6 +310,76 @@ export default function CapBangBanSao() {
     }
   }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const params = new URLSearchParams();
+      params.append('Order', 1);
+      params.append('OrderDir', 'ASC');
+      params.append('StartIndex', '0');
+      params.append('PageSize', 1000);
+      params.append('NgayDuyet', pageState.ngayDuyet == '' ? format(new Date(), 'yyyy-MM-dd') : pageState.ngayDuyet);
+      params.append('NguoiThucHien', user.username ? user.username : '');
+      params.append('TrangThai', '');
+      const response = await getSearchDonYeuCauDaDuyet(params);
+      const response1 = await GetCauHinhByIdDonVi(user.username ? user.username : '');
+      setDataExport(response.data.donYeuCaus);
+      setDataConfig(response1.data);
+    };
+    if (!firstLoad) {
+      fetchData();
+    } else {
+      setFirstLoad(false);
+    }
+  }, [pageState.search, search]);
+
+  const SoBanSao_word =
+    dataExport &&
+    dataExport.map((data, index) => ({
+      idx: index + 1,
+      hoTen_fm: data.hocSinh.hoTen,
+      ngaySinh_fm: convertISODateToFormattedDate(data.hocSinh.ngaySinh),
+      noiSinh_fm: data.hocSinh.noiSinh,
+      gioiTinh_fm: data.hocSinh.gioiTinh ? 'Nam' : 'Nữ',
+      danToc_fm: data.hocSinh.danToc,
+      xepLoai_fm: data.hocSinh.xepLoai,
+      soHieuVanBang_fm: data.hocSinh.soHieuVanBang,
+      soVaoSoBanSao_fm: data.soVaoSoBanSao
+    }));
+  const BienBanBanGiao_word =
+    dataExport &&
+    dataExport.map((data, index) => ({
+      idx: index + 1,
+      maDon_fm: data.ma,
+      hoTen_fm: data.hocSinh.hoTen,
+      hoTenNYC_fm: data.thongTinNguoiYeuCau.hoTenNguoiYeuCau,
+      cccd_fm: data.hocSinh.cccd,
+      soVaoSoBanSao_fm: data.soVaoSoBanSao,
+      soLuong_fm: data.soLuongBanSao
+    }));
+  const SoBanSao_cf = {
+    uyBanNhanDan: dataConfig.tenUyBanNhanDan || '',
+    coQuanCapBang: dataConfig.tenCoQuanCapBang || '',
+    diaPhuong: dataConfig.tenDiaPhuongCapBang || '',
+    ngayCap: pageState.ngayDuyet == '' ? formatDate(format(new Date(), 'yyyy-MM-dd')) : formatDate(pageState.ngayDuyet),
+    nguoiKy: dataConfig.hoTenNguoiKySoGoc || '',
+    nam: pageState.ngayDuyet == '' ? new Date(format(new Date(), 'yyyy-MM-dd')).getFullYear() : new Date(pageState.ngayDuyet).getFullYear(),
+    ngay: pageState.ngayDuyet == '' ? new Date(format(new Date(), 'yyyy-MM-dd')).getDate() : new Date(pageState.ngayDuyet).getDate(),
+    thang:
+      pageState.ngayDuyet == '' ? new Date(format(new Date(), 'yyyy-MM-dd')).getMonth() + 1 : new Date(pageState.ngayDuyet).getMonth() + 1
+  };
+  const handleExportWord = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    generateDocument(SoBanSao_word, SoBanSao_cf, true);
+    setLoading(false);
+  };
+  const handleExportBienBan = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    generateDocument(BienBanBanGiao_word, SoBanSao_cf, false);
+    setLoading(false);
+  };
+
   const handleTrangThaiChange = (event) => {
     const selectedValue = event.target.value;
     setPageState((old) => ({ ...old, trangThai: selectedValue }));
@@ -388,6 +478,40 @@ export default function CapBangBanSao() {
             >
               {t('button.search')}
             </Button>
+          </Grid>
+        </Grid>
+        <Grid item container justifyContent="flex-end" spacing={1} mb={1}>
+          <Grid item>
+            <AnimateButton>
+              <Tooltip title={t('button.export.word')} placement="bottom">
+                <Button
+                  fullWidth
+                  color="info"
+                  variant="contained"
+                  onClick={handleExportBienBan}
+                  startIcon={<IconFileExport />}
+                  disabled={dataExport && dataExport.length == 0}
+                >
+                  {t('Xuất biên bản bàn giao')}
+                </Button>
+              </Tooltip>
+            </AnimateButton>
+          </Grid>
+          <Grid item>
+            <AnimateButton>
+              <Tooltip title={t('button.export.word')} placement="bottom">
+                <Button
+                  fullWidth
+                  color="info"
+                  variant="contained"
+                  onClick={handleExportWord}
+                  startIcon={<IconFileExport />}
+                  disabled={dataExport && dataExport.length == 0}
+                >
+                  {t('Xuất sổ bản sao')}
+                </Button>
+              </Tooltip>
+            </AnimateButton>
           </Grid>
         </Grid>
         <DataGrid
