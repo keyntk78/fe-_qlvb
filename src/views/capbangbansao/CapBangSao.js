@@ -357,8 +357,8 @@ export default function CapBangBanSao() {
       soLuong_fm: data.soLuongBanSao
     }));
   const SoBanSao_cf = {
-    uyBanNhanDan: dataConfig.tenUyBanNhanDan || '',
-    coQuanCapBang: dataConfig.tenCoQuanCapBang || '',
+    uyBanNhanDan: dataConfig.tenUyBanNhanDan.toUpperCase() || '',
+    coQuanCapBang: dataConfig.tenCoQuanCapBang.toUpperCase() || '',
     diaPhuong: dataConfig.tenDiaPhuongCapBang || '',
     ngayCap: pageState.ngayDuyet == '' ? formatDate(format(new Date(), 'yyyy-MM-dd')) : formatDate(pageState.ngayDuyet),
     nguoiKy: dataConfig.hoTenNguoiKySoGoc || '',

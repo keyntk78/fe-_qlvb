@@ -49,7 +49,7 @@ export function generateDocument(hocsinhs, data, IsSoBanSao) {
       type: 'blob',
       mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     });
-    saveAs(out, 'sobansao.docx');
+    saveAs(out, IsSoBanSao ? 'sobansao.docx' : 'bienbanbangiao.docx');
   });
 }
 
