@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { IconArrowBack, IconCircleCheck, IconClick, IconDownload, IconPlus, IconSearch } from '@tabler/icons';
+import { IconArrowBack, IconCircleCheck, IconClick, IconDownload, IconFileExport, IconPlus, IconSearch } from '@tabler/icons';
 import { Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography, useMediaQuery } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -17,6 +17,7 @@ import {
   selectedDonvitruong,
   selectedHocsinh,
   setInfoHocSinh,
+  setLoading,
   setOpenPopup,
   setReloadData,
   setSelectedInfoMessage
@@ -47,6 +48,7 @@ import Duyet from './Duyet';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import ButtonSecondary from 'components/buttoncolor/ButtonSecondary';
+import ExportHocSinh from './ExportHocSinh';
 
 const trangThaiOptions = [{ value: '1', label: 'Chưa duyệt' }];
 
@@ -63,6 +65,7 @@ export default function HocSinh() {
   const [donvis, setDonvis] = useState([]);
   const [search, setSearch] = useState(false);
   const [firstLoad, setFirstLoad] = useState(true);
+  const [disabledExport, setDisabledExport] = useState(true);
   const reloadData = useSelector(reloadDataSelector);
   const dispatch = useDispatch();
   const localeText = useLocalText();
@@ -153,7 +156,16 @@ export default function HocSinh() {
     const selectedDanhmucInfo = dMTN.find((dmtn) => dmtn.id === danhmucSelect);
     dispatch(selectedDanhmuc(selectedDanhmucInfo));
     dispatch(selectedDonvitruong(selectedDonviInfo));
+    console.log(pageState.data.length);
   };
+
+  useEffect(() => {
+    if (pageState.data && pageState.data.length > 0) {
+      setDisabledExport(false);
+    } else {
+      setDisabledExport(true);
+    }
+  }, [pageState.data]);
 
   const buttonConfigurations = [
     {
@@ -298,12 +310,12 @@ export default function HocSinh() {
   }, [infoHocSinh, dMTN, donvis]);
 
   useEffect(() => {
-    if (pageState.DMTN && pageState.donVi) {
+    if (pageState.DMTN || pageState.donVi || pageState.cccd || pageState.hoTen || pageState.noiSinh || pageState.danToc) {
       setDisabledSearch(false);
     } else {
       setDisabledSearch(true);
     }
-  }, [pageState.DMTN, pageState.donVi]);
+  }, [pageState.DMTN, pageState.donVi, pageState.cccd, pageState.hoTen, pageState.noiSinh, pageState.danToc]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -382,6 +394,12 @@ export default function HocSinh() {
     setPageState((old) => ({ ...old, donVi: selectedValue }));
   };
 
+  const handleExport = async (e) => {
+    e.preventDefault();
+    dispatch(setLoading(true));
+    await ExportHocSinh(pageState.data);
+    dispatch(setLoading(false));
+  };
   const handleDanhMucChange = (event) => {
     const selectedValue = event.target.value;
     setPageState((old) => ({ ...old, DMTN: selectedValue }));
@@ -589,6 +607,9 @@ export default function HocSinh() {
           </Grid>
         </Grid>
         <Grid item container mb={1} justifyContent="flex-end" spacing={1}>
+          <Grid item>
+            <ButtonSuccess title={t('button.export.excel')} onClick={handleExport} icon={IconFileExport} disabled={disabledExport} />
+          </Grid>
           {selectedRowData.length !== 0 ? (
             <>
               <Grid item>
