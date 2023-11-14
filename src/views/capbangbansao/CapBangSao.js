@@ -23,6 +23,7 @@ import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import XacNhanDaPhat from './XacNhanDaPhat';
 import ThuocYeuCauBanSao from './ThuocYeuCauBanSao';
 import LichSuCapBanSao from './LichSuCapBanSao';
+import { convertISODateToFormattedDate } from 'utils/formatDate';
 export default function CapBangBanSao() {
   const isXs = useMediaQuery('(max-width:800px)');
   const openPopup = useSelector(openPopupSelector);
@@ -53,6 +54,8 @@ export default function CapBangBanSao() {
     cccd: '',
     Ma: '',
     hoTen: '',
+    soDienThoaiNguoiYeuCau: '',
+    ngayDuyet: '',
     trangThai: ''
   });
   const user = useSelector(userLoginSelector);
@@ -179,10 +182,16 @@ export default function CapBangBanSao() {
       )
     },
     {
+      field: 'NgayDuyet_fm',
+      headerName: t('Ngày duyệt'),
+      flex: 1,
+      minWidth: 100
+    },
+    {
       field: 'HoTen',
       headerName: t('Họ Tên'),
       flex: 1.8,
-      minWidth: 180
+      minWidth: 150
     },
     {
       field: 'CCCD',
@@ -243,6 +252,8 @@ export default function CapBangBanSao() {
       params.append('CCCD', pageState.cccd);
       params.append('HoTen', pageState.hoTen);
       params.append('NguoiThucHien', user ? user.username : '');
+      params.append('SoDienThoaiNguoiYeuCau', pageState.soDienThoaiNguoiYeuCau);
+      params.append('NgayDuyet', pageState.ngayDuyet);
 
       const response = await getSearchDonYeuCauDaDuyet(params);
       const check = handleResponseStatus(response, navigate);
@@ -256,6 +267,7 @@ export default function CapBangBanSao() {
           SoVaoSoBanSao: row.soVaoSoBanSao,
           SoLuong: row.soLuongBanSao,
           MaDonYeuCau: row.ma,
+          NgayDuyet_fm: convertISODateToFormattedDate(row.ngayDuyet),
           trangThai_fm:
             row.trangThai == 1 ? t('Chưa in bản sao') : row.trangThai == 2 ? t('Đã in bản sao') : row.trangThai == 3 ? t('Đã phát') : '',
           ...row
@@ -337,6 +349,33 @@ export default function CapBangBanSao() {
               </Select>
             </FormControl>
           </Grid>
+          <Grid item lg={3} container md={6} sm={6} xs={isXs ? 6 : 2}>
+            <TextField
+              fullWidth
+              id="outlined-basic"
+              label={t('Số điện thoại')}
+              variant="outlined"
+              size="small"
+              onChange={(e) => setPageState((old) => ({ ...old, soDienThoaiNguoiYeuCau: e.target.value }))}
+              value={pageState.soDienThoaiNguoiYeuCau}
+            />
+          </Grid>
+          <Grid item lg={3} container md={6} sm={6} xs={isXs ? 6 : 2}>
+            <FormControl fullWidth variant="outlined">
+              <TextField
+                size="small"
+                name="ngayDuyet"
+                type="date"
+                label={t('Ngày duyệt')}
+                onChange={(e) => setPageState((old) => ({ ...old, ngayDuyet: e.target.value }))}
+                value={pageState.ngayDuyet}
+                InputLabelProps={{
+                  shrink: true
+                }}
+              />
+            </FormControl>
+          </Grid>
+
           <Grid item lg={2} md={6} sm={6} xs={isXs ? 6 : 4}>
             <Button
               variant="contained"
