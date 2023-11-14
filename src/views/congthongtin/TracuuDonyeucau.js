@@ -1,6 +1,19 @@
-import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography, useMediaQuery } from '@mui/material';
+import {
+  Button,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Select,
+  TextField,
+  Typography,
+  useMediaQuery
+} from '@mui/material';
 import { Box, Container, useTheme } from '@mui/system';
-import { IconSearch } from '@tabler/icons';
+import { IconSearch, IconZoomReset } from '@tabler/icons';
 import { useEffect, useState } from 'react';
 import i18n from 'i18n';
 
@@ -20,6 +33,7 @@ import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { setReloadData } from 'store/actions';
 import BackToTop from 'components/scroll/BackToTop';
+import FormControlComponent from 'components/form/FormControlComponent ';
 
 export default function TracuuDonyeucau() {
   const showAlertLogin = useSelector(showAlertSelector);
@@ -34,6 +48,8 @@ export default function TracuuDonyeucau() {
   const theme = useTheme();
   const [namHoc, setNamHoc] = useState([]);
   const [hoTen, setHoTen] = useState('');
+  const [maDon, setMaDon] = useState('');
+  const [isMaDon, setIsMaDon] = useState(true);
   const [cccd, setCCCD] = useState('');
   const [error, setError] = useState('');
   const [ngaSinh, setNgaySinh] = useState('');
@@ -57,6 +73,21 @@ export default function TracuuDonyeucau() {
     } else {
       setIsChecked(false);
     }
+  };
+
+  const handleChaneMaDon = () => {
+    setIsMaDon(!isMaDon);
+    setHoTen('');
+    setCCCD('');
+    setNgaySinh('');
+    setMaDon('');
+  };
+
+  const handleReset = () => {
+    setHoTen('');
+    setCCCD('');
+    setNgaySinh('');
+    setMaDon('');
   };
 
   const columns = [
@@ -121,13 +152,18 @@ export default function TracuuDonyeucau() {
   };
   const handleSubmit = async () => {
     setError('');
-    if (isChecked === true && namHoc && hoTen && ngaSinh) {
+    if (isChecked === true && (maDon || (namHoc && hoTen && ngaSinh))) {
       setShowmain(true);
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
-      params.append('Cccd', cccd);
-      params.append('HoTen', hoTen);
-      params.append('NgaySinh', ngaSinh);
+      if (maDon != '') {
+        params.append('Ma', maDon);
+      } else {
+        params.append('Cccd', cccd);
+        params.append('HoTen', hoTen);
+        params.append('NgaySinh', ngaSinh);
+      }
+
       const response = await getSearchDonYeuCau(selectNamHoc, params);
 
       const check = handleResponseStatus(response, navigate);
@@ -201,67 +237,99 @@ export default function TracuuDonyeucau() {
             <Typography paddingLeft={4} variant="body1" sx={{ lineHeight: '1.5' }}>
               {t('ghichuvbcc2')}
             </Typography>
-            <Grid item container xs={12} justifyContent={'center'} spacing={2} mt={2}>
-              <Grid item xs={12} sm={6} md={4} lg={2}>
-                <FormControl fullWidth variant="outlined">
-                  <InputLabel>{t('namtn.title')}</InputLabel>
-                  <Select size="small" value={selectNamHoc} onChange={handleNamHocChange} label={t('namtn.title')}>
-                    {namHoc && namHoc.length > 0 ? (
-                      namHoc.map((data) => (
-                        <MenuItem key={data.id} value={data.id}>
-                          {data.ten}
-                        </MenuItem>
-                      ))
-                    ) : (
-                      <MenuItem value="nodata">{t('noRowsLabel')}</MenuItem>
-                    )}
-                  </Select>
-                </FormControl>
+            <Grid item container xs={12} justifyContent={'end'} mt={1}>
+              <Grid item xs={6}>
+                <FormControlComponent xsLabel={0} xsForm={12}>
+                  <FormControl fullWidth variant="outlined">
+                    <RadioGroup value={isMaDon} onChange={handleChaneMaDon}>
+                      <Grid container>
+                        <FormControlLabel size="small" value="true" control={<Radio size="small" />} label="Tìm theo mã đơn" />
+                        <FormControlLabel size="small" value="false" control={<Radio size="small" />} label="Tìm theo họ tên" />
+                      </Grid>
+                    </RadioGroup>
+                  </FormControl>
+                </FormControlComponent>
               </Grid>
-              <Grid item container xs={12} sm={6} md={4} lg={3.5}>
-                <TextField
-                  fullWidth
-                  required
-                  id="outlined-basic"
-                  label={t('hocsinh.field.fullname')}
-                  variant="outlined"
-                  size="small"
-                  onChange={(e) => setHoTen(e.target.value)}
-                  value={hoTen}
-                />
-              </Grid>
-              <Grid item container xs={12} sm={6} md={4} lg={3}>
-                <TextField
-                  style={{ borderRadius: '0' }}
-                  fullWidth
-                  required
-                  id="outlined-basic"
-                  type="date"
-                  label={t('hocsinh.field.bdate')}
-                  variant="outlined"
-                  size="small"
-                  onChange={(e) => setNgaySinh(e.target.value)}
-                  value={ngaSinh}
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                  inputProps={{
-                    max: new Date().toISOString().split('T')[0]
-                  }}
-                />
-              </Grid>
-              <Grid item container xs={12} sm={6} md={4} lg={2.5}>
-                <TextField
-                  fullWidth
-                  required
-                  id="outlined-basic"
-                  label="CCCD"
-                  variant="outlined"
-                  size="small"
-                  onChange={(e) => setCCCD(e.target.value)}
-                  value={cccd}
-                />
-              </Grid>
+            </Grid>
+            <Grid item container xs={12} justifyContent={'center'} spacing={2} mt={1}>
+              {isMaDon ? (
+                <Grid item container xs={12} sm={6} md={6} lg={6}>
+                  <TextField
+                    fullWidth
+                    required
+                    id="outlined-basic"
+                    label={t('hocsinh.field.madon')}
+                    variant="outlined"
+                    size="small"
+                    onChange={(e) => setMaDon(e.target.value)}
+                    value={maDon}
+                  />
+                </Grid>
+              ) : (
+                <>
+                  <Grid item xs={12} sm={6} md={4} lg={2}>
+                    <FormControl fullWidth variant="outlined">
+                      <InputLabel>{t('namtn.title')}</InputLabel>
+                      <Select size="small" value={selectNamHoc} onChange={handleNamHocChange} label={t('namtn.title')}>
+                        {namHoc && namHoc.length > 0 ? (
+                          namHoc.map((data) => (
+                            <MenuItem key={data.id} value={data.id}>
+                              {data.ten}
+                            </MenuItem>
+                          ))
+                        ) : (
+                          <MenuItem value="nodata">{t('noRowsLabel')}</MenuItem>
+                        )}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item container xs={12} sm={6} md={4} lg={3.5}>
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-basic"
+                      label={t('hocsinh.field.fullname')}
+                      variant="outlined"
+                      size="small"
+                      onChange={(e) => setHoTen(e.target.value)}
+                      value={hoTen}
+                    />
+                  </Grid>
+                  <Grid item container xs={12} sm={6} md={4} lg={3}>
+                    <TextField
+                      style={{ borderRadius: '0' }}
+                      fullWidth
+                      required
+                      id="outlined-basic"
+                      type="date"
+                      label={t('hocsinh.field.bdate')}
+                      variant="outlined"
+                      size="small"
+                      onChange={(e) => setNgaySinh(e.target.value)}
+                      value={ngaSinh}
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                      inputProps={{
+                        max: new Date().toISOString().split('T')[0]
+                      }}
+                    />
+                  </Grid>
+                  <Grid item container xs={12} sm={6} md={4} lg={2.5}>
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-basic"
+                      label="CCCD"
+                      variant="outlined"
+                      size="small"
+                      onChange={(e) => setCCCD(e.target.value)}
+                      value={cccd}
+                    />
+                  </Grid>
+                </>
+              )}
             </Grid>
 
             <Grid item container xs={12} justifyContent="center" alignItems="center" mt={2}>
@@ -284,8 +352,8 @@ export default function TracuuDonyeucau() {
                 </Typography>
               </Grid>
             </Grid>
-            <Grid item container xs={12} justifyContent={'center'}>
-              <Grid item xs={12} sm={4} md={3} lg={2}>
+            <Grid item container xs={12} justifyContent={'center'} spacing={2}>
+              <Grid item xs={6} sm={4} md={3} lg={3}>
                 <Button
                   variant="contained"
                   title={t('button.search')}
@@ -296,6 +364,19 @@ export default function TracuuDonyeucau() {
                   startIcon={<IconSearch />}
                 >
                   {t('button.search')}
+                </Button>
+              </Grid>
+              <Grid item xs={6} sm={4} md={3} lg={3}>
+                <Button
+                  variant="contained"
+                  title={t('button.reset')}
+                  fullWidth
+                  onClick={handleReset}
+                  color="inherit"
+                  sx={{ marginTop: '2px' }}
+                  startIcon={<IconZoomReset />}
+                >
+                  {t('button.reset')}
                 </Button>
               </Grid>
             </Grid>
