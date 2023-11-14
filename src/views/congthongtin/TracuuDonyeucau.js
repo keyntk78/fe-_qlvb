@@ -51,7 +51,7 @@ export default function TracuuDonyeucau() {
     pageSize: 25
   });
   const handleChange = (value) => {
-    if (value && namHoc && hoTen && ngaSinh) {
+    if (value) {
       setIsChecked(true);
       setError('');
     } else {
@@ -121,7 +121,7 @@ export default function TracuuDonyeucau() {
   };
   const handleSubmit = async () => {
     setError('');
-    if (isChecked === true) {
+    if (isChecked === true && namHoc && hoTen && ngaSinh) {
       setShowmain(true);
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
