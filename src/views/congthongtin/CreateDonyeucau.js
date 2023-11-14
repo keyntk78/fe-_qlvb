@@ -100,7 +100,9 @@ const CreateDonyeucau = () => {
         if (addDonyeucau.isSuccess == false) {
           dispatch(showAlert(new Date().getTime().toString(), 'error', addDonyeucau.message.toString()));
         } else {
-          navigate('/tracuu-donyeucau');
+          formik.resetForm();
+          formik.values.FileDonYeuCau = '';
+          formik.values.FileHinhAnhCCCD = '';
           dispatch(showAlert(new Date().getTime().toString(), 'success', addDonyeucau.message.toString()));
         }
       } catch (error) {

@@ -1,6 +1,6 @@
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography, useMediaQuery } from '@mui/material';
 import { Box, Container, useTheme } from '@mui/system';
-import { IconSearch } from '@tabler/icons';
+import { IconSearch, IconZoomReset } from '@tabler/icons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18n';
@@ -56,7 +56,7 @@ export default function TracuuVBCC() {
   });
 
   const handleChange = (value) => {
-    if (value && namHoc && hoTen && ngaSinh) {
+    if (value) {
       setIsChecked(true);
     } else {
       setIsChecked(false);
@@ -136,7 +136,7 @@ export default function TracuuVBCC() {
 
   const handleSubmit = async () => {
     setError('');
-    if (isChecked === true) {
+    if (isChecked === true && namHoc && hoTen && ngaSinh) {
       setShowmain(true);
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
@@ -170,6 +170,13 @@ export default function TracuuVBCC() {
     } else {
       ('');
     }
+  };
+
+  const handleReset = () => {
+    setHoTen('');
+    setCCCD('');
+    setNgaySinh('');
+    setSoHieuVanbang('');
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -304,8 +311,8 @@ export default function TracuuVBCC() {
                 </Typography>
               </Grid>
             </Grid>
-            <Grid item container xs={12} justifyContent={'center'}>
-              <Grid item xs={12} sm={4} md={3} lg={2}>
+            <Grid item container xs={12} justifyContent={'center'} spacing={2}>
+              <Grid item xs={6} sm={4} md={3} lg={3}>
                 <Button
                   variant="contained"
                   title={t('button.search')}
@@ -316,6 +323,19 @@ export default function TracuuVBCC() {
                   startIcon={<IconSearch />}
                 >
                   {t('button.search')}
+                </Button>
+              </Grid>
+              <Grid item xs={6} sm={4} md={3} lg={3}>
+                <Button
+                  variant="contained"
+                  title={t('button.reset')}
+                  fullWidth
+                  onClick={handleReset}
+                  color="inherit"
+                  sx={{ marginTop: '2px' }}
+                  startIcon={<IconZoomReset />}
+                >
+                  {t('button.reset')}
                 </Button>
               </Grid>
             </Grid>
