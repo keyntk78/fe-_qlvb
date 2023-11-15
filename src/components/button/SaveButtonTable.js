@@ -12,8 +12,8 @@ const SaveButtonTable = ({ onClick }) => {
       <Grid item xs={12}>
         <AnimateButton>
           <Tooltip title={t('button.save')} placement="bottom">
-            <Button color="info" variant="contained" size="medium" onClick={onClick}>
-              <IconDeviceFloppy /> {t('button.save')}
+            <Button color="info" variant="contained" size="medium" onClick={onClick} startIcon={<IconDeviceFloppy />}>
+              {t('button.save')}
             </Button>
           </Tooltip>
         </AnimateButton>

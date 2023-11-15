@@ -12,7 +12,8 @@ const config = {
 
   secretKey: 'mytopsecretkeywithatleast32characterslong',
 
-  urlImages: 'https://api.quanlyvanbang.cenit.vn'
+  // urlImages: 'https://api.quanlyvanbang.cenit.vn'
+  urlImages: 'http://localhost:5203'
 };
 
 export default config;

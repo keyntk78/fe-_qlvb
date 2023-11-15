@@ -5,14 +5,16 @@ import FormControlComponent from 'components/form/FormControlComponent ';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { ImportHocSinh } from 'services/nguoihoctotnghiepService';
-import { donviSelector, openPopupSelector, userLoginSelector } from 'store/selectors';
-import { setLoading, setOpenPopup, showAlert } from 'store/actions';
+import { donviSelector, openPopupSelector, openSubPopupSelector, userLoginSelector } from 'store/selectors';
+import { setLoading, setOpenPopup, setOpenSubPopup, showAlert } from 'store/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { IconFilePlus } from '@tabler/icons';
+import { IconEye, IconFilePlus } from '@tabler/icons';
 import { useTranslation } from 'react-i18next';
 import { getAllDanhmucTN } from 'services/sharedService';
 import { getAllKhoathiByDMTN } from 'services/khoathiService';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
+import Popup from 'components/controls/popup';
+import NotificationForm from 'components/form/NotificationForm';
 
 function Import() {
   const isXs = useMediaQuery('(max-width:600px)');
@@ -25,8 +27,10 @@ function Import() {
   const donvi = useSelector(donviSelector);
   const user = useSelector(userLoginSelector);
   const openPopup = useSelector(openPopupSelector);
+  const openSubPopup = useSelector(openSubPopupSelector);
   const [selectedFileName, setSelectedFileName] = useState('');
   const [selectDanhmuc, setSelectDanhmuc] = useState('');
+  const [data, setData] = useState('');
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -85,10 +89,12 @@ function Import() {
       values.append('fileExcel', selectFile);
       const Import = await ImportHocSinh(values);
       if (Import.isSuccess == false) {
-        dispatch(showAlert(new Date().getTime().toString(), 'error', Import.message.toString()));
+        dispatch(setOpenSubPopup(true));
+        setData(Import);
       } else {
+        setData(Import);
+        dispatch(setOpenSubPopup(true));
         dispatch(setOpenPopup(false));
-        dispatch(showAlert(new Date().getTime().toString(), 'success', Import.message.toString()));
       }
     } catch (error) {
       console.error('error' + error);
@@ -179,6 +185,16 @@ function Import() {
           </Grid>
         </Grid>
       </Grid>
+      <Popup
+        title="Kết quả import"
+        type={'subpopup'}
+        openPopup={openSubPopup}
+        maxWidth={'sm'}
+        icon={IconEye}
+        bgcolor={data.isSuccess ? '#00B835' : '#F44336'}
+      >
+        {data && <NotificationForm message={data.message} type={'subpopup'} success={data.isSuccess} url={data.data.path} />}
+      </Popup>
     </form>
   );
 }

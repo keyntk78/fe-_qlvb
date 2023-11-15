@@ -12,8 +12,8 @@ const SaveButton = () => {
       <Grid item xs={12}>
         <AnimateButton>
           <Tooltip title={t('button.save')} placement="bottom">
-            <Button type='submit' color="info" variant="contained" size="medium">
-              <IconDeviceFloppy /> {t('button.save')}
+            <Button type="submit" color="info" variant="contained" size="medium" startIcon={<IconDeviceFloppy />}>
+              {t('button.save')}
             </Button>
           </Tooltip>
         </AnimateButton>

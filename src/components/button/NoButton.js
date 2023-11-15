@@ -25,8 +25,8 @@ const NoButton = ({ color, type }) => {
       <Grid item xs={12}>
         <AnimateButton>
           <Tooltip title={t('button.no')} placement="bottom">
-            <Button color={color || 'info'} variant="contained" size="medium" onClick={handleCancelClick}>
-              <IconBan /> {t('button.no')}
+            <Button color={color || 'info'} variant="contained" size="medium" onClick={handleCancelClick} startIcon={<IconBan />}>
+              {t('button.no')}
             </Button>
           </Tooltip>
         </AnimateButton>

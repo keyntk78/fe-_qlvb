@@ -27,8 +27,8 @@ const ResetButton = ({ type }) => {
       <Grid item xs={12}>
         <AnimateButton>
           <Tooltip title={t('button.exit')} placement="bottom">
-            <Button color="error" variant="contained" size="medium" onClick={handleCancelClick}>
-              <IconX /> {t('button.exit')}
+            <Button color="error" variant="contained" size="medium" onClick={handleCancelClick} startIcon={<IconX />}>
+              {t('button.exit')}
             </Button>
           </Tooltip>
         </AnimateButton>

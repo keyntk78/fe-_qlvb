@@ -240,7 +240,7 @@ function Import() {
         </Grid>
       </Grid>
       <Popup title={data.title} type={'subpopup'} openPopup={openSubPopup} maxWidth={'sm'} icon={IconEye} bgcolor={data.color}>
-        <NotificationForm message={data.message} type={'subpopup'} error={data.error} submessage={data.submessage} url={data.url} />
+        <NotificationForm message={data.message} type={'subpopup'} success={data.error} submessage={data.submessage} url={data.url} />
       </Popup>
     </form>
   );

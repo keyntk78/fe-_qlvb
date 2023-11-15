@@ -12,8 +12,8 @@ const YesButton = ({ handleClick, color }) => {
       <Grid item xs={12}>
         <AnimateButton>
           <Tooltip title={t('button.yes')} placement="bottom">
-            <Button color={color || 'error'} variant="contained" size="medium" onClick={handleClick}>
-              <IconCheck /> {t('button.yes')}
+            <Button color={color || 'error'} variant="contained" size="medium" onClick={handleClick} startIcon={<IconCheck />}>
+              {t('button.yes')}
             </Button>
           </Tooltip>
         </AnimateButton>
