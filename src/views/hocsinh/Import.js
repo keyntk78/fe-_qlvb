@@ -31,6 +31,7 @@ function Import() {
   const openSubPopup = useSelector(openSubPopupSelector);
   const [selectedFileName, setSelectedFileName] = useState('');
   const [selectDanhmuc, setSelectDanhmuc] = useState('');
+  const [data, setData] = useState('');
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -73,15 +74,6 @@ function Import() {
     e.target.value = null;
   };
 
-  const [data, setDate] = useState({
-    message: '',
-    error: false,
-    submessage: '',
-    url: '',
-    title: 'Thông tin kết quả import',
-    color: ''
-  });
-
   const submitFile = async (e) => {
     e.preventDefault();
     if (!selectFile) {
@@ -102,23 +94,11 @@ function Import() {
       const Import = await ImportHocSinhByPhong(values);
       if (Import.isSuccess == false) {
         dispatch(setOpenSubPopup(true));
-        setDate((old) => ({
-          ...old,
-          message: 'Lỗi ABCD',
-          error: true,
-          url: '/abcd',
-          color: '#F44336'
-        }));
+        setData(Import);
         // dispatch(showAlert(new Date().getTime().toString(), 'error', Import.message.toString()));
       } else {
         dispatch(setOpenSubPopup(true));
-        setDate((old) => ({
-          ...old,
-          message: 'Thành công',
-          error: false,
-          url: '/abcd',
-          color: '#00B835'
-        }));
+        setData(Import);
         dispatch(setOpenPopup(false));
         // dispatch(showAlert(new Date().getTime().toString(), 'success', Import.message.toString()));
       }
@@ -239,8 +219,22 @@ function Import() {
           </Grid>
         </Grid>
       </Grid>
-      <Popup title={data.title} type={'subpopup'} openPopup={openSubPopup} maxWidth={'sm'} icon={IconEye} bgcolor={data.color}>
-        <NotificationForm message={data.message} type={'subpopup'} success={data.error} submessage={data.submessage} url={data.url} />
+      <Popup
+        title="Kết quả import"
+        type={'subpopup'}
+        openPopup={openSubPopup}
+        maxWidth={'sm'}
+        icon={IconEye}
+        bgcolor={data.isSuccess ? '#00B835' : '#F44336'}
+      >
+        {data && (
+          <NotificationForm
+            message={data.message}
+            type={'subpopup'}
+            success={data.isSuccess}
+            url={data.data && data.data.path ? data.data.path : ''}
+          />
+        )}
       </Popup>
     </form>
   );

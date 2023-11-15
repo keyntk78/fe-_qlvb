@@ -193,7 +193,14 @@ function Import() {
         icon={IconEye}
         bgcolor={data.isSuccess ? '#00B835' : '#F44336'}
       >
-        {data && <NotificationForm message={data.message} type={'subpopup'} success={data.isSuccess} url={data.data.path} />}
+        {data && (
+          <NotificationForm
+            message={data.message}
+            type={'subpopup'}
+            success={data.isSuccess}
+            url={data.data && data.data.path ? data.data.path : ''}
+          />
+        )}
       </Popup>
     </form>
   );
