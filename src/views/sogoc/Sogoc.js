@@ -48,6 +48,7 @@ import FileMau from '../FileMau/FileMau_ThemDanhSachVanBang.xlsx';
 import { getAllKhoathiByDMTN } from 'services/khoathiService';
 import PhuLucSoGoc from 'views/phulucsogoc/PhuLucSoGoc';
 import Import from 'views/ImportDanhSachVanBang/Import';
+import GroupButtons from 'components/button/GroupButton';
 export default function SoGoc() {
   const isXs = useMediaQuery('(max-width:600px)');
   const { t } = useTranslation();
@@ -123,8 +124,7 @@ export default function SoGoc() {
     const selectedKhoaThiInfo = khoaThis.find((khoathi) => khoathi.id === khoaThiSelect);
     setSelectKhoaThi(selectedKhoaThiInfo.id);
   };
-  const handleExport = async (e) => {
-    e.preventDefault();
+  const handleExport = async () => {
     dispatch(setLoading(true));
     await ExportExcel(formik, pageState1, selectDanhmuc, selectDonvi, selectKhoaThi, donvi, 'sogoc');
     dispatch(setLoading(false));
@@ -136,8 +136,7 @@ export default function SoGoc() {
     dispatch(setOpenPopup(true));
   };
 
-  const handleExportWord = async (e) => {
-    e.preventDefault();
+  const handleExportWord = async () => {
     setLoading(true);
     generateDocument(pageState1.data, additionalData, donvi, 'sogoc');
     setLoading(false);
@@ -153,6 +152,16 @@ export default function SoGoc() {
     setPageState((old) => ({ ...old, pageSize: newPageSize }));
   };
 
+  const xuatTep = [
+    {
+      type: 'exportExcel',
+      handleClick: handleExport
+    },
+    {
+      type: 'exportWord',
+      handleClick: handleExportWord
+    }
+  ];
   useEffect(() => {
     const fetchDataDL = async () => {
       dispatch(setLoading(true));
@@ -351,16 +360,7 @@ export default function SoGoc() {
           ) : (
             <Grid container justifyContent="flex-end" spacing={1}>
               <Grid item>
-                <ButtonSuccess title={t('button.export.excel')} onClick={handleExport} icon={IconFileExport} />
-              </Grid>
-              <Grid item>
-                <AnimateButton>
-                  <Tooltip title={t('button.export.word')} placement="bottom">
-                    <Button fullWidth color="info" variant="contained" onClick={handleExportWord} startIcon={<IconFileExport />}>
-                      {t('button.export.word')}
-                    </Button>
-                  </Tooltip>
-                </AnimateButton>
+                <GroupButtons buttonConfigurations={xuatTep} icon={IconFileExport} title={t('button.export')} />
               </Grid>
 
               <Grid item>
@@ -383,16 +383,7 @@ export default function SoGoc() {
         {isXs ? (
           <Grid container justifyContent="center" spacing={1}>
             <Grid item>
-              <ButtonSuccess title={t('Xuất file excel')} onClick={handleExport} icon={IconFileExport} />
-            </Grid>
-            <Grid item>
-              <AnimateButton>
-                <Tooltip title={t('Xuất file word')} placement="bottom">
-                  <Button fullWidth color="info" variant="contained" onClick={handleExportWord} startIcon={<IconFileExport />}>
-                    {t('Xuất file word')}
-                  </Button>
-                </Tooltip>
-              </AnimateButton>
+              <GroupButtons buttonConfigurations={xuatTep} icon={IconFileExport} title={t('button.export')} />
             </Grid>
             <Grid item>
               <ButtonSecondary

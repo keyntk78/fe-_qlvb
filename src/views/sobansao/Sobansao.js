@@ -16,7 +16,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Tooltip,
+  // Tooltip,
   Typography,
   useMediaQuery
 } from '@mui/material';
@@ -33,14 +33,15 @@ import MainCard from 'components/cards/MainCard';
 import { getAllDanhmucTN } from 'services/sharedService';
 import BackToTop from 'components/scroll/BackToTop';
 import { styled } from '@mui/system';
-import AnimateButton from 'components/extended/AnimateButton';
+// import AnimateButton from 'components/extended/AnimateButton';
 import { useFormik } from 'formik';
 import { generateDocument } from './ExportWord';
 import ExportExcel from './ExportExcel';
 import { GetHocSinhTheoSoBanSao } from 'services/sobansaoService';
-import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
+// import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { getAllTruong } from 'services/sharedService';
 import { getAllKhoathiByDMTN } from 'services/khoathiService';
+import GroupButtons from 'components/button/GroupButton';
 
 export default function SoBanSao() {
   const isXs = useMediaQuery('(max-width:600px)');
@@ -114,19 +115,31 @@ export default function SoBanSao() {
     setSelectKhoaThi(selectedKhoaThiInfo.id);
   };
 
-  const handleExport = async (e) => {
-    e.preventDefault();
+  const handleExport = async () => {
+    // e.preventDefault();
     dispatch(setLoading(true));
     await ExportExcel(formik, pageState1, selectDanhmuc, selectDonvi, selectKhoaThi, donvi);
     dispatch(setLoading(false));
   };
 
-  const handleExportWord = async (e) => {
-    e.preventDefault();
+  const handleExportWord = async () => {
+    // e.preventDefault();
     setLoading(true);
     generateDocument(pageState1.data, additionalData, donvi);
     setLoading(false);
+    console.log('123');
   };
+
+  const xuatTep = [
+    {
+      type: 'exportExcel',
+      handleClick: handleExport
+    },
+    {
+      type: 'exportWord',
+      handleClick: handleExportWord
+    }
+  ];
 
   const handleChange = (e, value) => {
     e.preventDefault();
@@ -343,44 +356,11 @@ export default function SoBanSao() {
       <MainCard
         title={t('sobansao.title')}
         secondary={
-          isXs ? (
-            ''
-          ) : (
-            <Grid container justifyContent="flex-end" spacing={1}>
-              <Grid item>
-                <ButtonSuccess title={t('button.export.excel')} onClick={handleExport} icon={IconFileExport} />
-              </Grid>
-              <Grid item>
-                <AnimateButton>
-                  <Tooltip title={t('button.export.word')} placement="bottom">
-                    <Button fullWidth color="info" variant="contained" onClick={handleExportWord} startIcon={<IconFileExport />}>
-                      {t('button.export.word')}
-                    </Button>
-                  </Tooltip>
-                </AnimateButton>
-              </Grid>
-            </Grid>
-          )
+          <Grid item>
+            <GroupButtons buttonConfigurations={xuatTep} icon={IconFileExport} title={t('button.export')} />
+          </Grid>
         }
       >
-        {isXs ? (
-          <Grid container justifyContent="flex-end" spacing={1}>
-            <Grid item>
-              <ButtonSuccess title={t('Xuất file excel')} onClick={handleExport} icon={IconFileExport} />
-            </Grid>
-            <Grid item>
-              <AnimateButton>
-                <Tooltip title={t('Xuất file word')} placement="bottom">
-                  <Button fullWidth color="info" variant="contained" onClick={handleExportWord} startIcon={<IconFileExport />}>
-                    {t('Xuất file word')}
-                  </Button>
-                </Tooltip>
-              </AnimateButton>
-            </Grid>
-          </Grid>
-        ) : (
-          ''
-        )}
         <Grid item container mb={1} spacing={1} mt={1} justifyContent={'center'}>
           <Grid item xs={isXs ? 12 : 4}>
             <FormControl fullWidth variant="outlined">

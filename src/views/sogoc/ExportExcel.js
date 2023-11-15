@@ -27,7 +27,7 @@ const ExportExcel = async (formik, pageState, danhmuc, donvi, khoathi, donviql, 
     worksheet.mergeCells('D1:L1');
 
     const quyetdinh = worksheet.getCell('A4');
-    quyetdinh.value = `Quyết định công nhận tốt nghiệp số ${danhmuc.soQuyetDinh}`;
+    quyetdinh.value = `Quyết định công nhận tốt nghiệp số ${formik.values.QuyetDinh}`;
     worksheet.mergeCells('A4:E4');
 
     const namtn = worksheet.getCell('I4');
@@ -128,7 +128,7 @@ const ExportExcel = async (formik, pageState, danhmuc, donvi, khoathi, donviql, 
     worksheet.mergeCells('D1:L1');
 
     const quyetdinh = worksheet.getCell('A4');
-    quyetdinh.value = `Quyết định công nhận tốt nghiệp số ${danhmuc.soQuyetDinh}`;
+    quyetdinh.value = `Quyết định công nhận tốt nghiệp số ${formik.values.QuyetDinh}`;
     worksheet.mergeCells('A4:E4');
 
     const kythi = worksheet.getCell('A5');
