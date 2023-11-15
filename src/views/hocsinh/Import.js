@@ -5,7 +5,7 @@ import FormControlComponent from 'components/form/FormControlComponent ';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { openPopupSelector, userLoginSelector } from 'store/selectors';
-import { setLoading, setOpenPopup, showAlert } from 'store/actions';
+import { setLoading, setOpenPopup, setOpenSubPopup, showAlert } from 'store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { IconFilePlus } from '@tabler/icons';
 import { useTranslation } from 'react-i18next';
@@ -70,6 +70,13 @@ function Import() {
     e.target.value = null;
   };
 
+  const [data, setDate] = useState({
+    message: '',
+    error: false,
+    submessage: '',
+    url: ''
+  });
+
   const submitFile = async (e) => {
     e.preventDefault();
     if (!selectFile) {
@@ -89,10 +96,24 @@ function Import() {
       values.append('fileExcel', selectFile);
       const Import = await ImportHocSinhByPhong(values);
       if (Import.isSuccess == false) {
-        dispatch(showAlert(new Date().getTime().toString(), 'error', Import.message.toString()));
+        dispatch(setOpenSubPopup(true));
+        setPageState((old) => ({
+          ...old,
+          message: 'Lỗi ABCD',
+          error: true,
+          url: '/abcd'
+        }));
+        // dispatch(showAlert(new Date().getTime().toString(), 'error', Import.message.toString()));
       } else {
+        dispatch(setOpenSubPopup(true));
+        setPageState((old) => ({
+          ...old,
+          message: 'Thành công',
+          error: false,
+          url: '/abcd'
+        }));
         dispatch(setOpenPopup(false));
-        dispatch(showAlert(new Date().getTime().toString(), 'success', Import.message.toString()));
+        // dispatch(showAlert(new Date().getTime().toString(), 'success', Import.message.toString()));
       }
     } catch (error) {
       console.error('error' + error);
@@ -211,6 +232,33 @@ function Import() {
           </Grid>
         </Grid>
       </Grid>
+      <Popup
+        title={title}
+        form={form}
+        openPopup={openPopup}
+        maxWidth={form == 'duyet' || form === 'duyetall' || form === 'tralai' || form === 'tralailuachon' ? 'sm' : 'md'}
+        bgcolor={form === 'delete' || form === 'tralai' || form === 'tralailuachon' ? '#F44336' : '#2196F3'}
+      >
+        {form === 'duyetall' ? (
+          <DuyetAll />
+        ) : form === 'duyet' ? (
+          <Duyet dataCCCD={dataCCCD} />
+        ) : form === 'detail' ? (
+          <Detail />
+        ) : form === 'import' ? (
+          <Import />
+        ) : form === 'edit' ? (
+          <Edit />
+        ) : form === 'tralai' ? (
+          <TraLai />
+        ) : form === 'tralailuachon' ? (
+          <TraLaiLuaChon dataCCCD={dataCCCD} />
+        ) : form === 'add' ? (
+          <Add />
+        ) : (
+          ''
+        )}
+      </Popup>
     </form>
   );
 }
