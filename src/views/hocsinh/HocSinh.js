@@ -75,7 +75,6 @@ export default function HocSinh() {
   const [selectedRowData, setSelectedRowData] = useState([]);
   const [disabled, setDisabled] = useState(false);
   const [disabled1, setDisabled1] = useState(false);
-  const [disabledSearch, setDisabledSearch] = useState(true);
   const [loadData, setLoadData] = useState(false);
   const infoHocSinh = useSelector(infoHocSinhSelector);
   const user = useSelector(userLoginSelector);
@@ -308,14 +307,6 @@ export default function HocSinh() {
       fetchData();
     }
   }, [infoHocSinh, dMTN, donvis]);
-
-  useEffect(() => {
-    if (pageState.DMTN || pageState.donVi || pageState.cccd || pageState.hoTen || pageState.noiSinh || pageState.danToc) {
-      setDisabledSearch(false);
-    } else {
-      setDisabledSearch(true);
-    }
-  }, [pageState.DMTN, pageState.donVi, pageState.cccd, pageState.hoTen, pageState.noiSinh, pageState.danToc]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -599,7 +590,6 @@ export default function HocSinh() {
                 color="info"
                 sx={{ marginTop: '2px' }}
                 startIcon={<IconSearch />}
-                disabled={disabledSearch}
               >
                 {t('button.search')}
               </Button>

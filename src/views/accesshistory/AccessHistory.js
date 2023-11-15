@@ -32,6 +32,7 @@ const HistoryAccess = () => {
   const [data, setData] = useState([]);
   const [functions, setFunctions] = useState('');
   const [actions, setActions] = useState('');
+  const [functionId, setFunctionId] = useState('');
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -115,7 +116,7 @@ const HistoryAccess = () => {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const response = await getActionsByFunctionId(pageState.function);
+      const response = await getActionsByFunctionId(functionId);
       if (response.data && response.data.length > 0) {
         setActions(response.data);
         setPageState((old) => ({ ...old, action: '' }));
@@ -123,10 +124,12 @@ const HistoryAccess = () => {
         setActions('');
       }
     };
-    if (pageState.function != '') {
+    if (functionId != '') {
       fetchDataDL();
+    } else {
+      setPageState((old) => ({ ...old, action: '' }));
     }
-  }, [pageState.function]);
+  }, [functionId]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -208,15 +211,24 @@ const HistoryAccess = () => {
   };
 
   const handleUserNameChange = (event) => {
-    const Value = event.target.value;
-    const userId = Value === 'TaiKhoan' ? 0 : Value;
+    const value = event.target.value;
+    const userId = value === 'TaiKhoan' ? 0 : value;
     setPageState((old) => ({ ...old, idUser: userId }));
-    const selectedUser = data.find((item) => item.userId === Value);
+    const selectedUser = data.find((item) => item.userId === value);
     if (selectedUser) {
       const ten = selectedUser.userName;
       setPageState((old) => ({ ...old, userName: ten }));
     } else {
       setPageState((old) => ({ ...old, userName: '' }));
+    }
+  };
+
+  const handleFunctionChange = (event) => {
+    const value = event.target.value;
+    setPageState((old) => ({ ...old, function: value }));
+    const selectedFunction = functions.find((item) => item.name === value);
+    if (selectedFunction) {
+      setFunctionId(selectedFunction.functionId);
     }
   };
 
@@ -234,15 +246,10 @@ const HistoryAccess = () => {
           <Grid item xs={2}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('Chức năng')}</InputLabel>
-              <Select
-                name="function"
-                value={pageState.function}
-                onChange={(e) => setPageState((old) => ({ ...old, function: e.target.value }))}
-                label={t('chức năng')}
-              >
+              <Select name="function" value={pageState.function} onChange={handleFunctionChange} label={t('chức năng')}>
                 {functions && functions.length > 0 ? (
                   functions.map((data) => (
-                    <MenuItem key={data.functionId} value={data.functionId}>
+                    <MenuItem key={data.name} value={data.name}>
                       {data.description}
                     </MenuItem>
                   ))
@@ -263,7 +270,7 @@ const HistoryAccess = () => {
               >
                 {actions && actions.length > 0 ? (
                   actions.map((data) => (
-                    <MenuItem key={data.functionActionId} value={data.functionActionId}>
+                    <MenuItem key={data.action} value={data.action}>
                       {data.action}
                     </MenuItem>
                   ))
