@@ -51,6 +51,7 @@ export default function HocSinh() {
   const [dataCCCD, setDataCCCD] = useState('');
   const donvi = useSelector(donviSelector);
   const [dMTN, setDMTN] = useState('');
+  const [selectedDMTN, setSelectedDMTN] = useState('');
   const { t } = useTranslation();
   const reloadData = useSelector(reloadDataSelector);
   const [firstLoad, setFirstLoad] = useState(true);
@@ -145,6 +146,7 @@ export default function HocSinh() {
 
   const handleSearch = () => {
     setSearch(!search);
+    setSelectedDMTN(pageState.DMTN);
     const danhmucSelect = pageState.DMTN;
     const selectedDanhmucInfo = dMTN.find((dmtn) => dmtn.id === danhmucSelect);
     dispatch(selectedDanhmuc(selectedDanhmucInfo));
@@ -276,12 +278,12 @@ export default function HocSinh() {
   }, [infoMessage, dMTN]);
 
   useEffect(() => {
-    if (pageState.DMTN) {
+    if (pageState.DMTN || pageState.cccd || pageState.trangThai || pageState.hoTen || pageState.noiSinh || pageState.danToc) {
       setDisabledSearch(false);
     } else {
       setDisabledSearch(true);
     }
-  }, [pageState.DMTN]);
+  }, [pageState.DMTN, pageState.cccd, pageState.trangThai, pageState.hoTen, pageState.noiSinh, pageState.danToc]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -554,7 +556,9 @@ export default function HocSinh() {
                   title={t('button.ingcn')}
                   onClick={handleInGCN}
                   icon={IconCertificate}
-                  disabled={selectedRowData.some((row) => row.trangThai === 0 || row.trangThai === 1 || row.trangThai === 3)}
+                  disabled={
+                    selectedRowData.some((row) => row.trangThai === 0 || row.trangThai === 1 || row.trangThai === 3) || !selectedDMTN
+                  }
                 />
               </Grid>
               <Grid item>
@@ -564,7 +568,7 @@ export default function HocSinh() {
                   onClick={handleGuiDuyet}
                   sx={{ mx: 1 }}
                   startIcon={<IconSend />}
-                  disabled={selectedRowData.some((row) => row.trangThai !== 0)}
+                  disabled={selectedRowData.some((row) => row.trangThai !== 0) || !selectedDMTN}
                 >
                   {t('button.send')}
                 </Button>
@@ -584,10 +588,21 @@ export default function HocSinh() {
           ) : (
             <>
               <Grid item>
-                <ButtonSuccess title={t('button.ingcntatca')} onClick={handleInGCNAll} icon={IconCertificate} disabled={disabledInGCN} />
+                <ButtonSuccess
+                  title={t('button.ingcntatca')}
+                  onClick={handleInGCNAll}
+                  icon={IconCertificate}
+                  disabled={disabledInGCN || !selectedDMTN}
+                />
               </Grid>
               <Grid item>
-                <Button onClick={handleGuiDuyetAll} color="info" variant="contained" startIcon={<IconSend />} disabled={disabled}>
+                <Button
+                  onClick={handleGuiDuyetAll}
+                  color="info"
+                  variant="contained"
+                  startIcon={<IconSend />}
+                  disabled={disabled || !selectedDMTN}
+                >
                   {t('button.sendall')}
                 </Button>
               </Grid>

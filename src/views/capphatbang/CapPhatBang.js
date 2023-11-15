@@ -360,12 +360,28 @@ export default function CapPhatBang() {
   }, [reloadData, search, loadData]);
 
   useEffect(() => {
-    if (pageState.DMTN) {
+    if (
+      pageState.DMTN ||
+      pageState.namHoc ||
+      pageState.cccd ||
+      pageState.hoTen ||
+      pageState.hinhThucDaoDao ||
+      pageState.soVaoSoCapBang ||
+      pageState.trangThai
+    ) {
       setDisabledSearch(false);
     } else {
       setDisabledSearch(true);
     }
-  }, [pageState.DMTN]);
+  }, [
+    pageState.DMTN,
+    pageState.namHoc,
+    pageState.cccd,
+    pageState.hoTen,
+    pageState.hinhThucDaoDao,
+    pageState.soVaoSoCapBang,
+    pageState.trangThai
+  ]);
 
   return (
     <>
