@@ -199,12 +199,15 @@ const TrangChu = () => {
     {
       field: 'actions',
       headerName: t('action'),
-      width: 110,
+      width: (params) => (params.row.donYeuCauCapBanSao != null ? 135 : 110),
       sortable: false,
       filterable: false,
       renderCell: (params) => (
         <>
           <Grid container justifyContent="center" spacing={1}>
+            <Grid item>
+              <ActionButtons type="showvanbang" handleClick={handleShowVanBang} params={params.row} />
+            </Grid>
             <Grid item>
               {params.row.donYeuCauCapBanSao != null ? (
                 <CombinedActionButtons
@@ -214,7 +217,7 @@ const TrangChu = () => {
                   title={'Cấp bằng bản sao'}
                 />
               ) : (
-                <ActionButtons type="showvanbang" handleClick={handleShowVanBang} params={params.row} />
+                ''
               )}
             </Grid>
             <Grid item>
