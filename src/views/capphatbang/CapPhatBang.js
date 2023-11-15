@@ -52,7 +52,6 @@ export default function CapPhatBang() {
   const dispatch = useDispatch();
   const localeText = useLocalText();
   const navigate = useNavigate();
-  const [disabledSearch, setDisabledSearch] = useState(true);
   const [daCapCount, setDaCapCount] = useState(0);
   const [chuaCapCount, setChuaCapCount] = useState(0);
   const donvi = useSelector(donviSelector);
@@ -254,16 +253,6 @@ export default function CapPhatBang() {
     }
   }, [selectNamHoc, selectHTDT]);
 
-  // useEffect(() => {
-  //   console.log('t ne');
-  //   setPageState((old) => ({
-  //     ...old,
-  //     DMTN: infoMessage.IdDanhMucTotNghiep
-  //   }));
-  //   const selectedDanhmucInfo = dMTN.find((dmtn) => dmtn.id === infoMessage.IdDanhMucTotNghiep);
-  //   dispatch(selectedDanhmuc(selectedDanhmucInfo));
-  // }, dMTN);
-
   useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
@@ -358,30 +347,6 @@ export default function CapPhatBang() {
       setFirstLoad1(false);
     }
   }, [reloadData, search, loadData]);
-
-  useEffect(() => {
-    if (
-      pageState.DMTN ||
-      pageState.namHoc ||
-      pageState.cccd ||
-      pageState.hoTen ||
-      pageState.hinhThucDaoDao ||
-      pageState.soVaoSoCapBang ||
-      pageState.trangThai
-    ) {
-      setDisabledSearch(false);
-    } else {
-      setDisabledSearch(true);
-    }
-  }, [
-    pageState.DMTN,
-    pageState.namHoc,
-    pageState.cccd,
-    pageState.hoTen,
-    pageState.hinhThucDaoDao,
-    pageState.soVaoSoCapBang,
-    pageState.trangThai
-  ]);
 
   return (
     <>
@@ -495,7 +460,6 @@ export default function CapPhatBang() {
                 color="info"
                 sx={{ marginTop: '2px' }}
                 startIcon={<IconSearch />}
-                disabled={disabledSearch}
               >
                 {t('button.search')}
               </Button>

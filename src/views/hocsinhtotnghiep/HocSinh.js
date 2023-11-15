@@ -63,7 +63,6 @@ export default function HocSinh() {
   const [search, setSearch] = useState(false);
   // const [disableImport, setDisableImport] = useState(false);
   const [disabled, setDisabled] = useState(true);
-  const [disabledSearch, setDisabledSearch] = useState(true);
   const [disabledInGCN, setDisabledInGCN] = useState(true);
   const [loadData, setLoadData] = useState(false);
   const user = useSelector(userLoginSelector);
@@ -278,14 +277,6 @@ export default function HocSinh() {
   }, [infoMessage, dMTN]);
 
   useEffect(() => {
-    if (pageState.DMTN || pageState.cccd || pageState.trangThai || pageState.hoTen || pageState.noiSinh || pageState.danToc) {
-      setDisabledSearch(false);
-    } else {
-      setDisabledSearch(true);
-    }
-  }, [pageState.DMTN, pageState.cccd, pageState.trangThai, pageState.hoTen, pageState.noiSinh, pageState.danToc]);
-
-  useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
@@ -353,20 +344,6 @@ export default function HocSinh() {
       setFirstLoad(false);
     }
   }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search, loadData]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const params = new URLSearchParams();
-  //     params.append('idDanhMucTotNghiep', pageState.DMTN);
-  //     params.append('idTruong', donvi.id);
-  //     // const response = await getHocSinhs(params);
-  //     // const hocSinhs = response.data.hocSinhs;
-  //     setDisableImport(false);
-  //   };
-  //   if (search) {
-  //     fetchData();
-  //   }
-  // }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
 
   useEffect(() => {
     setDataCCCD(selectedRowData.map((row) => row.cccd));
@@ -542,7 +519,6 @@ export default function HocSinh() {
               color="info"
               sx={{ marginTop: '2px', minWidth: 130 }}
               startIcon={<IconSearch />}
-              disabled={disabledSearch}
             >
               {t('button.search')}
             </Button>

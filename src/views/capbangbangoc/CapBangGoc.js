@@ -75,7 +75,6 @@ export default function CapBangGoc() {
   const [disabledInBang, setDisabledInBang] = useState(true);
   const [disabledVaoSo, setDisabledVaoSo] = useState(true);
   const [disabled, setDisabled] = useState(false);
-  const [disabledSearch, setDisabledSearch] = useState(true);
   const [selectedRowData, setSelectedRowData] = useState([]);
   const [dataCCCD, setDataCCCD] = useState('');
   const [loadData, setLoadData] = useState(false);
@@ -469,22 +468,6 @@ export default function CapBangGoc() {
     }
   }, [search, reloadData, loadData]);
 
-  useEffect(() => {
-    if (
-      pageState.DMTN ||
-      pageState.donVi ||
-      pageState.cccd ||
-      pageState.danToc ||
-      pageState.hoTen ||
-      pageState.noiSinh ||
-      pageState.trangThai
-    ) {
-      setDisabledSearch(false);
-    } else {
-      setDisabledSearch(true);
-    }
-  }, [pageState.DMTN, pageState.donVi, pageState.cccd, pageState.danToc, pageState.hoTen, pageState.noiSinh, pageState.trangThai]);
-
   return (
     <>
       <MainCard title={t('capbanggoc.title')}>
@@ -629,7 +612,6 @@ export default function CapBangGoc() {
                 color="info"
                 sx={{ marginTop: '2px' }}
                 startIcon={<IconSearch />}
-                disabled={disabledSearch}
               >
                 {t('button.search')}
               </Button>
