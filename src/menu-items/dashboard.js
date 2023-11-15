@@ -1,8 +1,8 @@
 // assets
-import { IconDashboard } from '@tabler/icons';
+import { IconHome } from '@tabler/icons';
 
 // constant
-const icons = { IconDashboard };
+const icons = { IconHome };
 
 // ============================== DASHBOARD MENU ITEMS ============================== //
 
@@ -11,7 +11,7 @@ const dashboard = {
   title: 'Trang chủ',
   url: '/admin',
   type: 'item',
-  icon: icons.IconDashboard,
+  icon: icons.IconHome,
   breadcrumbs: false
 };
 

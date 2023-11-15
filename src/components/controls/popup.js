@@ -42,7 +42,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 export default function Popup(props) {
   const { t } = useTranslation();
-  const { type, form, title, children, openPopup, maxWidth, bgcolor, height } = props;
+  const { type, form, title, children, openPopup, maxWidth, bgcolor, height, icon: Icon } = props;
   const dispatch = useDispatch();
   const trigger = useScrollTrigger({ disableHysteresis: true });
 
@@ -156,6 +156,10 @@ export default function Popup(props) {
                   <IconCertificate2 sx={{ order: 2 }} />
                 ) : form === 'phuluc' ? (
                   <IconBook sx={{ order: 2 }} />
+                ) : form === 'permissionGroup' ? (
+                  <IconUsers sx={{ order: 2 }} />
+                ) : Icon ? (
+                  <Icon sx={{ order: 2 }} />
                 ) : (
                   ''
                 )}

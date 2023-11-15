@@ -4,15 +4,17 @@ import ExitButton from 'components/button/ExitButton';
 import FormControlComponent from 'components/form/FormControlComponent ';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { openPopupSelector, userLoginSelector } from 'store/selectors';
+import { openPopupSelector, openSubPopupSelector, userLoginSelector } from 'store/selectors';
 import { setLoading, setOpenPopup, setOpenSubPopup, showAlert } from 'store/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { IconFilePlus } from '@tabler/icons';
+import { IconEye, IconFilePlus } from '@tabler/icons';
 import { useTranslation } from 'react-i18next';
 import { getAllDanhmucTN, getAllTruong } from 'services/sharedService';
 import { ImportHocSinhByPhong } from 'services/hocsinhService';
 import { getAllKhoathiByDMTN } from 'services/khoathiService';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
+import NotificationForm from 'components/form/NotificationForm';
+import Popup from 'components/controls/popup';
 
 function Import() {
   const isXs = useMediaQuery('(max-width:800px)');
@@ -26,6 +28,7 @@ function Import() {
   const [selectFile, setSelectFile] = useState('');
   const user = useSelector(userLoginSelector);
   const openPopup = useSelector(openPopupSelector);
+  const openSubPopup = useSelector(openSubPopupSelector);
   const [selectedFileName, setSelectedFileName] = useState('');
   const [selectDanhmuc, setSelectDanhmuc] = useState('');
   const { t } = useTranslation();
@@ -74,7 +77,9 @@ function Import() {
     message: '',
     error: false,
     submessage: '',
-    url: ''
+    url: '',
+    title: 'Thông tin kết quả import',
+    color: ''
   });
 
   const submitFile = async (e) => {
@@ -97,20 +102,22 @@ function Import() {
       const Import = await ImportHocSinhByPhong(values);
       if (Import.isSuccess == false) {
         dispatch(setOpenSubPopup(true));
-        setPageState((old) => ({
+        setDate((old) => ({
           ...old,
           message: 'Lỗi ABCD',
           error: true,
-          url: '/abcd'
+          url: '/abcd',
+          color: '#F44336'
         }));
         // dispatch(showAlert(new Date().getTime().toString(), 'error', Import.message.toString()));
       } else {
         dispatch(setOpenSubPopup(true));
-        setPageState((old) => ({
+        setDate((old) => ({
           ...old,
           message: 'Thành công',
           error: false,
-          url: '/abcd'
+          url: '/abcd',
+          color: '#00B835'
         }));
         dispatch(setOpenPopup(false));
         // dispatch(showAlert(new Date().getTime().toString(), 'success', Import.message.toString()));
@@ -232,32 +239,8 @@ function Import() {
           </Grid>
         </Grid>
       </Grid>
-      <Popup
-        title={title}
-        form={form}
-        openPopup={openPopup}
-        maxWidth={form == 'duyet' || form === 'duyetall' || form === 'tralai' || form === 'tralailuachon' ? 'sm' : 'md'}
-        bgcolor={form === 'delete' || form === 'tralai' || form === 'tralailuachon' ? '#F44336' : '#2196F3'}
-      >
-        {form === 'duyetall' ? (
-          <DuyetAll />
-        ) : form === 'duyet' ? (
-          <Duyet dataCCCD={dataCCCD} />
-        ) : form === 'detail' ? (
-          <Detail />
-        ) : form === 'import' ? (
-          <Import />
-        ) : form === 'edit' ? (
-          <Edit />
-        ) : form === 'tralai' ? (
-          <TraLai />
-        ) : form === 'tralailuachon' ? (
-          <TraLaiLuaChon dataCCCD={dataCCCD} />
-        ) : form === 'add' ? (
-          <Add />
-        ) : (
-          ''
-        )}
+      <Popup title={data.title} type={'subpopup'} openPopup={openSubPopup} maxWidth={'sm'} icon={IconEye} bgcolor={data.color}>
+        <NotificationForm message={data.message} type={'subpopup'} error={data.error} submessage={data.submessage} url={data.url} />
       </Popup>
     </form>
   );

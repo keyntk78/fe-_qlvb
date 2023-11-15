@@ -482,8 +482,8 @@ const ActionButtons = ({
         return [
           {
             title: 'Thu hồi/hủy bỏ',
-            icon: <IconCertificateOff size={'20px'} />,
-            color: 'success',
+            icon: <IconCertificateOff color="red" size={'20px'} />,
+            color: 'error',
             onClick: () => {
               handleClick(params);
               onClose();
