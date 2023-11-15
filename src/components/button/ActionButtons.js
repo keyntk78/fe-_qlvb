@@ -26,7 +26,8 @@ import {
   IconSquareRoundedPlus,
   IconCurrencyEuro,
   IconCertificateOff,
-  IconCertificate2
+  IconCertificate2,
+  IconBellPlus
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { useTranslation } from 'react-i18next';
@@ -45,7 +46,8 @@ const ActionButtons = ({
   params,
   title,
   handlePermission,
-  handleGetbyId
+  handleGetbyId,
+  handleNotify
 }) => {
   const { t } = useTranslation();
 
@@ -157,6 +159,18 @@ const ActionButtons = ({
             color: 'info',
             onClick: () => {
               handlePermission(params);
+              onClose();
+            }
+          }
+        ];
+      case 'notify':
+        return [
+          {
+            title: 'Thông báo',
+            icon: <IconBellPlus size={'20px'} />,
+            color: 'info',
+            onClick: () => {
+              handleNotify(params);
               onClose();
             }
           }

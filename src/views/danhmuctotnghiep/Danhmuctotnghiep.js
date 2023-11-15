@@ -30,6 +30,7 @@ import { getSearchDanhmucTN } from 'services/danhmuctotnghiepService';
 import ActionButtons from 'components/button/ActionButtons';
 import BackToTop from 'components/scroll/BackToTop';
 import Permission from './Permission';
+import ThongBao from './ThongBao';
 
 const Danhmuctotnghiep = () => {
   const openPopup = useSelector(openPopupSelector);
@@ -173,8 +174,15 @@ const Danhmuctotnghiep = () => {
   };
 
   const handlePhanQuyenTungTruongDanhmucTN = (danhmuctotnghiep) => {
-    setTitle(t('Phân Quyền Từng Trường'));
+    setTitle(t('Phân Quyền gửi học sinh'));
     setForm('permission');
+    dispatch(selectedDanhmuctotnghiep(danhmuctotnghiep));
+    dispatch(selectedNamthi(nam));
+    dispatch(setOpenPopup(true));
+  };
+  const handleThongBaoTungTruong = (danhmuctotnghiep) => {
+    setTitle(t('Thông báo'));
+    setForm('notify');
     dispatch(selectedDanhmuctotnghiep(danhmuctotnghiep));
     dispatch(selectedNamthi(nam));
     dispatch(setOpenPopup(true));
@@ -195,7 +203,8 @@ const Danhmuctotnghiep = () => {
           handleEdit: handleEditDanhmucTN
         },
 
-        { type: 'permission', handlePermission: handlePhanQuyenTungTruongDanhmucTN }
+        { type: 'permission', handlePermission: handlePhanQuyenTungTruongDanhmucTN },
+        { type: 'notify', handleNotify: handleThongBaoTungTruong }
       );
     }
 
@@ -328,7 +337,7 @@ const Danhmuctotnghiep = () => {
           form={form}
           openPopup={openPopup}
           bgcolor={form === 'delete' || form === 'deActive' ? '#F44336' : '#2196F3'}
-          maxWidth={form == 'permission' ? 'md' : 'sm'}
+          maxWidth={form == 'permission' || form == 'notify' ? 'md' : 'sm'}
         >
           {form === 'add' ? (
             <Add />
@@ -342,6 +351,8 @@ const Danhmuctotnghiep = () => {
             <Detail />
           ) : form === 'permission' ? (
             <Permission />
+          ) : form === 'notify' ? (
+            <ThongBao />
           ) : (
             <Delete />
           )}

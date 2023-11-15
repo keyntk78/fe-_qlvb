@@ -49,7 +49,7 @@ function GuiThongBaoLuaChon({ dataIdTruong }) {
         {t('Bạn có muốn gửi thông báo đến các trường đã chọn ?')}
       </MuiTypography>
       <MuiTypography variant="h5" gutterBottom m={1}>
-        {`${t('Tổng số trường : 123')} `}
+        {`${t('Tổng số trường: ')} ${data.length}`}
       </MuiTypography>
       <Grid item container xs={12} mt={1} justifyContent={'center'}>
         <TextField

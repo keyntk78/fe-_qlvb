@@ -4,18 +4,15 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import { setOpenPopup, setOpenSubPopup, setReloadData, showAlert } from 'store/actions';
-import { selectedUserSelector, reloadDataSelector, openSubPopupSelector } from 'store/selectors';
+import { setOpenPopup, setReloadData, showAlert } from 'store/actions';
+import { selectedUserSelector, reloadDataSelector } from 'store/selectors';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import useLocalText from 'utils/localText';
 import { useTranslation } from 'react-i18next';
-import { Button, Checkbox, Grid } from '@mui/material';
+import { Checkbox, Grid } from '@mui/material';
 import SaveButtonTable from 'components/button/SaveButtonTable';
 import ExitButton from 'components/button/ExitButton';
 import { getReportsViaUser, saveUserReport } from 'services/userService';
-import { IconBellPlus } from '@tabler/icons';
-import Popup from 'components/controls/popup';
-import ThongBao from './ThongBao';
 
 const Permission = () => {
   const language = i18n.language;
@@ -26,10 +23,6 @@ const Permission = () => {
   const { t } = useTranslation();
   const [isAccess, setIsAccess] = useState(true);
   const selectedUser = useSelector(selectedUserSelector);
-
-  const [title, setTitle] = useState('');
-  const [form, setForm] = useState('');
-  const openSubPopup = useSelector(openSubPopupSelector);
 
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -120,12 +113,6 @@ const Permission = () => {
     }
   };
 
-  const openPopupGuiThongBao = () => {
-    setTitle(t('Thông báo'));
-    setForm('notify');
-    dispatch(setOpenSubPopup(true));
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
@@ -158,11 +145,6 @@ const Permission = () => {
 
   return (
     <>
-      <Grid item sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-        <Button color="info" variant="contained" onClick={openPopupGuiThongBao} sx={{ mx: 1 }} startIcon={<IconBellPlus />}>
-          {t('Thông báo')}
-        </Button>
-      </Grid>
       {isAccess ? (
         <Grid container mt={2}>
           <DataGrid
@@ -206,18 +188,6 @@ const Permission = () => {
           <ExitButton />
         </Grid>
       </Grid>
-      {form !== '' && (
-        <Popup
-          title={title}
-          form={form}
-          openPopup={openSubPopup}
-          type="subpopup"
-          maxWidth={'md'}
-          bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
-        >
-          {form === 'notify' ? <ThongBao /> : ''}
-        </Popup>
-      )}
     </>
   );
 };

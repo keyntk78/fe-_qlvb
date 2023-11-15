@@ -113,16 +113,19 @@ const ThongBao = () => {
   return (
     <>
       <Grid container sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-        <Grid item>
-          <Button color="info" variant="contained" onClick={openGuiThongBao} sx={{ mx: 1 }} startIcon={<IconSend />}>
-            {t('Gửi thông báo')}
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button color="info" onClick={openGuiTatCaThongBao} variant="contained" startIcon={<IconSend />}>
-            {t('Gửi thông báo tất cả')}
-          </Button>
-        </Grid>
+        {selectedRowData.length !== 0 ? (
+          <Grid item>
+            <Button color="info" variant="contained" onClick={openGuiThongBao} sx={{ mx: 1 }} startIcon={<IconSend />}>
+              {t('Gửi thông báo')}
+            </Button>
+          </Grid>
+        ) : (
+          <Grid item>
+            <Button color="info" onClick={openGuiTatCaThongBao} variant="contained" startIcon={<IconSend />}>
+              {t('Gửi thông báo tất cả')}
+            </Button>
+          </Grid>
+        )}
       </Grid>
 
       {isAccess ? (
@@ -167,7 +170,7 @@ const ThongBao = () => {
       )}
       <Grid item xs={12} container spacing={2} justifyContent="flex-end" mt={1}>
         <Grid item>
-          <ExitButton type="subpopup" />
+          <ExitButton />
         </Grid>
       </Grid>
       {form !== '' && (
