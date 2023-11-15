@@ -75,7 +75,6 @@ export default function CapBangGoc() {
   const [disabledInBang, setDisabledInBang] = useState(true);
   const [disabledVaoSo, setDisabledVaoSo] = useState(true);
   const [disabled, setDisabled] = useState(false);
-  const [disabledSearch, setDisabledSearch] = useState(true);
   const [selectedRowData, setSelectedRowData] = useState([]);
   const [dataCCCD, setDataCCCD] = useState('');
   const [loadData, setLoadData] = useState(false);
@@ -469,14 +468,6 @@ export default function CapBangGoc() {
     }
   }, [search, reloadData, loadData]);
 
-  useEffect(() => {
-    if (pageState.DMTN && pageState.donVi) {
-      setDisabledSearch(false);
-    } else {
-      setDisabledSearch(true);
-    }
-  }, [pageState.DMTN, pageState.donVi]);
-
   return (
     <>
       <MainCard title={t('capbanggoc.title')}>
@@ -621,7 +612,6 @@ export default function CapBangGoc() {
                 color="info"
                 sx={{ marginTop: '2px' }}
                 startIcon={<IconSearch />}
-                disabled={disabledSearch}
               >
                 {t('button.search')}
               </Button>
@@ -636,7 +626,7 @@ export default function CapBangGoc() {
                 fullWidth
                 onClick={handleXacNhanIn}
                 icon={IconChecks}
-                disabled={disabledInBang}
+                disabled={disabledInBang || !selectDanhmuc || !selectDonvi || !selectNamHoc || !selectHTDT}
               />
             ) : (
               <ButtonSuccess
@@ -644,7 +634,7 @@ export default function CapBangGoc() {
                 fullWidth
                 onClick={handleXacNhanIn}
                 icon={IconChecks}
-                disabled={disabledInBang || disabled}
+                disabled={disabledInBang || disabled || !selectDanhmuc || !selectDonvi || !selectNamHoc || !selectHTDT}
               />
             )}
           </Grid>
@@ -655,7 +645,7 @@ export default function CapBangGoc() {
                 title={t('button.capbang')}
                 onClick={handleCapBang}
                 icon={IconFileCertificate}
-                disabled={disabledCapBang}
+                disabled={disabledCapBang || !selectDanhmuc || !selectDonvi || !selectNamHoc || !selectHTDT}
               />
             ) : (
               <ButtonSecondary
@@ -663,7 +653,7 @@ export default function CapBangGoc() {
                 title={t('button.capbangtatca')}
                 onClick={handleCapBangAll}
                 icon={IconFileCertificate}
-                disabled={disabledCapBang || disabled}
+                disabled={disabledCapBang || disabled || !selectDanhmuc || !selectDonvi || !selectNamHoc || !selectHTDT}
               />
             )}
           </Grid>
@@ -674,7 +664,7 @@ export default function CapBangGoc() {
               onClick={handleVaoSo}
               variant="contained"
               startIcon={<IconBookUpload />}
-              disabled={disabledVaoSo}
+              disabled={disabledVaoSo || !selectDanhmuc || !selectDonvi || !selectNamHoc || !selectHTDT}
             >
               {t('button.vaoso')}
             </Button>

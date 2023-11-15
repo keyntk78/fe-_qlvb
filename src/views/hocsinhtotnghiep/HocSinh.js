@@ -51,6 +51,7 @@ export default function HocSinh() {
   const [dataCCCD, setDataCCCD] = useState('');
   const donvi = useSelector(donviSelector);
   const [dMTN, setDMTN] = useState('');
+  const [selectedDMTN, setSelectedDMTN] = useState('');
   const { t } = useTranslation();
   const reloadData = useSelector(reloadDataSelector);
   const [firstLoad, setFirstLoad] = useState(true);
@@ -62,7 +63,6 @@ export default function HocSinh() {
   const [search, setSearch] = useState(false);
   // const [disableImport, setDisableImport] = useState(false);
   const [disabled, setDisabled] = useState(true);
-  const [disabledSearch, setDisabledSearch] = useState(true);
   const [disabledInGCN, setDisabledInGCN] = useState(true);
   const [loadData, setLoadData] = useState(false);
   const user = useSelector(userLoginSelector);
@@ -145,6 +145,7 @@ export default function HocSinh() {
 
   const handleSearch = () => {
     setSearch(!search);
+    setSelectedDMTN(pageState.DMTN);
     const danhmucSelect = pageState.DMTN;
     const selectedDanhmucInfo = dMTN.find((dmtn) => dmtn.id === danhmucSelect);
     dispatch(selectedDanhmuc(selectedDanhmucInfo));
@@ -276,14 +277,6 @@ export default function HocSinh() {
   }, [infoMessage, dMTN]);
 
   useEffect(() => {
-    if (pageState.DMTN) {
-      setDisabledSearch(false);
-    } else {
-      setDisabledSearch(true);
-    }
-  }, [pageState.DMTN]);
-
-  useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
@@ -351,20 +344,6 @@ export default function HocSinh() {
       setFirstLoad(false);
     }
   }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search, loadData]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const params = new URLSearchParams();
-  //     params.append('idDanhMucTotNghiep', pageState.DMTN);
-  //     params.append('idTruong', donvi.id);
-  //     // const response = await getHocSinhs(params);
-  //     // const hocSinhs = response.data.hocSinhs;
-  //     setDisableImport(false);
-  //   };
-  //   if (search) {
-  //     fetchData();
-  //   }
-  // }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
 
   useEffect(() => {
     setDataCCCD(selectedRowData.map((row) => row.cccd));
@@ -540,7 +519,6 @@ export default function HocSinh() {
               color="info"
               sx={{ marginTop: '2px', minWidth: 130 }}
               startIcon={<IconSearch />}
-              disabled={disabledSearch}
             >
               {t('button.search')}
             </Button>
@@ -554,7 +532,9 @@ export default function HocSinh() {
                   title={t('button.ingcn')}
                   onClick={handleInGCN}
                   icon={IconCertificate}
-                  disabled={selectedRowData.some((row) => row.trangThai === 0 || row.trangThai === 1 || row.trangThai === 3)}
+                  disabled={
+                    selectedRowData.some((row) => row.trangThai === 0 || row.trangThai === 1 || row.trangThai === 3) || !selectedDMTN
+                  }
                 />
               </Grid>
               <Grid item>
@@ -564,7 +544,7 @@ export default function HocSinh() {
                   onClick={handleGuiDuyet}
                   sx={{ mx: 1 }}
                   startIcon={<IconSend />}
-                  disabled={selectedRowData.some((row) => row.trangThai !== 0)}
+                  disabled={selectedRowData.some((row) => row.trangThai !== 0) || !selectedDMTN}
                 >
                   {t('button.send')}
                 </Button>
@@ -584,10 +564,21 @@ export default function HocSinh() {
           ) : (
             <>
               <Grid item>
-                <ButtonSuccess title={t('button.ingcntatca')} onClick={handleInGCNAll} icon={IconCertificate} disabled={disabledInGCN} />
+                <ButtonSuccess
+                  title={t('button.ingcntatca')}
+                  onClick={handleInGCNAll}
+                  icon={IconCertificate}
+                  disabled={disabledInGCN || !selectedDMTN}
+                />
               </Grid>
               <Grid item>
-                <Button onClick={handleGuiDuyetAll} color="info" variant="contained" startIcon={<IconSend />} disabled={disabled}>
+                <Button
+                  onClick={handleGuiDuyetAll}
+                  color="info"
+                  variant="contained"
+                  startIcon={<IconSend />}
+                  disabled={disabled || !selectedDMTN}
+                >
                   {t('button.sendall')}
                 </Button>
               </Grid>

@@ -29,7 +29,8 @@ import {
   IconHistory,
   IconCheckbox,
   IconCurrencyEuro,
-  IconCertificate2
+  IconCertificate2,
+  IconBellPlus
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { setOpenPopup, setOpenProfile, setOpenSubPopup, setOpenSubSubPopup } from '../../store/actions';
@@ -80,6 +81,8 @@ export default function Popup(props) {
                 <span style={{ order: 1, marginLeft: '5px' }}>{title}</span>
                 {form === 'add' ? (
                   <IconPlus sx={{ order: 2 }} />
+                ) : form === 'notify' ? (
+                  <IconBellPlus sx={{ order: 2 }} />
                 ) : form === 'edit' ? (
                   <IconEdit sx={{ order: 2 }} />
                 ) : form === 'permission' ? (
