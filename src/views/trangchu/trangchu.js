@@ -199,12 +199,12 @@ const TrangChu = () => {
     {
       field: 'actions',
       headerName: t('action'),
-      width: (params) => (params.row.donYeuCauCapBanSao != null ? 135 : 110),
+      width: 135,
       sortable: false,
       filterable: false,
       renderCell: (params) => (
         <>
-          <Grid container justifyContent="center" spacing={1}>
+          <Grid container justifyContent="start" spacing={1}>
             <Grid item>
               <ActionButtons type="showvanbang" handleClick={handleShowVanBang} params={params.row} />
             </Grid>
