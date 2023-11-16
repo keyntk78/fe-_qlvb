@@ -117,6 +117,20 @@ export async function GetTruongHasPermision(iddanhmuc, params) {
     throw error;
   }
 }
+export async function getAllTruong(iddanhmuc, useraction, params) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(
+      `DanhMucTotNghiep/GetAllTruong?idDanhMucTotNghiep=${iddanhmuc}&nguoiThucHien=${useraction}&${params}`,
+      'GET'
+    );
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating DanhmucTN:', error);
+    throw error;
+  }
+}
 
 export async function GuiThongBaoTungNguoi(noidung, data) {
   try {
@@ -140,6 +154,18 @@ export async function GuiThongBaoAll(noidung, iddanhmuc) {
     return response;
   } catch (error) {
     console.error('Error creating history access:', error);
+    throw error;
+  }
+}
+
+export async function createDanhMucTotNghiepViaTruong(data) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient('DanhMucTotNghiep/CreateDanhMucTotNghiepViaTruong', 'POST', data);
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating User:', error);
     throw error;
   }
 }

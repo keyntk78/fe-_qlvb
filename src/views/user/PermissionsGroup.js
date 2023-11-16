@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { getRolesViaUser, saveUserRole } from 'services/userService';
 import { setOpenPopup, setReloadData, showAlert } from 'store/actions';
-import { selectedUserSelector, reloadDataSelector } from 'store/selectors';
+import { selectedUserSelector, reloadDataSelector, openPopupSelector } from 'store/selectors';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import useLocalText from 'utils/localText';
 import { useTranslation } from 'react-i18next';
@@ -23,6 +23,7 @@ const PermissionsGroup = () => {
   const { t } = useTranslation();
   const [isAccess, setIsAccess] = useState(true);
   const selectedUser = useSelector(selectedUserSelector);
+  const openPopup = useSelector(openPopupSelector);
 
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -31,8 +32,44 @@ const PermissionsGroup = () => {
     order: 0,
     orderDir: 'ASC',
     startIndex: 0,
-    pageSize: 10
+    pageSize: -1,
+    selectAllChecked: false
   });
+
+  const handleSelectAllCheckboxChange = (event) => {
+    const isChecked = event.target.checked;
+    setPageState((prevState) => ({
+      ...prevState,
+      selectAllChecked: isChecked,
+      data: prevState.data.map((row) => ({
+        ...row,
+        hasPermission: isChecked
+      }))
+    }));
+  };
+
+  const handleCheckboxChange = (event, id) => {
+    const checked = event.target.checked;
+    setPageState((prevState) => {
+      const updatedData = prevState.data.map((row) => {
+        if (row.id === id) {
+          return {
+            ...row,
+            hasPermission: checked
+          };
+        }
+        return row;
+      });
+
+      const allChecked = updatedData.every((row) => row.hasPermission);
+
+      return {
+        ...prevState,
+        selectAllChecked: allChecked,
+        data: updatedData
+      };
+    });
+  };
 
   const columns = [
     {
@@ -50,7 +87,7 @@ const PermissionsGroup = () => {
     },
     {
       field: 'actions',
-      headerName: t('action'),
+      headerName: <Checkbox checked={pageState.selectAllChecked} color="info" onChange={handleSelectAllCheckboxChange} />,
       width: 88,
       sortable: false,
       filterable: false,
@@ -66,24 +103,6 @@ const PermissionsGroup = () => {
       )
     }
   ];
-
-  const handleCheckboxChange = (event, id) => {
-    const checked = event.target.checked;
-
-    // Cập nhật giá trị hasPermission trong state dựa trên id của hàng được chọn
-    setPageState((prevState) => ({
-      ...prevState,
-      data: prevState.data.map((row) => {
-        if (row.id === id) {
-          return {
-            ...row,
-            hasPermission: checked
-          };
-        }
-        return row;
-      })
-    }));
-  };
 
   const handleSave = async () => {
     const selectedUserIds = pageState.data.reduce((result, role) => {
@@ -126,11 +145,11 @@ const PermissionsGroup = () => {
             id: index + 1,
             ...row
           }));
-
           dispatch(setReloadData(false));
-
+          const allChecked = dataWithIds.every((row) => row.hasPermission);
           setPageState((old) => ({
             ...old,
+            selectAllChecked: allChecked,
             isLoading: false,
             data: dataWithIds,
             total: dataWithIds[0]?.totalRow || 0
@@ -140,8 +159,19 @@ const PermissionsGroup = () => {
         }
       }
     };
-    fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, selectedUser, reloadData]);
+    if (openPopup) {
+      fetchData();
+    }
+  }, [
+    pageState.search,
+    pageState.order,
+    pageState.orderDir,
+    pageState.startIndex,
+    pageState.pageSize,
+    selectedUser,
+    reloadData,
+    openPopup
+  ]);
 
   return (
     <>
@@ -175,6 +205,7 @@ const PermissionsGroup = () => {
             }}
             localeText={language === 'vi' ? localeText : null}
             disableSelectionOnClick={true}
+            hideFooterPagination
           />
         </Grid>
       ) : (

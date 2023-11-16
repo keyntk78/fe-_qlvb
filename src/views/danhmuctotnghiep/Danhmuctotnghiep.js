@@ -56,7 +56,7 @@ const Danhmuctotnghiep = () => {
   });
   const columns = [
     {
-      field: 'idIndex',
+      field: 'idx',
       headerName: t('serial'),
       width: 50,
       sortable: false,
@@ -177,7 +177,6 @@ const Danhmuctotnghiep = () => {
     setTitle(t('Phân Quyền gửi học sinh'));
     setForm('permission');
     dispatch(selectedDanhmuctotnghiep(danhmuctotnghiep));
-    dispatch(selectedNamthi(nam));
     dispatch(setOpenPopup(true));
   };
   const handleThongBaoTungTruong = (danhmuctotnghiep) => {
@@ -235,7 +234,7 @@ const Danhmuctotnghiep = () => {
     const danhmuctotnghiep = await getSearchDanhmucTN(namT, params);
     const dataDanhmucTN = await danhmuctotnghiep.data;
     const dataWithIds = dataDanhmucTN.danhMucTotNghieps.map((row, index) => ({
-      idIndex: index + 1,
+      idx: pageState.startIndex * pageState.pageSize + index + 1,
       tenNam: row.namThi.ten,
       ...row
     }));

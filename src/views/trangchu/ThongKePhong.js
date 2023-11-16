@@ -7,7 +7,7 @@ import { getAllNamthi } from 'services/namthiService';
 import { GetThongKeTongQuatByPhong } from 'services/thongkeService';
 import { IconAlbum, IconBuildingCommunity, IconFileDescription, IconUserExclamation } from '@tabler/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import {  selectedNamthi, setLoading } from 'store/actions';
+import { selectedNamthi, setLoading } from 'store/actions';
 import { useNavigate } from 'react-router';
 import { userLoginSelector } from 'store/selectors';
 

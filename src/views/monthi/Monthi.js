@@ -43,7 +43,7 @@ const Monthi = () => {
 
   const columns = [
     {
-      field: 'idindex',
+      field: 'idx',
       headerName: t('serial'),
       width: 50,
       sortable: false,
@@ -85,7 +85,7 @@ const Monthi = () => {
       if (check) {
         const data = await response.data;
         const dataWithIds = data.monThis.map((row, index) => ({
-          idindex: index + 1,
+          idx: pageState.startIndex * pageState.pageSize + index + 1,
           ...row
         }));
 

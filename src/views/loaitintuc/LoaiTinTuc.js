@@ -43,7 +43,7 @@ const Monthi = () => {
 
   const columns = [
     {
-      field: 'idindex',
+      field: 'idx',
       headerName: t('serial'),
       width: 50,
       sortable: false,
@@ -87,7 +87,7 @@ const Monthi = () => {
       if (check) {
         const data = await response.data;
         const dataWithIds = data.loaiTinTucs.map((row, index) => ({
-          idindex: index + 1,
+          idx: pageState.startIndex * pageState.pageSize + index + 1,
           ...row
         }));
 
@@ -174,13 +174,7 @@ const Monthi = () => {
         )}
       </MainCard>
       {form !== '' && (
-        <Popup
-          title={title}
-          form={form}
-          openPopup={openPopup}
-          bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
-          maxWidth={'sm'}
-        >
+        <Popup title={title} form={form} openPopup={openPopup} bgcolor={form === 'delete' ? '#F44336' : '#2196F3'} maxWidth={'sm'}>
           {form === 'add' ? <Add /> : form === 'edit' ? <Edit /> : <Delete />}
         </Popup>
       )}
