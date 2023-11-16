@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { setOpenSubSubPopup, setReloadData } from 'store/actions';
-import { reloadDataSelector, openSubSubPopupSelector, userLoginSelector } from 'store/selectors';
+import { reloadDataSelector, openSubSubPopupSelector, selectedDanhmuctotnghiepSelector, openPopupSelector } from 'store/selectors';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import useLocalText from 'utils/localText';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +15,7 @@ import { IconSend } from '@tabler/icons';
 import Popup from 'components/controls/popup';
 import GuiThongBaoLuaChon from './GuiThongBaoLuaChon';
 import GuiThongBaoTatCa from './GuiThongBaoTatCa';
-import { getSearchDonvi } from 'services/donvitruongService';
+import { GetTruongHasPermision } from 'services/danhmuctotnghiepService';
 
 const ThongBao = () => {
   const language = i18n.language;
@@ -25,13 +25,14 @@ const ThongBao = () => {
   const reloadData = useSelector(reloadDataSelector);
   const { t } = useTranslation();
   const [isAccess, setIsAccess] = useState(true);
-  const user = useSelector(userLoginSelector);
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
   const openSubSubPopup = useSelector(openSubSubPopupSelector);
+  const openPopup = useSelector(openPopupSelector);
   const [selectedRowData, setSelectedRowData] = useState([]);
   const [dataIdTruong, setDataIdTruong] = useState([]);
-
+  const danhmucTN = useSelector(selectedDanhmuctotnghiepSelector);
+  const [totalR, setTotalR] = useState(0);
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -51,22 +52,16 @@ const ThongBao = () => {
       filterable: false
     },
     {
-      field: 'ma',
+      field: 'maTruong',
       headerName: t('donvitruong.field.ma'),
       flex: 1,
-      minWidth: 80
+      minWidth: 150
     },
     {
-      field: 'ten',
+      field: 'tenTruong',
       headerName: t('donvitruong.field.ten'),
       flex: 2,
       minWidth: 200
-    },
-    {
-      field: 'url',
-      headerName: t('donvitruong.field.url'),
-      flex: 2,
-      minWidth: 140
     }
   ];
 
@@ -87,12 +82,13 @@ const ThongBao = () => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
-      params.append('nguoiThucHien', user ? user.username : '');
-      const response = await getSearchDonvi(params);
+      const response = await GetTruongHasPermision(danhmucTN.id, params);
       const check = await handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;
+        setTotalR(data.totalRow);
         const dataWithIds = data.truongs.map((row, index) => ({
+          id: row.idTruong,
           idindex: index + 1,
           ...row
         }));
@@ -107,8 +103,10 @@ const ThongBao = () => {
         setIsAccess(false);
       }
     };
-    fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
+    if (openPopup) {
+      fetchData();
+    }
+  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, openPopup]);
 
   return (
     <>
@@ -182,7 +180,13 @@ const ThongBao = () => {
           maxWidth={'sm'}
           bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
         >
-          {form === 'gui' ? <GuiThongBaoLuaChon dataIdTruong={dataIdTruong} /> : form === 'guiall' ? <GuiThongBaoTatCa /> : ''}
+          {form === 'gui' ? (
+            <GuiThongBaoLuaChon dataIdTruong={dataIdTruong} />
+          ) : form === 'guiall' ? (
+            <GuiThongBaoTatCa soluong={totalR} />
+          ) : (
+            ''
+          )}
         </Popup>
       )}
     </>
