@@ -258,6 +258,7 @@ export default function HocSinh() {
     const fetchDataDL = async () => {
       const danhmuc = await getAllDanhmucTN(user ? user.username : '');
       setDMTN(danhmuc.data);
+      console.log(danhmuc.data);
       const configAuto = await getCauHinhTuDongXepLoai();
       setConfigAuto(configAuto.data.configValue);
     };

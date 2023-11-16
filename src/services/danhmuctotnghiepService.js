@@ -106,6 +106,17 @@ export async function unlock(iddanhmuc, useraction) {
   }
 }
 
+export async function GetTruongHasPermision(iddanhmuc, params) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(`DanhMucTotNghiep/GetTruongHasPermision?idDanhMucTotNghiep=${iddanhmuc}&${params}`, 'GET');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating DanhmucTN:', error);
+    throw error;
+  }
+}
 export async function getAllTruong(iddanhmuc, useraction, params) {
   try {
     store.dispatch(setLoading(true));
@@ -117,6 +128,32 @@ export async function getAllTruong(iddanhmuc, useraction, params) {
     return response;
   } catch (error) {
     console.error('Error creating DanhmucTN:', error);
+    throw error;
+  }
+}
+
+export async function GuiThongBaoTungNguoi(noidung, data) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(`DanhMucTotNghiep/GuiThongBaoNhieuTruong?noiDung=${noidung}`, 'POST', data);
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating history access:', error);
+    throw error;
+  }
+}
+export async function GuiThongBaoAll(noidung, iddanhmuc) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(
+      `DanhMucTotNghiep/GuiThongBaoTatCaCacTruong?noiDung=${noidung}&idDanhMucTotNghiep=${iddanhmuc}`,
+      'POST'
+    );
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating history access:', error);
     throw error;
   }
 }
