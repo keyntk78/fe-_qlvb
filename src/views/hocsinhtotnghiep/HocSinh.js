@@ -3,6 +3,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import MainCard from 'components/cards/MainCard';
 import { Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography, useMediaQuery } from '@mui/material';
 import FileExcel from '../FileMau/FileMau_ThemHocSinh.xlsx';
+import FileExcel_thucong from '../FileMau/FileMau_ThemHocSinhThuCong.xlsx';
 import Popup from 'components/controls/popup';
 import GuiDuyet from './GuiDuyet';
 import { useState } from 'react';
@@ -24,7 +25,7 @@ import DeleteAll from './DeleteAll';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { IconCertificate, IconClick, IconDownload, IconPlus, IconSearch, IconSend, IconTrash } from '@tabler/icons';
 import Detail from './Detail';
-import { getAllDanhmucTN } from 'services/sharedService';
+import { getAllDanhmucTN, getCauHinhTuDongXepLoai } from 'services/sharedService';
 import BackToTop from 'components/scroll/BackToTop';
 import InGCNAll from './InGCNAll';
 import ActionButtons from 'components/button/ActionButtons';
@@ -66,6 +67,7 @@ export default function HocSinh() {
   const [disabledInGCN, setDisabledInGCN] = useState(true);
   const [loadData, setLoadData] = useState(false);
   const user = useSelector(userLoginSelector);
+  const [configAuto, setConfigAuto] = useState(false);
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -254,10 +256,10 @@ export default function HocSinh() {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      console.log(user.username);
       const danhmuc = await getAllDanhmucTN(user ? user.username : '');
-      console.log(danhmuc);
       setDMTN(danhmuc.data);
+      const configAuto = await getCauHinhTuDongXepLoai();
+      setConfigAuto(configAuto.data.configValue);
     };
     if (user) {
       fetchDataDL();
@@ -382,7 +384,7 @@ export default function HocSinh() {
               <Grid item>
                 <ButtonSecondary
                   title={t('button.download')}
-                  href={FileExcel}
+                  href={configAuto ? FileExcel : FileExcel_thucong}
                   download="File_Mau"
                   target="_blank"
                   rel="noreferrer"
@@ -411,7 +413,7 @@ export default function HocSinh() {
             <Grid item>
               <ButtonSecondary
                 title={t('button.download')}
-                href={FileExcel}
+                href={configAuto ? FileExcel : FileExcel_thucong}
                 download="File_Mau"
                 target="_blank"
                 rel="noreferrer"

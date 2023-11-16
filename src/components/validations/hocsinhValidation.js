@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
-export const useHocSinhValidationSchema = (isPhong = false) => {
+export const useHocSinhValidationSchema = (isPhong = false, configAuto) => {
   const { t } = useTranslation();
 
   let hocSinhValidationSchema = Yup.object({
@@ -14,14 +14,21 @@ export const useHocSinhValidationSchema = (isPhong = false) => {
     diaChi: Yup.string().required(t('validation.hocsinh.diachi')),
     lop: Yup.string().required(t('validation.hocsinh.lop')),
     noiSinh: Yup.string().required(t('validation.hocsinh.noisinh')),
-    xepLoai: Yup.string().required(t('validation.hocsinh.xeploai')),
-    hocLuc: Yup.string().required(t('validation.hocsinh.hocluc')),
+    //xepLoai: Yup.string().required(t('validation.hocsinh.xeploai'))
+    // hocLuc: Yup.string().required(t('validation.hocsinh.hocluc')),
     hanhKiem: Yup.string().required(t('validation.hocsinh.hanhkiem'))
   });
 
   if (isPhong) {
     hocSinhValidationSchema = hocSinhValidationSchema.shape({
       idTruong: Yup.string().required(t('validation.donvitruong'))
+    });
+  }
+  if (!configAuto) {
+    hocSinhValidationSchema = hocSinhValidationSchema.shape({
+      hocLuc: Yup.string().required(t('validation.hocsinh.hocluc')),
+      xepLoai: Yup.string().required(t('validation.hocsinh.xeploai')),
+      ketQua: Yup.string().required(t('Kết quả không được để trống'))
     });
   }
 

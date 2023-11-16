@@ -179,3 +179,14 @@ export async function getActionsByFunctionId(id) {
     throw error;
   }
 }
+export async function getCauHinhTuDongXepLoai() {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(`Shared/GetCauHinhTuDongXepLoai`, 'GET');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating DanhmucTN:', error);
+    throw error;
+  }
+}

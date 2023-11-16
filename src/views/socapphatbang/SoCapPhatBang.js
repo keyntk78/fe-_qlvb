@@ -17,7 +17,6 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Tooltip,
   Typography,
   useMediaQuery
 } from '@mui/material';
@@ -34,13 +33,12 @@ import MainCard from 'components/cards/MainCard';
 import { getAllDanhmucTN } from 'services/sharedService';
 import BackToTop from 'components/scroll/BackToTop';
 import { styled } from '@mui/system';
-import AnimateButton from 'components/extended/AnimateButton';
 import { useFormik } from 'formik';
 import { generateDocument } from '../sogoc/ExportWord';
 import ExportExcel from '../sogoc/ExportExcel';
 import { getHocSinhTheoSoCapPhatBang } from 'services/socapphatbangService';
-import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { getAllKhoathiByDMTN } from 'services/khoathiService';
+import GroupButtons from 'components/button/GroupButton';
 
 export default function SoCapPhatBang() {
   const isXs = useMediaQuery('(max-width:600px)');
@@ -112,15 +110,13 @@ export default function SoCapPhatBang() {
     setSelectKhoaThi(selectedKhoaThiInfo.id);
   };
 
-  const handleExport = async (e) => {
-    e.preventDefault();
+  const handleExport = async () => {
     dispatch(setLoading(true));
     await ExportExcel(formik, pageState1, selectDanhmuc, donvi, selectKhoaThi, donvi);
     dispatch(setLoading(false));
   };
 
-  const handleExportWord = async (e) => {
-    e.preventDefault();
+  const handleExportWord = async () => {
     setLoading(true);
     await generateDocument(pageState1.data, additionalData, donvi);
     setLoading(false);
@@ -136,6 +132,16 @@ export default function SoCapPhatBang() {
     setPageState((old) => ({ ...old, pageSize: newPageSize }));
   };
 
+  const xuatTep = [
+    {
+      type: 'exportExcel',
+      handleClick: handleExport
+    },
+    {
+      type: 'exportWord',
+      handleClick: handleExportWord
+    }
+  ];
   useEffect(() => {
     const fetchDataDL = async () => {
       const danhmuc = await getAllDanhmucTN(user ? user.username : '');
@@ -303,16 +309,7 @@ export default function SoCapPhatBang() {
           ) : (
             <Grid container justifyContent="flex-end" spacing={1}>
               <Grid item>
-                <ButtonSuccess title={t('button.export.excel')} onClick={handleExport} icon={IconFileExport} />
-              </Grid>
-              <Grid item>
-                <AnimateButton>
-                  <Tooltip title={t('button.export.excel')} placement="bottom">
-                    <Button fullWidth color="info" variant="contained" onClick={handleExportWord} startIcon={<IconFileExport />}>
-                      {t('button.export.word')}
-                    </Button>
-                  </Tooltip>
-                </AnimateButton>
+                <GroupButtons buttonConfigurations={xuatTep} icon={IconFileExport} title={t('button.export')} />
               </Grid>
             </Grid>
           )
@@ -321,16 +318,7 @@ export default function SoCapPhatBang() {
         {isXs ? (
           <Grid container justifyContent="flex-end" spacing={1}>
             <Grid item>
-              <ButtonSuccess title={t('Xuất file excel')} onClick={handleExport} icon={IconFileExport} />
-            </Grid>
-            <Grid item>
-              <AnimateButton>
-                <Tooltip title={t('Xuất file word')} placement="bottom">
-                  <Button fullWidth color="info" variant="contained" onClick={handleExportWord} startIcon={<IconFileExport />}>
-                    {t('Xuất file word')}
-                  </Button>
-                </Tooltip>
-              </AnimateButton>
+              <GroupButtons buttonConfigurations={xuatTep} icon={IconFileExport} title={t('button.export')} />
             </Grid>
           </Grid>
         ) : (

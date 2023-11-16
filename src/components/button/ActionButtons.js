@@ -26,11 +26,12 @@ import {
   IconSquareRoundedPlus,
   IconCurrencyEuro,
   IconCertificateOff,
-  IconCertificate2
+  IconCertificate2,
+  IconBellPlus,
+  IconFileExport
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { useTranslation } from 'react-i18next';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const ActionButtons = ({
   menu,
@@ -45,7 +46,8 @@ const ActionButtons = ({
   params,
   title,
   handlePermission,
-  handleGetbyId
+  handleGetbyId,
+  handleNotify
 }) => {
   const { t } = useTranslation();
 
@@ -157,6 +159,18 @@ const ActionButtons = ({
             color: 'info',
             onClick: () => {
               handlePermission(params);
+              onClose();
+            }
+          }
+        ];
+      case 'notify':
+        return [
+          {
+            title: 'Thông báo',
+            icon: <IconBellPlus size={'20px'} />,
+            color: 'info',
+            onClick: () => {
+              handleNotify(params);
               onClose();
             }
           }
@@ -490,6 +504,30 @@ const ActionButtons = ({
             }
           }
         ];
+      case 'exportExcel':
+        return [
+          {
+            title: 'Xuất tệp Excel',
+            icon: <IconFileExport color="green" size={'20px'} />,
+            color: 'success',
+            onClick: () => {
+              handleClick(params);
+              onClose();
+            }
+          }
+        ];
+      case 'exportWord':
+        return [
+          {
+            title: 'Xuất tệp word',
+            icon: <IconFileExport color="#2196F3" size={'20px'} />,
+            color: 'primary',
+            onClick: () => {
+              handleClick(params);
+              onClose();
+            }
+          }
+        ];
       case 'hide':
         return [
           {
@@ -528,7 +566,11 @@ const ActionButtons = ({
                 <MenuItem key={`${button.title}_${index}`} onClick={button.onClick}>
                   <ListItemIcon>{button.icon}</ListItemIcon>
                   <div style={{ margin: '0 0 -4px -7px' }}>
-                    <Typography variant="subtitle1" style={{ fontSize: '13px' }}>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ color: type == 'exportExcel' ? 'green' : type == 'exportWord' ? '#2196F3' : '' }}
+                      style={{ fontSize: '13px' }}
+                    >
                       {t(button.title)}
                     </Typography>
                   </div>
@@ -540,7 +582,7 @@ const ActionButtons = ({
               <AnimateButton>
                 <Tooltip title={t(button.title)} placement="bottom">
                   <IconButton color={button.color} key={index} onClick={button.onClick} style={{ border: '1px solid black' }} size="small">
-                    {<VisibilityIcon fontSize="small" />}
+                    {button.icon}
                   </IconButton>
                 </Tooltip>
               </AnimateButton>

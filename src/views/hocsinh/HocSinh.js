@@ -37,8 +37,9 @@ import Detail from './Detail';
 import MainCard from 'components/cards/MainCard';
 import Popup from 'components/controls/popup';
 import FileExcel from '../FileMau/FileMau_ThemHocSinh.xlsx';
+import FileExcel_thucong from '../FileMau/FileMau_ThemHocSinhThuCong.xlsx';
 // import { getAllDonvi } from 'services/donvitruongService';
-import { getAllTruong } from 'services/sharedService';
+import { getAllTruong, getCauHinhTuDongXepLoai } from 'services/sharedService';
 
 import DuyetAll from './DuyetAll';
 import { getAllDanhmucTN } from 'services/sharedService';
@@ -50,7 +51,10 @@ import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import ButtonSecondary from 'components/buttoncolor/ButtonSecondary';
 import ExportHocSinh from './ExportHocSinh';
 
-const trangThaiOptions = [{ value: '1', label: 'Chưa duyệt' }];
+const trangThaiOptions = [
+  { value: '1', label: 'Chưa duyệt' },
+  { value: '2', label: 'Đã duyệt' }
+];
 
 export default function HocSinh() {
   const isXs = useMediaQuery('(max-width:600px)');
@@ -76,6 +80,7 @@ export default function HocSinh() {
   const [disabled, setDisabled] = useState(false);
   const [disabled1, setDisabled1] = useState(false);
   const [loadData, setLoadData] = useState(false);
+  const [configAuto, setConfigAuto] = useState(false);
   const infoHocSinh = useSelector(infoHocSinhSelector);
   const user = useSelector(userLoginSelector);
 
@@ -261,6 +266,8 @@ export default function HocSinh() {
       setDMTN(response.data);
       const donvi = await getAllTruong(user.username);
       setDonvis(donvi.data);
+      const configAuto = await getCauHinhTuDongXepLoai();
+      setConfigAuto(configAuto.data.configValue);
     };
     fetchDataDL();
   }, []);
@@ -400,7 +407,6 @@ export default function HocSinh() {
     const selectedValue = event.target.value;
     setPageState((old) => ({ ...old, trangThai: selectedValue }));
   };
-
   return (
     <>
       <MainCard
@@ -417,7 +423,7 @@ export default function HocSinh() {
               <Grid item>
                 <ButtonSecondary
                   title={t('button.download')}
-                  href={FileExcel}
+                  href={configAuto ? FileExcel : FileExcel_thucong}
                   download="File_Mau"
                   target="_blank"
                   rel="noreferrer"
@@ -441,7 +447,7 @@ export default function HocSinh() {
             <Grid item>
               <ButtonSecondary
                 title={t('button.download')}
-                href={FileExcel}
+                href={configAuto ? FileExcel : FileExcel_thucong}
                 download="File_Mau"
                 target="_blank"
                 rel="noreferrer"
