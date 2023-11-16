@@ -37,6 +37,7 @@ import ChangePassword from 'views/pages/authentication/auth/ChangePassword';
 import { openProfileSelector, reloadDataSelector } from 'store/selectors';
 import Popup from 'components/controls/popup';
 import Profile from 'views/pages/authentication/auth/Profile';
+import { handleResponseStatus } from 'utils/handleResponseStatus';
 
 // ==============================|| PROFILE MENU ||============================== //
 
@@ -81,6 +82,7 @@ const ProfileSection = () => {
     const fetchData = async () => {
       try {
         const response = await profile();
+        await handleResponseStatus(response, navigate);
         setAvatar(response.data.data.avatar);
       } catch (error) {
         console.log(error);

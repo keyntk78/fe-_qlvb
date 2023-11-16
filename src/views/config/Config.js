@@ -17,7 +17,7 @@ import AddButton from 'components/button/AddButton';
 import { createSearchParams } from 'utils/createSearchParams';
 import i18n from 'i18n';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
-import { Grid } from '@mui/material';
+import { FormControlLabel, Grid, Switch } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
 
 const Config = () => {
@@ -138,10 +138,17 @@ const Config = () => {
     };
     fetchData();
   }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
-
+  const [loading, setLoading] = useState(false);
   return (
     <>
       <MainCard title={t('config.title')} secondary={<AddButton handleClick={handleAddConfig} />}>
+        <FormControlLabel
+          sx={{
+            display: 'block'
+          }}
+          control={<Switch checked={loading} onChange={() => setLoading(!loading)} name="loading" color="primary" />}
+          label="Tự động xếp loại"
+        />
         {isAccess ? (
           <DataGrid
             autoHeight

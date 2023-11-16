@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { donviSelector, reloadNotificationSelector } from 'store/selectors';
 import { setLoading, setReloadNotification } from 'store/actions';
 import { useNavigate } from 'react-router';
+import config from 'config';
 
 const ThongKeTruong = () => {
   const isMd = useMediaQuery('(min-width:600px) and (max-width:1000px)');
@@ -134,42 +135,42 @@ const ThongKeTruong = () => {
         color: '#2196F3',
         icon: IconUsers,
         count: thongKeTongQuat.tongHocSinh,
-        nav: '/hocsinhtotnghiep'
+        nav: config.defaultPath + '/hocsinhtotnghiep'
       },
       {
         title: t('Tổng số bằng'),
         color: '#1565C0',
         icon: IconUsers,
         count: thongKeTongQuat.tongBang,
-        nav: '/capphatbang'
+        nav: config.defaultPath + '/capphatbang'
       },
       {
         title: t('hocsinhdaduyet'),
         color: '#00C853',
         icon: IconUserCheck,
         count: thongKeTongQuat.hocSinhDaDuyet,
-        nav: '/hocsinhtotnghiep'
+        nav: config.defaultPath + '/hocsinhtotnghiep'
       },
       {
         title: t('Số bằng đã nhận'),
         color: '#008000',
         icon: IconCertificate,
         count: thongKeTongQuat.bangDaNhan,
-        nav: '/capphatbang'
+        nav: config.defaultPath + '/capphatbang'
       },
       {
         title: t('hocsinhchoduyet'),
         color: '#F79009',
         icon: IconUserExclamation,
         count: thongKeTongQuat.hocSinhChoDuyet,
-        nav: '/hocsinhtotnghiep'
+        nav: config.defaultPath + '/hocsinhtotnghiep'
       },
       {
         title: t('Số bằng chưa nhận'),
         color: '#D84315',
         icon: IconCertificateOff,
         count: thongKeTongQuat.bangChuaNhan,
-        nav: '/capphatbang'
+        nav: config.defaultPath + '/capphatbang'
       }
     ];
   } else {
@@ -179,42 +180,42 @@ const ThongKeTruong = () => {
         color: '#2196F3',
         icon: IconUsers,
         count: thongKeTongQuat.tongHocSinh,
-        nav: '/hocsinhtotnghiep'
+        nav: config.defaultPath + '/hocsinhtotnghiep'
       },
       {
         title: t('hocsinhdaduyet'),
         color: '#00C853',
         icon: IconUserCheck,
         count: thongKeTongQuat.hocSinhDaDuyet,
-        nav: '/hocsinhtotnghiep'
+        nav: config.defaultPath + '/hocsinhtotnghiep'
       },
       {
         title: t('hocsinhchoduyet'),
         color: '#F79009',
         icon: IconUserExclamation,
         count: thongKeTongQuat.hocSinhChoDuyet,
-        nav: '/hocsinhtotnghiep'
+        nav: config.defaultPath + '/hocsinhtotnghiep'
       },
       {
         title: t('Tổng số bằng'),
         color: '#1565C0',
         icon: IconUsers,
         count: thongKeTongQuat.tongBang,
-        nav: '/capphatbang'
+        nav: config.defaultPath + '/capphatbang'
       },
       {
         title: t('Số bằng đã nhận'),
         color: '#008000',
         icon: IconCertificate,
         count: thongKeTongQuat.bangDaNhan,
-        nav: '/capphatbang'
+        nav: config.defaultPath + '/capphatbang'
       },
       {
         title: t('Số bằng chưa nhận'),
         color: '#D84315',
         icon: IconCertificateOff,
         count: thongKeTongQuat.bangChuaNhan,
-        nav: '/capphatbang'
+        nav: config.defaultPath + '/capphatbang'
       }
     ];
   }
