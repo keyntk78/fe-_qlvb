@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Typography, Button, Grid } from '@mui/material';
 import { Link } from 'react-router-dom';
+import config from 'config';
 
 const ErrorPage = () => {
   return (
@@ -31,7 +32,7 @@ const ErrorPage = () => {
             <Typography variant="h4">Chúng tôi đang gặp một vài vấn đề với Sever. Vui lòng thử lại sau!</Typography>
           </Grid>
           <Grid item xs={12} mt={3}>
-            <Button component={Link} to="/" variant="contained" color="primary">
+            <Button component={Link} to={config.defaultPath} variant="contained" color="primary">
               Quay lại trang chủ
             </Button>
           </Grid>

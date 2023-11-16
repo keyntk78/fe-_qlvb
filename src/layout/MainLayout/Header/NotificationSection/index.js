@@ -36,6 +36,7 @@ import { setReloadNotification } from 'store/actions';
 import { notificationCountSelector, userLoginSelector } from 'store/selectors';
 import { updateAllReadStatus } from 'services/notificationService';
 import { Link, useNavigate } from 'react-router-dom';
+import config from 'config';
 
 // notification status options
 // const status = [
@@ -110,7 +111,7 @@ const NotificationSection = () => {
 
   const handleViewMore = () => {
     setOpen(false);
-    navigate('/tinnhan');
+    navigate(config.defaultPath + '/tinnhan');
   };
 
   const handleMarkAllAsRead = async () => {

@@ -3,19 +3,16 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createSearchParams, useNavigate } from 'react-router-dom';
-import { setOpenPopup, setOpenSubPopup, setReloadData, showAlert } from 'store/actions';
-import { selectedUserSelector, reloadDataSelector, openSubPopupSelector } from 'store/selectors';
+import { useNavigate } from 'react-router-dom';
+import { setOpenPopup, setReloadData, showAlert } from 'store/actions';
+import { reloadDataSelector, selectedDanhmuctotnghiepSelector, userLoginSelector, openPopupSelector } from 'store/selectors';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import useLocalText from 'utils/localText';
 import { useTranslation } from 'react-i18next';
-import { Button, Checkbox, Grid } from '@mui/material';
+import { Checkbox, Grid } from '@mui/material';
 import SaveButtonTable from 'components/button/SaveButtonTable';
 import ExitButton from 'components/button/ExitButton';
-import { getReportsViaUser, saveUserReport } from 'services/userService';
-import { IconBellPlus } from '@tabler/icons';
-import Popup from 'components/controls/popup';
-import ThongBao from './ThongBao';
+import { createDanhMucTotNghiepViaTruong, getAllTruong } from 'services/danhmuctotnghiepService';
 
 const Permission = () => {
   const language = i18n.language;
@@ -25,87 +22,101 @@ const Permission = () => {
   const reloadData = useSelector(reloadDataSelector);
   const { t } = useTranslation();
   const [isAccess, setIsAccess] = useState(true);
-  const selectedUser = useSelector(selectedUserSelector);
-
-  const [title, setTitle] = useState('');
-  const [form, setForm] = useState('');
-  const openSubPopup = useSelector(openSubPopupSelector);
+  const selectedDanhMuc = useSelector(selectedDanhmuctotnghiepSelector);
+  const user = useSelector(userLoginSelector);
+  const openPopup = useSelector(openPopupSelector);
 
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
     total: 0,
-    order: 0,
-    orderDir: 'ASC',
-    startIndex: 0,
-    pageSize: 10
+    pageSize: -1,
+    selectAllChecked: false
   });
+
+  const handleSelectAllCheckboxChange = (event) => {
+    const isChecked = event.target.checked;
+    setPageState((prevState) => ({
+      ...prevState,
+      selectAllChecked: isChecked,
+      data: prevState.data.map((row) => ({
+        ...row,
+        hasPermision: isChecked
+      }))
+    }));
+  };
+
+  const handleCheckboxChange = (event, id) => {
+    const checked = event.target.checked;
+    setPageState((prevState) => {
+      const updatedData = prevState.data.map((row) => {
+        if (row.id === id) {
+          return {
+            ...row,
+            hasPermision: checked
+          };
+        }
+        return row;
+      });
+
+      const allChecked = updatedData.every((row) => row.hasPermision);
+
+      return {
+        ...prevState,
+        selectAllChecked: allChecked,
+        data: updatedData
+      };
+    });
+  };
 
   const columns = [
     {
-      field: 'rowIndex',
+      field: 'id',
       headerName: t('serial'),
       width: 50,
       sortable: false,
       filterable: false
     },
     {
-      field: 'name',
-      headerName: t('Tên báo cáo'),
+      field: 'tenTruong',
+      headerName: t('Tên trường'),
       flex: 1,
       minWidth: 138
     },
     {
       field: 'actions',
-      headerName: t('action'),
+      headerName: <Checkbox checked={pageState.selectAllChecked} color="info" onChange={handleSelectAllCheckboxChange} />,
       width: 88,
       sortable: false,
       filterable: false,
       renderCell: (params) => (
         <>
           <Checkbox
-            checked={params.row.hasPermission}
+            checked={params.row.hasPermision}
             color="info"
             onChange={(event) => handleCheckboxChange(event, params.row.id)}
-            name={params.row.userId ? params.row.userId.toString() : ''}
+            name={params.row.idTruong ? params.row.idTruong.toString() : ''}
           />
         </>
       )
     }
   ];
 
-  const handleCheckboxChange = (event, id) => {
-    const checked = event.target.checked;
-
-    // Cập nhật giá trị hasPermission trong state dựa trên id của hàng được chọn
-    setPageState((prevState) => ({
-      ...prevState,
-      data: prevState.data.map((row) => {
-        if (row.id === id) {
-          return {
-            ...row,
-            hasPermission: checked
-          };
-        }
-        return row;
-      })
-    }));
-  };
-
   const handleSave = async () => {
-    const selectedUserIds = pageState.data.reduce((result, report) => {
-      if (report.hasPermission) {
-        return result !== '' ? `${result},${report.reportId}` : `${report.reportId}`;
+    const selectedTruongIds = pageState.data.reduce((result, truong) => {
+      if (truong.hasPermision) {
+        return result !== '' ? `${result},${truong.idTruong}` : `${truong.idTruong}`;
       }
       return result;
     }, '');
 
     const data = {
-      userId: selectedUser.userId,
-      reportIds: selectedUserIds
+      idDanhMucTotNghiep: selectedDanhMuc.id,
+      idTruongs: selectedTruongIds,
+      nguoiThucHien: user.username
     };
 
-    const response = await saveUserReport(data);
+    const response = await createDanhMucTotNghiepViaTruong(data);
     const check = handleResponseStatus(response, navigate);
     if (!check) {
       dispatch(showAlert(new Date().getTime().toString(), 'error', response.message.toString()));
@@ -120,68 +131,56 @@ const Permission = () => {
     }
   };
 
-  const openPopupGuiThongBao = () => {
-    setTitle(t('Thông báo'));
-    setForm('notify');
-    dispatch(setOpenSubPopup(true));
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
-      const params = await createSearchParams(pageState);
-      if (selectedUser) {
-        const response = await getReportsViaUser(selectedUser.userId, params);
+      if (selectedDanhMuc) {
+        const response = await getAllTruong(selectedDanhMuc.id, user.username);
         const check = await handleResponseStatus(response, navigate);
         if (check) {
           const data = await response.data;
-          const dataWithIds = data.map((row, index) => ({
+          const dataWithIds = data.truongs.map((row, index) => ({
             id: index + 1,
             ...row
           }));
-
+          const allChecked = dataWithIds.every((row) => row.hasPermision);
           dispatch(setReloadData(false));
-
           setPageState((old) => ({
             ...old,
+            selectAllChecked: allChecked,
             isLoading: false,
             data: dataWithIds,
-            total: dataWithIds[0]?.totalRow || 0
+            total: data.totalRow
           }));
         } else {
           setIsAccess(false);
         }
       }
     };
-    fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, selectedUser, reloadData]);
+    if (openPopup) {
+      fetchData();
+    }
+  }, [
+    pageState.search,
+    pageState.order,
+    pageState.orderDir,
+    pageState.startIndex,
+    pageState.pageSize,
+    selectedDanhMuc,
+    reloadData,
+    openPopup
+  ]);
 
   return (
     <>
-      <Grid item sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-        <Button color="info" variant="contained" onClick={openPopupGuiThongBao} sx={{ mx: 1 }} startIcon={<IconBellPlus />}>
-          {t('Thông báo')}
-        </Button>
-      </Grid>
       {isAccess ? (
         <Grid container mt={2}>
           <DataGrid
             autoHeight
             columns={columns}
             rows={pageState.data}
-            rowCount={pageState.total}
             loading={pageState.isLoading}
-            rowsPerPageOptions={[5, 10, 25, 50, 100]}
             pagination
-            page={pageState.startIndex}
-            pageSize={pageState.pageSize}
-            paginationMode="server"
-            onPageChange={(newPage) => {
-              setPageState((old) => ({ ...old, startIndex: newPage }));
-            }}
-            onPageSizeChange={(newPageSize) => {
-              setPageState((old) => ({ ...old, pageSize: newPageSize }));
-            }}
             onSortModelChange={(newSortModel) => {
               const field = newSortModel[0]?.field;
               const sort = newSortModel[0]?.sort;
@@ -193,6 +192,7 @@ const Permission = () => {
             }}
             localeText={language === 'vi' ? localeText : null}
             disableSelectionOnClick={true}
+            hideFooterPagination
           />
         </Grid>
       ) : (
@@ -206,18 +206,6 @@ const Permission = () => {
           <ExitButton />
         </Grid>
       </Grid>
-      {form !== '' && (
-        <Popup
-          title={title}
-          form={form}
-          openPopup={openSubPopup}
-          type="subpopup"
-          maxWidth={'md'}
-          bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
-        >
-          {form === 'notify' ? <ThongBao /> : ''}
-        </Popup>
-      )}
     </>
   );
 };

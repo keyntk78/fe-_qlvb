@@ -29,7 +29,6 @@ const EditDanhmucTN = () => {
   const [hinhThucDaoTao, setHinhThucDaoTao] = useState('');
   const user = useSelector(userLoginSelector);
   const danhmucTN = useSelector(selectedDanhmuctotnghiepSelector);
-  console.log(danhmucTN);
   const reloadData = useSelector(reloadDataSelector);
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -112,7 +111,6 @@ const EditDanhmucTN = () => {
 
       //hedaotao
       const hedaotao = await getAllHeDaoTao();
-      console.log(hedaotao);
       const datahedaotao = await hedaotao.data;
       const dataWithhdt = datahedaotao.map((row, index) => ({
         idIndex: index + 1,

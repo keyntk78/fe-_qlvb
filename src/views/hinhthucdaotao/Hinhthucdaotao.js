@@ -43,7 +43,7 @@ const Hinhthucdaotao = () => {
 
   const columns = [
     {
-      field: 'idindex',
+      field: 'idx',
       headerName: t('serial'),
       width: 50,
       sortable: false,
@@ -59,7 +59,7 @@ const Hinhthucdaotao = () => {
       field: 'ten',
       headerName: t('hinhthucdaotao.field.ten'),
       flex: 1.5,
-      minWidth: 160,
+      minWidth: 160
     },
     {
       field: 'actions',
@@ -87,7 +87,7 @@ const Hinhthucdaotao = () => {
       if (check) {
         const data = await response.data;
         const dataWithIds = data.hinhThucDaoTaos.map((row, index) => ({
-          idindex: index + 1,
+          idx: pageState.startIndex * pageState.pageSize + index + 1,
           ...row
         }));
 
