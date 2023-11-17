@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { IconChecks, IconEdit, IconSearch, IconTrash } from '@tabler/icons';
+import { IconChecks, IconEdit, IconHistory, IconSearch, IconTrash } from '@tabler/icons';
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography, useMediaQuery } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -212,8 +212,8 @@ export default function Xacminhvanbang() {
       handleClick: handleThuHoiHuyBo
     }
   ];
-
-  const xacminhvb1 = [
+  /*Lịch sử xác minh hủy bỏ */
+  const historyXMHB = [
     {
       type: 'xemlichsuxacminh',
       handleClick: handleXemLichSu
@@ -315,12 +315,7 @@ export default function Xacminhvanbang() {
                 <ActionButtons type="detail" handleGetbyId={handleDetail} params={params.row} />
               </Grid>
               <Grid item>
-                <CombinedActionButtons
-                  params={params.row}
-                  buttonConfigurations={xacminhvb1}
-                  icon={IconChecks}
-                  title={t('button.title.chinhsua.huybo')}
-                />
+                <CombinedActionButtons params={params.row} buttonConfigurations={historyXMHB} icon={IconHistory} title={t('Xem lịch sử')} />
               </Grid>
             </Grid>
           )}
