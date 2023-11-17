@@ -36,8 +36,8 @@ import { getHocSinhs } from 'services/hocsinhService';
 import Detail from './Detail';
 import MainCard from 'components/cards/MainCard';
 import Popup from 'components/controls/popup';
-import FileExcel from '../FileMau/FileMau_ThemHocSinh.xlsx';
-import FileExcel_thucong from '../FileMau/FileMau_ThemHocSinhThuCong.xlsx';
+import FileExcel from '../FileMau/FileMauTuDong.xlsx';
+import FileExcel_thucong from '../FileMau/FileMauKhongTuDong.xlsx';
 // import { getAllDonvi } from 'services/donvitruongService';
 import { getAllTruong, getCauHinhTuDongXepLoai } from 'services/sharedService';
 
