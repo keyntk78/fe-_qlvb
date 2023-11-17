@@ -13,6 +13,7 @@ import { Checkbox, Grid } from '@mui/material';
 import SaveButtonTable from 'components/button/SaveButtonTable';
 import ExitButton from 'components/button/ExitButton';
 import { createDanhMucTotNghiepViaTruong, getAllTruong } from 'services/danhmuctotnghiepService';
+import { createSearchParams } from 'utils/createSearchParams';
 
 const Permission = () => {
   const language = i18n.language;
@@ -30,6 +31,7 @@ const Permission = () => {
     isLoading: false,
     data: [],
     total: 0,
+    startIndex: 0,
     pageSize: -1,
     selectAllChecked: false
   });
@@ -135,7 +137,8 @@ const Permission = () => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       if (selectedDanhMuc) {
-        const response = await getAllTruong(selectedDanhMuc.id, user.username);
+        const params = await createSearchParams(pageState);
+        const response = await getAllTruong(selectedDanhMuc.id, user.username, params);
         const check = await handleResponseStatus(response, navigate);
         if (check) {
           const data = await response.data;

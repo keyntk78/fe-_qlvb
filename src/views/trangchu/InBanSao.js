@@ -26,19 +26,22 @@ const InBanSao = () => {
       setPhoiSao(phoidata.data);
       dispatch(selectedPhoisao(phoidata.data));
     };
-    fetchDataDLHS();
-  }, []);
+    if (hocsinhid) {
+      fetchDataDLHS();
+    }
+  }, [hocsinhid]);
 
   useEffect(() => {
     const fetchDataDLHS = async () => {
-      console.log('123');
       const response_cf = await GetConfigPhoi(phoisao.id);
       setDuLieuConFig(response_cf.data);
       const hocSinhSoBanSao = await getHocSinhDaDuaVaoSobanSao(hocsinhid.id, hocsinhid.donYeuCauCapBanSao.id, user.username);
       setHsSoBanSao(hocSinhSoBanSao.data);
     };
-    fetchDataDLHS();
-  }, [phoisao.id, hocsinhid.id]);
+    if (phoisao) {
+      fetchDataDLHS();
+    }
+  }, [phoisao]);
   const soLuongBanSao = hsSoBanSao.soLuongBanSao ? hsSoBanSao.soLuongBanSao : 1;
 
   //Tạo ra dữ liệu in phù hợp với số lượng bản sao yêu cầu

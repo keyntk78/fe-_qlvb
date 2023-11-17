@@ -242,6 +242,7 @@ const TrangChu = () => {
       params.append('hoTen', pageState.hoTen);
       params.append('nguoiThucHien', user ? user.username : '');
       const response = await GetTraCuuHocSinhTotNghiep(params);
+      console.log(response);
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;
