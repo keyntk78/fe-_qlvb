@@ -217,7 +217,7 @@ const ActionButtons = ({
         return [
           {
             title: 'Xem văn bằng',
-            icon: <IconCertificate size={'20px'} />,
+            icon: <IconEye size={'20px'} />,
             color: 'info',
             onClick: () => {
               handleClick(params);
@@ -442,6 +442,7 @@ const ActionButtons = ({
             color: 'info',
             onClick: () => {
               handleClick(params);
+              onClose();
             }
           }
         ];
