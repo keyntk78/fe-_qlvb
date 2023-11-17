@@ -35,9 +35,9 @@ const ShowVanBang = ({ duLieuHocSinh }) => {
     HINHTHUCDAOTAO: duLieuHocSinh.tenHinhThucDaoTao,
     GOC_SOHIEUVANBANG: duLieuHocSinh.soHieuVanBang,
     GOC_SOVAOSOCAP: duLieuHocSinh.soVaoSoCapBang,
-    NAMCAP: new Date(duLieuHocSinh.ngayCapBang).getFullYear(),
-    NGAYCAP: new Date(duLieuHocSinh.ngayCapBang).getDate(),
-    THANGCAP: new Date(duLieuHocSinh.ngayCapBang).getMonth() + 1,
+    NAMCAP: new Date(duLieuHocSinh.ngayTao).getFullYear(),
+    NGAYCAP: new Date(duLieuHocSinh.ngayTao).getDate(),
+    THANGCAP: new Date(duLieuHocSinh.ngayTao).getMonth() + 1,
     TRUONGPHONGDGDT: duLieuHocSinh.soGoc.nguoiKyBang,
     NOICAP: duLieuHocSinh.soGoc.diaPhuongCapBang
   };
