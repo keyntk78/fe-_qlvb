@@ -361,7 +361,7 @@ export default function SoBanSao() {
           </Grid>
         }
       >
-        <Grid item container mb={1} spacing={1} mt={1} justifyContent={'center'}>
+        <Grid item container mb={1} spacing={1} mt={1} justifyContent={'center'} alignItems="center">
           <Grid item xs={isXs ? 12 : 4}>
             <FormControl fullWidth variant="outlined">
               <InputLabel>{t('danhmuc.title')}</InputLabel>
@@ -417,7 +417,6 @@ export default function SoBanSao() {
               fullWidth
               onClick={handleSearch}
               color="info"
-              sx={{ marginTop: '2px' }}
               startIcon={<IconSearch />}
               disabled={disable}
             >

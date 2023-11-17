@@ -346,7 +346,7 @@ const DanhSachImport = () => {
         }
       >
         <Grid container justifyContent="center" mb={1} spacing={1}>
-          <Grid item container spacing={1} justifyContent={'center'}>
+          <Grid item container spacing={1} justifyContent={'center'} alignItems="center">
             <Grid item md={6} sm={6} lg={3} container xs={isXs ? 12 : 3}>
               <TextField
                 fullWidth
@@ -398,7 +398,6 @@ const DanhSachImport = () => {
                 fullWidth
                 onClick={handleSearch}
                 color="info"
-                sx={{ marginTop: '2px' }}
                 startIcon={<IconSearch />}
               >
                 {t('button.search')}

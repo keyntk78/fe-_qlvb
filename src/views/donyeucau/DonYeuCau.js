@@ -261,7 +261,7 @@ export default function DonYeuCau() {
   return (
     <>
       <MainCard title={t('Đơn yêu cầu')} secondary={<AddButton handleClick={handleAddDonyeucau} />}>
-        <Grid item container mb={1} spacing={1} justifyContent={'center'}>
+        <Grid item container mb={1} spacing={1} justifyContent={'center'} alignItems="center">
           <Grid item lg={2} md={2.5} sm={4.5} xs={5}>
             <TextField
               fullWidth
@@ -313,15 +313,7 @@ export default function DonYeuCau() {
             </FormControl>
           </Grid>
           <Grid item lg={2} md={2} sm={4} xs={5} minWidth={150}>
-            <Button
-              variant="contained"
-              title={t('button.search')}
-              fullWidth
-              onClick={handleSearch}
-              color="info"
-              sx={{ marginTop: '2px' }}
-              startIcon={<IconSearch />}
-            >
+            <Button variant="contained" title={t('button.search')} fullWidth onClick={handleSearch} color="info" startIcon={<IconSearch />}>
               {t('button.search')}
             </Button>
           </Grid>

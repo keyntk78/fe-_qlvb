@@ -320,7 +320,7 @@ const ActionButtons = ({
           {
             title: 'Xác nhận phát bản sao',
             icon: <IconChecks size={'20px'} />,
-            color: 'warning',
+            color: 'success',
             onClick: () => {
               handleClick(params);
               onClose();
@@ -582,7 +582,7 @@ const ActionButtons = ({
             <>
               <AnimateButton>
                 <Tooltip title={t(button.title)} placement="bottom">
-                  <IconButton color={button.color} key={index} onClick={button.onClick} style={{ border: '1px solid black' }} size="small">
+                  <IconButton color={button.color} key={index} onClick={button.onClick} style={{ border: '1px solid' }} size="small">
                     {button.icon}
                   </IconButton>
                 </Tooltip>

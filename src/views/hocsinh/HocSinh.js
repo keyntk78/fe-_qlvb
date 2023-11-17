@@ -538,7 +538,7 @@ export default function HocSinh() {
           ) : (
             ''
           )}
-          <Grid item container mb={1} spacing={1} justifyContent={'center'}>
+          <Grid item container mb={1} spacing={1} justifyContent={'center'} alignItems="center">
             {isXs ? (
               ''
             ) : (
@@ -594,7 +594,6 @@ export default function HocSinh() {
                 fullWidth
                 onClick={handleSearch}
                 color="info"
-                sx={{ marginTop: '2px' }}
                 startIcon={<IconSearch />}
               >
                 {t('button.search')}

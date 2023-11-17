@@ -324,7 +324,7 @@ export default function SoCapPhatBang() {
         ) : (
           ''
         )}
-        <Grid item container mb={1} spacing={1} mt={1} justifyContent={'center'}>
+        <Grid item container mb={1} spacing={1} mt={1} justifyContent={'center'} alignItems="center">
           <Grid item>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('danhmuc.title')}</InputLabel>
@@ -364,7 +364,6 @@ export default function SoCapPhatBang() {
               fullWidth
               onClick={handleSearch}
               color="info"
-              sx={{ marginTop: '2px' }}
               startIcon={<IconSearch />}
               disabled={disable}
             >

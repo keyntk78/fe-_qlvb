@@ -36,6 +36,7 @@ const InBanSao = () => {
       const response_cf = await GetConfigPhoi(phoisao.id);
       setDuLieuConFig(response_cf.data);
       const hocSinhSoBanSao = await getHocSinhDaDuaVaoSobanSao(hocsinhid.id, hocsinhid.donYeuCauCapBanSao.id, user.username);
+      console.log(hocSinhSoBanSao);
       setHsSoBanSao(hocSinhSoBanSao.data);
     };
     if (phoisao) {
@@ -59,10 +60,10 @@ const InBanSao = () => {
       GIOITINH: hsSoBanSao.gioiTinh ? 'Nam' : 'Nữ',
       DANTOC: hsSoBanSao.danToc,
       HOCSINHTRUONG: hsSoBanSao.truong,
-      NAMTOTNGHIEP: hsSoBanSao.namthi,
+      NAMTOTNGHIEP: hsSoBanSao.namThi,
       XEPLOAITOTNGHIEP: hsSoBanSao.xepLoai,
       HINHTHUCDAOTAO: hsSoBanSao.hinhThucDaoTao,
-      SAO_SOVAOSOBANSAO: hsSoBanSao.soVaoSoBanSao,
+      SAO_SOVAOSOBANSAO: hsSoBanSao.soVaoSoCapBang,
       NAMCAP: new Date(hsSoBanSao.ngayTao).getFullYear(),
       NGAYCAP: new Date(hsSoBanSao.ngayTao).getDate(),
       THANGCAP: new Date(hsSoBanSao.ngayTao).getMonth() + 1,
