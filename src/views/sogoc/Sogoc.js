@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IconBook, IconClick, IconDownload, IconFileExport, IconSearch } from '@tabler/icons';
+import { IconBook, IconFileExport, IconFileImport, IconSearch } from '@tabler/icons';
 import {
   Button,
   Divider,
@@ -40,10 +40,8 @@ import { useFormik } from 'formik';
 import { generateDocument } from './ExportWord';
 import { getHocSinhTheoSoGoc } from 'services/sogocService';
 import ExportExcel from './ExportExcel';
-import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { getAllTruong } from 'services/sharedService';
 import Popup from 'components/controls/popup';
-import ButtonSecondary from 'components/buttoncolor/ButtonSecondary';
 import FileMau from '../FileMau/FileMau_ThemDanhSachVanBang.xlsx';
 import { getAllKhoathiByDMTN } from 'services/khoathiService';
 import PhuLucSoGoc from 'views/phulucsogoc/PhuLucSoGoc';
@@ -136,6 +134,9 @@ export default function SoGoc() {
     dispatch(setOpenPopup(true));
   };
 
+  const handleDowloadTemplate = async () => {
+    window.location.href = FileMau;
+  };
   const handleExportWord = async () => {
     setLoading(true);
     generateDocument(pageState1.data, additionalData, donvi, 'sogoc');
@@ -162,6 +163,7 @@ export default function SoGoc() {
       handleClick: handleExportWord
     }
   ];
+
   useEffect(() => {
     const fetchDataDL = async () => {
       dispatch(setLoading(true));
@@ -302,6 +304,16 @@ export default function SoGoc() {
     setPageState((old) => ({ ...old, donVi: selectedValue }));
   };
 
+  const themTuTep = [
+    {
+      type: 'importFile',
+      handleClick: handleImport
+    },
+    {
+      type: 'dowloadTemplate',
+      handleClick: handleDowloadTemplate
+    }
+  ];
   useEffect(() => {
     const fetchData = async () => {
       const params = await createSearchParams(pageState1);
@@ -360,21 +372,16 @@ export default function SoGoc() {
           ) : (
             <Grid container justifyContent="flex-end" spacing={1}>
               <Grid item>
-                <GroupButtons buttonConfigurations={xuatTep} icon={IconFileExport} title={t('button.export')} />
-              </Grid>
-
-              <Grid item>
-                <ButtonSecondary
-                  title={t('button.download')}
-                  href={FileMau}
-                  download="File_Mau"
-                  target="_blank"
-                  rel="noreferrer"
-                  icon={IconDownload}
-                />
+                <AnimateButton>
+                  <Tooltip placement="bottom">
+                    <Button color="info" variant="contained" size="medium" onClick={handelPhuLuc} startIcon={<IconBook />}>
+                      {t('button.title.phuluc')}
+                    </Button>
+                  </Tooltip>
+                </AnimateButton>
               </Grid>
               <Grid item>
-                <ButtonSuccess title={t('button.import')} onClick={handleImport} icon={IconClick} />
+                <GroupButtons buttonConfigurations={themTuTep} themtep icon={IconFileImport} title={t('button.import')} />
               </Grid>
             </Grid>
           )
@@ -383,20 +390,16 @@ export default function SoGoc() {
         {isXs ? (
           <Grid container justifyContent="center" spacing={1}>
             <Grid item>
-              <GroupButtons buttonConfigurations={xuatTep} icon={IconFileExport} title={t('button.export')} />
+              <AnimateButton>
+                <Tooltip placement="bottom">
+                  <Button color="info" variant="contained" size="medium" onClick={handelPhuLuc} startIcon={<IconBook />}>
+                    {t('button.title.phuluc')}
+                  </Button>
+                </Tooltip>
+              </AnimateButton>
             </Grid>
             <Grid item>
-              <ButtonSecondary
-                title={t('button.download')}
-                href={FileMau}
-                download="File_Mau"
-                target="_blank"
-                rel="noreferrer"
-                icon={IconDownload}
-              />
-            </Grid>
-            <Grid item>
-              <ButtonSuccess title={t('button.import')} onClick={handleImport} icon={IconClick} />
+              <GroupButtons buttonConfigurations={themTuTep} themtep icon={IconFileImport} title={t('button.import')} />
             </Grid>
           </Grid>
         ) : (
@@ -468,13 +471,7 @@ export default function SoGoc() {
         </Grid>
         <Grid item xs={12} container spacing={2} justifyContent="flex-end" mt={1}>
           <Grid item>
-            <AnimateButton>
-              <Tooltip placement="bottom">
-                <Button color="info" variant="contained" size="medium" onClick={handelPhuLuc} startIcon={<IconBook />}>
-                  {t('button.title.phuluc')}
-                </Button>
-              </Tooltip>
-            </AnimateButton>
+            <GroupButtons buttonConfigurations={xuatTep} color="info" icon={IconFileExport} title={t('button.export')} />
           </Grid>
         </Grid>
         {pageState.data.length > 0 ? (

@@ -28,7 +28,9 @@ import {
   IconCertificateOff,
   IconCertificate2,
   IconBellPlus,
-  IconFileExport
+  IconFileExport,
+  IconFileImport,
+  IconDownload
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { useTranslation } from 'react-i18next';
@@ -529,6 +531,31 @@ const ActionButtons = ({
             }
           }
         ];
+      case 'dowloadTemplate':
+        return [
+          {
+            title: 'Tải tệp mẫu',
+            icon: <IconDownload color="#378771" size={'20px'} />,
+            color: 'primary',
+            onClick: () => {
+              handleClick(params);
+              onClose();
+            }
+          }
+        ];
+      case 'importFile':
+        return [
+          {
+            title: 'Thêm từ tệp',
+            icon: <IconFileImport color="#00B835" size={'20px'} />,
+            color: 'success',
+            onClick: () => {
+              handleClick(params);
+              onClose();
+            }
+          }
+        ];
+
       case 'hide':
         return [
           {
@@ -569,7 +596,18 @@ const ActionButtons = ({
                   <div style={{ margin: '0 0 -4px -7px' }}>
                     <Typography
                       variant="subtitle1"
-                      sx={{ color: type == 'exportExcel' ? 'green' : type == 'exportWord' ? '#2196F3' : '' }}
+                      sx={{
+                        color:
+                          type == 'exportExcel'
+                            ? 'green'
+                            : type == 'exportWord'
+                            ? '#2196F3'
+                            : type == 'dowloadTemplate'
+                            ? '#378771'
+                            : type == 'importFile'
+                            ? '#00B835'
+                            : ''
+                      }}
                       style={{ fontSize: '13px' }}
                     >
                       {t(button.title)}

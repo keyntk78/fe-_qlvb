@@ -23,7 +23,7 @@ import { useNavigate } from 'react-router-dom';
 import GuiDuyetAll from './GuiDuyetAll';
 import DeleteAll from './DeleteAll';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
-import { IconCertificate, IconClick, IconDownload, IconPlus, IconSearch, IconSend, IconTrash } from '@tabler/icons';
+import { IconCertificate, IconFileImport, IconPlus, IconSearch, IconSend, IconTrash } from '@tabler/icons';
 import Detail from './Detail';
 import { getAllDanhmucTN, getCauHinhTuDongXepLoai } from 'services/sharedService';
 import BackToTop from 'components/scroll/BackToTop';
@@ -34,7 +34,7 @@ import Add from '../hocsinhtotnghiep/Add';
 import InGCN from './InGCN';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
-import ButtonSecondary from 'components/buttoncolor/ButtonSecondary';
+import GroupButtons from 'components/button/GroupButton';
 
 const trangThaiOptions = [
   { value: '0', label: 'Chưa gửi duyệt' },
@@ -369,6 +369,20 @@ export default function HocSinh() {
     setPageState((old) => ({ ...old, trangThai: trangthai }));
   };
 
+  const handleDowloadTemplate = async () => {
+    window.location.href = configAuto ? FileExcel : FileExcel_thucong;
+  };
+  const themTuTep = [
+    {
+      type: 'importFile',
+      handleClick: handleImport
+    },
+    {
+      type: 'dowloadTemplate',
+      handleClick: handleDowloadTemplate
+    }
+  ];
+
   return (
     <>
       <MainCard
@@ -383,22 +397,7 @@ export default function HocSinh() {
           ) : (
             <Grid item container justifyContent="flex-end" spacing={1}>
               <Grid item>
-                <ButtonSecondary
-                  title={t('button.download')}
-                  href={configAuto ? FileExcel : FileExcel_thucong}
-                  download="File_Mau"
-                  target="_blank"
-                  rel="noreferrer"
-                  icon={IconDownload}
-                />
-              </Grid>
-              <Grid item>
-                <ButtonSuccess
-                  title={t('button.import')}
-                  onClick={handleImport}
-                  icon={IconClick}
-                  // disabled={disableImport}
-                />
+                <GroupButtons buttonConfigurations={themTuTep} themtep icon={IconFileImport} title={t('button.import')} />
               </Grid>
               <Grid item>
                 <Button onClick={handleAdd} color="info" variant="contained" startIcon={<IconPlus />}>
@@ -412,22 +411,7 @@ export default function HocSinh() {
         {isXs ? (
           <Grid item container justifyContent="center" spacing={1}>
             <Grid item>
-              <ButtonSecondary
-                title={t('button.download')}
-                href={configAuto ? FileExcel : FileExcel_thucong}
-                download="File_Mau"
-                target="_blank"
-                rel="noreferrer"
-                icon={IconDownload}
-              />
-            </Grid>
-            <Grid item>
-              <ButtonSuccess
-                title={t('button.import')}
-                onClick={handleImport}
-                icon={IconClick}
-                // disabled={disableImport}
-              />
+              <GroupButtons buttonConfigurations={themTuTep} themtep icon={IconFileImport} title={t('button.import')} />
             </Grid>
           </Grid>
         ) : (

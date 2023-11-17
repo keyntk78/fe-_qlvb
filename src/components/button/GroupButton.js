@@ -3,10 +3,9 @@ import * as React from 'react';
 import Menu from '@mui/material/Menu';
 import AnimateButton from 'components/extended/AnimateButton';
 import { Button, Tooltip } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 import ActionButtons from './ActionButtons';
-const GroupButtons = ({ params, buttonConfigurations, title, icon: Icon }) => {
-  const { t } = useTranslation();
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+const GroupButtons = ({ params, buttonConfigurations, title, icon: Icon, themtep }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -21,9 +20,35 @@ const GroupButtons = ({ params, buttonConfigurations, title, icon: Icon }) => {
     <>
       <AnimateButton>
         <Tooltip title={title} placement="bottom">
-          <Button fullWidth color="info" variant="contained" onClick={handleClick} startIcon={<Icon />}>
-            {t('button.export')}
-          </Button>
+          {themtep ? (
+            <Button
+              fullWidth
+              sx={{
+                bgcolor: '#00B835',
+                color: 'white',
+                '&:hover': {
+                  bgcolor: '#00942A' // Đặt màu chữ khi hover vào nút
+                }
+              }}
+              variant="contained"
+              onClick={handleClick}
+              startIcon={<Icon />}
+              endIcon={<KeyboardArrowDownIcon />}
+            >
+              {title}
+            </Button>
+          ) : (
+            <Button
+              fullWidth
+              color="info"
+              variant="contained"
+              onClick={handleClick}
+              startIcon={<Icon />}
+              endIcon={<KeyboardArrowDownIcon />}
+            >
+              {title}
+            </Button>
+          )}
         </Tooltip>
       </AnimateButton>
       <Menu

@@ -457,7 +457,7 @@ export default function SoCapPhatBang() {
                 Quyết định công nhận tốt nghiệp số {formik.values.QuyetDinh}
               </Typography>
               <Typography variant="body1" fontSize={14}>
-                Học sinh trường: {selectDonvi ? selectDonvi.ten : ''}
+                Học sinh trường: {donvi ? donvi.ten : ''}
               </Typography>
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={5} flexDirection={'column'}>
