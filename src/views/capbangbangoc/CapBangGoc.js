@@ -471,7 +471,7 @@ export default function CapBangGoc() {
   return (
     <>
       <MainCard title={t('capbanggoc.title')}>
-        <Grid item container mb={1} spacing={1} justifyContent={'center'}>
+        <Grid item container mb={1} spacing={1} justifyContent={'center'} alignItems="center">
           <Grid item md={3} sm={3} lg={1.4} xs={isXs ? 5 : 1.5}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('namhoc')}</InputLabel>
@@ -558,7 +558,7 @@ export default function CapBangGoc() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item container spacing={1} justifyContent={'center'}>
+          <Grid item container spacing={1} justifyContent={'center'} alignItems="center">
             <Grid item md={6} sm={6} lg={3} container xs={isXs ? 12 : 3}>
               <TextField
                 fullWidth
@@ -610,7 +610,6 @@ export default function CapBangGoc() {
                 fullWidth
                 onClick={handleSearch}
                 color="info"
-                sx={{ marginTop: '2px' }}
                 startIcon={<IconSearch />}
               >
                 {t('button.search')}

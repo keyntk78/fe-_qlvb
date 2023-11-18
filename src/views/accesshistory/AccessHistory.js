@@ -242,7 +242,7 @@ const HistoryAccess = () => {
           </Grid>
         }
       >
-        <Grid container justifyContent="center" mb={1} spacing={1}>
+        <Grid container justifyContent="center" mb={1} spacing={1} alignItems="center">
           <Grid item xs={2}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('Chức năng')}</InputLabel>
@@ -340,7 +340,7 @@ const HistoryAccess = () => {
               />
             </FormControl>
           </Grid>
-          <Grid item mt={'1px'} mb={1}>
+          <Grid item>
             <Button variant="contained" title="Tìm kiếm" color="info" onClick={handleSearch} startIcon={<IconSearch />}>
               {t('button.search')}
             </Button>

@@ -417,7 +417,7 @@ export default function CapPhatBang() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item container spacing={1} justifyContent={'center'}>
+          <Grid item container spacing={1} justifyContent={'center'} alignItems="center">
             <Grid item lg={4} md={5} sm={5} xs={isXs ? 12 : 4}>
               <TextField
                 fullWidth
@@ -458,7 +458,6 @@ export default function CapPhatBang() {
                 fullWidth
                 onClick={handleSearch}
                 color="info"
-                sx={{ marginTop: '2px' }}
                 startIcon={<IconSearch />}
               >
                 {t('button.search')}

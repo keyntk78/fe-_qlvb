@@ -246,13 +246,8 @@ export default function ThongKeHocSinh() {
 
   return (
     <>
-      <MainCard
-        title={t('Thống kê học sinh tốt nghiệp')}
-        secondary={
-          <ButtonSuccess title={t('button.export.excel')} onClick={handleExport} icon={IconFileExport} disabled={disabledExport} />
-        }
-      >
-        <Grid item container spacing={1} mb={2} justifyContent={'center'}>
+      <MainCard title={t('Thống kê học sinh tốt nghiệp')}>
+        <Grid item container spacing={1} justifyContent={'center'}>
           <Grid item lg={2} md={3} sm={4} xs={isXs ? 4 : 2}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('Năm học')}</InputLabel>
@@ -308,6 +303,8 @@ export default function ThongKeHocSinh() {
               </Select>
             </FormControl>
           </Grid>
+        </Grid>
+        <Grid item xs={12} container spacing={2} justifyContent="center" mt={1} mb={2}>
           <Grid item lg={2} md={3} sm={4} xs={isXs ? 6 : 2} minWidth={130}>
             <Button
               variant="contained"
@@ -315,12 +312,14 @@ export default function ThongKeHocSinh() {
               fullWidth
               onClick={handleSearch}
               color="info"
-              sx={{ marginTop: '2px' }}
               startIcon={<IconSearch />}
               disabled={disabledSearch}
             >
               {t('button.search')}
             </Button>
+          </Grid>
+          <Grid item>
+            <ButtonSuccess title={t('button.export.excel')} onClick={handleExport} icon={IconFileExport} disabled={disabledExport} />
           </Grid>
         </Grid>
         <DataGrid

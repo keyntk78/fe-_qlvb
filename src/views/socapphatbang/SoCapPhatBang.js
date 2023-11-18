@@ -324,7 +324,7 @@ export default function SoCapPhatBang() {
         ) : (
           ''
         )}
-        <Grid item container mb={1} spacing={1} mt={1} justifyContent={'center'}>
+        <Grid item container mb={1} spacing={1} mt={1} justifyContent={'center'} alignItems="center">
           <Grid item>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('danhmuc.title')}</InputLabel>
@@ -364,7 +364,6 @@ export default function SoCapPhatBang() {
               fullWidth
               onClick={handleSearch}
               color="info"
-              sx={{ marginTop: '2px' }}
               startIcon={<IconSearch />}
               disabled={disable}
             >
@@ -458,7 +457,7 @@ export default function SoCapPhatBang() {
                 Quyết định công nhận tốt nghiệp số {formik.values.QuyetDinh}
               </Typography>
               <Typography variant="body1" fontSize={14}>
-                Học sinh trường: {selectDonvi ? selectDonvi.ten : ''}
+                Học sinh trường: {donvi ? donvi.ten : ''}
               </Typography>
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={5} flexDirection={'column'}>

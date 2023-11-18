@@ -352,7 +352,7 @@ export default function TracuuDonyeucau() {
                 </Typography>
               </Grid>
             </Grid>
-            <Grid item container xs={12} justifyContent={'center'} spacing={2}>
+            <Grid item container xs={12} justifyContent={'center'} spacing={2} alignItems="center">
               <Grid item xs={6} sm={4} md={3} lg={3}>
                 <Button
                   variant="contained"
@@ -360,7 +360,6 @@ export default function TracuuDonyeucau() {
                   fullWidth
                   onClick={handleSubmit}
                   color="info"
-                  sx={{ marginTop: '2px' }}
                   startIcon={<IconSearch />}
                 >
                   {t('button.search')}
@@ -373,7 +372,6 @@ export default function TracuuDonyeucau() {
                   fullWidth
                   onClick={handleReset}
                   color="inherit"
-                  sx={{ marginTop: '2px' }}
                   startIcon={<IconZoomReset />}
                 >
                   {t('button.reset')}

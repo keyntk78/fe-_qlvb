@@ -1,10 +1,10 @@
 import { Button, Card, Grid, TextField, useMediaQuery } from '@mui/material';
 // import { Button, Grid, TextField, useMediaQuery } from '@mui/material';
-import { IconCertificate, IconEdit, IconSearch } from '@tabler/icons';
+import { IconCertificate, IconEdit, IconSearch, IconZoomIn } from '@tabler/icons';
 import React from 'react';
 import ThongKeSoBangDaPhatChuaPhat from './SoBangDaPhatChuaPhat';
 import ThongKeSoLuongXepLoai from './SoLuongXepLoai';
-import ThongKeSoLuongNguoiHoc from './SoLuongHocSinh';
+// import ThongKeSoLuongNguoiHoc from './SoLuongHocSinh';
 import MainCard from 'components/cards/MainCard';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -32,6 +32,8 @@ import Thuhoihuybo from 'views/thuhoihuybo/Thuhoihuybo';
 import ShowVanBang from './ShowVanBang';
 import InBanSao from './InBanSao';
 import XacNhanIn from './XacNhanIn';
+import config from 'config';
+import ThongKeSoLuong from './BieuDo';
 
 // import { Component } from 'react';
 
@@ -301,6 +303,11 @@ const TrangChu = () => {
   const handleSearch = () => {
     setSearch(true);
   };
+
+  const handleTraCuuNangCao = () => {
+    navigate(config.defaultPath + '/tracuuvanbang');
+  };
+
   return (
     <>
       {/* <Demo></Demo> */}
@@ -317,8 +324,8 @@ const TrangChu = () => {
           {' '}
           {donvi.laPhong && (
             <Grid mb={2}>
-              <MainCard title={t('Tìm kiếm nhanh')}>
-                <Grid item container spacing={1} mb={2} justifyContent={'center'}>
+              <MainCard title={t('Tra cứu nhanh')}>
+                <Grid item container spacing={1} mb={2} justifyContent={'center'} alignItems={'center'}>
                   <Grid item lg={2} md={3} sm={3} xs={isXs ? 4 : 2}>
                     <TextField
                       fullWidth
@@ -342,16 +349,13 @@ const TrangChu = () => {
                     />
                   </Grid>
                   <Grid item lg={2} md={3} sm={3} xs={isXs ? 6 : 2} minWidth={130}>
-                    <Button
-                      variant="contained"
-                      title={t('button.search')}
-                      fullWidth
-                      onClick={handleSearch}
-                      color="info"
-                      sx={{ marginTop: '2px' }}
-                      startIcon={<IconSearch />}
-                    >
-                      {t('button.search')}
+                    <Button variant="contained" fullWidth onClick={handleSearch} color="info" startIcon={<IconSearch />}>
+                      {t('Tra cứu nhanh')}
+                    </Button>
+                  </Grid>
+                  <Grid item lg={2} md={3} sm={3} xs={isXs ? 6 : 2} minWidth={130}>
+                    <Button variant="contained" fullWidth onClick={handleTraCuuNangCao} color="info" startIcon={<IconZoomIn />}>
+                      {t('Tra cứu nâng cao')}
                     </Button>
                   </Grid>
                 </Grid>
@@ -384,7 +388,8 @@ const TrangChu = () => {
               <Card sx={{ mt: 2 }}>
                 <Grid container item xs={12} justifyContent={'center'}>
                   <Grid item xs={12}>
-                    <ThongKeSoLuongNguoiHoc />
+                    {/* <ThongKeSoLuongNguoiHoc /> */}
+                    <ThongKeSoLuong />
                   </Grid>
                 </Grid>
               </Card>

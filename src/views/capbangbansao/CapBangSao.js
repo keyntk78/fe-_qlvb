@@ -388,7 +388,7 @@ export default function CapBangBanSao() {
   return (
     <>
       <MainCard title={t('Cấp bằng bản sao')}>
-        <Grid item container mb={1} spacing={1} justifyContent={'center'}>
+        <Grid item container mb={1} spacing={1} justifyContent={'center'} alignItems="center">
           <Grid item container lg={2} md={6} sm={6} xs={isXs ? 6 : 2}>
             <TextField
               fullWidth
@@ -467,15 +467,7 @@ export default function CapBangBanSao() {
           </Grid>
 
           <Grid item lg={2} md={6} sm={6} xs={isXs ? 6 : 4}>
-            <Button
-              variant="contained"
-              title={t('button.search')}
-              fullWidth
-              onClick={handleSearch}
-              color="info"
-              sx={{ marginTop: '2px' }}
-              startIcon={<IconSearch />}
-            >
+            <Button variant="contained" title={t('button.search')} fullWidth onClick={handleSearch} color="info" startIcon={<IconSearch />}>
               {t('button.search')}
             </Button>
           </Grid>
