@@ -423,7 +423,7 @@ export default function HocSinh() {
               <Grid item>
                 <ButtonSecondary
                   title={t('button.download')}
-                  href={configAuto ? FileExcel : FileExcel_thucong}
+                  href={configAuto === 'true' ? FileExcel : FileExcel_thucong}
                   download="File_Mau"
                   target="_blank"
                   rel="noreferrer"
@@ -447,7 +447,7 @@ export default function HocSinh() {
             <Grid item>
               <ButtonSecondary
                 title={t('button.download')}
-                href={configAuto ? FileExcel : FileExcel_thucong}
+                href={configAuto === 'true' ? FileExcel : FileExcel_thucong}
                 download="File_Mau"
                 target="_blank"
                 rel="noreferrer"

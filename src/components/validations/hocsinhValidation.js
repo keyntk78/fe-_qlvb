@@ -14,8 +14,8 @@ export const useHocSinhValidationSchema = (isPhong = false, configAuto) => {
     diaChi: Yup.string().required(t('validation.hocsinh.diachi')),
     lop: Yup.string().required(t('validation.hocsinh.lop')),
     noiSinh: Yup.string().required(t('validation.hocsinh.noisinh')),
-    //xepLoai: Yup.string().required(t('validation.hocsinh.xeploai'))
-    // hocLuc: Yup.string().required(t('validation.hocsinh.hocluc')),
+    hoiDong: Yup.string().required(t('Hội đông thi không được để trống')),
+    diemTB: Yup.string().required(t('Điểm trung bình không được để trống')),
     hanhKiem: Yup.string().required(t('validation.hocsinh.hanhkiem'))
   });
 
@@ -24,7 +24,7 @@ export const useHocSinhValidationSchema = (isPhong = false, configAuto) => {
       idTruong: Yup.string().required(t('validation.donvitruong'))
     });
   }
-  if (!configAuto) {
+  if (configAuto === 'false') {
     hocSinhValidationSchema = hocSinhValidationSchema.shape({
       hocLuc: Yup.string().required(t('validation.hocsinh.hocluc')),
       xepLoai: Yup.string().required(t('validation.hocsinh.xeploai')),

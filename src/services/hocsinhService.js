@@ -12,7 +12,6 @@ export async function getHocSinhs(params) {
     throw error;
   }
 }
-
 export async function getHocSinhByCCCD(cccd) {
   try {
     store.dispatch(setLoading(true));
