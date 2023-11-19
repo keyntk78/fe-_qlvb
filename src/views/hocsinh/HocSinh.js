@@ -39,7 +39,7 @@ import Popup from 'components/controls/popup';
 import FileExcel from '../FileMau/FileMauTuDong.xlsx';
 import FileExcel_thucong from '../FileMau/FileMauKhongTuDong.xlsx';
 // import { getAllDonvi } from 'services/donvitruongService';
-import { getAllTruong, getCauHinhTuDongXepLoai } from 'services/sharedService';
+import { getAllDanToc, getAllTruong, getCauHinhTuDongXepLoai } from 'services/sharedService';
 
 import DuyetAll from './DuyetAll';
 import { getAllDanhmucTN } from 'services/sharedService';
@@ -55,6 +55,10 @@ const trangThaiOptions = [
   { value: '1', label: 'Chưa duyệt' },
   { value: '2', label: 'Đã duyệt' }
 ];
+const ketQuaOptions = [
+  { value: 'x', label: 'Đạt' },
+  { value: 'o', label: 'Không đạt' }
+];
 
 export default function HocSinh() {
   const isXs = useMediaQuery('(max-width:600px)');
@@ -67,6 +71,7 @@ export default function HocSinh() {
   const [dataCCCD, setDataCCCD] = useState('');
   const [dMTN, setDMTN] = useState([]);
   const [donvis, setDonvis] = useState([]);
+  const [danToc, setDanToc] = useState([]);
   const [search, setSearch] = useState(false);
   const [firstLoad, setFirstLoad] = useState(true);
   const [disabledExport, setDisabledExport] = useState(true);
@@ -79,6 +84,7 @@ export default function HocSinh() {
   const [selectedRowData, setSelectedRowData] = useState([]);
   const [disabled, setDisabled] = useState(false);
   const [disabled1, setDisabled1] = useState(false);
+  const [disabledApprov, setDisabledApprov] = useState(false);
   const [loadData, setLoadData] = useState(false);
   const [configAuto, setConfigAuto] = useState(false);
   const infoHocSinh = useSelector(infoHocSinhSelector);
@@ -98,7 +104,8 @@ export default function HocSinh() {
     DMTN: '',
     danToc: '',
     donVi: '',
-    trangThai: ''
+    trangThai: '',
+    ketQua: ''
   });
 
   const handleDetail = (hocsinh) => {
@@ -266,6 +273,8 @@ export default function HocSinh() {
       setDMTN(response.data);
       const donvi = await getAllTruong(user.username);
       setDonvis(donvi.data);
+      const dantoc = await getAllDanToc();
+      setDanToc(dantoc.data);
       const configAuto = await getCauHinhTuDongXepLoai();
       setConfigAuto(configAuto.data.configValue);
     };
@@ -326,10 +335,13 @@ export default function HocSinh() {
       params.append('idDanhMucTotNghiep', pageState.DMTN);
       params.append('idTruong', pageState.donVi);
       params.append('trangThai', pageState.trangThai ? pageState.trangThai : '1');
+      params.append('ketQua', pageState.ketQua ? pageState.ketQua : 'x');
       const response = await getHocSinhs(params);
       const data = response.data;
       const hasActiveHocSinh = data && data.hocSinhs.length > 0 ? data.hocSinhs.some((hocSinh) => hocSinh.trangThai === 1) : false;
       setDisabled(!hasActiveHocSinh);
+      const hasActiveApprov = data && data.hocSinhs.length > 0 ? data.hocSinhs.some((hocSinh) => hocSinh.ketQua === 'x') : false;
+      setDisabledApprov(!hasActiveApprov);
       const check = handleResponseStatus(response, navigate);
       if (check) {
         if (data && data.hocSinhs.length > 0) {
@@ -406,6 +418,15 @@ export default function HocSinh() {
   const handleTrangThaiChange = (event) => {
     const selectedValue = event.target.value;
     setPageState((old) => ({ ...old, trangThai: selectedValue }));
+  };
+  const handleKetQuaTotNghiepChange = (event) => {
+    const selectedValue = event.target.value;
+    setPageState((old) => ({ ...old, ketQua: selectedValue }));
+  };
+  const handleDanTocChange = (event) => {
+    const selectedValue = event.target.value;
+    const danToc = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, danToc: danToc }));
   };
   const handleDowloadTemplate = async () => {
     window.location.href = configAuto === 'true' ? FileExcel : FileExcel_thucong;
@@ -512,6 +533,25 @@ export default function HocSinh() {
               </Select>
             </FormControl>
           </Grid>
+          {pageState.trangThai != 2 && (
+            <Grid item lg={2} md={3} sm={3} xs={isXs ? 6 : 2}>
+              <FormControl fullWidth variant="outlined" size="small">
+                <InputLabel>{t('Kết quả tốt nghiệp')}</InputLabel>
+                <Select
+                  name="ketQua"
+                  value={pageState.ketQua ? pageState.ketQua : 'x'}
+                  onChange={handleKetQuaTotNghiepChange}
+                  label={t('Kết quả tốt nghiệp')}
+                >
+                  {ketQuaOptions.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          )}
           {isXs ? (
             <Grid item xs={isXs ? 6 : 2}>
               <TextField
@@ -565,7 +605,7 @@ export default function HocSinh() {
                 value={pageState.noiSinh}
               />
             </Grid>
-            <Grid item lg={2} md={3} sm={3} xs={isXs ? 6 : 2}>
+            {/* <Grid item lg={2} md={3} sm={3} xs={isXs ? 6 : 2}>
               <TextField
                 fullWidth
                 id="outlined-basic"
@@ -575,6 +615,29 @@ export default function HocSinh() {
                 onChange={(e) => setPageState((old) => ({ ...old, danToc: e.target.value }))}
                 value={pageState.danToc}
               />
+            </Grid> */}
+
+            <Grid item lg={2} md={3} sm={3} xs={isXs ? 6 : 2}>
+              <FormControl fullWidth variant="outlined" size="small">
+                <InputLabel>{t('hocsinh.field.nation')}</InputLabel>
+                <Select
+                  name="danToc"
+                  value={pageState.danToc === '' ? 'all' : pageState.danToc}
+                  onChange={handleDanTocChange}
+                  label={t('hocsinh.field.nation')}
+                >
+                  <MenuItem value="all">Tất cả</MenuItem>
+                  {danToc && danToc.length > 0 ? (
+                    danToc.map((dantoc) => (
+                      <MenuItem key={dantoc.id} value={dantoc.ten}>
+                        {dantoc.ten}
+                      </MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem value="">No data available</MenuItem>
+                  )}
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item lg={2} md={3} sm={3} xs={isXs ? 6 : 2} minWidth={130}>
               <Button
@@ -613,7 +676,12 @@ export default function HocSinh() {
                   title={t('button.duyet')}
                   onClick={handleDuyet}
                   icon={IconCircleCheck}
-                  disabled={!selectDanhmuc || !selectDonvi || selectedRowData.some((row) => row.trangThai === 2)}
+                  disabled={
+                    !selectDanhmuc ||
+                    !selectDonvi ||
+                    selectedRowData.some((row) => row.trangThai === 2) ||
+                    selectedRowData.some((row) => row.ketQua === 'o')
+                  }
                 />
               </Grid>
             </>
@@ -635,7 +703,7 @@ export default function HocSinh() {
                   title={t('button.duyetall')}
                   onClick={handleDuyetAll}
                   icon={IconCircleCheck}
-                  disabled={!selectDanhmuc || !selectDonvi || disabled || disabled1}
+                  disabled={!selectDanhmuc || !selectDonvi || disabled || disabled1 || disabledApprov}
                 />
               </Grid>
             </>

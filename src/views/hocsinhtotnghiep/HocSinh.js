@@ -25,7 +25,7 @@ import DeleteAll from './DeleteAll';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { IconCertificate, IconFileImport, IconPlus, IconSearch, IconSend, IconTrash } from '@tabler/icons';
 import Detail from './Detail';
-import { getAllDanhmucTN, getCauHinhTuDongXepLoai } from 'services/sharedService';
+import { getAllDanToc, getAllDanhmucTN, getCauHinhTuDongXepLoai } from 'services/sharedService';
 import BackToTop from 'components/scroll/BackToTop';
 import InGCNAll from './InGCNAll';
 import ActionButtons from 'components/button/ActionButtons';
@@ -53,6 +53,7 @@ export default function HocSinh() {
   const donvi = useSelector(donviSelector);
   const [dMTN, setDMTN] = useState('');
   const [selectedDMTN, setSelectedDMTN] = useState('');
+  const [danToc, setDanToc] = useState([]);
   const { t } = useTranslation();
   const reloadData = useSelector(reloadDataSelector);
   const [firstLoad, setFirstLoad] = useState(true);
@@ -259,6 +260,8 @@ export default function HocSinh() {
       const danhmuc = await getAllDanhmucTN(user ? user.username : '');
       setDMTN(danhmuc.data);
       console.log(danhmuc.data);
+      const dantoc = await getAllDanToc();
+      setDanToc(dantoc.data);
       const configAuto = await getCauHinhTuDongXepLoai();
       setConfigAuto(configAuto.data.configValue);
     };
@@ -362,7 +365,11 @@ export default function HocSinh() {
     const selectedValue = event.target.value;
     setPageState((old) => ({ ...old, DMTN: selectedValue }));
   };
-
+  const handleDanTocChange = (event) => {
+    const selectedValue = event.target.value;
+    const danToc = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, danToc: danToc }));
+  };
   const handleTrangThaiChange = (event) => {
     const selectedValue = event.target.value;
     const trangthai = selectedValue === 'all' ? '' : selectedValue;
@@ -486,7 +493,7 @@ export default function HocSinh() {
               value={pageState.noiSinh}
             />
           </Grid>
-          <Grid item container xs={6} sm={3} md={3} lg={2}>
+          {/* <Grid item container xs={6} sm={3} md={3} lg={2}>
             <TextField
               fullWidth
               id="outlined-basic"
@@ -496,6 +503,28 @@ export default function HocSinh() {
               onChange={(e) => setPageState((old) => ({ ...old, danToc: e.target.value }))}
               value={pageState.danToc}
             />
+          </Grid> */}
+          <Grid item lg={2} md={3} sm={3} xs={isXs ? 6 : 2}>
+            <FormControl fullWidth variant="outlined" size="small">
+              <InputLabel>{t('hocsinh.field.nation')}</InputLabel>
+              <Select
+                name="danToc"
+                value={pageState.danToc === '' ? 'all' : pageState.danToc}
+                onChange={handleDanTocChange}
+                label={t('hocsinh.field.nation')}
+              >
+                <MenuItem value="all">Tất cả</MenuItem>
+                {danToc && danToc.length > 0 ? (
+                  danToc.map((dantoc) => (
+                    <MenuItem key={dantoc.id} value={dantoc.ten}>
+                      {dantoc.ten}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value="">No data available</MenuItem>
+                )}
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={5} sm={3} md={3} lg={2}>
             <Button

@@ -42,7 +42,7 @@ import { getHocSinhTheoSoGoc } from 'services/sogocService';
 import ExportExcel from './ExportExcel';
 import { getAllTruong } from 'services/sharedService';
 import Popup from 'components/controls/popup';
-import FileMau from '../FileMau/FileMau_ThemDanhSachVanBang.xlsx';
+import FileMau from '../FileMau/FileImportVanBang.xlsx';
 import { getAllKhoathiByDMTN } from 'services/khoathiService';
 import PhuLucSoGoc from 'views/phulucsogoc/PhuLucSoGoc';
 import Import from 'views/ImportDanhSachVanBang/Import';
