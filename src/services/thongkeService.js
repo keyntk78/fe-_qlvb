@@ -287,3 +287,13 @@ export async function GetThongKeTongQuatByTruong(params) {
     throw error;
   }
 }
+
+export async function GetThongKeHocSinh3DanhMucGanNhat(user) {
+  try {
+    const response = await axiosClient(`TrangChu/GetThongKeHocSinh3DanhMucGanNhat?nguoiThucHien=${user}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating thong ke:', error);
+    throw error;
+  }
+}
