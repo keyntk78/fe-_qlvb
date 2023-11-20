@@ -17,8 +17,9 @@ import AddButton from 'components/button/AddButton';
 import { createSearchParams } from 'utils/createSearchParams';
 import i18n from 'i18n';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
-import { FormControlLabel, Grid, Switch } from '@mui/material';
+import { Grid } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
+import QuickSearch from 'components/form/QuickSearch';
 
 const Config = () => {
   const language = i18n.language;
@@ -31,6 +32,7 @@ const Config = () => {
   const [form, setForm] = useState('');
   const [isAccess, setIsAccess] = useState(true);
   const reloadData = useSelector(reloadDataSelector);
+  const [search, setSearch] = useState(false);
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -38,7 +40,8 @@ const Config = () => {
     order: 0,
     orderDir: 'ASC',
     startIndex: 0,
-    pageSize: 10
+    pageSize: 10,
+    search: ''
   });
 
   const handleAddConfig = () => {
@@ -137,18 +140,27 @@ const Config = () => {
       }
     };
     fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
-  const [loading, setLoading] = useState(false);
+  }, [pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
+
   return (
     <>
       <MainCard title={t('config.title')} secondary={<AddButton handleClick={handleAddConfig} />}>
-        <FormControlLabel
+        {/* <FormControlLabel
           sx={{
             display: 'block'
           }}
           control={<Switch checked={loading} onChange={() => setLoading(!loading)} name="loading" color="primary" />}
           label="Tự động xếp loại"
-        />
+        /> */}
+        <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
+          <Grid item lg={3} md={4} sm={5} xs={7}>
+            <QuickSearch
+              value={pageState.search}
+              onChange={(value) => setPageState((old) => ({ ...old, search: value }))}
+              onSearch={() => setSearch(!search)}
+            />
+          </Grid>
+        </Grid>
         {isAccess ? (
           <DataGrid
             autoHeight

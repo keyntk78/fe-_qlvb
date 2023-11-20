@@ -180,7 +180,7 @@ const DonVi = () => {
     <>
       <MainCard title={t('donvitruong.title')} secondary={<AddButton handleClick={handleAddDonvi} />}>
         <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
-          <Grid item xs={3}>
+          <Grid item lg={3} md={4} sm={5} xs={7}>
             <QuickSearch
               value={pageState.search}
               onChange={(value) => setPageState((old) => ({ ...old, search: value }))}
