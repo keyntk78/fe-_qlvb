@@ -17,8 +17,9 @@ import { createSearchParams } from 'utils/createSearchParams';
 import i18n from 'i18n';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import BackToTop from 'components/scroll/BackToTop';
-import { Grid } from '@mui/material';
+import { FormControl, Grid, IconButton, Input, InputAdornment, InputLabel } from '@mui/material';
 import { getDanToc } from 'services/dantocService';
+import { IconSearch } from '@tabler/icons';
 
 const DanToc = () => {
   const language = i18n.language;
@@ -30,6 +31,7 @@ const DanToc = () => {
   const [form, setForm] = useState('');
   const reloadData = useSelector(reloadDataSelector);
   const { t } = useTranslation();
+  const [search, setSearch] = useState(false);
   const [isAccess, setIsAccess] = useState(true);
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -127,11 +129,34 @@ const DanToc = () => {
       }
     };
     fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
+  }, [pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
+
+  const handleSearch = () => {
+    setSearch(!search);
+  };
 
   return (
     <>
       <MainCard title={t('Dân tộc')} secondary={<AddButton handleClick={handleAdd} />}>
+        <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
+          <Grid item>
+            <FormControl variant="standard" size="small">
+              <InputLabel>Tìm kiếm</InputLabel>
+              <Input
+                id="search-input"
+                value={pageState.search}
+                onChange={(e) => setPageState((old) => ({ ...old, search: e.target.value }))}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleSearch} edge="end">
+                      <IconSearch />
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+          </Grid>
+        </Grid>
         {isAccess ? (
           <DataGrid
             autoHeight

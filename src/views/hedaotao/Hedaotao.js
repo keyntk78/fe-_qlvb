@@ -17,8 +17,9 @@ import { createSearchParams } from 'utils/createSearchParams';
 import i18n from 'i18n';
 import { getHedaotao } from 'services/hedaotaoService';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
-import { Grid } from '@mui/material';
+import { FormControl, Grid, IconButton, Input, InputAdornment, InputLabel } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
+import { IconSearch } from '@tabler/icons';
 
 const Hedaotao = () => {
   const language = i18n.language;
@@ -30,6 +31,7 @@ const Hedaotao = () => {
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
   const [isAccess, setIsAccess] = useState(true);
+  const [search, setSearch] = useState(false);
   const reloadData = useSelector(reloadDataSelector);
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -125,7 +127,7 @@ const Hedaotao = () => {
       }
     };
     fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
+  }, [pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
 
   const handleAddHedaotao = () => {
     setTitle(<> {t('hedaotao.title.add')} </>);
@@ -133,9 +135,32 @@ const Hedaotao = () => {
     dispatch(setOpenPopup(true));
   };
 
+  const handleSearch = () => {
+    setSearch(!search);
+  };
+
   return (
     <>
       <MainCard title={t('hedaotao.title')} secondary={<AddButton handleClick={handleAddHedaotao} />}>
+        <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
+          <Grid item>
+            <FormControl variant="standard" size="small">
+              <InputLabel>Tìm kiếm</InputLabel>
+              <Input
+                id="search-input"
+                value={pageState.search}
+                onChange={(e) => setPageState((old) => ({ ...old, search: e.target.value }))}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleSearch} edge="end">
+                      <IconSearch />
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+          </Grid>
+        </Grid>
         {isAccess ? (
           <DataGrid
             autoHeight
