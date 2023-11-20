@@ -21,7 +21,7 @@ import Edit from './Edit';
 import Delete from './Delete';
 import Show from './Show';
 import Hide from './Hide';
-import { Chip, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel } from '@mui/material';
+import { Chip, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, MenuItem, Select, Button } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
 import { IconSearch } from '@tabler/icons';
 
@@ -39,6 +39,7 @@ const TinTuc = () => {
   const [isAccess, setIsAccess] = useState(true);
   const [search, setSearch] = useState(false);
   const [loaiTinTuc, setLoaiTinTuc] = useState([]);
+  const [selectLoaiTinTuc, setSelectLoaiTinTuc] = useState('');
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -200,10 +201,16 @@ const TinTuc = () => {
     }
   ];
 
+  const handleSearchLoaiTinTuc = (event) => {
+    const selectedValue = event.target.value;
+    const loaiTinTucId = selectedValue === 'all' ? '' : selectedValue;
+    setSelectLoaiTinTuc(loaiTinTucId);
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getAllLoaiTinTuc();
+        console.log(response);
         setLoaiTinTuc(response.data);
       } catch (error) {
         console.log(error);
@@ -247,7 +254,36 @@ const TinTuc = () => {
   return (
     <>
       <MainCard title={t('Tin tức')} secondary={<AddButton handleClick={handleAdd} />}>
-        <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
+        <Grid container spacing={2} justifyContent="center">
+          <Grid item lg={3} md={4} sm={4} xs={6}>
+            <FormControl fullWidth variant="outlined" size="small">
+              <InputLabel>{t('Loại tin tức')}</InputLabel>
+              <Select
+                name="id"
+                value={selectLoaiTinTuc == '' ? 'all' : selectLoaiTinTuc}
+                onChange={handleSearchLoaiTinTuc}
+                label={t('Loại tin tức')}
+              >
+                <MenuItem value="all">Tất cả</MenuItem>
+                {loaiTinTuc && loaiTinTuc.length > 0 ? (
+                  loaiTinTuc.map((data) => (
+                    <MenuItem key={data.id} value={data.id}>
+                      {data.tieuDe}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value="">No data available</MenuItem>
+                )}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item md={4} sm={4} lg={2} xs={6}>
+            <Button variant="contained" title={t('button.search')} fullWidth onClick={handleSearch} color="info" startIcon={<IconSearch />}>
+              {t('button.search')}
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid container justifyContent="flex-end" mb={1}>
           <Grid item>
             <FormControl variant="standard" size="small">
               <InputLabel>Tìm kiếm</InputLabel>

@@ -1,5 +1,5 @@
 import { FormControl, Grid, InputLabel, MenuItem, Select, useMediaQuery } from '@mui/material';
-import { IconTableExport, IconTableImport } from '@tabler/icons';
+import { IconFileExport, IconFileImport } from '@tabler/icons';
 import GroupButtons from 'components/button/GroupButton';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import MainCard from 'components/cards/MainCard';
@@ -77,11 +77,11 @@ const XuLyDuLieu = () => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={isXs ? 8 : 2.5} sm={6} md={4} lg={2.5} sx={{ ml: 2, mb: 2 }}>
-            <GroupButtons buttonConfigurations={themTuTep} themtep icon={IconTableImport} title={t('button.import')} />
+          <Grid item xs={isXs ? 8 : 2.5} sm={4} md={4} lg={2.1} sx={{ ml: 2, mb: 2 }}>
+            <GroupButtons buttonConfigurations={themTuTep} themtep icon={IconFileImport} title={t('button.import')} />
           </Grid>
           <Grid item xs={isXs ? 6 : 2.5} sm={4} md={3} lg={2.5} sx={{ ml: 2, mb: 2 }}>
-            <ButtonSuccess title={t('button.export')} onClick={handleExport} icon={IconTableExport} />
+            <ButtonSuccess title={t('button.export')} onClick={handleExport} icon={IconFileExport} />
           </Grid>
         </Grid>
       </MainCard>
