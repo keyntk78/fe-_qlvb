@@ -22,7 +22,7 @@ const ThongKeSoBangDaPhatChuaPhat = () => {
   const currentYear = new Date().getFullYear();
 
   useEffect(() => {
-    setChartHeight(300);
+    setChartHeight(328);
   }, []);
 
   useEffect(() => {
@@ -127,7 +127,7 @@ const ThongKeSoBangDaPhatChuaPhat = () => {
         <MainCard>
           <Grid container>
             <Grid item xs={12}>
-              <Grid container alignItems="center">
+              <Grid container>
                 <Grid item xs={3}>
                   <Grid container direction="column" spacing={1}>
                     <Grid item>
@@ -138,9 +138,9 @@ const ThongKeSoBangDaPhatChuaPhat = () => {
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid item mt={1}>
-                  <Grid container spacing={2}>
-                    <Grid item>
+                <Grid item mt={1} xs={9}>
+                  <Grid container spacing={1} justifyContent="flex-end">
+                    <Grid item xs={8}>
                       <FormControl fullWidth variant="outlined" size="small">
                         <InputLabel>{t('Danh mục tốt nghiệp')}</InputLabel>
                         <Select
@@ -160,15 +160,10 @@ const ThongKeSoBangDaPhatChuaPhat = () => {
                         </Select>
                       </FormControl>
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={8}>
                       <FormControl fullWidth variant="outlined" size="small">
                         <InputLabel>{t('Đơn vị trường')}</InputLabel>
-                        <Select
-                          value={selectedDonVi || ''}
-                          onChange={handleDonViChange}
-                          label={t('Đơn vị trường')}
-                          style={{ width: '175px' }}
-                        >
+                        <Select value={selectedDonVi || ''} onChange={handleDonViChange} label={t('Đơn vị trường')}>
                           {donvi && donvi.length > 0 ? (
                             donvi.map((data) => (
                               <MenuItem key={data.idTruong} value={data.idTruong}>
