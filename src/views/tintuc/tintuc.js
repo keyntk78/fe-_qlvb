@@ -21,9 +21,10 @@ import Edit from './Edit';
 import Delete from './Delete';
 import Show from './Show';
 import Hide from './Hide';
-import { Chip, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, MenuItem, Select, Button } from '@mui/material';
+import { Chip, FormControl, Grid, InputLabel, MenuItem, Select, Button } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
 import { IconSearch } from '@tabler/icons';
+import QuickSearch from 'components/form/QuickSearch';
 
 const TinTuc = () => {
   const { t } = useTranslation();
@@ -38,6 +39,7 @@ const TinTuc = () => {
   const [urlFileImage, setUrlFileImage] = useState('');
   const [isAccess, setIsAccess] = useState(true);
   const [search, setSearch] = useState(false);
+  const [quickSearch, setQuickSearch] = useState(false);
   const [loaiTinTuc, setLoaiTinTuc] = useState([]);
   const [selectLoaiTinTuc, setSelectLoaiTinTuc] = useState('');
   const [pageState, setPageState] = useState({
@@ -45,6 +47,7 @@ const TinTuc = () => {
     data: [],
     total: 0,
     order: 0,
+    loaiTinTuc: '',
     orderDir: 'DESC',
     startIndex: 0,
     pageSize: 10
@@ -204,13 +207,12 @@ const TinTuc = () => {
   const handleSearchLoaiTinTuc = (event) => {
     const selectedValue = event.target.value;
     const loaiTinTucId = selectedValue === 'all' ? '' : selectedValue;
-    setSelectLoaiTinTuc(loaiTinTucId);
+    setPageState((old) => ({ ...old, loaiTinTuc: loaiTinTucId }));
   };
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getAllLoaiTinTuc();
-        console.log(response);
         setLoaiTinTuc(response.data);
       } catch (error) {
         console.log(error);
@@ -224,6 +226,7 @@ const TinTuc = () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       setUrlFileImage(config.urlFile + 'TinTuc/');
       const params = await createSearchParams(pageState);
+      params.append('idLoaiTinTuc', selectLoaiTinTuc);
       const response = await getSearchTinTuc(params);
       const check = await handleResponseStatus(response, navigate);
       if (check) {
@@ -245,10 +248,11 @@ const TinTuc = () => {
       }
     };
     fetchData();
-  }, [pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
+  }, [pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search, quickSearch]);
 
   const handleSearch = () => {
     setSearch(!search);
+    dispatch(setSelectLoaiTinTuc(pageState.loaiTinTuc));
   };
 
   return (
@@ -260,7 +264,7 @@ const TinTuc = () => {
               <InputLabel>{t('Loại tin tức')}</InputLabel>
               <Select
                 name="id"
-                value={selectLoaiTinTuc == '' ? 'all' : selectLoaiTinTuc}
+                value={pageState.loaiTinTuc == '' ? 'all' : pageState.loaiTinTuc}
                 onChange={handleSearchLoaiTinTuc}
                 label={t('Loại tin tức')}
               >
@@ -283,25 +287,16 @@ const TinTuc = () => {
             </Button>
           </Grid>
         </Grid>
-        <Grid container justifyContent="flex-end" mb={1}>
-          <Grid item>
-            <FormControl variant="standard" size="small">
-              <InputLabel>Tìm kiếm</InputLabel>
-              <Input
-                id="search-input"
-                value={pageState.search}
-                onChange={(e) => setPageState((old) => ({ ...old, search: e.target.value }))}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton onClick={handleSearch} edge="end">
-                      <IconSearch />
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-            </FormControl>
+        <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-5px' }}>
+          <Grid item lg={3} md={4} sm={5} xs={7}>
+            <QuickSearch
+              value={pageState.search}
+              onChange={(value) => setPageState((old) => ({ ...old, search: value }))}
+              onSearch={() => setQuickSearch(!quickSearch)}
+            />
           </Grid>
         </Grid>
+
         {isAccess ? (
           <DataGrid
             autoHeight
