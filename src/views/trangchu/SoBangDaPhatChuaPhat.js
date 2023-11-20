@@ -69,7 +69,6 @@ const ThongKeSoBangDaPhatChuaPhat = () => {
         async () => {
           try {
             const response = await GetThongKeHocSinhPhatBang(params);
-            console.log(response.data);
             setData(response.data.data);
             setFirstLoad(false);
             setLoading(false);

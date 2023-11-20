@@ -583,7 +583,7 @@ export default function HocSinh() {
                 />
               </Grid>
             )}
-            <Grid item lg={2} md={3} sm={3} xs={isXs ? 12 : 2}>
+            <Grid item lg={3} md={3} sm={3} xs={isXs ? 12 : 2}>
               <TextField
                 fullWidth
                 id="outlined-basic"
@@ -594,7 +594,7 @@ export default function HocSinh() {
                 value={pageState.hoTen}
               />
             </Grid>
-            <Grid item lg={2} md={3} sm={3} xs={isXs ? 6 : 2}>
+            <Grid item lg={3} md={3} sm={3} xs={isXs ? 6 : 2}>
               <TextField
                 fullWidth
                 id="outlined-basic"

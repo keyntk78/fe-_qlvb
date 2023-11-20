@@ -1,10 +1,8 @@
 import { Button, Card, Grid, TextField, useMediaQuery } from '@mui/material';
-// import { Button, Grid, TextField, useMediaQuery } from '@mui/material';
 import { IconCertificate, IconEdit, IconSearch, IconZoomIn } from '@tabler/icons';
 import React from 'react';
 import ThongKeSoBangDaPhatChuaPhat from './SoBangDaPhatChuaPhat';
 import ThongKeSoLuongXepLoai from './SoLuongXepLoai';
-// import ThongKeSoLuongNguoiHoc from './SoLuongHocSinh';
 import MainCard from 'components/cards/MainCard';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -244,8 +242,10 @@ const TrangChu = () => {
       const response = await getAllDanhmucTN(params);
       dispatch(listDanhMuc(response.data));
     };
-    fetchDataDL();
-  }, []);
+    if (donvi != 0) {
+      fetchDataDL();
+    }
+  }, [donvi]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -331,7 +331,6 @@ const TrangChu = () => {
         </div>
       ) : (
         <>
-          {' '}
           {donvi.laPhong && (
             <Grid mb={2}>
               <MainCard title={t('Tra cứu nhanh')}>

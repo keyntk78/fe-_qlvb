@@ -32,7 +32,7 @@ import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { convertISODateToFormattedDate, formatDate } from 'utils/formatDate';
 import MainCard from 'components/cards/MainCard';
 // import { getAllDonvi } from 'services/donvitruongService';
-import { getAllDanhmucTN } from 'services/sharedService';
+import { getAllDanhmucTN, getTruongCuByTruongMoi } from 'services/sharedService';
 import BackToTop from 'components/scroll/BackToTop';
 import { styled } from '@mui/system';
 import AnimateButton from 'components/extended/AnimateButton';
@@ -56,6 +56,7 @@ export default function SoGoc() {
   const navigate = useNavigate();
   const [dMTN, setDMTN] = useState([]);
   const [donvis, setDonvis] = useState([]);
+  const [donviOld, setDonviOld] = useState([]);
   const [khoaThis, setKhoaThis] = useState([]);
   const [selectKhoaThi, setSelectKhoaThi] = useState([]);
   const [selectDonvi, setSelectDonvi] = useState('');
@@ -167,7 +168,6 @@ export default function SoGoc() {
   useEffect(() => {
     const fetchDataDL = async () => {
       dispatch(setLoading(true));
-      // const donvi = await getAllDonvi();
       const donvi = await getAllTruong(user.username);
 
       if (donvi.data && donvi.data.length > 0) {
@@ -184,6 +184,22 @@ export default function SoGoc() {
     };
     fetchDataDL();
   }, []);
+
+  useEffect(() => {
+    const fetchDataDL = async () => {
+      const response = await getTruongCuByTruongMoi(selectDonvi);
+      console.log(response);
+      if (response.data && response.data.length > 0) {
+        setDonviOld(response.data);
+      } else {
+        setDonviOld([]);
+      }
+      dispatch(setLoading(false));
+    };
+    if (selectDonvi) {
+      fetchDataDL();
+    }
+  }, [selectDonvi]);
 
   useEffect(() => {
     const fetchDataDL = async () => {
@@ -302,6 +318,7 @@ export default function SoGoc() {
   const handleSchoolChange = (event) => {
     const selectedValue = event.target.value;
     setPageState((old) => ({ ...old, donVi: selectedValue }));
+    setSelectDonvi(selectedValue);
   };
 
   const themTuTep = [
@@ -405,8 +422,8 @@ export default function SoGoc() {
         ) : (
           ''
         )}
-        <Grid item container spacing={2} mt={1} justifyContent={'center'}>
-          <Grid item xs={isXs ? 12 : 4}>
+        <Grid item container spacing={1} mt={1} justifyContent={'center'}>
+          <Grid item xs={isXs ? 12 : 3}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('danhmuc.title')}</InputLabel>
               <Select name="id" value={pageState.DMTN} onChange={handleDanhMucChange} label={t('danhmuc.title')}>
@@ -438,7 +455,7 @@ export default function SoGoc() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={isXs ? 12 : 4}>
+          <Grid item xs={isXs ? 12 : 3}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('donvitruong.title')}</InputLabel>
               <Select name="truongId" value={pageState.donVi} onChange={handleSchoolChange} label={t('donvitruong.title')}>
@@ -454,22 +471,43 @@ export default function SoGoc() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={isXs ? 6 : 2}>
+          {donviOld && donviOld.length > 0 ? (
+            <>
+              <Grid item xs={isXs ? 12 : 3}>
+                <FormControl fullWidth variant="outlined" size="small">
+                  <InputLabel>{t('donvitruong.title')}</InputLabel>
+                  <Select name="truongId" value={pageState.donVi} onChange={handleSchoolChange} label={t('donvitruong.title')}>
+                    {donviOld && donviOld.length > 0 ? (
+                      donviOld.map((donvi) => (
+                        <MenuItem key={donvi.id} value={donvi.id}>
+                          {donvi.ten}
+                        </MenuItem>
+                      ))
+                    ) : (
+                      <MenuItem value="">No data available</MenuItem>
+                    )}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </>
+          ) : (
+            ''
+          )}
+        </Grid>
+        <Grid item xs={12} container spacing={1} justifyContent="center" mt={1}>
+          <Grid item>
             <Button
               variant="contained"
               title={t('button.search')}
               fullWidth
               onClick={handleSearch}
               color="info"
-              sx={{ marginTop: '2px', minWidth: 130 }}
               startIcon={<IconSearch />}
               disabled={disable}
             >
               {t('button.search')}
             </Button>
           </Grid>
-        </Grid>
-        <Grid item xs={12} container spacing={2} justifyContent="flex-end" mt={1}>
           <Grid item>
             <GroupButtons buttonConfigurations={xuatTep} color="info" icon={IconFileExport} title={t('button.export')} />
           </Grid>

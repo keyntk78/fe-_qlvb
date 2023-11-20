@@ -31,7 +31,7 @@ import User1 from 'assets/images/users/user-round.svg';
 // assets
 import { IconEdit, IconLogout, IconSettings, IconUser } from '@tabler/icons';
 import { useTranslation } from 'react-i18next';
-import { setOpenProfile, userLogin } from 'store/actions';
+import { setDonvi, setOpenProfile, userLogin } from 'store/actions';
 import { logout, profile } from 'services/authService';
 import ChangePassword from 'views/pages/authentication/auth/ChangePassword';
 import { openProfileSelector, reloadDataSelector } from 'store/selectors';
@@ -71,7 +71,7 @@ const ProfileSection = () => {
       localStorage.removeItem('donvi');
       localStorage.removeItem('reports');
       dispatch(userLogin(null));
-      // dispatch(setDonvi(null));
+      dispatch(setDonvi(0));
       navigate('/login');
     } catch (err) {
       console.error(err);
