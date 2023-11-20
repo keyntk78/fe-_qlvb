@@ -65,16 +65,10 @@ const Message = () => {
       filterable: false
     },
     {
-      flex: 1,
+      flex: 0.7,
       field: 'time_fm',
       headerName: t('Thời gian gửi'),
       minWidth: 150
-    },
-    {
-      flex: 1,
-      field: 'messageType',
-      headerName: t('Loại tin nhắn'),
-      minWidth: 130
     },
     {
       flex: 1,
@@ -83,16 +77,16 @@ const Message = () => {
       minWidth: 200
     },
     {
-      flex: 1,
+      flex: 0.6,
       field: 'userName',
       headerName: t('Người nhận'),
       minWidth: 100
     },
     {
-      flex: 1.5,
-      field: 'title',
-      headerName: t('Tiêu đề'),
-      minWidth: 110
+      flex: 2,
+      field: 'content',
+      headerName: t('Nội dung'),
+      minWidth: 200
     },
     {
       field: 'actions',
@@ -118,6 +112,7 @@ const Message = () => {
       params.append('ToDate', pageState.toDate);
       params.append('userId', user.id);
       const response = await GetAllMessagesByUserId(params);
+      console.log(response);
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;

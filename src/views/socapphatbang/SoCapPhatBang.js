@@ -298,29 +298,7 @@ export default function SoCapPhatBang() {
 
   return (
     <>
-      <MainCard
-        title={t('socapphatbang.title')}
-        secondary={
-          isXs ? (
-            ''
-          ) : (
-            <Grid container justifyContent="flex-end" spacing={1}>
-              <Grid item>
-                <GroupButtons buttonConfigurations={xuatTep} icon={IconFileExport} title={t('button.export')} />
-              </Grid>
-            </Grid>
-          )
-        }
-      >
-        {isXs ? (
-          <Grid container justifyContent="flex-end" spacing={1}>
-            <Grid item>
-              <GroupButtons buttonConfigurations={xuatTep} icon={IconFileExport} title={t('button.export')} />
-            </Grid>
-          </Grid>
-        ) : (
-          ''
-        )}
+      <MainCard title={t('socapphatbang.title')}>
         <Grid item container mb={1} spacing={1} mt={1} justifyContent={'center'} alignItems="center">
           <Grid item xs={isXs ? 12 : 4}>
             <FormControl fullWidth variant="outlined" size="small">
@@ -354,10 +332,15 @@ export default function SoCapPhatBang() {
               </Select>
             </FormControl>
           </Grid>
+        </Grid>
+        <Grid item xs={12} container spacing={1} justifyContent="center" mt={1}>
           <Grid item>
             <Button variant="contained" title={t('button.search')} fullWidth onClick={handleSearch} color="info" startIcon={<IconSearch />}>
               {t('button.search')}
             </Button>
+          </Grid>
+          <Grid item>
+            <GroupButtons buttonConfigurations={xuatTep} icon={IconFileExport} title={t('button.export')} />
           </Grid>
         </Grid>
         {pageState.data.length > 0 ? (
@@ -398,10 +381,10 @@ export default function SoCapPhatBang() {
             alignItems="center"
           >
             <Typography variant="body1" fontSize={14}>
-              {formik.values.UyBanNhanDan.toUpperCase()}
+              {formik.values.UyBanNhanDan.toUpperCase() || '{ỦY BAN NHÂN DÂN}'}
             </Typography>
             <Typography variant="h5" fontSize={15} fontWeight={'bold'}>
-              {formik.values.CoQuanCapBang.toUpperCase()}
+              {formik.values.CoQuanCapBang.toUpperCase() || '{CƠ QUAN CẤP BẰNG}'}
             </Typography>
             <Grid item mt={0}>
               <Divider width={120} />
@@ -410,7 +393,7 @@ export default function SoCapPhatBang() {
           <Grid item lg={3} md={0.1} sm={1} xs={1}></Grid>
           <Grid item container lg={6} md={7.8} sm={7} xs={6} justifyContent={'center'} textAlign={'center'}>
             <Typography variant="h4" fontSize={18}>
-              SỔ CẤP PHÁT BẰNG TỐT NGHIỆP {formik.values.HeDaoTao.toUpperCase()}
+              SỔ CẤP PHÁT BẰNG TỐT NGHIỆP {formik.values.HeDaoTao.toUpperCase() || '{HỆ ĐÀO TẠO}'}
             </Typography>
           </Grid>
         </Grid>
@@ -443,18 +426,18 @@ export default function SoCapPhatBang() {
           <Grid item container mb={3} spacing={1} mt={3}>
             <Grid item lg={8} md={8} sm={8} xs={7} flexDirection={'column'}>
               <Typography variant="body1" fontSize={14}>
-                Quyết định công nhận tốt nghiệp số {formik.values.QuyetDinh}
+                Quyết định công nhận tốt nghiệp số {formik.values.QuyetDinh || '{Số quyết định}'}
               </Typography>
               <Typography variant="body1" fontSize={14}>
-                Học sinh trường: {donvi ? donvi.ten : ''}
+                Học sinh trường: {donvi ? donvi.ten : '{Tên trường}'}
               </Typography>
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={5} flexDirection={'column'}>
               <Typography variant="body1" fontSize={14}>
-                Năm tốt nghiệp: {formik.values.NamThi}
+                Năm tốt nghiệp: {formik.values.NamThi || '{Năm tốt nghiệp}'}
               </Typography>
               <Typography variant="body1" fontSize={14}>
-                Hình thức học: {formik.values.HinhThucDaoTao}
+                Hình thức học: {formik.values.HinhThucDaoTao || '{Hình thức đào tạo}'}
               </Typography>
             </Grid>
           </Grid>
@@ -465,7 +448,6 @@ export default function SoCapPhatBang() {
               <TableRow>
                 <TableCell1 style={{ width: '30px' }}>STT</TableCell1>
                 <TableCell1 style={{ width: 'auto' }}>Họ và tên</TableCell1>
-                <TableCell1 style={{ width: '110px' }}>CCCD</TableCell1>
                 <TableCell1 style={{ width: '83px' }}>Ngày tháng năm sinh</TableCell1>
                 <TableCell1 style={{ width: 'auto' }}>Nơi sinh</TableCell1>
                 <TableCell1 style={{ width: '45px' }}>Giới tính</TableCell1>
@@ -479,23 +461,30 @@ export default function SoCapPhatBang() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {pageState.data.map((row) => (
-                <TableRow key={row.idx}>
-                  <TableCell2 style={{ textAlign: 'center' }}>{row.idx}</TableCell2>
-                  <TableCell2>{row.HoTen}</TableCell2>
-                  <TableCell2>{row.CCCD}</TableCell2>
-                  <TableCell2>{row.ngaySinh_fm}</TableCell2>
-                  <TableCell2>{row.NoiSinh}</TableCell2>
-                  <TableCell2>{row.gioiTinh_fm}</TableCell2>
-                  <TableCell2>{row.DanToc}</TableCell2>
-                  {donvi.donViQuanLy == 1 && <TableCell2>{row.HoiDong}</TableCell2>}
-                  <TableCell2>{row.XepLoai}</TableCell2>
-                  <TableCell2>{row.SoHieuVanBang}</TableCell2>
-                  <TableCell2 style={{ textAlign: 'center' }}>{row.SoVaoSoCapBang}</TableCell2>
-                  <TableCell2></TableCell2>
-                  <TableCell2></TableCell2>
+              {pageState.data.length === 0 ? (
+                <TableRow>
+                  <TableCell2 colSpan={11} style={{ textAlign: 'center' }}>
+                    Không có dữ liệu
+                  </TableCell2>
                 </TableRow>
-              ))}
+              ) : (
+                pageState.data.map((row) => (
+                  <TableRow key={row.idx}>
+                    <TableCell2 style={{ textAlign: 'center' }}>{row.idx}</TableCell2>
+                    <TableCell2>{row.HoTen}</TableCell2>
+                    <TableCell2>{row.ngaySinh_fm}</TableCell2>
+                    <TableCell2>{row.NoiSinh}</TableCell2>
+                    <TableCell2>{row.gioiTinh_fm}</TableCell2>
+                    <TableCell2>{row.DanToc}</TableCell2>
+                    {donvi.donViQuanLy == 1 && <TableCell2>{row.HoiDong}</TableCell2>}
+                    <TableCell2>{row.XepLoai}</TableCell2>
+                    <TableCell2>{row.SoHieuVanBang}</TableCell2>
+                    <TableCell2 style={{ textAlign: 'center' }}>{row.SoVaoSoCapBang}</TableCell2>
+                    <TableCell2></TableCell2>
+                    <TableCell2></TableCell2>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -515,7 +504,7 @@ export default function SoCapPhatBang() {
           >
             <Grid item>
               <Typography variant="body1" fontSize={14} style={{ fontStyle: 'italic' }}>
-                {formik.values.DiaPhuongCapBang}, {formik.values.NgayCapBang}
+                {formik.values.DiaPhuongCapBang || '{Địa phương}'}, {formik.values.NgayCapBang || '{Ngày cấp bằng}'}
               </Typography>
             </Grid>
             <Grid item mt={0.4}>
@@ -525,7 +514,7 @@ export default function SoCapPhatBang() {
             </Grid>
             <Grid item mt={10}>
               <Typography variant="body1" fontSize={15} style={{ fontWeight: 'bold' }}>
-                {formik.values.NguoiKyBang}
+                {formik.values.NguoiKyBang || '{Người ký bằng}'}
               </Typography>
             </Grid>
           </Grid>

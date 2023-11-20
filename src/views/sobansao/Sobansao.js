@@ -127,7 +127,6 @@ export default function SoBanSao() {
     setLoading(true);
     generateDocument(pageState1.data, additionalData, donvi);
     setLoading(false);
-    console.log('123');
   };
 
   const xuatTep = [
@@ -194,8 +193,6 @@ export default function SoBanSao() {
   useEffect(() => {
     const fetchDataDL = async () => {
       const response = await getAllKhoathiByDMTN(selectDanhmuc);
-      console.log(response);
-      console.log(selectDanhmuc);
       if (response.data && response.data.length > 0) {
         setKhoaThis(response.data);
         setPageState((old) => ({ ...old, khoaThi: response.data[0].id }));
@@ -221,7 +218,8 @@ export default function SoBanSao() {
       HinhThucDaoTao: '',
       NgayCapBang: '',
       TenKyThi: '',
-      KhoaThi: ''
+      KhoaThi: '',
+      TenTruong: ''
     }
   });
 
@@ -246,7 +244,8 @@ export default function SoBanSao() {
         HinhThucDaoTao: data.truong.hinhThucDaoTao || '',
         NgayCapBang: formatDate(data.danhMucTotNghiep.ngayCapBang) || '',
         TenKyThi: data.danhMucTotNghiep.tenKyThi || '',
-        KhoaThi: convertISODateToFormattedDate(data.khoaThi.ngay) || ''
+        KhoaThi: convertISODateToFormattedDate(data.khoaThi.ngay) || '',
+        TenTruong: selectDonvi.ten || ''
       });
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -292,7 +291,6 @@ export default function SoBanSao() {
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data.donYeuCaus;
-        console.log(data);
         const dataWithIds = data.map((row, index) => ({
           idx: index + 1,
           gioiTinh_fm: row.hocSinh.gioiTinh ? t('gender.male') : t('gender.female'),
@@ -354,14 +352,7 @@ export default function SoBanSao() {
 
   return (
     <>
-      <MainCard
-        title={t('sobansao.title')}
-        secondary={
-          <Grid item>
-            <GroupButtons buttonConfigurations={xuatTep} icon={IconFileExport} title={t('button.export')} />
-          </Grid>
-        }
-      >
+      <MainCard title={t('sobansao.title')}>
         <Grid item container mb={1} spacing={1} mt={1} justifyContent={'center'} alignItems="center">
           <Grid item xs={isXs ? 12 : 4}>
             <FormControl fullWidth variant="outlined">
@@ -411,18 +402,25 @@ export default function SoBanSao() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={isXs ? 6 : 2}>
-            <Button
-              variant="contained"
-              title={t('button.search')}
-              fullWidth
-              onClick={handleSearch}
-              color="info"
-              startIcon={<IconSearch />}
-              disabled={disable}
-            >
-              {t('button.search')}
-            </Button>
+        </Grid>
+        <Grid item xs={12} container spacing={1} justifyContent="center" mt={1}>
+          <Grid item>
+            <Grid>
+              <Button
+                variant="contained"
+                title={t('button.search')}
+                fullWidth
+                onClick={handleSearch}
+                color="info"
+                startIcon={<IconSearch />}
+                disabled={disable}
+              >
+                {t('button.search')}
+              </Button>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <GroupButtons buttonConfigurations={xuatTep} icon={IconFileExport} title={t('button.export')} />
           </Grid>
         </Grid>
         {pageState.data.length > 0 ? (
@@ -463,10 +461,10 @@ export default function SoBanSao() {
             alignItems="center"
           >
             <Typography variant="body1" fontSize={14}>
-              {formik.values.UyBanNhanDan.toUpperCase()}
+              {formik.values.UyBanNhanDan.toUpperCase() || '{ỦY BAN NHÂN DÂN}'}
             </Typography>
             <Typography variant="h5" fontSize={15} fontWeight={'bold'}>
-              {formik.values.CoQuanCapBang.toUpperCase()}
+              {formik.values.CoQuanCapBang.toUpperCase() || '{CƠ QUAN CẤP BẰNG}'}
             </Typography>
             <Grid item mt={0}>
               <Divider width={120} />
@@ -475,7 +473,7 @@ export default function SoBanSao() {
           <Grid item lg={3} md={0.1} sm={1} xs={1}></Grid>
           <Grid item container lg={6} md={7.8} sm={7} xs={6} justifyContent={'center'} textAlign={'center'}>
             <Typography variant="h4" fontSize={18}>
-              SỔ BẢN SAO BẰNG TỐT NGHIỆP {formik.values.HeDaoTao.toUpperCase()}
+              SỔ BẢN SAO BẰNG TỐT NGHIỆP {formik.values.HeDaoTao.toUpperCase() || '{HỆ ĐÀO TẠO}'}
             </Typography>
           </Grid>
         </Grid>
@@ -508,18 +506,18 @@ export default function SoBanSao() {
           <Grid item container mb={3} spacing={1} mt={3}>
             <Grid item lg={8} md={8} sm={8} xs={7} flexDirection={'column'}>
               <Typography variant="body1" fontSize={14}>
-                Quyết định công nhận tốt nghiệp số {formik.values.QuyetDinh}
+                Quyết định công nhận tốt nghiệp số {formik.values.QuyetDinh || '{Số quyết định}'}
               </Typography>
               <Typography variant="body1" fontSize={14}>
-                Học sinh trường: {selectDonvi ? selectDonvi.ten : ''}
+                Học sinh trường: {formik.values.TenTruong || '{Tên trường}'}
               </Typography>
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={5} flexDirection={'column'}>
               <Typography variant="body1" fontSize={14}>
-                Năm tốt nghiệp: {formik.values.NamThi}
+                Năm tốt nghiệp: {formik.values.NamThi || '{Năm tốt nghiệp}'}
               </Typography>
               <Typography variant="body1" fontSize={14}>
-                Hình thức học: {formik.values.HinhThucDaoTao}
+                Hình thức học: {formik.values.HinhThucDaoTao || '{Hình thức đào tạo}'}
               </Typography>
             </Grid>
           </Grid>
@@ -543,22 +541,30 @@ export default function SoBanSao() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {pageState.data.map((row) => (
-                <TableRow key={row.id}>
-                  <TableCell2>{row.idx}</TableCell2>
-                  <TableCell2>{row.hoTen_fm}</TableCell2>
-                  <TableCell2>{row.ngaySinh_fm}</TableCell2>
-                  <TableCell2>{row.noiSinh_fm}</TableCell2>
-                  <TableCell2>{row.gioiTinh_fm}</TableCell2>
-                  <TableCell2>{row.danToc_fm}</TableCell2>
-                  {donvi.donViQuanLy == 1 && <TableCell2>{row.hoiDong_fm}</TableCell2>}
-                  <TableCell2>{row.xepLoai_fm}</TableCell2>
-                  <TableCell2>{row.soHieuVanBang_fm}</TableCell2>
-                  <TableCell2 style={{ textAlign: 'center' }}>{row.soVaoSoBanSao_fm}</TableCell2>
-                  <TableCell2></TableCell2>
-                  <TableCell2></TableCell2>
+              {pageState.data.length === 0 ? (
+                <TableRow>
+                  <TableCell2 colSpan={11} style={{ textAlign: 'center' }}>
+                    Không có dữ liệu
+                  </TableCell2>
                 </TableRow>
-              ))}
+              ) : (
+                pageState.data.map((row) => (
+                  <TableRow key={row.id}>
+                    <TableCell2>{row.idx}</TableCell2>
+                    <TableCell2>{row.hoTen_fm}</TableCell2>
+                    <TableCell2>{row.ngaySinh_fm}</TableCell2>
+                    <TableCell2>{row.noiSinh_fm}</TableCell2>
+                    <TableCell2>{row.gioiTinh_fm}</TableCell2>
+                    <TableCell2>{row.danToc_fm}</TableCell2>
+                    {donvi.donViQuanLy == 1 && <TableCell2>{row.hoiDong_fm}</TableCell2>}
+                    <TableCell2>{row.xepLoai_fm}</TableCell2>
+                    <TableCell2>{row.soHieuVanBang_fm}</TableCell2>
+                    <TableCell2 style={{ textAlign: 'center' }}>{row.soVaoSoBanSao_fm}</TableCell2>
+                    <TableCell2></TableCell2>
+                    <TableCell2></TableCell2>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -578,7 +584,7 @@ export default function SoBanSao() {
           >
             <Grid item>
               <Typography variant="body1" fontSize={14} style={{ fontStyle: 'italic' }}>
-                {formik.values.DiaPhuongCapBang}, {formik.values.NgayCapBang}
+                {formik.values.DiaPhuongCapBang || '{Địa phương}'}, {formik.values.NgayCapBang || '{Ngày cấp bằng}'}
               </Typography>
             </Grid>
             <Grid item mt={0.4}>
@@ -588,7 +594,7 @@ export default function SoBanSao() {
             </Grid>
             <Grid item mt={10}>
               <Typography variant="body1" fontSize={15} style={{ fontWeight: 'bold' }}>
-                {formik.values.NguoiKyBang}
+                {formik.values.NguoiKyBang || '{Người ký bằng}'}
               </Typography>
             </Grid>
           </Grid>

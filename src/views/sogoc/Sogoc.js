@@ -188,7 +188,7 @@ export default function SoGoc() {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const response = await getTruongCuByTruongMoi(selectDonvi);
+      const response = await getTruongCuByTruongMoi(pageState.donVi);
       if (response.data && response.data.length > 0) {
         setDonviOld(response.data);
       } else {
@@ -253,10 +253,6 @@ export default function SoGoc() {
     }
   });
 
-  useEffect(() => {
-    console.log(selectDonvi);
-  }, [selectDonvi]);
-
   const handleImport = () => {
     setTitle(t('Import danh sách văn bằng'));
     setForm('import');
@@ -304,10 +300,9 @@ export default function SoGoc() {
             total: data.totalRow || 0
           }));
         } else {
-          formik.setValues((value) => ({
-            ...value,
+          formik.setValues({
             TenTruong: selectDonvi.ten || ''
-          }));
+          });
           setPageState((old) => ({
             ...old,
             isLoading: false,
@@ -481,9 +476,9 @@ export default function SoGoc() {
             </FormControl>
           </Grid>
           <Grid item container xs={isXs ? 12 : 2}>
-            <FormControl fullWidth variant="outlined">
+            <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('Khóa thi')}</InputLabel>
-              <Select label={t('Khóa thi')} size="small" name="khoaThi" value={selectKhoaThi} onChange={handleKhoaThiChange}>
+              <Select label={t('Khóa thi')} name="khoaThi" value={selectKhoaThi} onChange={handleKhoaThiChange}>
                 {khoaThis && khoaThis.length > 0 ? (
                   khoaThis.map((data) => (
                     <MenuItem key={data.id} value={data.id}>
@@ -600,10 +595,10 @@ export default function SoGoc() {
             alignItems="center"
           >
             <Typography variant="body1" fontSize={14}>
-              {formik.values.UyBanNhanDan ? formik.values.UyBanNhanDan.toUpperCase() : ''}
+              {formik.values.UyBanNhanDan ? formik.values.UyBanNhanDan.toUpperCase() : '{ỦY BAN NHÂN DÂN}'}
             </Typography>
             <Typography variant="h5" fontSize={15} fontWeight={'bold'}>
-              {formik.values.UyBanNhanDan ? formik.values.CoQuanCapBang.toUpperCase() : ''}
+              {formik.values.CoQuanCapBang ? formik.values.CoQuanCapBang.toUpperCase() : '{CƠ QUAN CẤP BẰNG}'}
             </Typography>
             <Grid item mt={0}>
               <Divider width={120} />
@@ -612,7 +607,7 @@ export default function SoGoc() {
           <Grid item lg={3} md={0.1} sm={1} xs={1}></Grid>
           <Grid item container lg={6} md={7.8} sm={7} xs={6} justifyContent={'center'} textAlign={'center'}>
             <Typography variant="h4" fontSize={18}>
-              SỔ GỐC CẤP BẰNG TỐT NGHIỆP {formik.values.HeDaoTao ? formik.values.HeDaoTao.toUpperCase() : ''}
+              SỔ GỐC CẤP BẰNG TỐT NGHIỆP {formik.values.HeDaoTao ? formik.values.HeDaoTao.toUpperCase() : '{HỆ ĐÀO TẠO}'}
             </Typography>
           </Grid>
         </Grid>
@@ -620,21 +615,21 @@ export default function SoGoc() {
           <Grid item container mb={3} spacing={1} mt={3}>
             <Grid item lg={8} md={8} sm={8} xs={7} flexDirection={'column'}>
               <Typography variant="body1" fontSize={14}>
-                Quyết định công nhận tốt nghiệp số {formik.values.QuyetDinh}
+                Quyết định công nhận tốt nghiệp số {formik.values.QuyetDinh || '{Số quyết định}'}
               </Typography>
               <Typography variant="body1" fontSize={14}>
-                Kỳ thi: {formik.values.TenKyThi}
+                Kỳ thi: {formik.values.TenKyThi || '{Tên kỳ thi}'}
               </Typography>
               <Typography variant="body1" fontSize={14}>
-                Năm tốt nghiệp: {formik.values.NamThi}
+                Năm tốt nghiệp: {formik.values.NamThi || '{Năm tốt nghiệp}'}
               </Typography>
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={5} flexDirection={'column'}>
               <Typography variant="body1" fontSize={14}>
-                Khóa thi: {formik.values.KhoaThi}
+                Khóa thi: {formik.values.KhoaThi || '{Khóa thi}'}
               </Typography>
               <Typography variant="body1" fontSize={14}>
-                Học sinh trường: {formik.values.TenTruong}
+                Học sinh trường: {formik.values.TenTruong || '{Tên trường}'}
               </Typography>
               {/* <Typography variant="body1" fontSize={14}>
               Hình thức học: {formik.values.HinhThucDaoTao}
@@ -645,18 +640,18 @@ export default function SoGoc() {
           <Grid item container mb={3} spacing={1} mt={3}>
             <Grid item lg={8} md={8} sm={8} xs={7} flexDirection={'column'}>
               <Typography variant="body1" fontSize={14}>
-                Quyết định công nhận tốt nghiệp số {formik.values.QuyetDinh}
+                Quyết định công nhận tốt nghiệp số {formik.values.QuyetDinh || '{Số quyết định}'}
               </Typography>
               <Typography variant="body1" fontSize={14}>
-                Học sinh trường: {formik.values.TenTruong}
+                Học sinh trường: {formik.values.TenTruong || '{Tên trường}'}
               </Typography>
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={5} flexDirection={'column'}>
               <Typography variant="body1" fontSize={14}>
-                Năm tốt nghiệp: {formik.values.NamThi}
+                Năm tốt nghiệp: {formik.values.NamThi || '{Năm tốt nghiệp}'}
               </Typography>
               <Typography variant="body1" fontSize={14}>
-                Hình thức học: {formik.values.HinhThucDaoTao}
+                Hình thức học: {formik.values.HinhThucDaoTao || '{Hình thức đào tạo}'}
               </Typography>
             </Grid>
           </Grid>
@@ -681,23 +676,31 @@ export default function SoGoc() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {pageState.data.map((row) => (
-                <TableRow key={row.idx}>
-                  <TableCell2 style={{ textAlign: 'center' }}>{row.idx}</TableCell2>
-                  <TableCell2>{row.hoTen}</TableCell2>
-                  {/* <TableCell2>{row.CCCD}</TableCell2> */}
-                  <TableCell2>{row.ngaySinh_fm}</TableCell2>
-                  <TableCell2>{row.noiSinh}</TableCell2>
-                  <TableCell2>{row.gioiTinh_fm}</TableCell2>
-                  <TableCell2>{row.danToc}</TableCell2>
-                  {donvi.donViQuanLy == 1 && <TableCell2>{row.hoiDong}</TableCell2>}
-                  <TableCell2>{row.xepLoai}</TableCell2>
-                  <TableCell2>{row.soHieuVanBang}</TableCell2>
-                  <TableCell2 style={{ textAlign: 'center' }}>{row.soVaoSoCapBang}</TableCell2>
-                  <TableCell2></TableCell2>
-                  <TableCell2></TableCell2>
+              {pageState.data.length === 0 ? (
+                <TableRow>
+                  <TableCell2 colSpan={11} style={{ textAlign: 'center' }}>
+                    Không có dữ liệu
+                  </TableCell2>
                 </TableRow>
-              ))}
+              ) : (
+                pageState.data.map((row) => (
+                  <TableRow key={row.idx}>
+                    <TableCell2 style={{ textAlign: 'center' }}>{row.idx}</TableCell2>
+                    <TableCell2>{row.hoTen}</TableCell2>
+                    {/* <TableCell2>{row.CCCD}</TableCell2> */}
+                    <TableCell2>{row.ngaySinh_fm}</TableCell2>
+                    <TableCell2>{row.noiSinh}</TableCell2>
+                    <TableCell2>{row.gioiTinh_fm}</TableCell2>
+                    <TableCell2>{row.danToc}</TableCell2>
+                    {donvi.donViQuanLy == 1 && <TableCell2>{row.hoiDong}</TableCell2>}
+                    <TableCell2>{row.xepLoai}</TableCell2>
+                    <TableCell2>{row.soHieuVanBang}</TableCell2>
+                    <TableCell2 style={{ textAlign: 'center' }}>{row.soVaoSoCapBang}</TableCell2>
+                    <TableCell2></TableCell2>
+                    <TableCell2></TableCell2>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -717,7 +720,7 @@ export default function SoGoc() {
           >
             <Grid item>
               <Typography variant="body1" fontSize={14} style={{ fontStyle: 'italic' }}>
-                {formik.values.DiaPhuongCapBang}, {formik.values.NgayCapBang}
+                {formik.values.DiaPhuongCapBang || '{Địa phương}'}, {formik.values.NgayCapBang || '{Ngày cấp bằng}'}
               </Typography>
             </Grid>
             <Grid item mt={0.4}>
@@ -727,7 +730,7 @@ export default function SoGoc() {
             </Grid>
             <Grid item mt={10}>
               <Typography variant="body1" fontSize={15} style={{ fontWeight: 'bold' }}>
-                {formik.values.NguoiKyBang}
+                {formik.values.NguoiKyBang || '{Người ký bằng}'}
               </Typography>
             </Grid>
           </Grid>
