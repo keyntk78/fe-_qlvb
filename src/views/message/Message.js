@@ -22,6 +22,7 @@ import Popup from 'components/controls/popup';
 import { addMonths, format, subMonths } from 'date-fns';
 import ExcelJS from 'exceljs';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
+import QuickSearch from 'components/form/QuickSearch';
 
 const Message = () => {
   const language = i18n.language;
@@ -36,9 +37,12 @@ const Message = () => {
   const [search, setSearch] = useState(false);
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
+  const [quickSearch, setQuickSearch] = useState(false);
+
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
+    search: '',
     total: 0,
     order: 1,
     orderDir: 'ASC',
@@ -135,7 +139,7 @@ const Message = () => {
     };
     fetchData();
     setSearch(false);
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
+  }, [pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search, quickSearch]);
 
   const handleSearch = () => {
     setSearch(true);
@@ -279,6 +283,15 @@ const Message = () => {
             <Button fullWidth variant="contained" title="Tìm kiếm" color="info" onClick={handleSearch} startIcon={<IconSearch />}>
               {t('button.search')}
             </Button>
+          </Grid>
+        </Grid>
+        <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-5px' }}>
+          <Grid item lg={3} md={4} sm={5} xs={7}>
+            <QuickSearch
+              value={pageState.search}
+              onChange={(value) => setPageState((old) => ({ ...old, search: value }))}
+              onSearch={() => setQuickSearch(!quickSearch)}
+            />
           </Grid>
         </Grid>
         {isAccess ? (
