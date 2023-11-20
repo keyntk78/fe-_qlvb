@@ -17,9 +17,9 @@ import AddButton from 'components/button/AddButton';
 import { createSearchParams } from 'utils/createSearchParams';
 import i18n from 'i18n';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
-import { FormControl, Grid, IconButton, Input, InputAdornment, InputLabel } from '@mui/material';
+import { Grid } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
-import { IconSearch } from '@tabler/icons';
+import QuickSearch from 'components/form/QuickSearch';
 
 const Hinhthucdaotao = () => {
   const language = i18n.language;
@@ -138,30 +138,16 @@ const Hinhthucdaotao = () => {
     }
   ];
 
-  const handleSearch = () => {
-    setSearch(!search);
-  };
-
   return (
     <>
       <MainCard title={t('hinhthucdaotao.title')} secondary={<AddButton handleClick={handleAddHinhthucdaotao} />}>
         <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
-          <Grid item>
-            <FormControl variant="standard" size="small">
-              <InputLabel>Tìm kiếm</InputLabel>
-              <Input
-                id="search-input"
-                value={pageState.search}
-                onChange={(e) => setPageState((old) => ({ ...old, search: e.target.value }))}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton onClick={handleSearch} edge="end">
-                      <IconSearch />
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-            </FormControl>
+          <Grid item lg={3} md={4} sm={5} xs={7}>
+            <QuickSearch
+              value={pageState.search}
+              onChange={(value) => setPageState((old) => ({ ...old, search: value }))}
+              onSearch={() => setSearch(!search)}
+            />
           </Grid>
         </Grid>
         {isAccess ? (

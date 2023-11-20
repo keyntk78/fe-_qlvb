@@ -26,10 +26,10 @@ import AddButton from 'components/button/AddButton';
 import i18n from 'i18n';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import ResetPassword from './ResetPassword';
-import { FormControl, Grid, IconButton, Input, InputAdornment, InputLabel } from '@mui/material';
+import { Grid } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
 import PermissionsReport from './PermissionsReport';
-import { IconSearch } from '@tabler/icons';
+import QuickSearch from 'components/form/QuickSearch';
 
 const User = () => {
   const language = i18n.language;
@@ -243,7 +243,7 @@ const User = () => {
       }
     };
     fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
+  }, [search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
 
   const handleAddUser = () => {
     setTitle(t('user.title.add'));
@@ -251,30 +251,16 @@ const User = () => {
     dispatch(setOpenPopup(true));
   };
 
-  const handleSearch = () => {
-    setSearch(!search);
-  };
-
   return (
     <>
       <MainCard title={t('user.title')} secondary={<AddButton handleClick={handleAddUser} />}>
         <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
-          <Grid item>
-            <FormControl variant="standard" size="small">
-              <InputLabel>Tìm kiếm</InputLabel>
-              <Input
-                id="search-input"
-                value={pageState.search}
-                onChange={(e) => setPageState((old) => ({ ...old, search: e.target.value }))}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton onClick={handleSearch} edge="end">
-                      <IconSearch />
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-            </FormControl>
+          <Grid item lg={3} md={4} sm={5} xs={7}>
+            <QuickSearch
+              value={pageState.search}
+              onChange={(value) => setPageState((old) => ({ ...old, search: value }))}
+              onSearch={() => setSearch(!search)}
+            />
           </Grid>
         </Grid>
         {isAccess ? (
