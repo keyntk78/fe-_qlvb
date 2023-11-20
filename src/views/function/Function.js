@@ -20,6 +20,7 @@ import i18n from 'i18n';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import { Grid } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
+import QuickSearch from 'components/form/QuickSearch';
 
 const Functions = () => {
   const language = i18n.language;
@@ -32,6 +33,7 @@ const Functions = () => {
   const [form, setForm] = useState('');
   const [isAccess, setIsAccess] = useState(true);
   const reloadData = useSelector(reloadDataSelector);
+  const [search, setSearch] = useState(false);
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -72,16 +74,16 @@ const Functions = () => {
   const buttonConfigurations = [
     {
       type: 'action',
-      handleAdd: handleAddAction,
+      handleAdd: handleAddAction
     },
     {
       type: 'edit',
-      handleEdit: handleEditFunction,
+      handleEdit: handleEditFunction
     },
     {
       type: 'delete',
-      handleDelete: handleDeleteFunction,
-    },
+      handleDelete: handleDeleteFunction
+    }
   ];
 
   const columns = [
@@ -111,7 +113,7 @@ const Functions = () => {
       renderCell: (params) => (
         <>
           <Grid container justifyContent="center">
-            <CombinedActionButtons  params={params.row} buttonConfigurations={buttonConfigurations} />
+            <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
           </Grid>
         </>
       )
@@ -144,11 +146,20 @@ const Functions = () => {
       }
     };
     fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
+  }, [pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
 
   return (
     <>
       <MainCard title={t('function.title')} secondary={<AddButton handleClick={handleAddRole} />}>
+        <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
+          <Grid item xs={3}>
+            <QuickSearch
+              value={pageState.search}
+              onChange={(value) => setPageState((old) => ({ ...old, search: value }))}
+              onSearch={() => setSearch(!search)}
+            />
+          </Grid>
+        </Grid>
         {isAccess ? (
           <DataGrid
             autoHeight
@@ -184,10 +195,10 @@ const Functions = () => {
         )}
       </MainCard>
       {form !== '' && (
-        <Popup 
-          title={title} 
+        <Popup
+          title={title}
           form={form}
-          openPopup={openPopup} 
+          openPopup={openPopup}
           maxWidth={form === 'action' ? 'md' : 'sm'}
           bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
         >

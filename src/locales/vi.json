@@ -42,7 +42,7 @@
   "validation.function.name": "Tên chức năng không được để trống",
 
   "validation.action.name": "Tên hành động không được để trống",
-
+  "validation.action.description": "Mô tả hành động không được để trống",
   "validation.password.oldpass": "Mật khẩu hiện tại không được để trống",
   "validation.password.newpass": "Mật khẩu mới không được để trống",
   "validation.password.confirmpass": "Xác thực mật khẩu không được để trống",
@@ -330,8 +330,9 @@
   "action.title.edit": "Chỉnh sửa hành động",
   "action.title.delete": "Xóa hành động",
   "action.field.action": "Tên hành động",
+  "action.field.description": "Mô tả hành động",
   "action.input.label.action": "Tên hành động",
-
+  "action.input.label.description": "Mô tả hành động",
   "donyeucau.duyet": "Duyệt đơn yêu cầu",
   "donyeucau.tuchoi": "Từ chối đơn yêu cầu",
   "button.title.inbang": "In bằng",
