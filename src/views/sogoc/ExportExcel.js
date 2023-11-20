@@ -35,7 +35,7 @@ const ExportExcel = async (formik, pageState, danhmuc, donvi, khoathi, donviql, 
     worksheet.mergeCells('I4:J4');
 
     const donvitruong = worksheet.getCell('A5');
-    donvitruong.value = `Học sinh trường: ${donvi.ten}`;
+    donvitruong.value = `Học sinh trường: ${formik.values.TenTruong}`;
     worksheet.mergeCells('A5:C5');
 
     const hinhthuchoc = worksheet.getCell('I5');
@@ -72,14 +72,14 @@ const ExportExcel = async (formik, pageState, danhmuc, donvi, khoathi, donviql, 
     pageState.data.forEach((item) => {
       const dataRow = worksheet.addRow([
         item.idx,
-        item.HoTen,
+        item.hoTen,
         item.ngaySinh_fm,
-        item.NoiSinh,
+        item.noiSinh,
         item.gioiTinh_fm,
-        item.DanToc,
-        item.XepLoai,
-        item.SoHieuVanBang,
-        item.SoVaoSoCapBang,
+        item.danToc,
+        item.xepLoai,
+        item.soHieuVanBang,
+        item.soVaoSoCapBang,
         '',
         ''
       ]);
@@ -144,7 +144,7 @@ const ExportExcel = async (formik, pageState, danhmuc, donvi, khoathi, donviql, 
     worksheet.mergeCells('I4:K4');
 
     const donvitruong = worksheet.getCell('I5');
-    donvitruong.value = `Học sinh trường: ${donvi.ten}`;
+    donvitruong.value = `Học sinh trường: ${formik.values.TenTruong}`;
     worksheet.mergeCells('I5:K5');
 
     const cell = worksheet.getCell('A7');

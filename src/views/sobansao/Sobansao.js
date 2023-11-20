@@ -198,6 +198,7 @@ export default function SoBanSao() {
       console.log(selectDanhmuc);
       if (response.data && response.data.length > 0) {
         setKhoaThis(response.data);
+        setPageState((old) => ({ ...old, khoaThi: response.data[0].id }));
         setSelectKhoaThi(response.data[0].id);
       } else {
         setKhoaThis([]);

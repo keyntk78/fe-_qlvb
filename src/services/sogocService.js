@@ -94,3 +94,15 @@ export async function getHocSinhTheoSoGoc(params) {
     throw error;
   }
 }
+
+export async function getHocSinhBySoGoc(params) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`SoGoc/GetHocSinhBySoGoc?${params}`, 'GET');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating Monthi:', error);
+    throw error;
+  }
+}

@@ -38,7 +38,7 @@ import { styled } from '@mui/system';
 import AnimateButton from 'components/extended/AnimateButton';
 import { useFormik } from 'formik';
 import { generateDocument } from './ExportWord';
-import { getHocSinhTheoSoGoc } from 'services/sogocService';
+import { getHocSinhBySoGoc } from 'services/sogocService';
 import ExportExcel from './ExportExcel';
 import { getAllTruong } from 'services/sharedService';
 import Popup from 'components/controls/popup';
@@ -108,7 +108,8 @@ export default function SoGoc() {
     pageSize: -1,
     DMTN: '',
     donVi: '',
-    khoaThi: ''
+    khoaThi: '',
+    donViOld: ''
   });
 
   const handleSearch = () => {
@@ -123,6 +124,7 @@ export default function SoGoc() {
     const selectedKhoaThiInfo = khoaThis.find((khoathi) => khoathi.id === khoaThiSelect);
     setSelectKhoaThi(selectedKhoaThiInfo.id);
   };
+
   const handleExport = async () => {
     dispatch(setLoading(true));
     await ExportExcel(formik, pageState1, selectDanhmuc, selectDonvi, selectKhoaThi, donvi, 'sogoc');
@@ -139,9 +141,9 @@ export default function SoGoc() {
     window.location.href = FileMau;
   };
   const handleExportWord = async () => {
-    setLoading(true);
+    dispatch(setLoading(true));
     generateDocument(pageState1.data, additionalData, donvi, 'sogoc');
-    setLoading(false);
+    dispatch(setLoading(false));
   };
 
   const handleChange = (e, value) => {
@@ -169,7 +171,6 @@ export default function SoGoc() {
     const fetchDataDL = async () => {
       dispatch(setLoading(true));
       const donvi = await getAllTruong(user.username);
-
       if (donvi.data && donvi.data.length > 0) {
         setDonvis(donvi.data);
         setPageState((old) => ({ ...old, donVi: donvi.data[0].id }));
@@ -188,7 +189,6 @@ export default function SoGoc() {
   useEffect(() => {
     const fetchDataDL = async () => {
       const response = await getTruongCuByTruongMoi(selectDonvi);
-      console.log(response);
       if (response.data && response.data.length > 0) {
         setDonviOld(response.data);
       } else {
@@ -196,10 +196,10 @@ export default function SoGoc() {
       }
       dispatch(setLoading(false));
     };
-    if (selectDonvi) {
+    if (pageState.donVi != '') {
       fetchDataDL();
     }
-  }, [selectDonvi]);
+  }, [pageState.donVi]);
 
   useEffect(() => {
     const fetchDataDL = async () => {
@@ -226,6 +226,7 @@ export default function SoGoc() {
       if (response.data && response.data.length > 0) {
         setKhoaThis(response.data);
         setSelectKhoaThi(response.data[0].id);
+        setPageState((old) => ({ ...old, khoaThi: response.data[0].id }));
       } else {
         setKhoaThis([]);
       }
@@ -247,14 +248,21 @@ export default function SoGoc() {
       HinhThucDaoTao: '',
       NgayCapBang: '',
       TenKyThi: '',
-      KhoaThi: ''
+      KhoaThi: '',
+      TenTruong: ''
     }
   });
+
+  useEffect(() => {
+    console.log(selectDonvi);
+  }, [selectDonvi]);
+
   const handleImport = () => {
     setTitle(t('Import danh sách văn bằng'));
     setForm('import');
     dispatch(setOpenPopup(true));
   };
+
   useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
@@ -262,37 +270,51 @@ export default function SoGoc() {
       params.append('IdDanhMucTotNghiep', pageState.DMTN);
       params.append('IdTruong', pageState.donVi);
       params.append('IdKhoaThi', pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : '');
-      const response = await getHocSinhTheoSoGoc(params);
-      const data = response.data;
-      formik.setValues({
-        UyBanNhanDan: data.CauHinh.TenUyBanNhanDan || '',
-        CoQuanCapBang: data.CauHinh.TenCoQuanCapBang || '',
-        NamThi: data.DanhMucTotNghiep.NamThi || '',
-        QuyetDinh: data.DanhMucTotNghiep.SoQuyetDinh || '',
-        NguoiKyBang: data.CauHinh.HoTenNguoiKySoGoc || '',
-        DiaPhuongCapBang: data.CauHinh.TenDiaPhuongCapBang || '',
-        HeDaoTao: data.Truong.HeDaoTao.toUpperCase() || '',
-        HinhThucDaoTao: data.Truong.HinhThucDaoTao || '',
-        NgayCapBang: formatDate(data.DanhMucTotNghiep.NgayCapBang) || '',
-        TenKyThi: data.DanhMucTotNghiep.TenKyThi || '',
-        KhoaThi: convertISODateToFormattedDate(data.KhoaThi.Ngay) || ''
-      });
+      params.append('IdTruongCu', pageState.donViOld || '');
+      const response = await getHocSinhBySoGoc(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
-        const data = await response.data.SoGoc;
-        const dataWithIds = data.hocSinhs.map((row, index) => ({
-          idx: pageState.startIndex * pageState.pageSize + index + 1,
-          gioiTinh_fm: row.GioiTinh ? t('gender.male') : t('gender.female'),
-          ngaySinh_fm: convertISODateToFormattedDate(row.NgaySinh),
-          ...row
-        }));
-        dispatch(setReloadData(false));
-        setPageState((old) => ({
-          ...old,
-          isLoading: false,
-          data: dataWithIds,
-          total: data.totalRow || 0
-        }));
+        const data = await response.data;
+        if (data && data.hocSinhs.length > 0) {
+          formik.setValues({
+            UyBanNhanDan: data.uyBanNhanDan || '',
+            CoQuanCapBang: data.coQuanCapBang || '',
+            NamThi: data.namThi || '',
+            QuyetDinh: data.soQuyetDinh || '',
+            NguoiKyBang: data.nguoiKyBang || '',
+            DiaPhuongCapBang: data.diaPhuongCapBang || '',
+            HeDaoTao: data.tenHeDaoTao.toUpperCase() || '',
+            HinhThucDaoTao: data.tenHinhThucDaoTao || '',
+            NgayCapBang: formatDate(data.ngayCapBang) || '',
+            // TenKyThi: data.DanhMucTotNghiep.TenKyThi || '',
+            KhoaThi: convertISODateToFormattedDate(data.khoaThi) || '',
+            TenTruong: data.tenTruong || ''
+          });
+          const dataWithIds = data.hocSinhs.map((row, index) => ({
+            idx: pageState.startIndex * pageState.pageSize + index + 1,
+            gioiTinh_fm: row.gioiTinh ? t('gender.male') : t('gender.female'),
+            ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
+            ...row
+          }));
+          dispatch(setReloadData(false));
+          setPageState((old) => ({
+            ...old,
+            isLoading: false,
+            data: dataWithIds,
+            total: data.totalRow || 0
+          }));
+        } else {
+          formik.setValues((value) => ({
+            ...value,
+            TenTruong: selectDonvi.ten || ''
+          }));
+          setPageState((old) => ({
+            ...old,
+            isLoading: false,
+            data: [],
+            total: 0
+          }));
+        }
       } else {
         setIsAccess(false);
       }
@@ -317,8 +339,12 @@ export default function SoGoc() {
 
   const handleSchoolChange = (event) => {
     const selectedValue = event.target.value;
-    setPageState((old) => ({ ...old, donVi: selectedValue }));
-    setSelectDonvi(selectedValue);
+    setPageState((old) => ({ ...old, donVi: selectedValue, donViOld: '' }));
+  };
+
+  const handleOldSchoolChange = (event) => {
+    const selectedValue = event.target.value;
+    setPageState((old) => ({ ...old, donViOld: selectedValue }));
   };
 
   const themTuTep = [
@@ -334,25 +360,39 @@ export default function SoGoc() {
   useEffect(() => {
     const fetchData = async () => {
       const params = await createSearchParams(pageState1);
-      params.append('idDanhMucTotNghiep', pageState.DMTN);
-      params.append('idTruong', pageState.donVi);
+      params.append('IdDanhMucTotNghiep', pageState.DMTN);
+      params.append('IdTruong', pageState.donVi);
+      params.append('IdTruongCu', pageState.donViOld || '');
       params.append('IdKhoaThi', pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : '');
-      const response = await getHocSinhTheoSoGoc(params);
+      const response = await getHocSinhBySoGoc(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
-        const data = await response.data.SoGoc;
-        const dataWithIds = data.hocSinhs.map((row, index) => ({
-          idx: index + 1,
-          gioiTinh_fm: row.GioiTinh ? t('gender.male') : t('gender.female'),
-          ngaySinh_fm: convertISODateToFormattedDate(row.NgaySinh),
-          ...row
-        }));
-        setPageState1((old) => ({
-          ...old,
-          isLoading: false,
-          data: dataWithIds,
-          total: data.totalRow || 0
-        }));
+        const data = await response.data;
+        if (data && data.hocSinhs.length > 0) {
+          const dataWithIds = data.hocSinhs.map((row, index) => ({
+            idx: index + 1,
+            gioiTinh_fm: row.gioiTinh ? t('gender.male') : t('gender.female'),
+            ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
+            ...row
+          }));
+          setPageState1((old) => ({
+            ...old,
+            isLoading: false,
+            data: dataWithIds,
+            total: data.totalRow || 0
+          }));
+        } else {
+          formik.setValues((value) => ({
+            ...value,
+            TenTruong: selectDonvi.ten || ''
+          }));
+          setPageState1((old) => ({
+            ...old,
+            isLoading: false,
+            data: [],
+            total: 0
+          }));
+        }
       } else {
         setIsAccess(false);
       }
@@ -363,18 +403,19 @@ export default function SoGoc() {
   }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
 
   const additionalData = {
-    uyBanNhanDan: formik.values.UyBanNhanDan.toUpperCase(),
-    coQuanCapBang: formik.values.CoQuanCapBang.toUpperCase(),
+    uyBanNhanDan: formik.values.UyBanNhanDan ? formik.values.UyBanNhanDan.toUpperCase() : '',
+    coQuanCapBang: formik.values.CoQuanCapBang ? formik.values.CoQuanCapBang.toUpperCase() : '',
     quyetDinh: formik.values.QuyetDinh,
     donVi: selectDonvi ? selectDonvi.ten : '',
     namThi: formik.values.NamThi,
-    title: `SỔ GỐC CẤP BẰNG TỐT NGHIỆP ${formik.values.HeDaoTao.toUpperCase()}`,
+    title: `SỔ GỐC CẤP BẰNG TỐT NGHIỆP ${formik.values.HeDaoTao ? formik.values.HeDaoTao.toUpperCase() : ''}`,
     hinhThucDaoTao: formik.values.HinhThucDaoTao,
     diaPhuong: formik.values.DiaPhuongCapBang,
     ngayCap: formik.values.NgayCapBang,
     nguoiKy: formik.values.NguoiKyBang,
     khoaThi: formik.values.KhoaThi,
-    tenKyThi: formik.values.TenKyThi
+    tenKyThi: formik.values.TenKyThi,
+    tenTruong: formik.values.TenTruong
   };
 
   // const count = pageState.total ? Math.floor(parseInt(pageState.total) / parseInt(pageState.pageSize)) + 1 : 0;
@@ -475,12 +516,12 @@ export default function SoGoc() {
             <>
               <Grid item xs={isXs ? 12 : 3}>
                 <FormControl fullWidth variant="outlined" size="small">
-                  <InputLabel>{t('donvitruong.title')}</InputLabel>
-                  <Select name="truongId" value={pageState.donVi} onChange={handleSchoolChange} label={t('donvitruong.title')}>
+                  <InputLabel>{t('Đơn vị trường cũ')}</InputLabel>
+                  <Select name="truongId" value={pageState.donViOld} onChange={handleOldSchoolChange} label={t('Đơn vị trường cũ')}>
                     {donviOld && donviOld.length > 0 ? (
                       donviOld.map((donvi) => (
-                        <MenuItem key={donvi.id} value={donvi.id}>
-                          {donvi.ten}
+                        <MenuItem key={donvi.idTruongCu} value={donvi.idTruongCu}>
+                          {donvi.tenTruongCu}
                         </MenuItem>
                       ))
                     ) : (
@@ -559,10 +600,10 @@ export default function SoGoc() {
             alignItems="center"
           >
             <Typography variant="body1" fontSize={14}>
-              {formik.values.UyBanNhanDan.toUpperCase()}
+              {formik.values.UyBanNhanDan ? formik.values.UyBanNhanDan.toUpperCase() : ''}
             </Typography>
             <Typography variant="h5" fontSize={15} fontWeight={'bold'}>
-              {formik.values.CoQuanCapBang.toUpperCase()}
+              {formik.values.UyBanNhanDan ? formik.values.CoQuanCapBang.toUpperCase() : ''}
             </Typography>
             <Grid item mt={0}>
               <Divider width={120} />
@@ -571,7 +612,7 @@ export default function SoGoc() {
           <Grid item lg={3} md={0.1} sm={1} xs={1}></Grid>
           <Grid item container lg={6} md={7.8} sm={7} xs={6} justifyContent={'center'} textAlign={'center'}>
             <Typography variant="h4" fontSize={18}>
-              SỔ GỐC CẤP BẰNG TỐT NGHIỆP {formik.values.HeDaoTao.toUpperCase()}
+              SỔ GỐC CẤP BẰNG TỐT NGHIỆP {formik.values.HeDaoTao ? formik.values.HeDaoTao.toUpperCase() : ''}
             </Typography>
           </Grid>
         </Grid>
@@ -593,7 +634,7 @@ export default function SoGoc() {
                 Khóa thi: {formik.values.KhoaThi}
               </Typography>
               <Typography variant="body1" fontSize={14}>
-                Học sinh trường: {selectDonvi ? selectDonvi.ten : ''}
+                Học sinh trường: {formik.values.TenTruong}
               </Typography>
               {/* <Typography variant="body1" fontSize={14}>
               Hình thức học: {formik.values.HinhThucDaoTao}
@@ -607,7 +648,7 @@ export default function SoGoc() {
                 Quyết định công nhận tốt nghiệp số {formik.values.QuyetDinh}
               </Typography>
               <Typography variant="body1" fontSize={14}>
-                Học sinh trường: {selectDonvi ? selectDonvi.ten : ''}
+                Học sinh trường: {formik.values.TenTruong}
               </Typography>
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={5} flexDirection={'column'}>
@@ -643,16 +684,16 @@ export default function SoGoc() {
               {pageState.data.map((row) => (
                 <TableRow key={row.idx}>
                   <TableCell2 style={{ textAlign: 'center' }}>{row.idx}</TableCell2>
-                  <TableCell2>{row.HoTen}</TableCell2>
+                  <TableCell2>{row.hoTen}</TableCell2>
                   {/* <TableCell2>{row.CCCD}</TableCell2> */}
                   <TableCell2>{row.ngaySinh_fm}</TableCell2>
-                  <TableCell2>{row.NoiSinh}</TableCell2>
+                  <TableCell2>{row.noiSinh}</TableCell2>
                   <TableCell2>{row.gioiTinh_fm}</TableCell2>
-                  <TableCell2>{row.DanToc}</TableCell2>
-                  {donvi.donViQuanLy == 1 && <TableCell2>{row.HoiDong}</TableCell2>}
-                  <TableCell2>{row.XepLoai}</TableCell2>
-                  <TableCell2>{row.SoHieuVanBang}</TableCell2>
-                  <TableCell2 style={{ textAlign: 'center' }}>{row.SoVaoSoCapBang}</TableCell2>
+                  <TableCell2>{row.danToc}</TableCell2>
+                  {donvi.donViQuanLy == 1 && <TableCell2>{row.hoiDong}</TableCell2>}
+                  <TableCell2>{row.xepLoai}</TableCell2>
+                  <TableCell2>{row.soHieuVanBang}</TableCell2>
+                  <TableCell2 style={{ textAlign: 'center' }}>{row.soVaoSoCapBang}</TableCell2>
                   <TableCell2></TableCell2>
                   <TableCell2></TableCell2>
                 </TableRow>
