@@ -69,6 +69,7 @@ export const PAGE_SIZE = '@customization/PAGE_SIZE';
 export const SELECTED_INFO_MESSAGE = '@customization/SELECTED_INFO_MESSAGE';
 export const INFO_HOCSINH = '@customization/INFO_HOCSINH';
 export const UPDATE_VBCC = '@customization/UPDATE_VBCC';
+export const LIST_DANHMUC = '@customization/LIST_DANHMUC';
 
 // actions.js
 export const setUsers = (data) => ({ type: SET_USERS, users: data });
@@ -117,7 +118,7 @@ export const setNotificationCount = (data) => ({ type: NOTIFICATION_COUNT, notif
 export const setPageSize = (data) => ({ type: PAGE_SIZE, pageSize: data });
 export const setSelectedInfoMessage = (data) => ({ type: SELECTED_INFO_MESSAGE, selectedInfoMessage: data });
 export const setInfoHocSinh = (data) => ({ type: INFO_HOCSINH, infoHocSinh: data });
-
+export const listDanhMuc = (data) => ({ type: LIST_DANHMUC, listDanhMuc: data });
 export const setCapBangInfor = (infor) => ({ type: CAPBANG_INFOR, capBangInfor: infor });
 export const setCapBangBanSao = (infor) => ({ type: CAPBANG_BANSAO, capBangBansao: infor });
 

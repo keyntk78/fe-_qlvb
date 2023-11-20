@@ -65,7 +65,8 @@ export const initialState = {
   pageSize: 10,
   infoHocSinh: null,
   report: [],
-  up_vbcc: ''
+  up_vbcc: '',
+  listDanhMuc: []
 };
 
 // ==============================|| CUSTOMIZATION REDUCER ||============================== //
@@ -127,6 +128,11 @@ const customizationReducer = (state = initialState, action) => {
       return {
         ...state,
         roles: action.roles
+      };
+    case actionTypes.LIST_DANHMUC:
+      return {
+        ...state,
+        listDanhMuc: action.listDanhMuc
       };
     // cổng thông tin
     case actionTypes.SELECTED_THONGTIN:

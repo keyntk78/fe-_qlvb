@@ -53,7 +53,6 @@ export default function SoCapPhatBang() {
   const navigate = useNavigate();
   const [dMTN, setDMTN] = useState([]);
   const [selectDanhmuc, setSelectDanhmuc] = useState('');
-  const [disable, setDisable] = useState(false);
   const user = useSelector(userLoginSelector);
 
   const TableCell2 = styled(TableCell)(
@@ -149,12 +148,10 @@ export default function SoCapPhatBang() {
         setDMTN(danhmuc.data);
         setPageState((old) => ({ ...old, DMTN: danhmuc.data[0].id }));
         setSelectDanhmuc(danhmuc.data[0].id);
-        setDisable(false);
       } else {
         setDMTN([]);
         setPageState((old) => ({ ...old, DMTN: '' }));
         setSelectDanhmuc('');
-        setDisable(true);
       }
       dispatch(setLoading(false));
     };
@@ -325,7 +322,7 @@ export default function SoCapPhatBang() {
           ''
         )}
         <Grid item container mb={1} spacing={1} mt={1} justifyContent={'center'} alignItems="center">
-          <Grid item>
+          <Grid item xs={isXs ? 12 : 4}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('danhmuc.title')}</InputLabel>
               <Select name="id" value={pageState.DMTN} onChange={handleDanhMucChange} label={t('danhmuc.title')}>
@@ -342,9 +339,9 @@ export default function SoCapPhatBang() {
             </FormControl>
           </Grid>
           <Grid item container xs={isXs ? 12 : 2}>
-            <FormControl fullWidth variant="outlined">
+            <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('Khóa thi')}</InputLabel>
-              <Select label={t('Khóa thi')} size="small" name="khoaThi" value={selectKhoaThi} onChange={handleKhoaThiChange}>
+              <Select label={t('Khóa thi')} name="khoaThi" value={selectKhoaThi} onChange={handleKhoaThiChange}>
                 {khoaThis && khoaThis.length > 0 ? (
                   khoaThis.map((data) => (
                     <MenuItem key={data.id} value={data.id}>
@@ -358,15 +355,7 @@ export default function SoCapPhatBang() {
             </FormControl>
           </Grid>
           <Grid item>
-            <Button
-              variant="contained"
-              title={t('button.search')}
-              fullWidth
-              onClick={handleSearch}
-              color="info"
-              startIcon={<IconSearch />}
-              disabled={disable}
-            >
+            <Button variant="contained" title={t('button.search')} fullWidth onClick={handleSearch} color="info" startIcon={<IconSearch />}>
               {t('button.search')}
             </Button>
           </Grid>
@@ -457,7 +446,7 @@ export default function SoCapPhatBang() {
                 Quyết định công nhận tốt nghiệp số {formik.values.QuyetDinh}
               </Typography>
               <Typography variant="body1" fontSize={14}>
-                Học sinh trường: {selectDonvi ? selectDonvi.ten : ''}
+                Học sinh trường: {donvi ? donvi.ten : ''}
               </Typography>
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={5} flexDirection={'column'}>

@@ -287,3 +287,23 @@ export async function GetThongKeTongQuatByTruong(params) {
     throw error;
   }
 }
+
+export async function GetThongKeHocSinhTheoXepLoai(params) {
+  try {
+    const response = await axiosClient(`TrangChu/GetThongKeHocSinhTheoXepLoai?${params}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating thong ke:', error);
+    throw error;
+  }
+}
+
+export async function GetThongKeHocSinhPhatBang(params) {
+  try {
+    const response = await axiosClient(`TrangChu/GetThongKeHocSinhPhatBang?${params}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating thong ke:', error);
+    throw error;
+  }
+}

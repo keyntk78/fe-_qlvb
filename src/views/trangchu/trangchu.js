@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import useLocalText from 'utils/localText';
 import { DataGrid } from '@mui/x-data-grid';
-import { selectedHocsinh, setCapBangBanSao, setOpenPopup, setReloadData } from 'store/actions';
+import { listDanhMuc, selectedHocsinh, setCapBangBanSao, setOpenPopup, setReloadData } from 'store/actions';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import i18n from 'i18n';
 import { createSearchParams } from 'utils/createSearchParams';
@@ -33,7 +33,8 @@ import ShowVanBang from './ShowVanBang';
 import InBanSao from './InBanSao';
 import XacNhanIn from './XacNhanIn';
 import config from 'config';
-import ThongKeSoLuong from './BieuDo';
+import { getAllDanhmucTN } from 'services/danhmuctotnghiepService';
+import ThongKeSoLuongNguoiHoc from './SoLuongHocSinh';
 
 // import { Component } from 'react';
 
@@ -237,6 +238,16 @@ const TrangChu = () => {
   ];
 
   useEffect(() => {
+    const fetchDataDL = async () => {
+      const params = new URLSearchParams();
+      params.append('nguoiThucHien', user ? user.username : '');
+      const response = await getAllDanhmucTN(params);
+      dispatch(listDanhMuc(response.data));
+    };
+    fetchDataDL();
+  }, []);
+
+  useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
@@ -244,7 +255,6 @@ const TrangChu = () => {
       params.append('hoTen', pageState.hoTen);
       params.append('nguoiThucHien', user ? user.username : '');
       const response = await GetTraCuuHocSinhTotNghiep(params);
-      console.log(response);
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;
@@ -388,8 +398,8 @@ const TrangChu = () => {
               <Card sx={{ mt: 2 }}>
                 <Grid container item xs={12} justifyContent={'center'}>
                   <Grid item xs={12}>
-                    {/* <ThongKeSoLuongNguoiHoc /> */}
-                    <ThongKeSoLuong />
+                    <ThongKeSoLuongNguoiHoc />
+                    {/* <ThongKeSoLuong /> */}
                   </Grid>
                 </Grid>
               </Card>
