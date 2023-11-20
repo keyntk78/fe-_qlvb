@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Checkbox,
   Divider,
   FormControl,
   FormControlLabel,
@@ -24,20 +25,21 @@ import FormControlComponent from 'components/form/FormControlComponent ';
 import FormGroupButton from 'components/button/FormGroupButton';
 import { IconBook2, IconCertificate, IconUser, IconX } from '@tabler/icons';
 import { useState } from 'react';
-import { getAllDonvi } from 'services/donvitruongService';
 import InputForm1 from 'components/form/InputForm1';
 import { createHocSinh } from 'services/hocsinhService';
 import { getAllMonthi } from 'services/monthiService';
 import useHocSinhValidationSchema from 'components/validations/hocsinhValidation';
 import { getAllKhoathiByDMTN } from 'services/khoathiService';
-import { getAllDanhmucTN, getCauHinhTuDongXepLoai } from 'services/sharedService';
+import { getAllDanhmucTN, getAllTruong, getCauHinhTuDongXepLoai } from 'services/sharedService';
 import { getAllDanToc } from 'services/dantocService';
 import SelectForm from 'components/form/SelectForm';
 
 const hocLucOptions = [
   { value: 'Giỏi', label: 'Giỏi' },
   { value: 'Khá', label: 'Khá' },
-  { value: 'Trung bình', label: 'Trung bình' }
+  { value: 'Trung Bình', label: 'Trung Bình' },
+  { value: 'Yếu', label: 'Yếu' },
+  { value: 'Kém', label: 'Kém' }
 ];
 
 const ketQuaOptions = [
@@ -103,7 +105,11 @@ const AddHocSinh = () => {
       heDaoTao: '',
       hinhThucDaoTao: '',
       nguoiThucHien: user.username,
-      ketQuaHocTaps: []
+      ketQuaHocTaps: [],
+      diemTB: '',
+      lanDauTotNghiep: 'x',
+      dienXetTotNghiep: '',
+      hoiDong: ''
     },
     validationSchema: hocSinhValidation,
     onSubmit: async (values) => {
@@ -133,7 +139,7 @@ const AddHocSinh = () => {
       setDanToc(dantoc.data);
       const danhmuc = await getAllDanhmucTN(user ? user.username : '');
       setDanhMuc(danhmuc.data);
-      const donvi = await getAllDonvi();
+      const donvi = await getAllTruong(user ? user.username : '');
       setDonVi(donvi.data);
       const configAuto = await getCauHinhTuDongXepLoai();
       setConfigAuto(configAuto.data.configValue);
@@ -343,7 +349,8 @@ const AddHocSinh = () => {
               </FormControl>
             </FormControlComponent>
           </Grid>
-          <InputForm1 formik={formik} xs={isXs ? 12 : 6} label={t('Lớp')} name="lop" isRequired />
+          <InputForm1 formik={formik} xs={isXs ? 6 : 3} label={t('Lớp')} name="lop" isRequired />
+          <InputForm1 formik={formik} xs={isXs ? 6 : 3} label={t('Hội đồng thi')} name="hoiDong" isRequired />
         </Grid>
         <Grid xs={12} item container spacing={isXs ? 0 : 2} columnSpacing={isXs ? 1 : 0}>
           {selectedMonHocs.map((selectedMonHoc, index) => (
@@ -392,7 +399,41 @@ const AddHocSinh = () => {
             </React.Fragment>
           ))}
         </Grid>
-        {configAuto ? (
+        <Grid xs={12} item container spacing={isXs ? 0 : 2} mt={0} columnSpacing={isXs ? 1 : 0}>
+          <Grid item xs={isXs ? 6 : 3}>
+            <FormControlComponent xsLabel={0} xsForm={12} label={t('hocsinh.label.hanhkiem')} isRequire>
+              <FormControl fullWidth variant="outlined">
+                <SelectForm
+                  formik={formik}
+                  keyProp="value"
+                  valueProp="label"
+                  item={hanhKiemOptions}
+                  name="hanhKiem"
+                  value={formik.values.hanhKiem}
+                  onChange={handleHanhKiemChange}
+                />
+              </FormControl>
+            </FormControlComponent>
+          </Grid>
+          <Grid item xs={isXs ? 6 : 3}>
+            <InputForm1 formik={formik} xs={12} label={t('Điểm trung bình')} name="diemTB" isRequired />
+          </Grid>
+          <Grid item xs={isXs ? 6 : 3}>
+            <InputForm1 formik={formik} xs={12} label={t('Diện xét tốt nghiệp')} name="dienXetTotNghiep" />
+          </Grid>
+          <Grid item xs={isXs ? 6 : 3} sx={{ display: 'flex', alignItems: 'flex-end' }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={formik.values.lanDauTotNghiep === 'x'} // Check if the value is 'x'
+                  onChange={(e) => formik.setFieldValue('lanDauTotNghiep', e.target.checked ? 'x' : 'o')}
+                />
+              }
+              label="Lần đầu xét tốt nghiệp"
+            />
+          </Grid>
+        </Grid>
+        {configAuto === 'false' ? (
           <Grid xs={12} item container spacing={isXs ? 0 : 2} mt={0} columnSpacing={isXs ? 1 : 0}>
             <Grid item xs={isXs ? 6 : 4}>
               <FormControlComponent xsLabel={0} xsForm={12} label={t('hocsinh.label.hocluc')} isRequire>
@@ -492,26 +533,7 @@ const AddHocSinh = () => {
             </Grid>
           </Grid>
         )}
-        <Grid xs={12} item container spacing={isXs ? 0 : 2} mt={0} columnSpacing={isXs ? 1 : 0}>
-          <Grid item xs={isXs ? 6 : 4}>
-            <FormControlComponent xsLabel={0} xsForm={12} label={t('hocsinh.label.hanhkiem')} isRequire>
-              <FormControl fullWidth variant="outlined">
-                <SelectForm
-                  formik={formik}
-                  keyProp="value"
-                  valueProp="label"
-                  item={hanhKiemOptions}
-                  name="hanhKiem"
-                  value={formik.values.hanhKiem}
-                  onChange={handleHanhKiemChange}
-                />
-              </FormControl>
-            </FormControlComponent>
-          </Grid>
-          <Grid item xs={isXs ? 6 : 5}>
-            <InputForm1 formik={formik} xs={isXs ? 12 : 6} label={t('Điểm trung bình')} name="lop" isRequired />
-          </Grid>
-        </Grid>
+
         <Grid item container spacing={isXs ? 0 : 1} xs={12} mt={isXs ? 2 : 4} alignItems={'center'}>
           <Grid item>
             <IconCertificate />

@@ -80,7 +80,7 @@ export async function getLichSuXacMinhVanBangByID(id) {
 export async function ImportDanhSachVanBang(data) {
   try {
     store.dispatch(setLoading(true));
-    const response = await axiosClient(`XacMinhVanBang/ImportHocSinh`, 'POST', data);
+    const response = await axiosClient(`SoGoc/ImportHocSinh`, 'POST', data);
     store.dispatch(setLoading(false));
     return response;
   } catch (error) {

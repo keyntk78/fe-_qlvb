@@ -18,7 +18,7 @@ import { getAllNamthi } from 'services/namthiService';
 import InputForm1 from 'components/form/InputForm1';
 import { getAllHinhthucdaotao } from 'services/hinhthucdaotaoService';
 import SelectForm from 'components/form/SelectForm';
-import { getAllHeDaoTao } from 'services/sharedService';
+//import { getAllHeDaoTao } from 'services/sharedService';
 
 const EditDanhmucTN = () => {
   const isXs = useMediaQuery('(max-width:800px)');
@@ -33,15 +33,15 @@ const EditDanhmucTN = () => {
   const [pageState, setPageState] = useState({
     isLoading: false,
     namThi: [],
-    hinhthucdaotao: [],
-    hedaotao: []
+    hinhthucdaotao: []
+    //hedaotao: []
   });
   const danhmuctnValidationSchema = useDanhmucTNValidationSchema();
   const formik = useFormik({
     initialValues: {
       IdNamThi: '',
       IdHinhThucDaoTao: '',
-      MaHeDaoTao: '',
+      // MaHeDaoTao: '',
       TenKyThi: '',
       TieuDe: '',
       GhiChu: '',
@@ -81,10 +81,10 @@ const EditDanhmucTN = () => {
     setHinhThucDaoTao(idHinhThucDaoTao);
   };
 
-  const handleChangeHDT = async (event) => {
-    const maHeDaoTao = event.target.value;
-    formik.setFieldValue('MaHeDaoTao', maHeDaoTao);
-  };
+  // const handleChangeHDT = async (event) => {
+  //   const maHeDaoTao = event.target.value;
+  //   formik.setFieldValue('MaHeDaoTao', maHeDaoTao);
+  // };
   useEffect(() => {
     const fetchData = async () => {
       const danhmucTNbyid = await getById(danhmucTN.id);
@@ -110,12 +110,12 @@ const EditDanhmucTN = () => {
       }));
 
       //hedaotao
-      const hedaotao = await getAllHeDaoTao();
-      const datahedaotao = await hedaotao.data;
-      const dataWithhdt = datahedaotao.map((row, index) => ({
-        idIndex: index + 1,
-        ...row
-      }));
+      // const hedaotao = await getAllHeDaoTao();
+      // const datahedaotao = await hedaotao.data;
+      // const dataWithhdt = datahedaotao.map((row, index) => ({
+      //   idIndex: index + 1,
+      //   ...row
+      // }));
       setHinhThucDaoTao(datadanhmucTN.idHinhThucDaoTao);
       formik.setFieldValue('IdHinhThucDaoTao', datadanhmucTN.idHinhThucDaoTao);
       dispatch(setReloadData(false));
@@ -123,15 +123,15 @@ const EditDanhmucTN = () => {
         ...old,
         isLoading: false,
         namThi: dataWithnt,
-        hinhthucdaotao: dataWithhtdt,
-        hedaotao: dataWithhdt
+        hinhthucdaotao: dataWithhtdt
+        //hedaotao: dataWithhdt
       }));
       if (datadanhmucTN) {
         formik.setValues({
           id: danhmucTN.id,
           IdNamThi: datadanhmucTN.idNamThi,
           IdHinhThucDaoTao: datadanhmucTN.idHinhThucDaoTao,
-          MaHeDaoTao: datadanhmucTN.maHeDaoTao,
+          // MaHeDaoTao: datadanhmucTN.maHeDaoTao,
           TenKyThi: danhmucTN.tenKyThi,
           TieuDe: datadanhmucTN.tieuDe || '',
           GhiChu: datadanhmucTN.ghiChu || '',
@@ -194,7 +194,7 @@ const EditDanhmucTN = () => {
             </Grid>
           </Grid>
           <Grid item xs={12} container spacing={1}>
-            <Grid item xs={isXs ? 12 : 6}>
+            {/* <Grid item xs={isXs ? 12 : 6}>
               <FormControlComponent xsLabel={0} xsForm={12} isRequire label={t('hedaotao.title')}>
                 <SelectForm
                   formik={formik}
@@ -207,8 +207,8 @@ const EditDanhmucTN = () => {
                   onChange={handleChangeHDT}
                 />
               </FormControlComponent>
-            </Grid>
-            <Grid item xs={isXs ? 12 : 6}>
+            </Grid> */}
+            <Grid item xs={isXs ? 12 : 12}>
               <FormControlComponent xsLabel={0} xsForm={12} isRequire label={t('Tên kỳ thi')}>
                 <InputForm formik={formik} name="TenKyThi" type="text" placeholder={t('Tên kỳ thi')} />
               </FormControlComponent>

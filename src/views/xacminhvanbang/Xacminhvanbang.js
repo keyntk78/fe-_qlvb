@@ -37,7 +37,7 @@ import Xacminhnhieunguoi from './Xacminhnhieunguoi';
 // import { getHocSinhXacMinhVanBang } from 'services/xacminhvanbangService';
 import { getHocSinhXacMinhVanBang } from 'services/tracuuvanbangService';
 
-import { getAllTruong, getByIdNamThi } from 'services/sharedService';
+import { getAllDanToc, getAllTruong, getByIdNamThi } from 'services/sharedService';
 import ChinhSuaVBCC from 'views/chinhsuavbcc/ChinhSuaVBCC';
 import Thuhoihuybo from 'views/thuhoihuybo/Thuhoihuybo';
 import LichSuThuHoi from 'views/thuhoihuybo/LichSuThuHoi';
@@ -55,6 +55,7 @@ export default function Xacminhvanbang() {
   const [dMTN, setDMTN] = useState([]);
   const [donvis, setDonvis] = useState([]);
   const [namHoc, setNamHoc] = useState([]);
+  const [danToc, setDanToc] = useState([]);
   const [htdt, setHTDT] = useState([]);
   const [trangThai, setTrangThai] = useState('');
   const [search, setSearch] = useState(false);
@@ -338,6 +339,8 @@ export default function Xacminhvanbang() {
     const fetchDataDL = async () => {
       const namhoc = await getAllNamthi();
       setNamHoc(namhoc.data);
+      const dantoc = await getAllDanToc();
+      setDanToc(dantoc.data);
     };
     fetchDataDL();
   }, []);
@@ -498,7 +501,11 @@ export default function Xacminhvanbang() {
     const selectedValue = event.target.value;
     setPageState((old) => ({ ...old, DMTN: selectedValue }));
   };
-
+  const handleDanTocChange = (event) => {
+    const selectedValue = event.target.value;
+    const danToc = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, danToc: danToc }));
+  };
   const handleSchoolChange = (event) => {
     const selectedValue = event.target.value;
     const truongId = selectedValue === 'all' ? '' : selectedValue;
@@ -635,7 +642,7 @@ export default function Xacminhvanbang() {
                 value={pageState.cccd}
               />
             </Grid>
-            <Grid item md={4} sm={4} lg={2} container xs={isXs ? 6 : 2}>
+            {/* <Grid item md={4} sm={4} lg={2} container xs={isXs ? 6 : 2}>
               <TextField
                 fullWidth
                 id="outlined-basic"
@@ -645,6 +652,29 @@ export default function Xacminhvanbang() {
                 onChange={(e) => setPageState((old) => ({ ...old, danToc: e.target.value }))}
                 value={pageState.danToc}
               />
+            </Grid> */}
+
+            <Grid item lg={2} md={4} sm={4} xs={isXs ? 6 : 2}>
+              <FormControl fullWidth variant="outlined" size="small">
+                <InputLabel>{t('hocsinh.field.nation')}</InputLabel>
+                <Select
+                  name="danToc"
+                  value={pageState.danToc === '' ? 'all' : pageState.danToc}
+                  onChange={handleDanTocChange}
+                  label={t('hocsinh.field.nation')}
+                >
+                  <MenuItem value="all">Tất cả</MenuItem>
+                  {danToc && danToc.length > 0 ? (
+                    danToc.map((dantoc) => (
+                      <MenuItem key={dantoc.id} value={dantoc.ten}>
+                        {dantoc.ten}
+                      </MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem value="">No data available</MenuItem>
+                  )}
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item md={4} sm={4} lg={2} xs={isXs ? 6 : 4}>
               <Button

@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Checkbox,
   Divider,
   FormControl,
   FormControlLabel,
@@ -29,14 +30,16 @@ import { createHocSinh } from 'services/nguoihoctotnghiepService';
 import { getAllMonthi } from 'services/monthiService';
 import useHocSinhValidationSchema from 'components/validations/hocsinhValidation';
 import { getAllKhoathiByDMTN } from 'services/khoathiService';
-import { getAllDanhmucTN } from 'services/sharedService';
+import { getAllDanhmucTN, getCauHinhTuDongXepLoai } from 'services/sharedService';
 import { getAllDanToc } from 'services/dantocService';
 import SelectForm from 'components/form/SelectForm';
 
 const hocLucOptions = [
   { value: 'Giỏi', label: 'Giỏi' },
   { value: 'Khá', label: 'Khá' },
-  { value: 'Trung bình', label: 'Trung bình' }
+  { value: 'Trung bình', label: 'Trung bình' },
+  { value: 'Yếu', label: 'Yếu' },
+  { value: 'Kém', label: 'Kém' }
 ];
 
 const ketQuaOptions = [
@@ -75,6 +78,7 @@ const AddHocSinh = () => {
   const [monThi, setMonThi] = useState([]);
   const [danToc, setDanToc] = useState([]);
   const [khoaThi, setKhoaThi] = useState([]);
+  const [configAuto, setConfigAuto] = useState(false);
   const hocSinhValidation = useHocSinhValidationSchema();
   const [selectDanhmuc, setSelectDanhmuc] = useState('');
   const [selectedMonHocs, setSelectedMonHocs] = useState(['', '', '', '', '', '']);
@@ -97,12 +101,16 @@ const AddHocSinh = () => {
       ghiChu: '',
       idDanhMucTotNghiep: '',
       xepLoai: '',
-      ketQua: 'x',
+      ketQua: '',
       heDaoTao: '',
       hinhThucDaoTao: '',
       idTruong: donvi.id,
       nguoiThucHien: user.username,
-      ketQuaHocTaps: []
+      ketQuaHocTaps: [],
+      diemTB: '',
+      lanDauTotNghiep: 'x',
+      dienXetTotNghiep: '',
+      hoiDong: ''
     },
 
     validationSchema: hocSinhValidation,
@@ -131,6 +139,8 @@ const AddHocSinh = () => {
       setDanToc(dantoc.data);
       const danhmuc = await getAllDanhmucTN(user ? user.username : '');
       setDanhMuc(danhmuc.data);
+      const configAuto = await getCauHinhTuDongXepLoai();
+      setConfigAuto(configAuto.data.configValue);
     };
     fetchDataDL();
   }, []);
@@ -318,6 +328,7 @@ const AddHocSinh = () => {
         </Grid>
         <Grid xs={12} item container spacing={isXs ? 0 : 2} mt={0}>
           <InputForm1 formik={formik} xs={isXs ? 12 : 6} label={t('Lớp')} name="lop" isRequired />
+          <InputForm1 formik={formik} xs={isXs ? 12 : 6} label={t('Hội đồng thi')} name="hoiDong" isRequired />
         </Grid>
         <Grid xs={12} item container spacing={isXs ? 0 : 2} columnSpacing={isXs ? 1 : 0}>
           {selectedMonHocs.map((selectedMonHoc, index) => (
@@ -368,21 +379,6 @@ const AddHocSinh = () => {
         </Grid>
         <Grid xs={12} item container spacing={isXs ? 0 : 2} mt={0} columnSpacing={isXs ? 1 : 0}>
           <Grid item xs={isXs ? 6 : 3}>
-            <FormControlComponent xsLabel={0} xsForm={12} label={t('hocsinh.label.hocluc')} isRequire>
-              <FormControl fullWidth variant="outlined">
-                <SelectForm
-                  formik={formik}
-                  keyProp="value"
-                  valueProp="label"
-                  item={hocLucOptions}
-                  name="hocLuc"
-                  value={formik.values.hocLuc}
-                  onChange={handleHocLucChange}
-                />
-              </FormControl>
-            </FormControlComponent>
-          </Grid>
-          <Grid item xs={isXs ? 6 : 3}>
             <FormControlComponent xsLabel={0} xsForm={12} label={t('hocsinh.label.hanhkiem')} isRequire>
               <FormControl fullWidth variant="outlined">
                 <SelectForm
@@ -398,35 +394,123 @@ const AddHocSinh = () => {
             </FormControlComponent>
           </Grid>
           <Grid item xs={isXs ? 6 : 3}>
-            <FormControlComponent xsLabel={0} xsForm={12} label={t('result')}>
-              <FormControl fullWidth variant="outlined">
-                <SelectForm
-                  keyProp="value"
-                  valueProp="label"
-                  item={ketQuaOptions}
-                  name="ketQua"
-                  value={formik.values.ketQua ? formik.values.ketQua : 'x'}
-                  onChange={handleKetQuaChange}
-                />
-              </FormControl>
-            </FormControlComponent>
+            <InputForm1 formik={formik} xs={12} label={t('Điểm trung bình')} name="diemTB" isRequired />
           </Grid>
           <Grid item xs={isXs ? 6 : 3}>
-            <FormControlComponent xsLabel={0} xsForm={12} isRequire label={t('rating')}>
-              <FormControl fullWidth variant="outlined">
-                <SelectForm
-                  formik={formik}
-                  keyProp="value"
-                  valueProp="label"
-                  item={hocLucOptions}
-                  name="xepLoai"
-                  value={formik.values.xepLoai}
-                  onChange={handleXepLoaiChange}
+            <InputForm1 formik={formik} xs={12} label={t('Diện xét tốt nghiệp')} name="dienXetTotNghiep" />
+          </Grid>
+          <Grid item xs={isXs ? 6 : 3} sx={{ display: 'flex', alignItems: 'flex-end' }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={formik.values.lanDauTotNghiep === 'x'} // Check if the value is 'x'
+                  onChange={(e) => formik.setFieldValue('lanDauTotNghiep', e.target.checked ? 'x' : 'o')}
                 />
-              </FormControl>
-            </FormControlComponent>
+              }
+              label="Lần đầu xét tốt nghiệp"
+            />
           </Grid>
         </Grid>
+        {configAuto === 'false' ? (
+          <Grid xs={12} item container spacing={isXs ? 0 : 2} mt={0} columnSpacing={isXs ? 1 : 0}>
+            <Grid item xs={isXs ? 6 : 4}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('hocsinh.label.hocluc')} isRequire>
+                <FormControl fullWidth variant="outlined">
+                  <SelectForm
+                    formik={formik}
+                    keyProp="value"
+                    valueProp="label"
+                    item={hocLucOptions}
+                    name="hocLuc"
+                    value={formik.values.hocLuc}
+                    onChange={handleHocLucChange}
+                  />
+                </FormControl>
+              </FormControlComponent>
+            </Grid>
+            <Grid item xs={isXs ? 6 : 4}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('kết quả tốt nghiệp')} isRequire>
+                <FormControl fullWidth variant="outlined">
+                  <SelectForm
+                    formik={formik}
+                    keyProp="value"
+                    valueProp="label"
+                    item={ketQuaOptions}
+                    name="ketQua"
+                    value={formik.values.ketQua}
+                    onChange={handleKetQuaChange}
+                  />
+                </FormControl>
+              </FormControlComponent>
+            </Grid>
+            <Grid item xs={isXs ? 6 : 4}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('xếp loại tốt nghiệp')} isRequire>
+                <FormControl fullWidth variant="outlined">
+                  <SelectForm
+                    formik={formik}
+                    keyProp="value"
+                    valueProp="label"
+                    item={hocLucOptions}
+                    name="xepLoai"
+                    value={formik.values.xepLoai}
+                    onChange={handleXepLoaiChange}
+                  />
+                </FormControl>
+              </FormControlComponent>
+            </Grid>
+          </Grid>
+        ) : (
+          <Grid xs={12} item container spacing={isXs ? 0 : 2} mt={0} columnSpacing={isXs ? 1 : 0}>
+            <Grid item xs={isXs ? 6 : 4}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('hocsinh.label.hocluc')}>
+                <FormControl fullWidth variant="outlined">
+                  <SelectForm
+                    formik={formik}
+                    keyProp="value"
+                    valueProp="label"
+                    item={hocLucOptions}
+                    name="hocLuc"
+                    value={formik.values.hocLuc}
+                    onChange={handleHocLucChange}
+                    disabled
+                  />
+                </FormControl>
+              </FormControlComponent>
+            </Grid>
+            <Grid item xs={isXs ? 6 : 4}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('kết quả tốt nghiệp')}>
+                <FormControl fullWidth variant="outlined">
+                  <SelectForm
+                    formik={formik}
+                    keyProp="value"
+                    valueProp="label"
+                    item={ketQuaOptions}
+                    name="ketQua"
+                    value={formik.values.ketQua}
+                    onChange={handleKetQuaChange}
+                    disabled
+                  />
+                </FormControl>
+              </FormControlComponent>
+            </Grid>
+            <Grid item xs={isXs ? 6 : 4}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('xếp loại tốt nghiệp')}>
+                <FormControl fullWidth variant="outlined">
+                  <SelectForm
+                    formik={formik}
+                    keyProp="value"
+                    valueProp="label"
+                    item={hocLucOptions}
+                    name="xepLoai"
+                    value={formik.values.xepLoai}
+                    onChange={handleXepLoaiChange}
+                    disabled
+                  />
+                </FormControl>
+              </FormControlComponent>
+            </Grid>
+          </Grid>
+        )}
         <Grid item container spacing={isXs ? 0 : 1} xs={12} mt={2} alignItems={'center'}>
           <Grid item>
             <IconCertificate />

@@ -20,7 +20,7 @@ import InputForm1 from 'components/form/InputForm1';
 import InputForm from 'components/form/InputForm';
 import { getAllHinhthucdaotao } from 'services/hinhthucdaotaoService';
 import SelectForm from 'components/form/SelectForm';
-import { getAllHeDaoTao } from 'services/sharedService';
+//import { getAllHeDaoTao } from 'services/sharedService';
 
 const Add = () => {
   const isXs = useMediaQuery('(max-width:800px)');
@@ -75,10 +75,10 @@ const Add = () => {
     const idHinhThucDaoTao = event.target.value;
     formik.setFieldValue('IdHinhThucDaoTao', idHinhThucDaoTao);
   };
-  const handleChangeHDT = async (event) => {
-    const maHeDaoTao = event.target.value;
-    formik.setFieldValue('MaHeDaoTao', maHeDaoTao);
-  };
+  // const handleChangeHDT = async (event) => {
+  //   const maHeDaoTao = event.target.value;
+  //   formik.setFieldValue('MaHeDaoTao', maHeDaoTao);
+  // };
 
   useEffect(() => {
     if (openPopup) {
@@ -105,22 +105,22 @@ const Add = () => {
       }));
 
       //hedaotao
-      const hedaotao = await getAllHeDaoTao();
-      const datahedaotao = await hedaotao.data;
-      if (datahedaotao && datahedaotao.length > 0) {
-        formik.setFieldValue('MaHeDaoTao', datahedaotao[0].ma);
-      }
-      const dataWithhdt = datahedaotao.map((row, index) => ({
-        idIndex: index + 1,
-        ...row
-      }));
+      // const hedaotao = await getAllHeDaoTao();
+      // const datahedaotao = await hedaotao.data;
+      // if (datahedaotao && datahedaotao.length > 0) {
+      //   formik.setFieldValue('MaHeDaoTao', datahedaotao[0].ma);
+      // }
+      // const dataWithhdt = datahedaotao.map((row, index) => ({
+      //   idIndex: index + 1,
+      //   ...row
+      // }));
       dispatch(setReloadData(false));
       setPageState((old) => ({
         ...old,
         isLoading: false,
         namThi: dataWithnt,
-        hinhthucdaotao: dataWithhtdt,
-        hedaotao: dataWithhdt
+        hinhthucdaotao: dataWithhtdt
+        //hedaotao: dataWithhdt
       }));
     };
 
@@ -172,7 +172,7 @@ const Add = () => {
             </Grid>
           </Grid>
           <Grid item xs={12} container spacing={1}>
-            <Grid item xs={isXs ? 12 : 6}>
+            {/* <Grid item xs={isXs ? 12 : 6}>
               <FormControlComponent xsLabel={0} xsForm={12} isRequire label={t('hedaotao.title')}>
                 <SelectForm
                   formik={formik}
@@ -185,8 +185,8 @@ const Add = () => {
                   onChange={handleChangeHDT}
                 />
               </FormControlComponent>
-            </Grid>
-            <Grid item xs={isXs ? 12 : 6}>
+            </Grid> */}
+            <Grid item xs={isXs ? 12 : 12}>
               <FormControlComponent xsLabel={0} xsForm={12} isRequire label={t('Tên kỳ thi')}>
                 <InputForm formik={formik} name="TenKyThi" type="text" placeholder={t('Tên kỳ thi')} />
               </FormControlComponent>

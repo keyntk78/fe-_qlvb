@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Checkbox,
   Divider,
   FormControl,
   FormControlLabel,
@@ -11,7 +12,8 @@ import {
   RadioGroup,
   Select,
   Typography,
-  styled
+  styled,
+  useMediaQuery
 } from '@mui/material';
 import { useFormik } from 'formik';
 import { setReloadData } from 'store/actions';
@@ -37,7 +39,9 @@ import SelectForm from 'components/form/SelectForm';
 const hocLucOptions = [
   { value: 'Giỏi', label: 'Giỏi' },
   { value: 'Khá', label: 'Khá' },
-  { value: 'Trung Bình', label: 'Trung Bình' }
+  { value: 'Trung Bình', label: 'Trung Bình' },
+  { value: 'Yếu', label: 'Yếu' },
+  { value: 'Kém', label: 'Kém' }
 ];
 
 const ketQuaOptions = [
@@ -68,6 +72,7 @@ const CustomSelect = styled(Select)({
 const Detail = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const isXs = useMediaQuery('(max-width:600px)');
   const openPopup = useSelector(openPopupSelector);
   const user = useSelector(userLoginSelector);
   const selectedHocSinh = useSelector(selectedHocsinhSelector);
@@ -98,12 +103,16 @@ const Detail = () => {
       ghiChu: '',
       idDanhMucTotNghiep: '',
       xepLoai: '',
-      ketqua: '',
+      ketQua: '',
       idTruong: '',
       heDaoTao: '',
       hinhThucDaoTao: '',
       nguoiThucHien: user.username,
-      ketQuaHocTaps: []
+      ketQuaHocTaps: [],
+      diemTB: '',
+      lanDauTotNghiep: 'x',
+      dienXetTotNghiep: '',
+      hoiDong: ''
     }
   });
 
@@ -131,12 +140,16 @@ const Detail = () => {
           ghiChu: datauser.ghiChu || '',
           idDanhMucTotNghiep: datauser.idDanhMucTotNghiep || '',
           xepLoai: datauser.xepLoai || '',
-          ketqua: datauser.ketqua || '',
+          ketQua: datauser.ketQua || '',
           idTruong: datauser.idTruong || '',
           heDaoTao: datauser.truong.maHeDaoTao || '',
           hinhThucDaoTao: datauser.truong.maHinhThucDaoTao || '',
           nguoiThucHien: user.username,
-          ketQuaHocTaps: datauser.ketQuaHocTaps || []
+          ketQuaHocTaps: datauser.ketQuaHocTaps || [],
+          diemTB: datauser.diemTB || '',
+          lanDauTotNghiep: datauser.lanDauTotNghiep || '',
+          dienXetTotNghiep: datauser.dienXetTotNghiep || '',
+          hoiDong: datauser.hoiDong || ''
         });
       }
       dispatch(setReloadData(false));
@@ -200,8 +213,8 @@ const Detail = () => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <Grid container>
-        <Grid xs={12} item container spacing={2} mt={0}>
-          <Grid item xs={6}>
+        <Grid xs={12} item container spacing={isXs ? 1 : 2} mt={0}>
+          <Grid item xs={isXs ? 12 : 6}>
             <FormControlComponent xsLabel={0} xsForm={12} label={t('danhmuc.title')}>
               <FormControl fullWidth variant="outlined">
                 <SelectForm
@@ -216,7 +229,7 @@ const Detail = () => {
             </FormControlComponent>
           </Grid>
         </Grid>
-        <Grid item container spacing={1} xs={12} mt={2} alignItems={'center'}>
+        <Grid item container spacing={isXs ? 0 : 1} xs={12} mt={2} alignItems={'center'}>
           <Grid item>
             <IconUser />
           </Grid>
@@ -227,10 +240,10 @@ const Detail = () => {
         <Grid item xs={12}>
           <Divider />
         </Grid>
-        <Grid xs={12} item container spacing={2} mt={0}>
-          <InputForm1 formik={formik} xs={6} label={t('hocsinh.field.fullname')} name="hoTen" isDisabled />
-          <InputForm1 formik={formik} xs={3} label={t('hocsinh.field.cccd')} name="cccd" isDisabled />
-          <Grid item xs={3}>
+        <Grid xs={12} item container spacing={isXs ? 0 : 2} mt={0}>
+          <InputForm1 formik={formik} xs={isXs ? 12 : 6} label={t('hocsinh.field.fullname')} name="hoTen" isDisabled />
+          <InputForm1 formik={formik} xs={isXs ? 6 : 3} label={t('hocsinh.field.cccd')} name="cccd" isDisabled />
+          <Grid item xs={isXs ? 6 : 3}>
             <FormControlComponent xsLabel={0} xsForm={12} label={t('user.label.gender')}>
               <FormControl fullWidth variant="outlined">
                 <RadioGroup name="gioiTinh" value={formik.values.gioiTinh ? 'male' : 'female'} onBlur={formik.handleBlur}>
@@ -243,9 +256,9 @@ const Detail = () => {
             </FormControlComponent>
           </Grid>
         </Grid>
-        <Grid xs={12} item container spacing={2}>
-          <InputForm1 formik={formik} xs={6} label={'Nơi sinh'} name="noiSinh" isDisabled />
-          <Grid item xs={3}>
+        <Grid xs={12} item container spacing={isXs ? 0 : 2}>
+          <InputForm1 formik={formik} xs={isXs ? 12 : 6} label={'Nơi sinh'} name="noiSinh" isDisabled />
+          <Grid item xs={isXs ? 6 : 3}>
             <FormControlComponent xsLabel={0} xsForm={12} label={t('user.label.birthday')}>
               <InputForm
                 isDisabled
@@ -256,10 +269,10 @@ const Detail = () => {
               />
             </FormControlComponent>
           </Grid>
-          <InputForm1 formik={formik} xs={3} label={t('hocsinh.field.nation')} name="danToc" isDisabled />
+          <InputForm1 formik={formik} xs={isXs ? 6 : 3} label={t('hocsinh.field.nation')} name="danToc" isDisabled />
         </Grid>
         <Grid xs={12} item container spacing={2}>
-          <InputForm1 formik={formik} xs={6} label={'Địa chỉ'} name="diaChi" isDisabled />
+          <InputForm1 formik={formik} xs={isXs ? 12 : 6} label={'Địa chỉ'} name="diaChi" isDisabled />
         </Grid>
         <Grid item container spacing={1} xs={12} mt={4} alignItems={'center'}>
           <Grid item>
@@ -273,19 +286,20 @@ const Detail = () => {
           <Divider />
         </Grid>
         <Grid xs={12} item container spacing={2} mt={0}>
-          <Grid item xs={6}>
+          <Grid item xs={isXs ? 12 : 6}>
             <FormControlComponent xsLabel={0} xsForm={12} label={t('donvitruong.title')}>
               <FormControl fullWidth variant="outlined">
                 <SelectForm keyProp="id" valueProp="ten" item={donVi} name="idTruong" value={formik.values.idTruong} disabled />
               </FormControl>
             </FormControlComponent>
           </Grid>
-          <InputForm1 formik={formik} xs={6} label={t('Lớp')} name="lop" isDisabled />
+          <InputForm1 formik={formik} xs={isXs ? 6 : 3} label={t('Lớp')} name="lop" isDisabled />
+          <InputForm1 formik={formik} xs={isXs ? 6 : 3} label={t('Hội đồng thi')} name="hoiDong" isDisabled />
         </Grid>
         <Grid xs={12} item container spacing={2}>
           {formik.values.ketQuaHocTaps.map((ketQua, index) => (
             <React.Fragment key={index}>
-              <Grid item xs={3}>
+              <Grid item xs={isXs ? 6 : 3}>
                 <FormControlComponent xsLabel={0} xsForm={12} label={`${t('subject')} ${index + 1}`}>
                   <FormControl fullWidth>
                     <CustomSelect
@@ -316,7 +330,7 @@ const Detail = () => {
                   </FormControl>
                 </FormControlComponent>
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={isXs ? 6 : 3}>
                 <InputForm1
                   formik={formik}
                   xs={12}
@@ -330,18 +344,12 @@ const Detail = () => {
             </React.Fragment>
           ))}
         </Grid>
-        <Grid xs={12} item container spacing={2} mt={0}>
-          <Grid item xs={3}>
-            <FormControlComponent xsLabel={0} xsForm={12} label={t('hocsinh.label.hocluc')}>
-              <FormControl fullWidth variant="outlined">
-                <SelectForm keyProp="value" valueProp="label" item={hocLucOptions} name="hocLuc" value={formik.values.hocLuc} disabled />
-              </FormControl>
-            </FormControlComponent>
-          </Grid>
-          <Grid item xs={3}>
-            <FormControlComponent xsLabel={0} xsForm={12} label={t('hocsinh.label.hanhkiem')}>
+        <Grid xs={12} item container spacing={isXs ? 0 : 2} mt={0} columnSpacing={isXs ? 1 : 0}>
+          <Grid item xs={isXs ? 6 : 3}>
+            <FormControlComponent xsLabel={0} xsForm={12} label={t('hocsinh.label.hanhkiem')} isRequire>
               <FormControl fullWidth variant="outlined">
                 <SelectForm
+                  formik={formik}
                   keyProp="value"
                   valueProp="label"
                   item={hanhKiemOptions}
@@ -352,29 +360,61 @@ const Detail = () => {
               </FormControl>
             </FormControlComponent>
           </Grid>
-          <Grid item xs={3}>
-            <FormControlComponent xsLabel={0} xsForm={12} label={t('result')}>
+          <Grid item xs={isXs ? 6 : 3}>
+            <InputForm1 formik={formik} xs={12} label={t('Điểm trung bình')} name="diemTB" isRequired isDisabled />
+          </Grid>
+          <Grid item xs={isXs ? 6 : 3}>
+            <InputForm1 formik={formik} xs={12} label={t('Diện xét tốt nghiệp')} name="dienXetTotNghiep" isDisabled />
+          </Grid>
+          <Grid item xs={isXs ? 6 : 3} sx={{ display: 'flex', alignItems: 'flex-end' }}>
+            <FormControlLabel
+              control={<Checkbox checked={formik.values.lanDauTotNghiep === 'x'} />}
+              label="Lần đầu xét tốt nghiệp"
+              disabled
+            />
+          </Grid>
+        </Grid>
+        <Grid xs={12} item container spacing={isXs ? 0 : 2} mt={0} columnSpacing={isXs ? 1 : 0}>
+          <Grid item xs={isXs ? 6 : 4}>
+            <FormControlComponent xsLabel={0} xsForm={12} label={t('hocsinh.label.hocluc')}>
               <FormControl fullWidth variant="outlined">
                 <SelectForm
+                  formik={formik}
                   keyProp="value"
                   valueProp="label"
-                  item={ketQuaOptions}
-                  name="ketqua"
-                  value={formik.values.ketqua ? formik.values.ketqua : 'x'}
+                  item={hocLucOptions}
+                  name="hocLuc"
+                  value={formik.values.hocLuc}
                   disabled
                 />
               </FormControl>
             </FormControlComponent>
           </Grid>
-          <Grid item xs={3}>
-            <FormControlComponent xsLabel={0} xsForm={12} label={t('rating')}>
+          <Grid item xs={isXs ? 6 : 4}>
+            <FormControlComponent xsLabel={0} xsForm={12} label={t('kết quả tốt nghiệp')}>
               <FormControl fullWidth variant="outlined">
                 <SelectForm
+                  formik={formik}
+                  keyProp="value"
+                  valueProp="label"
+                  item={ketQuaOptions}
+                  name="ketQua"
+                  value={formik.values.ketQua ? formik.values.ketQua : 'o'}
+                  disabled
+                />
+              </FormControl>
+            </FormControlComponent>
+          </Grid>
+          <Grid item xs={isXs ? 6 : 4}>
+            <FormControlComponent xsLabel={0} xsForm={12} label={t('xếp loại tốt nghiệp')}>
+              <FormControl fullWidth variant="outlined">
+                <SelectForm
+                  formik={formik}
                   keyProp="value"
                   valueProp="label"
                   item={hocLucOptions}
                   name="xepLoai"
-                  value={formik.values.xepLoai ? formik.values.xepLoai : 'Giỏi'}
+                  value={formik.values.xepLoai}
                   disabled
                 />
               </FormControl>
@@ -393,14 +433,14 @@ const Detail = () => {
           <Divider />
         </Grid>
         <Grid xs={12} item container spacing={2} mt={0}>
-          <Grid item xs={6}>
+          <Grid item xs={isXs ? 12 : 6}>
             <FormControlComponent xsLabel={0} xsForm={12} label={t('hedaotao.title')}>
               <FormControl fullWidth variant="outlined">
                 <SelectForm keyProp="ma" valueProp="ten" item={heDaoTao} name="heDaoTao" value={formik.values.heDaoTao} disabled />
               </FormControl>
             </FormControlComponent>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={isXs ? 12 : 6}>
             <FormControlComponent xsLabel={0} xsForm={12} label={t('hinhthucdaotao.title')}>
               <FormControl fullWidth variant="outlined">
                 <SelectForm keyProp="ma" valueProp="ten" item={htdt} name="hinhThucDaoTao" value={formik.values.hinhThucDaoTao} disabled />
@@ -413,9 +453,9 @@ const Detail = () => {
             <InputForm1 formik={formik} xs={3} label={'Hội đồng thi'} name='hdt1' value='' isDisabled/>
         </Grid> */}
         <Grid xs={12} item container spacing={2}>
-          <InputForm1 formik={formik} xs={4} label={t('hocsinh.field.soHieu')} name="soHieu" isDisabled />
-          <InputForm1 formik={formik} xs={4} label={t('hocsinh.field.soCapBang')} name="soVaoSo" isDisabled />
-          <Grid item xs={4}>
+          <InputForm1 formik={formik} xs={isXs ? 12 : 4} label={t('hocsinh.field.soHieu')} name="soHieu" isDisabled />
+          <InputForm1 formik={formik} xs={isXs ? 12 : 4} label={t('hocsinh.field.soCapBang')} name="soVaoSo" isDisabled />
+          <Grid item xs={isXs ? 12 : 4}>
             <FormControlComponent xsLabel={0} xsForm={12} label={t('khoathi.title')}>
               <FormControl fullWidth variant="outlined">
                 <SelectForm convert keyProp="id" valueProp="ngay" item={khoaThi} name="khoaThi" value={formik.values.khoaThi} disabled />

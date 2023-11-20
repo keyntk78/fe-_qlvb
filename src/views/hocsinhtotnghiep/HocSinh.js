@@ -23,9 +23,9 @@ import { useNavigate } from 'react-router-dom';
 import GuiDuyetAll from './GuiDuyetAll';
 import DeleteAll from './DeleteAll';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
-import { IconCertificate, IconClick, IconDownload, IconPlus, IconSearch, IconSend, IconTrash } from '@tabler/icons';
+import { IconCertificate, IconFileImport, IconPlus, IconSearch, IconSend, IconTrash } from '@tabler/icons';
 import Detail from './Detail';
-import { getAllDanhmucTN, getCauHinhTuDongXepLoai } from 'services/sharedService';
+import { getAllDanToc, getAllDanhmucTN, getCauHinhTuDongXepLoai } from 'services/sharedService';
 import BackToTop from 'components/scroll/BackToTop';
 import InGCNAll from './InGCNAll';
 import ActionButtons from 'components/button/ActionButtons';
@@ -34,7 +34,7 @@ import Add from '../hocsinhtotnghiep/Add';
 import InGCN from './InGCN';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
-import ButtonSecondary from 'components/buttoncolor/ButtonSecondary';
+import GroupButtons from 'components/button/GroupButton';
 
 const trangThaiOptions = [
   { value: '0', label: 'Chưa gửi duyệt' },
@@ -53,6 +53,7 @@ export default function HocSinh() {
   const donvi = useSelector(donviSelector);
   const [dMTN, setDMTN] = useState('');
   const [selectedDMTN, setSelectedDMTN] = useState('');
+  const [danToc, setDanToc] = useState([]);
   const { t } = useTranslation();
   const reloadData = useSelector(reloadDataSelector);
   const [firstLoad, setFirstLoad] = useState(true);
@@ -259,6 +260,8 @@ export default function HocSinh() {
       const danhmuc = await getAllDanhmucTN(user ? user.username : '');
       setDMTN(danhmuc.data);
       console.log(danhmuc.data);
+      const dantoc = await getAllDanToc();
+      setDanToc(dantoc.data);
       const configAuto = await getCauHinhTuDongXepLoai();
       setConfigAuto(configAuto.data.configValue);
     };
@@ -362,12 +365,30 @@ export default function HocSinh() {
     const selectedValue = event.target.value;
     setPageState((old) => ({ ...old, DMTN: selectedValue }));
   };
-
+  const handleDanTocChange = (event) => {
+    const selectedValue = event.target.value;
+    const danToc = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, danToc: danToc }));
+  };
   const handleTrangThaiChange = (event) => {
     const selectedValue = event.target.value;
     const trangthai = selectedValue === 'all' ? '' : selectedValue;
     setPageState((old) => ({ ...old, trangThai: trangthai }));
   };
+
+  const handleDowloadTemplate = async () => {
+    window.location.href = configAuto === 'true' ? FileExcel : FileExcel_thucong;
+  };
+  const themTuTep = [
+    {
+      type: 'importFile',
+      handleClick: handleImport
+    },
+    {
+      type: 'dowloadTemplate',
+      handleClick: handleDowloadTemplate
+    }
+  ];
 
   return (
     <>
@@ -383,22 +404,7 @@ export default function HocSinh() {
           ) : (
             <Grid item container justifyContent="flex-end" spacing={1}>
               <Grid item>
-                <ButtonSecondary
-                  title={t('button.download')}
-                  href={configAuto ? FileExcel : FileExcel_thucong}
-                  download="File_Mau"
-                  target="_blank"
-                  rel="noreferrer"
-                  icon={IconDownload}
-                />
-              </Grid>
-              <Grid item>
-                <ButtonSuccess
-                  title={t('button.import')}
-                  onClick={handleImport}
-                  icon={IconClick}
-                  // disabled={disableImport}
-                />
+                <GroupButtons buttonConfigurations={themTuTep} themtep icon={IconFileImport} title={t('button.import')} />
               </Grid>
               <Grid item>
                 <Button onClick={handleAdd} color="info" variant="contained" startIcon={<IconPlus />}>
@@ -412,22 +418,7 @@ export default function HocSinh() {
         {isXs ? (
           <Grid item container justifyContent="center" spacing={1}>
             <Grid item>
-              <ButtonSecondary
-                title={t('button.download')}
-                href={configAuto ? FileExcel : FileExcel_thucong}
-                download="File_Mau"
-                target="_blank"
-                rel="noreferrer"
-                icon={IconDownload}
-              />
-            </Grid>
-            <Grid item>
-              <ButtonSuccess
-                title={t('button.import')}
-                onClick={handleImport}
-                icon={IconClick}
-                // disabled={disableImport}
-              />
+              <GroupButtons buttonConfigurations={themTuTep} themtep icon={IconFileImport} title={t('button.import')} />
             </Grid>
           </Grid>
         ) : (
@@ -502,7 +493,7 @@ export default function HocSinh() {
               value={pageState.noiSinh}
             />
           </Grid>
-          <Grid item container xs={6} sm={3} md={3} lg={2}>
+          {/* <Grid item container xs={6} sm={3} md={3} lg={2}>
             <TextField
               fullWidth
               id="outlined-basic"
@@ -512,6 +503,28 @@ export default function HocSinh() {
               onChange={(e) => setPageState((old) => ({ ...old, danToc: e.target.value }))}
               value={pageState.danToc}
             />
+          </Grid> */}
+          <Grid item lg={2} md={3} sm={3} xs={isXs ? 6 : 2}>
+            <FormControl fullWidth variant="outlined" size="small">
+              <InputLabel>{t('hocsinh.field.nation')}</InputLabel>
+              <Select
+                name="danToc"
+                value={pageState.danToc === '' ? 'all' : pageState.danToc}
+                onChange={handleDanTocChange}
+                label={t('hocsinh.field.nation')}
+              >
+                <MenuItem value="all">Tất cả</MenuItem>
+                {danToc && danToc.length > 0 ? (
+                  danToc.map((dantoc) => (
+                    <MenuItem key={dantoc.id} value={dantoc.ten}>
+                      {dantoc.ten}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value="">No data available</MenuItem>
+                )}
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={5} sm={3} md={3} lg={2}>
             <Button

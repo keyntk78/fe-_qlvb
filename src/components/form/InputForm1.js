@@ -9,10 +9,10 @@ const CustomTextField = styled(TextField)({
   },
   '& .MuiInputBase-input.Mui-disabled': {
     backgroundColor: '#ededed',
-    color: 'success',
+    color: 'success'
   },
   '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
-    borderColor: '#ededed',
+    borderColor: '#ededed'
   }
 });
 
@@ -29,7 +29,8 @@ const InputForm1 = ({
   rows,
   isRequired,
   maxRows,
-  minRows
+  minRows,
+  onclick
 }) => {
   return (
     <Grid item xs={xs}>
@@ -42,6 +43,7 @@ const InputForm1 = ({
           value={value ? value : formik.values[name] || ''}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
+          onClick={onclick}
           variant="outlined"
           placeholder={placeholder}
           error={formik.touched[name] && Boolean(formik.errors[name])}

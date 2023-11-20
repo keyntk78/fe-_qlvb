@@ -1,5 +1,17 @@
 import React from 'react';
-import { Divider, FormControl, FormControlLabel, Grid, Radio, RadioGroup, Typography, useMediaQuery } from '@mui/material';
+import {
+  Checkbox,
+  Divider,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Select,
+  Typography,
+  useMediaQuery
+} from '@mui/material';
 import { useFormik } from 'formik';
 import { setOpenPopup, setReloadData, showAlert } from 'store/actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,18 +24,20 @@ import { IconBook2, IconCertificate, IconUser } from '@tabler/icons';
 import { useState } from 'react';
 import InputForm1 from 'components/form/InputForm1';
 import { editHocSinh, getHocSinhByCCCD } from 'services/nguoihoctotnghiepService';
-// import { getAllMonthi } from 'services/monthiService';
+import { getAllMonthi } from 'services/monthiService';
 import useHocSinhValidationSchema from 'components/validations/hocsinhValidation';
 import { getAllKhoathi } from 'services/khoathiService';
 import InputForm from 'components/form/InputForm';
-import { getAllDanhmucTN } from 'services/sharedService';
+import { getAllDanhmucTN, getCauHinhTuDongXepLoai } from 'services/sharedService';
 import { getAllDanToc } from 'services/dantocService';
 import SelectForm from 'components/form/SelectForm';
 
 const hocLucOptions = [
   { value: 'Giỏi', label: 'Giỏi' },
   { value: 'Khá', label: 'Khá' },
-  { value: 'Trung Bình', label: 'Trung bình' }
+  { value: 'Trung Bình', label: 'Trung Bình' },
+  { value: 'Yếu', label: 'Yếu' },
+  { value: 'Kém', label: 'Kém' }
 ];
 
 const ketQuaOptions = [
@@ -47,11 +61,13 @@ const EditHocSinh = () => {
   const donvi = useSelector(donviSelector);
   const selectedHocSinh = useSelector(selectedHocsinhSelector);
   const [danhMuc, setDanhMuc] = useState([]);
-  // const [ monThi, setMonThi ] = useState([]);
+  const [configAuto, setConfigAuto] = useState(false);
+  const [monThi, setMonThi] = useState([]);
   const [khoaThi, setKhoaThi] = useState([]);
   const [danToc, setDanToc] = useState([]);
   const hocSinhValidation = useHocSinhValidationSchema();
-  // const [selectedMonHocs, setSelectedMonHocs] = useState(['', '', '', '', '', '']);
+  const [selectedMonHocs, setSelectedMonHocs] = useState(['', '', '', '', '', '']);
+  const [selectedSubjectIndex, setSelectedSubjectIndex] = useState(null);
   const formik = useFormik({
     initialValues: {
       id: '',
@@ -73,10 +89,14 @@ const EditHocSinh = () => {
       ghiChu: '',
       idDanhMucTotNghiep: '',
       xepLoai: '',
-      ketqua: '',
+      ketQua: '',
       idTruong: '',
       nguoiThucHien: user.username,
-      ketQuaHocTaps: []
+      ketQuaHocTaps: [],
+      diemTB: '',
+      lanDauTotNghiep: 'x',
+      dienXetTotNghiep: '',
+      hoiDong: ''
     },
 
     validationSchema: hocSinhValidation,
@@ -98,7 +118,10 @@ const EditHocSinh = () => {
       }
     }
   });
-
+  const handleSubjectClick = (index) => {
+    // Set the selected subject index when a subject is clicked
+    setSelectedSubjectIndex(index);
+  };
   useEffect(() => {
     const fetchData = async () => {
       const userbyid = await getHocSinhByCCCD(selectedHocSinh.cccd);
@@ -111,8 +134,8 @@ const EditHocSinh = () => {
           cccd: datauser.cccd || '',
           ngaySinh: datauser.ngaySinh || '',
           diaChi: datauser.diaChi || '',
-          noiSinh: datauser.noiSinh || '',
           lop: datauser.lop || '',
+          noiSinh: datauser.noiSinh || '',
           gioiTinh: datauser.gioiTinh || false,
           danToc: datauser.danToc || '',
           hanhKiem: datauser.hanhKiem || '',
@@ -123,9 +146,14 @@ const EditHocSinh = () => {
           ghiChu: datauser.ghiChu || '',
           idDanhMucTotNghiep: datauser.idDanhMucTotNghiep || '',
           xepLoai: datauser.xepLoai || '',
-          ketqua: datauser.ketqua || '',
+          ketQua: datauser.ketQua || '',
+          idTruong: datauser.idTruong || '',
           nguoiThucHien: user.username,
-          ketQuaHocTaps: datauser.ketQuaHocTaps || []
+          ketQuaHocTaps: datauser.ketQuaHocTaps || [],
+          diemTB: datauser.diemTB || '',
+          lanDauTotNghiep: datauser.lanDauTotNghiep || '',
+          dienXetTotNghiep: datauser.dienXetTotNghiep || '',
+          hoiDong: datauser.hoiDong || ''
         });
       }
       dispatch(setReloadData(false));
@@ -137,14 +165,16 @@ const EditHocSinh = () => {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      // const monthi = await getAllMonthi();
-      // setMonThi(monthi.data);
+      const monthi = await getAllMonthi();
+      setMonThi(monthi.data);
       const dantoc = await getAllDanToc();
       setDanToc(dantoc.data);
       const danhmuc = await getAllDanhmucTN(user ? user.username : '');
       setDanhMuc(danhmuc.data);
       const khoathi = await getAllKhoathi();
       setKhoaThi(khoathi.data);
+      const configAuto = await getCauHinhTuDongXepLoai();
+      setConfigAuto(configAuto.data.configValue);
     };
     fetchDataDL();
   }, []);
@@ -188,38 +218,37 @@ const EditHocSinh = () => {
     formik.setFieldValue('gioiTinh', event.target.value === 'male');
   };
 
-  // const handleSelectChange = (event, index) => {
-  //   const selectedValue = event.target.value;
-  //   if (selectedValue !== '') {
-  //     const newSelectedMonHocs = [...selectedMonHocs];
-  //     newSelectedMonHocs[index] = selectedValue;
-  //     setSelectedMonHocs(newSelectedMonHocs);
-  //   }
-  // };
+  const handleSelectChange = (event, index) => {
+    const selectedValue = event.target.value;
+    if (selectedValue !== '') {
+      const newSelectedMonHocs = [...selectedMonHocs];
+      newSelectedMonHocs[index] = selectedValue;
+      setSelectedMonHocs(newSelectedMonHocs);
+    }
+  };
 
-  // const getRemainingOptions = (index) => {
-  //   return monThi.filter((option) => !selectedMonHocs.includes(option.ma) || option.ma === selectedMonHocs[index]);
-  // };
+  const getRemainingOptions = (index) => {
+    return monThi.filter((option) => !selectedMonHocs.includes(option.ma) || option.ma === selectedMonHocs[index]);
+  };
 
-  // const handleRemoveSelection = (index) => {
-  //   const newSelectedMonHocs = [...selectedMonHocs];
-  //   newSelectedMonHocs[index] = '';
-  //   setSelectedMonHocs(newSelectedMonHocs);
-  //   formik.setFieldValue(`diem${index + 1}`, '');
-  // };
+  const diems = formik.values.ketQuaHocTaps.map((_, index) => formik.values[`diem${index + 1}`]);
 
-  // const diems = selectedMonHocs.map((_, index) => formik.values[`diem${index + 1}`]);
+  useEffect(() => {
+    if (selectedSubjectIndex !== null) {
+      const newData = formik.values.ketQuaHocTaps.map((maMon, index) => {
+        if (index === selectedSubjectIndex) {
+          const newDiemValue = formik.values[`diem${index + 1}`] !== undefined ? formik.values[`diem${index + 1}`] : maMon.diem;
+          return {
+            ...maMon,
+            diem: newDiemValue
+          };
+        }
+        return maMon;
+      });
 
-  // useEffect(() => {
-  //   const newData = selectedMonHocs
-  //     .map((maMon, index) => ({
-  //       maMon,
-  //       diem: formik.values[`diem${index + 1}`],
-  //     }))
-  //     .filter((subject) => subject.maMon !== '' && subject.diem !== undefined);
-
-  //   formik.setFieldValue('ketQuaHocTaps', newData);
-  // }, [...diems]);
+      formik.setFieldValue('ketQuaHocTaps', newData);
+    }
+  }, [selectedSubjectIndex, ...diems]);
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -320,70 +349,20 @@ const EditHocSinh = () => {
         </Grid>
         <Grid xs={12} item container spacing={isXs ? 0 : 2} mt={0}>
           <InputForm1 formik={formik} xs={isXs ? 12 : 6} label={'Lớp'} name="lop" isRequired />
+          <InputForm1 formik={formik} xs={isXs ? 12 : 6} label={t('Hội đồng thi')} name="hoiDong" isRequired />
         </Grid>
-        {/* <Grid xs={12} item container spacing={2}>
-          {selectedMonHocs.map((selectedMonHoc, index) => (
-            <React.Fragment key={index}>
-              <Grid item xs={3}>
-                <FormControlComponent xsLabel={0} xsForm={12} label={`Môn học ${index + 1}`}>
-                  <FormControl fullWidth>
-                    <Select
-                      size="small"
-                      name={`maMon${index + 1}`}
-                      value={selectedMonHoc}
-                      onChange={(event) => handleSelectChange(event, index)}
-                      endAdornment={
-                        selectedMonHoc !== '' && (
-                          <InputAdornment position="end">
-                            <IconButton onClick={() => handleRemoveSelection(index)} size="small" sx={{ marginRight: '10px', color: 'gray' }}>
-                              <IconX size={20} />
-                            </IconButton>
-                          </InputAdornment>
-                        )
-                      }
-                    >
-                      {getRemainingOptions(index).map((option) => (
-                        <MenuItem key={option.id} value={option.ma}>
-                          {option.ten}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </FormControlComponent>
-              </Grid>
-              <Grid item xs={3}>
-                <InputForm1
-                  formik={formik}
-                  xs={12}
-                  label={`Điểm môn ${index + 1}`}
-                  name={`diem${index + 1}`}
-                  isDisabled={selectedMonHoc === ''}
-                  type='number'
-                />
-              </Grid>
-            </React.Fragment>
-          ))}
-        </Grid> */}
-        {/* <Grid xs={12} item container spacing={2}>
+        <Grid xs={12} item container spacing={2}>
           {formik.values.ketQuaHocTaps.map((ketQua, index) => (
             <React.Fragment key={index}>
               <Grid item xs={3}>
                 <FormControlComponent xsLabel={0} xsForm={12} label={`${t('subject')} ${index + 1}`}>
                   <FormControl fullWidth>
                     <Select
+                      disabled
                       size="small"
                       name={`maMon${index + 1}`}
                       value={ketQua.maMon}
                       onChange={(event) => handleSelectChange(event, index)}
-                      endAdornment={
-                        ketQua.maMon !== '' && (
-                          <InputAdornment position="end">
-                            <IconButton onClick={() => handleRemoveSelection(index)} size="small" sx={{ marginRight: '10px', color: 'gray' }}>
-                              <IconX size={20} />
-                            </IconButton>
-                          </InputAdornment>
-                        )
-                      }
                     >
                       {getRemainingOptions(index).map((option) => (
                         <MenuItem key={option.id} value={option.ma}>
@@ -401,31 +380,17 @@ const EditHocSinh = () => {
                   label={`${t('point')} ${index + 1}`}
                   name={`diem${index + 1}`}
                   isDisabled={ketQua.maMon === ''}
-                  type='number'
-                  value={ketQua.diem.toString()}
+                  type="number"
+                  value={ketQua.diem}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  onclick={() => handleSubjectClick(index)}
                 />
               </Grid>
             </React.Fragment>
           ))}
-        </Grid> */}
-        <Grid xs={12} item container spacing={isXs ? 0 : 2} columnSpacing={isXs ? 1 : 0} mt={0}>
-          <Grid item xs={isXs ? 6 : 3}>
-            <FormControlComponent xsLabel={0} xsForm={12} label={t('hocsinh.label.hocluc')} isRequire>
-              <FormControl fullWidth variant="outlined">
-                <SelectForm
-                  formik={formik}
-                  keyProp="value"
-                  valueProp="label"
-                  item={hocLucOptions}
-                  name="hocLuc"
-                  value={formik.values.hocLuc}
-                  onChange={handleHocLucChange}
-                />
-              </FormControl>
-            </FormControlComponent>
-          </Grid>
+        </Grid>
+        <Grid xs={12} item container spacing={isXs ? 0 : 2} mt={0} columnSpacing={isXs ? 1 : 0}>
           <Grid item xs={isXs ? 6 : 3}>
             <FormControlComponent xsLabel={0} xsForm={12} label={t('hocsinh.label.hanhkiem')} isRequire>
               <FormControl fullWidth variant="outlined">
@@ -442,35 +407,123 @@ const EditHocSinh = () => {
             </FormControlComponent>
           </Grid>
           <Grid item xs={isXs ? 6 : 3}>
-            <FormControlComponent xsLabel={0} xsForm={12} label={t('result')}>
-              <FormControl fullWidth variant="outlined">
-                <SelectForm
-                  keyProp="value"
-                  valueProp="label"
-                  item={ketQuaOptions}
-                  name="ketQua"
-                  value={formik.values.ketQua ? formik.values.ketQua : 'x'}
-                  onChange={handleKetQuaChange}
-                />
-              </FormControl>
-            </FormControlComponent>
+            <InputForm1 formik={formik} xs={12} label={t('Điểm trung bình')} name="diemTB" isRequired />
           </Grid>
           <Grid item xs={isXs ? 6 : 3}>
-            <FormControlComponent xsLabel={0} xsForm={12} label={t('rating')} isRequire>
-              <FormControl fullWidth variant="outlined">
-                <SelectForm
-                  formik={formik}
-                  keyProp="value"
-                  valueProp="label"
-                  item={hocLucOptions}
-                  name="xepLoai"
-                  value={formik.values.xepLoai}
-                  onChange={handleXepLoaiChange}
+            <InputForm1 formik={formik} xs={12} label={t('Diện xét tốt nghiệp')} name="dienXetTotNghiep" />
+          </Grid>
+          <Grid item xs={isXs ? 6 : 3} sx={{ display: 'flex', alignItems: 'flex-end' }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={formik.values.lanDauTotNghiep === 'x'} // Check if the value is 'x'
+                  onChange={(e) => formik.setFieldValue('lanDauTotNghiep', e.target.checked ? 'x' : 'o')}
                 />
-              </FormControl>
-            </FormControlComponent>
+              }
+              label="Lần đầu xét tốt nghiệp"
+            />
           </Grid>
         </Grid>
+        {configAuto === 'false' ? (
+          <Grid xs={12} item container spacing={isXs ? 0 : 2} mt={0} columnSpacing={isXs ? 1 : 0}>
+            <Grid item xs={isXs ? 6 : 4}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('hocsinh.label.hocluc')} isRequire>
+                <FormControl fullWidth variant="outlined">
+                  <SelectForm
+                    formik={formik}
+                    keyProp="value"
+                    valueProp="label"
+                    item={hocLucOptions}
+                    name="hocLuc"
+                    value={formik.values.hocLuc}
+                    onChange={handleHocLucChange}
+                  />
+                </FormControl>
+              </FormControlComponent>
+            </Grid>
+            <Grid item xs={isXs ? 6 : 4}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('kết quả tốt nghiệp')} isRequire>
+                <FormControl fullWidth variant="outlined">
+                  <SelectForm
+                    formik={formik}
+                    keyProp="value"
+                    valueProp="label"
+                    item={ketQuaOptions}
+                    name="ketQua"
+                    value={formik.values.ketQua ? formik.values.ketQua : 'o'}
+                    onChange={handleKetQuaChange}
+                  />
+                </FormControl>
+              </FormControlComponent>
+            </Grid>
+            <Grid item xs={isXs ? 6 : 4}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('xếp loại tốt nghiệp')} isRequire>
+                <FormControl fullWidth variant="outlined">
+                  <SelectForm
+                    formik={formik}
+                    keyProp="value"
+                    valueProp="label"
+                    item={hocLucOptions}
+                    name="xepLoai"
+                    value={formik.values.xepLoai}
+                    onChange={handleXepLoaiChange}
+                  />
+                </FormControl>
+              </FormControlComponent>
+            </Grid>
+          </Grid>
+        ) : (
+          <Grid xs={12} item container spacing={isXs ? 0 : 2} mt={0} columnSpacing={isXs ? 1 : 0}>
+            <Grid item xs={isXs ? 6 : 4}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('hocsinh.label.hocluc')}>
+                <FormControl fullWidth variant="outlined">
+                  <SelectForm
+                    formik={formik}
+                    keyProp="value"
+                    valueProp="label"
+                    item={hocLucOptions}
+                    name="hocLuc"
+                    value={formik.values.hocLuc}
+                    onChange={handleHocLucChange}
+                    disabled
+                  />
+                </FormControl>
+              </FormControlComponent>
+            </Grid>
+            <Grid item xs={isXs ? 6 : 4}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('kết quả tốt nghiệp')}>
+                <FormControl fullWidth variant="outlined">
+                  <SelectForm
+                    formik={formik}
+                    keyProp="value"
+                    valueProp="label"
+                    item={ketQuaOptions}
+                    name="ketQua"
+                    value={formik.values.ketQua ? formik.values.ketQua : 'o'}
+                    onChange={handleKetQuaChange}
+                    disabled
+                  />
+                </FormControl>
+              </FormControlComponent>
+            </Grid>
+            <Grid item xs={isXs ? 6 : 4}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('xếp loại tốt nghiệp')}>
+                <FormControl fullWidth variant="outlined">
+                  <SelectForm
+                    formik={formik}
+                    keyProp="value"
+                    valueProp="label"
+                    item={hocLucOptions}
+                    name="xepLoai"
+                    value={formik.values.xepLoai}
+                    onChange={handleXepLoaiChange}
+                    disabled
+                  />
+                </FormControl>
+              </FormControlComponent>
+            </Grid>
+          </Grid>
+        )}
         <Grid item container spacing={isXs ? 0 : 1} xs={12} mt={2} alignItems={'center'}>
           <Grid item>
             <IconCertificate />

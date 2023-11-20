@@ -1,38 +1,60 @@
 import { Grid, Typography } from '@mui/material';
 import MainCard from 'components/cards/MainCard';
 import React, { useEffect, useState } from 'react';
-import Chart from 'react-apexcharts';
+import ReactApexChart from 'react-apexcharts';
 import { useTranslation } from 'react-i18next';
-import SkeletonTotalPieChart from 'components/cards/Skeleton/TotalPieCard';
-import { GetSoLuongHocSinhTheoXepLoai } from 'services/thongkeService';
 import { useSelector } from 'react-redux';
-import { selectedNamthiSelector, userLoginSelector } from 'store/selectors';
+import { useTheme } from '@emotion/react';
+import { GetThongKeHocSinh3DanhMucGanNhat } from 'services/thongkeService';
+import { userLoginSelector } from 'store/selectors';
+import SkeletonTotalGrowthBarChart from 'components/cards/Skeleton/TotalGrowthBarChart';
 
 const ThongKeSoLuongXepLoai = () => {
   const [chartHeight, setChartHeight] = useState(300);
   const { t } = useTranslation();
-  const [xepLoaiTotNghiep, setXLTN] = useState('');
-  const [isLoading, setLoading] = useState(true);
-  const namhoc = useSelector(selectedNamthiSelector);
-  const [firstLoad, setFirstLoad] = useState(true);
+  const theme = useTheme();
   const user = useSelector(userLoginSelector);
+  const [isLoading, setLoading] = useState(true);
+  const customization = useSelector((state) => state.customization);
+  const [firstLoad, setFirstLoad] = useState(true);
+
+  const { navType } = customization;
+  const { primary } = theme.palette.text;
+  const darkLight = theme.palette.dark.light;
+  const grey200 = theme.palette.grey[200];
+  const grey500 = theme.palette.grey[500];
+
+  const primary200 = theme.palette.primary[200];
+  const primaryDark = theme.palette.primary.dark;
+  const secondaryMain = theme.palette.secondary.main;
+  const secondaryLight = theme.palette.secondary.light;
+  const [pageState, setPageState] = useState({
+    isLoading: false,
+    tenDanhMuc: [],
+    soLuong: []
+  });
 
   useEffect(() => {
-    setChartHeight(300);
+    setChartHeight(350);
   }, []);
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const params = new URLSearchParams();
-      params.append('nguoiThucHien', user ? user.username : '');
-      params.append('idNamThi', namhoc);
       setTimeout(
         async () => {
           try {
-            const response = await GetSoLuongHocSinhTheoXepLoai(params);
-            setXLTN(response.data);
-            setLoading(false);
+            const response = await GetThongKeHocSinh3DanhMucGanNhat(user.username);
+            const dataResponse = response.data.data;
+            const tenDanhMucArray = Object.values(dataResponse).map((item) => item.tenDanhMucTotNghiep);
+            const soLuongHocSinhArray = Object.values(dataResponse).map((item) => item.soLuongHocSinh);
             setFirstLoad(false);
+            setLoading(false);
+            setPageState((old) => ({
+              ...old,
+              isLoading: false,
+              tenDanhMuc: tenDanhMucArray,
+              soLuong: soLuongHocSinhArray
+            }));
           } catch (error) {
             console.error(error);
             setLoading(false);
@@ -41,39 +63,117 @@ const ThongKeSoLuongXepLoai = () => {
         firstLoad ? 2500 : 0
       );
     };
-    if (namhoc) {
-      fetchDataDL();
-    }
-  }, [namhoc]);
+    fetchDataDL();
+  }, [user.username]);
 
-  const xepLoaiTotNghiep_fm = [
-    { name: 'Trung bình', y: xepLoaiTotNghiep && xepLoaiTotNghiep.XepLoaiTrungBinh ? xepLoaiTotNghiep.XepLoaiTrungBinh : 0 },
-    { name: 'Khá', y: xepLoaiTotNghiep && xepLoaiTotNghiep.XepLoaiKha ? xepLoaiTotNghiep.XepLoaiKha : 0 },
-    { name: 'Giỏi', y: xepLoaiTotNghiep && xepLoaiTotNghiep.XepLoaiGioi ? xepLoaiTotNghiep.XepLoaiGioi : 0 }
-  ];
-
+  const categories = pageState.tenDanhMuc ? pageState.tenDanhMuc.map((name) => `DM${name.slice(-4)}`) : [''];
+  const data = pageState.soLuong ? pageState.soLuong : [0];
   const options = {
+    series: [
+      {
+        name: 'Số lượng',
+        data: data
+      }
+    ],
     chart: {
-      type: 'pie',
       height: chartHeight,
+      type: 'line',
+      id: 'line-chart',
+      stacked: true,
       toolbar: {
-        show: true,
-        tools: {
-          export: true,
-          download: true
-        }
+        show: true
+      },
+      zoom: {
+        enabled: false
       }
     },
-    legend: {
-      position: 'bottom'
+    forecastDataPoints: {
+      count: 7
     },
-    labels: xepLoaiTotNghiep_fm.map((item) => item.name)
+    stroke: {
+      width: 5,
+      curve: 'smooth'
+    },
+    xaxis: {
+      type: 'text',
+      categories: categories,
+      tickAmount: 10
+    },
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shade: 'dark',
+        gradientToColors: ['#FDD835'],
+        shadeIntensity: 1,
+        type: 'horizontal',
+        opacityFrom: 1,
+        opacityTo: 1,
+        stops: [0, 100, 100, 100]
+      }
+    },
+    tooltip: {
+      // Tùy chỉnh hiển thị thông tin khi hover
+      custom: ({ dataPointIndex }) => {
+        const tenDanhMuc = pageState.tenDanhMuc[dataPointIndex];
+        const soLuongHocSinh = pageState.soLuong[dataPointIndex];
+
+        return `<div class="apexcharts-tooltip-custom">
+        <div  style="padding: 8px ; background-color: lightgray">
+        ${tenDanhMuc}
+        </div>
+        <div  style="padding: 8px">
+        Số lượng : ${soLuongHocSinh}
+        </div>
+        </div>`;
+      }
+    },
+    yaxis: {
+      min: 0,
+      max: Math.max(...data) + 10
+    }
   };
+
+  useEffect(() => {
+    const newChartData = {
+      ...options.options,
+      colors: [primary200, primaryDark, secondaryMain, secondaryLight],
+      xaxis: {
+        labels: {
+          style: {
+            colors: [primary, primary, primary, primary, primary, primary, primary, primary, primary, primary, primary, primary]
+          }
+        }
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: [primary]
+          }
+        }
+      },
+      grid: {
+        borderColor: grey200
+      },
+      tooltip: {
+        theme: 'light'
+      },
+      legend: {
+        labels: {
+          colors: grey500
+        }
+      }
+    };
+
+    // do not load chart when loading
+    if (!isLoading) {
+      ApexCharts.exec(`line-chart`, 'updateOptions', newChartData);
+    }
+  }, [navType, primary200, primaryDark, secondaryMain, secondaryLight, primary, darkLight, grey200, isLoading, grey500]);
 
   return (
     <>
       {isLoading ? (
-        <SkeletonTotalPieChart type={'main'} />
+        <SkeletonTotalGrowthBarChart />
       ) : (
         <MainCard>
           <Grid container>
@@ -82,24 +182,23 @@ const ThongKeSoLuongXepLoai = () => {
                 <Grid item xs={4}>
                   <Grid container direction="column" spacing={1}>
                     <Grid item>
-                      <Typography variant="subtitle2">{t('Tổng số học sinh')}</Typography>
+                      <Typography variant="subtitle2">{t('Tổng số học sinh tốt nghiệp')}</Typography>
                     </Grid>
-                    <Grid item>
-                      <Typography variant="h3">{xepLoaiTotNghiep ? xepLoaiTotNghiep.TongHocSinh : 0}</Typography>
-                    </Grid>
+                    <Grid item>{/* <Typography variant="h3">{xepLoaiTotNghiep ? xepLoaiTotNghiep.TongHocSinh : 0}</Typography> */}</Grid>
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
             <Grid item xs={12}>
-              <Chart options={options} series={xepLoaiTotNghiep_fm.map((item) => item.y)} type="pie" width="100%" height={chartHeight} />
+              <ReactApexChart options={options} series={options.series} type="line" height={chartHeight} />
             </Grid>
             <Grid item xs={12} textAlign={'center'}>
-              <Typography variant="subtitle2">{t('bieudoxeploai')}</Typography>
+              <Typography variant="subtitle2">{t('bieudosoluongtheo3danhmuc')}</Typography>
             </Grid>
           </Grid>
         </MainCard>
       )}
+      ;
     </>
   );
 };

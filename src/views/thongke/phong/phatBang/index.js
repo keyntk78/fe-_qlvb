@@ -187,12 +187,7 @@ export default function ThongKeHocSinh() {
 
   return (
     <>
-      <MainCard
-        title={t('Thống kê phát bằng')}
-        secondary={
-          <ButtonSuccess title={t('button.export.excel')} onClick={handleExport} icon={IconFileExport} disabled={disabledExport} />
-        }
-      >
+      <MainCard title={t('Thống kê phát bằng')}>
         <Grid item container spacing={1} mb={2} justifyContent={'center'} alignItems="center">
           <Grid item lg={2} md={3} sm={3} xs={isXs ? 4 : 2}>
             <FormControl fullWidth variant="outlined" size="small">
@@ -222,6 +217,9 @@ export default function ThongKeHocSinh() {
             >
               {t('button.search')}
             </Button>
+          </Grid>
+          <Grid item>
+            <ButtonSuccess title={t('button.export.excel')} onClick={handleExport} icon={IconFileExport} disabled={disabledExport} />
           </Grid>
         </Grid>
         <DataGrid
