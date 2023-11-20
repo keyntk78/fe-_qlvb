@@ -24,10 +24,10 @@ const GroupButtons = ({ params, buttonConfigurations, title, icon: Icon, themtep
             <Button
               fullWidth
               sx={{
-                bgcolor: '#00B835',
+                bgcolor: '#378771',
                 color: 'white',
                 '&:hover': {
-                  bgcolor: '#00942A' // Đặt màu chữ khi hover vào nút
+                  bgcolor: '#2A6353' // Đặt màu chữ khi hover vào nút
                 }
               }}
               variant="contained"
@@ -40,7 +40,13 @@ const GroupButtons = ({ params, buttonConfigurations, title, icon: Icon, themtep
           ) : (
             <Button
               fullWidth
-              color="info"
+              sx={{
+                bgcolor: '#00B835',
+                color: 'white',
+                '&:hover': {
+                  bgcolor: '#00942A' // Đặt màu chữ khi hover vào nút
+                }
+              }}
               variant="contained"
               onClick={handleClick}
               startIcon={<Icon />}
