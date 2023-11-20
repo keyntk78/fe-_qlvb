@@ -21,8 +21,9 @@ import Edit from './Edit';
 import Delete from './Delete';
 import Show from './Show';
 import Hide from './Hide';
-import { Chip, Grid } from '@mui/material';
+import { Chip, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
+import { IconSearch } from '@tabler/icons';
 
 const TinTuc = () => {
   const { t } = useTranslation();
@@ -36,6 +37,7 @@ const TinTuc = () => {
   const reloadData = useSelector(reloadDataSelector);
   const [urlFileImage, setUrlFileImage] = useState('');
   const [isAccess, setIsAccess] = useState(true);
+  const [search, setSearch] = useState(false);
   const [loaiTinTuc, setLoaiTinTuc] = useState([]);
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -236,11 +238,34 @@ const TinTuc = () => {
       }
     };
     fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
+  }, [pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
+
+  const handleSearch = () => {
+    setSearch(!search);
+  };
 
   return (
     <>
       <MainCard title={t('Tin tức')} secondary={<AddButton handleClick={handleAdd} />}>
+        <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
+          <Grid item>
+            <FormControl variant="standard" size="small">
+              <InputLabel>Tìm kiếm</InputLabel>
+              <Input
+                id="search-input"
+                value={pageState.search}
+                onChange={(e) => setPageState((old) => ({ ...old, search: e.target.value }))}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleSearch} edge="end">
+                      <IconSearch />
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+          </Grid>
+        </Grid>
         {isAccess ? (
           <DataGrid
             autoHeight

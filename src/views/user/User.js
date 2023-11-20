@@ -26,9 +26,10 @@ import AddButton from 'components/button/AddButton';
 import i18n from 'i18n';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import ResetPassword from './ResetPassword';
-import { Grid } from '@mui/material';
+import { FormControl, Grid, IconButton, Input, InputAdornment, InputLabel } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
 import PermissionsReport from './PermissionsReport';
+import { IconSearch } from '@tabler/icons';
 
 const User = () => {
   const language = i18n.language;
@@ -41,6 +42,7 @@ const User = () => {
   const [title, setTitle] = useState('');
   const [urlFileImage, setUrlFileImage] = useState('');
   const [form, setForm] = useState('');
+  const [search, setSearch] = useState(false);
   const [isAccess, setIsAccess] = useState(true);
   const reloadData = useSelector(reloadDataSelector);
   const [pageState, setPageState] = useState({
@@ -241,7 +243,7 @@ const User = () => {
       }
     };
     fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
+  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
 
   const handleAddUser = () => {
     setTitle(t('user.title.add'));
@@ -249,9 +251,32 @@ const User = () => {
     dispatch(setOpenPopup(true));
   };
 
+  const handleSearch = () => {
+    setSearch(!search);
+  };
+
   return (
     <>
       <MainCard title={t('user.title')} secondary={<AddButton handleClick={handleAddUser} />}>
+        <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
+          <Grid item>
+            <FormControl variant="standard" size="small">
+              <InputLabel>Tìm kiếm</InputLabel>
+              <Input
+                id="search-input"
+                value={pageState.search}
+                onChange={(e) => setPageState((old) => ({ ...old, search: e.target.value }))}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleSearch} edge="end">
+                      <IconSearch />
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+          </Grid>
+        </Grid>
         {isAccess ? (
           <DataGrid
             autoHeight

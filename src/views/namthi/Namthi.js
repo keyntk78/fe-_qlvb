@@ -18,8 +18,9 @@ import i18n from 'i18n';
 import { getNamthi } from 'services/namthiService';
 import Khoathi from 'views/khoathi/Khoathi';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
-import { Grid } from '@mui/material';
+import { FormControl, Grid, IconButton, Input, InputAdornment, InputLabel } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
+import { IconSearch } from '@tabler/icons';
 
 const Namthi = () => {
   const language = i18n.language;
@@ -31,6 +32,7 @@ const Namthi = () => {
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
   const [isAccess, setIsAccess] = useState(true);
+  const [search, setSearch] = useState(false);
   const reloadData = useSelector(reloadDataSelector);
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -130,7 +132,7 @@ const Namthi = () => {
       }
     };
     fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
+  }, [pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
 
   const handleAddNamthi = () => {
     setTitle(<> {t('namthi.title.add')} </>);
@@ -138,9 +140,32 @@ const Namthi = () => {
     dispatch(setOpenPopup(true));
   };
 
+  const handleSearch = () => {
+    setSearch(!search);
+  };
+
   return (
     <>
       <MainCard title={t('namthi.title')} secondary={<AddButton handleClick={handleAddNamthi} />}>
+        <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
+          <Grid item>
+            <FormControl variant="standard" size="small">
+              <InputLabel>Tìm kiếm</InputLabel>
+              <Input
+                id="search-input"
+                value={pageState.search}
+                onChange={(e) => setPageState((old) => ({ ...old, search: e.target.value }))}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleSearch} edge="end">
+                      <IconSearch />
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+          </Grid>
+        </Grid>
         {isAccess ? (
           <DataGrid
             autoHeight

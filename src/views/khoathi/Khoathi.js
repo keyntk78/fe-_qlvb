@@ -17,8 +17,10 @@ import i18n from 'i18n';
 import { getKhoathi } from 'services/khoathiService';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
-import { Grid } from '@mui/material';
+import { FormControl, Grid, IconButton, Input, InputAdornment, InputLabel } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
+import MainCard from 'components/cards/MainCard';
+import { IconSearch } from '@tabler/icons';
 
 const Khoathi = () => {
   const language = i18n.language;
@@ -30,6 +32,7 @@ const Khoathi = () => {
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
   const [isAccess, setIsAccess] = useState(true);
+  const [search, setSearch] = useState(false);
   const reloadData = useSelector(reloadDataSelector);
   const selectedNamthi = useSelector(selectedNamthiSelector);
   const [pageState, setPageState] = useState({
@@ -129,7 +132,7 @@ const Khoathi = () => {
       }
     };
     fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, selectedNamthi.id]);
+  }, [pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, selectedNamthi.id, search]);
 
   const handleAddKhoathi = () => {
     setTitle(<> {t('khoathi.title.add')} </>);
@@ -137,46 +140,66 @@ const Khoathi = () => {
     dispatch(setOpenSubPopup(true));
   };
 
+  const handleSearch = () => {
+    setSearch(!search);
+  };
+
   return (
     <>
-      <Grid container justifyContent={'flex-end'} my={2}>
-        <Grid item>
-          <AddButton handleClick={handleAddKhoathi} />
+      <MainCard title={t('khoathi.title')} secondary={<AddButton handleClick={handleAddKhoathi} />}>
+        <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
+          <Grid item>
+            <FormControl variant="standard" size="small">
+              <InputLabel>Tìm kiếm</InputLabel>
+              <Input
+                id="search-input"
+                value={pageState.search}
+                onChange={(e) => setPageState((old) => ({ ...old, search: e.target.value }))}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleSearch} edge="end">
+                      <IconSearch />
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+          </Grid>
         </Grid>
-      </Grid>
-      {isAccess ? (
-        <DataGrid
-          autoHeight
-          columns={columns}
-          rows={pageState.data}
-          rowCount={pageState.total}
-          loading={pageState.isLoading}
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
-          pagination
-          page={pageState.startIndex}
-          pageSize={pageState.pageSize}
-          paginationMode="server"
-          onPageChange={(newPage) => {
-            setPageState((old) => ({ ...old, startIndex: newPage }));
-          }}
-          onPageSizeChange={(newPageSize) => {
-            setPageState((old) => ({ ...old, pageSize: newPageSize }));
-          }}
-          onSortModelChange={(newSortModel) => {
-            const field = newSortModel[0]?.field;
-            const sort = newSortModel[0]?.sort;
-            setPageState((old) => ({ ...old, order: field, orderDir: sort }));
-          }}
-          onFilterModelChange={(newSearchModel) => {
-            const value = newSearchModel.items[0]?.value;
-            setPageState((old) => ({ ...old, search: value }));
-          }}
-          localeText={language === 'vi' ? localeText : null}
-          disableSelectionOnClick={true}
-        />
-      ) : (
-        <h1>{t('not.allow.access')}</h1>
-      )}
+        {isAccess ? (
+          <DataGrid
+            autoHeight
+            columns={columns}
+            rows={pageState.data}
+            rowCount={pageState.total}
+            loading={pageState.isLoading}
+            rowsPerPageOptions={[5, 10, 25, 50, 100]}
+            pagination
+            page={pageState.startIndex}
+            pageSize={pageState.pageSize}
+            paginationMode="server"
+            onPageChange={(newPage) => {
+              setPageState((old) => ({ ...old, startIndex: newPage }));
+            }}
+            onPageSizeChange={(newPageSize) => {
+              setPageState((old) => ({ ...old, pageSize: newPageSize }));
+            }}
+            onSortModelChange={(newSortModel) => {
+              const field = newSortModel[0]?.field;
+              const sort = newSortModel[0]?.sort;
+              setPageState((old) => ({ ...old, order: field, orderDir: sort }));
+            }}
+            onFilterModelChange={(newSearchModel) => {
+              const value = newSearchModel.items[0]?.value;
+              setPageState((old) => ({ ...old, search: value }));
+            }}
+            localeText={language === 'vi' ? localeText : null}
+            disableSelectionOnClick={true}
+          />
+        ) : (
+          <h1>{t('not.allow.access')}</h1>
+        )}
+      </MainCard>
       {form !== '' && (
         <Popup
           title={title}
