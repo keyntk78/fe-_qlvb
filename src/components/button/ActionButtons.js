@@ -30,7 +30,8 @@ import {
   IconBellPlus,
   IconFileExport,
   IconFileImport,
-  IconDownload
+  IconDownload,
+  IconFileReport
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { useTranslation } from 'react-i18next';
@@ -83,7 +84,7 @@ const ActionButtons = ({
         return [
           {
             title: title || 'Thống kê',
-            icon: <IconUsers size={'20px'} />,
+            icon: <IconFileReport size={'20px'} />,
             color: 'info',
             onClick: () => {
               handleClick(params);

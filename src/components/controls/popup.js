@@ -31,7 +31,8 @@ import {
   IconCurrencyEuro,
   IconCertificate2,
   IconBellPlus,
-  IconTransferIn
+  IconTransferIn,
+  IconFileReport
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { setOpenPopup, setOpenProfile, setOpenSubPopup, setOpenSubSubPopup } from '../../store/actions';
@@ -162,6 +163,8 @@ export default function Popup(props) {
                   <IconBook sx={{ order: 2 }} />
                 ) : form === 'permissionGroup' ? (
                   <IconUsers sx={{ order: 2 }} />
+                ) : form === 'permissionReport' ? (
+                  <IconFileReport sx={{ order: 2 }} />
                 ) : form === 'transfer' ? (
                   <IconTransferIn sx={{ order: 2 }} />
                 ) : Icon ? (

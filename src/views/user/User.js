@@ -90,7 +90,7 @@ const User = () => {
   };
 
   const handlePermissonReport = (user) => {
-    setTitle(t('user.title.permissionGroup'));
+    setTitle(t('user.title.permissionReport'));
     setForm('permissionReport');
     dispatch(selectedUser(user));
     dispatch(setOpenPopup(true));
