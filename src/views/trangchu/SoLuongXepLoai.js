@@ -31,7 +31,8 @@ const ThongKeSoLuongXepLoai = () => {
   const [pageState, setPageState] = useState({
     isLoading: false,
     tenDanhMuc: [],
-    soLuong: []
+    soLuong: [],
+    labelDanhMuc: []
   });
 
   useEffect(() => {
@@ -47,13 +48,20 @@ const ThongKeSoLuongXepLoai = () => {
             const dataResponse = response.data.data;
             const tenDanhMucArray = Object.values(dataResponse).map((item) => item.tenDanhMucTotNghiep);
             const soLuongHocSinhArray = Object.values(dataResponse).map((item) => item.soLuongHocSinh);
+            const dataWithdanhmuctn = dataResponse.map((row, index) => ({
+              idindex: index + 1,
+              labelDanhMuc: 'DM-' + row.maHinhThucDaoTao + '-' + row.namHoc,
+              ...row
+            }));
+            const laeldanhMucArray = Object.values(dataWithdanhmuctn).map((item) => item.labelDanhMuc);
             setFirstLoad(false);
             setLoading(false);
             setPageState((old) => ({
               ...old,
               isLoading: false,
               tenDanhMuc: tenDanhMucArray,
-              soLuong: soLuongHocSinhArray
+              soLuong: soLuongHocSinhArray,
+              labelDanhMuc: laeldanhMucArray
             }));
           } catch (error) {
             console.error(error);
@@ -66,8 +74,10 @@ const ThongKeSoLuongXepLoai = () => {
     fetchDataDL();
   }, [user.username]);
 
-  const categories = pageState.tenDanhMuc ? pageState.tenDanhMuc.map((name) => `DM${name.slice(-4)}`) : [''];
+  console.log(pageState);
+  const categories = pageState.labelDanhMuc ? pageState.labelDanhMuc : [''];
   const data = pageState.soLuong ? pageState.soLuong : [0];
+  const sum = data ? data.reduce((acc, currentValue) => acc + currentValue, 0) : 0;
   const options = {
     series: [
       {
@@ -86,9 +96,6 @@ const ThongKeSoLuongXepLoai = () => {
       zoom: {
         enabled: false
       }
-    },
-    forecastDataPoints: {
-      count: 7
     },
     stroke: {
       width: 5,
@@ -184,7 +191,9 @@ const ThongKeSoLuongXepLoai = () => {
                     <Grid item>
                       <Typography variant="subtitle2">{t('Tổng số học sinh tốt nghiệp')}</Typography>
                     </Grid>
-                    <Grid item>{/* <Typography variant="h3">{xepLoaiTotNghiep ? xepLoaiTotNghiep.TongHocSinh : 0}</Typography> */}</Grid>
+                    <Grid item>
+                      <Typography variant="h3">{sum ? sum : 0}</Typography>
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>

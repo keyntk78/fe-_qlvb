@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectedNamthi, setLoading } from 'store/actions';
 import { useNavigate } from 'react-router';
 import { userLoginSelector } from 'store/selectors';
+import config from 'config';
 
 const ThongKePhong = () => {
   const isMd = useMediaQuery('(max-width:1220px)');
@@ -197,28 +198,28 @@ const ThongKePhong = () => {
                   color: '#00C853',
                   icon: IconAlbum,
                   count: thongKeTongQuat.phoi,
-                  nav: '/phoigoc'
+                  nav: config.defaultPath + '/phoigoc'
                 },
                 {
                   title: t('tongtruong'),
                   color: '#1E88E5',
                   icon: IconBuildingCommunity,
                   count: `${thongKeTongQuat.donViDaGui}/${thongKeTongQuat.donViTong}`,
-                  nav: '/quanlyhocsinh'
+                  nav: config.defaultPath + '/quanlyhocsinh'
                 },
                 {
                   title: t('donyeucau'),
                   color: '#F79009',
                   icon: IconFileDescription,
                   count: thongKeTongQuat.donCapBanSao,
-                  nav: '/donyeucau'
+                  nav: config.defaultPath + '/donyeucau'
                 },
                 {
                   title: t('hocsinhchoduyet'),
                   color: '#6366F1',
                   icon: IconUserExclamation,
                   count: thongKeTongQuat.hocSinhChoDuyet,
-                  nav: '/quanlyhocsinh'
+                  nav: config.defaultPath + '/quanlyhocsinh'
                 }
               ].map((item, index) => (
                 <Grid item xs={12} sm={6} md={6} lg={isMd ? 6 : 3} key={index}>
