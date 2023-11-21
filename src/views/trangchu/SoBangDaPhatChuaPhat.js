@@ -22,7 +22,7 @@ const ThongKeSoBangDaPhatChuaPhat = () => {
   const currentYear = new Date().getFullYear();
 
   useEffect(() => {
-    setChartHeight(328);
+    setChartHeight(350);
   }, []);
 
   useEffect(() => {
