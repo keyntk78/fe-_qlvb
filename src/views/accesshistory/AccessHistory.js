@@ -38,7 +38,7 @@ const HistoryAccess = () => {
     data: [],
     total: 0,
     order: 1,
-    orderDir: 'ASC',
+    orderDir: 'DESC',
     startIndex: 0,
     pageSize: 10,
     fromDate: format(subMonths(new Date(), 1), 'yyyy-MM-dd'),
