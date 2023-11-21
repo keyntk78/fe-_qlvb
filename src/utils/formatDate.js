@@ -12,6 +12,7 @@ export function convertISODateTimeToFormattedDateTime(isoDate) {
   const dateObject = new Date(isoDate);
   return format(dateObject, 'dd-MM-yyyy HH:mm:ss', { locale: viLocale });
 }
+
 export function convertDateTimeToDate(date) {
   const formatDate = new Date(date);
   return format(formatDate, 'yyyy-MM-dd', { locale: viLocale });
