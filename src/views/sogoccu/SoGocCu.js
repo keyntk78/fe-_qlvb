@@ -2,7 +2,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import MainCard from 'components/cards/MainCard';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setOpenPopup, setReloadData } from 'store/actions';
+import { setLoading, setOpenPopup, setReloadData } from 'store/actions';
 import { openPopupSelector, reloadDataSelector, userLoginSelector } from 'store/selectors';
 import { useNavigate } from 'react-router-dom';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
@@ -19,6 +19,7 @@ import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { format, subMonths } from 'date-fns';
 import Popup from 'components/controls/popup';
 import ChuyenDoi from './ChuyenDoi';
+import * as XLSX from 'xlsx';
 import { getAllTruong } from 'services/sharedService';
 import { getLichSuChuyenDoiSoGoc } from 'services/sogocService';
 
@@ -139,10 +140,10 @@ const SoGocCu = () => {
     params.append('FromDate', pageState.fromDate);
     params.append('ToDate', pageState.toDate);
     const response = await getLichSuChuyenDoiSoGoc(params);
-    const formattedData = response.data.map((item) => ({
-      STT: item.rowIndex,
-      'Tên trường cũ': item.fullName,
-      'Tên trường mới': item.userName,
+    const formattedData = response.data.map((item, index) => ({
+      STT: index + 1,
+      'Tên trường cũ': item.tenTruongCu,
+      'Tên trường mới': item.tenTruongMoi,
       'Ngày chuyển đổi': convertISODateToFormattedDate(item.ngayTao)
     }));
     const worksheet = XLSX.utils.json_to_sheet(formattedData);
