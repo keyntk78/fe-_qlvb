@@ -19,6 +19,7 @@ import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import BackToTop from 'components/scroll/BackToTop';
 import { Grid } from '@mui/material';
 import { getAllReportByParams } from 'services/reportService';
+import QuickSearch from 'components/form/QuickSearch';
 
 const Report = () => {
   const language = i18n.language;
@@ -28,6 +29,7 @@ const Report = () => {
   const openPopup = useSelector(openPopupSelector);
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
+  const [search, setSearch] = useState(false);
   const reloadData = useSelector(reloadDataSelector);
   const { t } = useTranslation();
   const [isAccess, setIsAccess] = useState(true);
@@ -132,11 +134,20 @@ const Report = () => {
       }
     };
     fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
+  }, [search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
 
   return (
     <>
       <MainCard title={t('Báo cáo')} secondary={<AddButton handleClick={handleAddReport} />}>
+        <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
+          <Grid item lg={3} md={4} sm={5} xs={7}>
+            <QuickSearch
+              value={pageState.search}
+              onChange={(value) => setPageState((old) => ({ ...old, search: value }))}
+              onSearch={() => setSearch(!search)}
+            />
+          </Grid>
+        </Grid>
         {isAccess ? (
           <DataGrid
             autoHeight

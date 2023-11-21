@@ -20,6 +20,7 @@ import i18n from 'i18n';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import BackToTop from 'components/scroll/BackToTop';
 import { Grid } from '@mui/material';
+import QuickSearch from 'components/form/QuickSearch';
 
 const Role = () => {
   const language = i18n.language;
@@ -29,6 +30,7 @@ const Role = () => {
   const openPopup = useSelector(openPopupSelector);
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
+  const [search, setSearch] = useState(false);
   const reloadData = useSelector(reloadDataSelector);
   const { t } = useTranslation();
   const [isAccess, setIsAccess] = useState(true);
@@ -139,11 +141,20 @@ const Role = () => {
       }
     };
     fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
+  }, [search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
 
   return (
     <>
       <MainCard title={t('role.title')} secondary={<AddButton handleClick={handleAddRole} />}>
+        <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
+          <Grid item lg={3} md={4} sm={5} xs={7}>
+            <QuickSearch
+              value={pageState.search}
+              onChange={(value) => setPageState((old) => ({ ...old, search: value }))}
+              onSearch={() => setSearch(!search)}
+            />
+          </Grid>
+        </Grid>
         {isAccess ? (
           <DataGrid
             autoHeight
@@ -189,7 +200,7 @@ const Role = () => {
           {form === 'add' ? <Add /> : form === 'edit' ? <Edit /> : form === 'permission' ? <Permission /> : <Delete />}
         </Popup>
       )}
-      <BackToTop/>
+      <BackToTop />
     </>
   );
 };

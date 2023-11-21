@@ -5,7 +5,8 @@ export const useActionValidationSchema = () => {
   const { t } = useTranslation();
 
   const functionValidationSchema = Yup.object({
-    action: Yup.string().required(t('validation.action.name'))
+    action: Yup.string().required(t('validation.action.name')),
+    description: Yup.string().required(t('validation.action.description'))
   });
 
   return functionValidationSchema;

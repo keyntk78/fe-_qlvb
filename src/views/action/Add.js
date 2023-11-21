@@ -23,6 +23,7 @@ const AddAction = () => {
   const formik = useFormik({
     initialValues: {
       action: '',
+      description: '',
       functionId: selectedFunction.functionId
     },
     validationSchema: acionValidationSchema,
@@ -54,6 +55,9 @@ const AddAction = () => {
       <Grid container spacing={1} my={2}>
         <FormControlComponent xsLabel={isXs ? 0 : 3} xsForm={isXs ? 12 : 9} isRequire label={t('action.input.label.action')}>
           <InputForm formik={formik} name="action" type="text" />
+        </FormControlComponent>
+        <FormControlComponent xsLabel={isXs ? 0 : 3} xsForm={isXs ? 12 : 9} isRequire label={t('action.input.label.description')}>
+          <InputForm formik={formik} name="description" type="text" />
         </FormControlComponent>
         <Grid item xs={12} container spacing={2} justifyContent="flex-end">
           <FormGroupButton type="subpopup" />

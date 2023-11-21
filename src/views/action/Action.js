@@ -17,8 +17,10 @@ import Popup from 'components/controls/popup';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import i18n from 'i18n';
 import AddButton from 'components/button/AddButton';
-import { Grid } from '@mui/material';
+import { FormControl, Grid, IconButton, Input, InputAdornment, InputLabel } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
+import { IconSearch } from '@tabler/icons';
+import MainCard from 'components/cards/MainCard';
 
 const Action = () => {
   const { t } = useTranslation();
@@ -30,6 +32,7 @@ const Action = () => {
   const openSubPopup = useSelector(openSubPopupSelector);
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
+  const [search, setSearch] = useState(false);
   const [isAccess, setIsAccess] = useState(true);
   const reloadData = useSelector(reloadDataSelector);
   const [pageState, setPageState] = useState({
@@ -61,16 +64,18 @@ const Action = () => {
     dispatch(selectedAction(functions));
     dispatch(setOpenSubPopup(true));
   };
-
+  const handleSearch = () => {
+    setSearch(!search);
+  };
   const buttonConfigurations = [
     {
       type: 'edit',
-      handleEdit: handleEditAction,
+      handleEdit: handleEditAction
     },
     {
       type: 'delete',
-      handleDelete: handleDeleteAction,
-    },
+      handleDelete: handleDeleteAction
+    }
   ];
 
   const columns = [
@@ -86,6 +91,12 @@ const Action = () => {
       field: 'action',
       headerName: t('action.field.action')
     },
+
+    {
+      flex: 1,
+      field: 'description',
+      headerName: t('action.field.description')
+    },
     {
       field: 'actions',
       headerName: t('action'),
@@ -95,10 +106,7 @@ const Action = () => {
       renderCell: (params) => (
         <>
           <Grid container justifyContent="center">
-            <CombinedActionButtons
-              params={params.row}
-              buttonConfigurations={buttonConfigurations}
-            />
+            <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
           </Grid>
         </>
       )
@@ -131,62 +139,72 @@ const Action = () => {
       }
     };
     fetchData();
-  }, [
-    selectedFunction.functionId,
-    pageState.search,
-    pageState.order,
-    pageState.orderDir,
-    pageState.startIndex,
-    pageState.pageSize,
-    reloadData
-  ]);
+  }, [selectedFunction.functionId, search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
 
   return (
     <>
-      <Grid container justifyContent={'flex-end'} my={2}>
-        <Grid item>
-          <AddButton handleClick={handleAddAction} />
+      <MainCard title={t('action.title')} secondary={<AddButton handleClick={handleAddAction} />} sx={{ my: 1 }}>
+        <Grid container justifyContent={'flex-end'}>
+          <Grid container justifyContent="flex-end" mb={1}>
+            <Grid item>
+              <FormControl variant="standard" size="small">
+                <InputLabel>Tìm kiếm</InputLabel>
+                <Input
+                  id="search-input"
+                  value={pageState.search}
+                  onChange={(e) => setPageState((old) => ({ ...old, search: e.target.value }))}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleSearch} edge="end">
+                        <IconSearch />
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+              </FormControl>
+            </Grid>
+          </Grid>
         </Grid>
-      </Grid>
-      {isAccess ? (
-        <DataGrid
-          autoHeight
-          columns={columns}
-          rows={pageState.data}
-          rowCount={pageState.total}
-          loading={pageState.isLoading}
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
-          pagination
-          page={pageState.startIndex}
-          pageSize={pageState.pageSize}
-          paginationMode="server"
-          onPageChange={(newPage) => {
-            setPageState((old) => ({ ...old, startIndex: newPage }));
-          }}
-          onPageSizeChange={(newPageSize) => {
-            setPageState((old) => ({ ...old, pageSize: newPageSize }));
-          }}
-          onSortModelChange={(newSortModel) => {
-            const field = newSortModel[0]?.field;
-            const sort = newSortModel[0]?.sort;
-            setPageState((old) => ({ ...old, order: field, orderDir: sort }));
-          }}
-          onFilterModelChange={(newSearchModel) => {
-            const value = newSearchModel.items[0]?.value;
-            setPageState((old) => ({ ...old, search: value }));
-          }}
-          localeText={language === 'vi' ? localeText : null}
-          disableSelectionOnClick={true}
-        />
-      ) : (
-        <h1>{t('not.allow.access')}</h1>
-      )}
-      {form !== '' && (
-        <Popup title={title} form={form} openPopup={openSubPopup} type="subpopup" bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}>
-          {form === 'add' ? <Add /> : form === 'edit' ? <Edit /> : <Delete />}
-        </Popup>
-      )}
-      <BackToTop />
+        {isAccess ? (
+          <DataGrid
+            autoHeight
+            columns={columns}
+            rows={pageState.data}
+            rowCount={pageState.total}
+            loading={pageState.isLoading}
+            rowsPerPageOptions={[5, 10, 25, 50, 100]}
+            pagination
+            page={pageState.startIndex}
+            pageSize={pageState.pageSize}
+            paginationMode="server"
+            onPageChange={(newPage) => {
+              setPageState((old) => ({ ...old, startIndex: newPage }));
+            }}
+            onPageSizeChange={(newPageSize) => {
+              setPageState((old) => ({ ...old, pageSize: newPageSize }));
+            }}
+            onSortModelChange={(newSortModel) => {
+              const field = newSortModel[0]?.field;
+              const sort = newSortModel[0]?.sort;
+              setPageState((old) => ({ ...old, order: field, orderDir: sort }));
+            }}
+            onFilterModelChange={(newSearchModel) => {
+              const value = newSearchModel.items[0]?.value;
+              setPageState((old) => ({ ...old, search: value }));
+            }}
+            localeText={language === 'vi' ? localeText : null}
+            disableSelectionOnClick={true}
+          />
+        ) : (
+          <h1>{t('not.allow.access')}</h1>
+        )}
+        {form !== '' && (
+          <Popup title={title} form={form} openPopup={openSubPopup} type="subpopup" bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}>
+            {form === 'add' ? <Add /> : form === 'edit' ? <Edit /> : <Delete />}
+          </Popup>
+        )}
+        <BackToTop />
+      </MainCard>
     </>
   );
 };

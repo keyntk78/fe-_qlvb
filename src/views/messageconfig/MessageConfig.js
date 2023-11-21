@@ -19,6 +19,7 @@ import Delete from './Delete';
 import BackToTop from 'components/scroll/BackToTop';
 import { getMessageConfigByParams } from 'services/messageConfigService';
 import { Grid } from '@mui/material';
+import QuickSearch from 'components/form/QuickSearch';
 
 const MessageConfig = () => {
   const { t } = useTranslation();
@@ -29,6 +30,7 @@ const MessageConfig = () => {
   const openPopup = useSelector(openPopupSelector);
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
+  const [search, setSearch] = useState(false);
   const reloadData = useSelector(reloadDataSelector);
   const [isAccess, setIsAccess] = useState(true);
   const [pageState, setPageState] = useState({
@@ -142,11 +144,20 @@ const MessageConfig = () => {
       }
     };
     fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
+  }, [search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
 
   return (
     <>
       <MainCard title={t('Cấu hình tin nhắn')} secondary={<AddButton handleClick={handleAdd} />}>
+        <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
+          <Grid item lg={3} md={4} sm={5} xs={7}>
+            <QuickSearch
+              value={pageState.search}
+              onChange={(value) => setPageState((old) => ({ ...old, search: value }))}
+              onSearch={() => setSearch(!search)}
+            />
+          </Grid>
+        </Grid>
         {isAccess ? (
           <DataGrid
             autoHeight

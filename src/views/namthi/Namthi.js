@@ -18,9 +18,9 @@ import i18n from 'i18n';
 import { getNamthi } from 'services/namthiService';
 import Khoathi from 'views/khoathi/Khoathi';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
-import { FormControl, Grid, IconButton, Input, InputAdornment, InputLabel } from '@mui/material';
+import { Grid } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
-import { IconSearch } from '@tabler/icons';
+import QuickSearch from 'components/form/QuickSearch';
 
 const Namthi = () => {
   const language = i18n.language;
@@ -39,7 +39,7 @@ const Namthi = () => {
     data: [],
     total: 0,
     order: 1,
-    orderDir: 'ASC',
+    orderDir: 'DESC',
     startIndex: 0,
     pageSize: 10
   });
@@ -140,30 +140,16 @@ const Namthi = () => {
     dispatch(setOpenPopup(true));
   };
 
-  const handleSearch = () => {
-    setSearch(!search);
-  };
-
   return (
     <>
       <MainCard title={t('namthi.title')} secondary={<AddButton handleClick={handleAddNamthi} />}>
         <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
-          <Grid item>
-            <FormControl variant="standard" size="small">
-              <InputLabel>Tìm kiếm</InputLabel>
-              <Input
-                id="search-input"
-                value={pageState.search}
-                onChange={(e) => setPageState((old) => ({ ...old, search: e.target.value }))}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton onClick={handleSearch} edge="end">
-                      <IconSearch />
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-            </FormControl>
+          <Grid item lg={3} md={4} sm={5} xs={7}>
+            <QuickSearch
+              value={pageState.search}
+              onChange={(value) => setPageState((old) => ({ ...old, search: value }))}
+              onSearch={() => setSearch(!search)}
+            />
           </Grid>
         </Grid>
         {isAccess ? (

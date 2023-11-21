@@ -20,6 +20,7 @@ import i18n from 'i18n';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import BackToTop from 'components/scroll/BackToTop';
 import { Grid } from '@mui/material';
+import QuickSearch from 'components/form/QuickSearch';
 
 const Menu = () => {
   const language = i18n.language;
@@ -29,6 +30,7 @@ const Menu = () => {
   const openPopup = useSelector(openPopupSelector);
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
+  const [search, setSearch] = useState(false);
   const reloadData = useSelector(reloadDataSelector);
   const { t } = useTranslation();
   const [isAccess, setIsAccess] = useState(true);
@@ -98,7 +100,7 @@ const Menu = () => {
       }
     };
     fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
+  }, [search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
 
   const handleAddmenu = () => {
     setTitle(<> {t('menu.title.add')}</>);
@@ -119,6 +121,7 @@ const Menu = () => {
     dispatch(selectedMenu(menu));
     dispatch(setOpenPopup(true));
   };
+
   const buttonConfigurations = [
     {
       type: 'edit',
@@ -132,6 +135,15 @@ const Menu = () => {
   return (
     <>
       <MainCard title={t('menu.title')} secondary={<AddButton handleClick={handleAddmenu} />}>
+        <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
+          <Grid item lg={3} md={4} sm={5} xs={7}>
+            <QuickSearch
+              value={pageState.search}
+              onChange={(value) => setPageState((old) => ({ ...old, search: value }))}
+              onSearch={() => setSearch(!search)}
+            />
+          </Grid>
+        </Grid>
         {isAccess ? (
           <DataGrid
             autoHeight
@@ -158,7 +170,7 @@ const Menu = () => {
           {form === 'add' ? <Add /> : form === 'edit' ? <Edit /> : <Delete />}
         </Popup>
       )}
-      <BackToTop/>
+      <BackToTop />
     </>
   );
 };

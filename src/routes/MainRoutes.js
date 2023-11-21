@@ -31,6 +31,7 @@ const SoBanSao = Loadable(lazy(() => import('views/sobansao/Sobansao')));
 const SoCapPhatBang = Loadable(lazy(() => import('views/socapphatbang/SoCapPhatBang')));
 const Hedaotao = Loadable(lazy(() => import('views/hedaotao/Hedaotao')));
 const Namthi = Loadable(lazy(() => import('views/namthi/Namthi')));
+const XuLyDuLieu = Loadable(lazy(() => import('views/xulydulieu/XuLyDuLieu')));
 const Functions = Loadable(lazy(() => import('views/function/Function')));
 const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
 const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
@@ -138,6 +139,10 @@ const MainRoutes = {
     {
       path: 'namthi',
       element: <Namthi />
+    },
+    {
+      path: 'xulydulieu',
+      element: <XuLyDuLieu />
     },
     {
       path: 'cauhinh',

@@ -12,7 +12,7 @@ import i18n from 'i18n';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Chip, FormControl, Grid, InputLabel, MenuItem, Select, Typography } from '@mui/material';
+import { Chip, FormControl, Grid, InputLabel, MenuItem, Select, Typography, Button } from '@mui/material';
 import { getAllNamthi } from 'services/namthiService';
 const language = i18n.language;
 import { useTranslation } from 'react-i18next';
@@ -31,6 +31,8 @@ import ActionButtons from 'components/button/ActionButtons';
 import BackToTop from 'components/scroll/BackToTop';
 import Permission from './Permission';
 import ThongBao from './ThongBao';
+import QuickSearch from 'components/form/QuickSearch';
+import { IconSearch } from '@tabler/icons';
 
 const Danhmuctotnghiep = () => {
   const openPopup = useSelector(openPopupSelector);
@@ -43,7 +45,10 @@ const Danhmuctotnghiep = () => {
   const [form, setForm] = useState('');
   const { t } = useTranslation();
   const [isAccess, setIsAccess] = useState(true);
+  const [search, setSearch] = useState(false);
+  const [quickSearch, setQuickSearch] = useState(false);
   const [nam, setNam] = useState('');
+  const [selectedNam, setSelectedNam] = useState('');
   const [pageState, setPageState] = useState({
     isLoading: false,
     danhmuctotnghiep: [],
@@ -222,11 +227,9 @@ const Danhmuctotnghiep = () => {
   };
 
   const handleChange = async (event) => {
-    setPageState((old) => ({ ...old, isLoading: true }));
     const idNam = event.target.value;
     const trangThai = idNam == 'all' ? '' : idNam;
-    setNam(trangThai);
-    listDanhmuc(trangThai); // Fetch all items
+    setSelectedNam(trangThai);
   };
 
   const listDanhmuc = async (namT) => {
@@ -276,16 +279,21 @@ const Danhmuctotnghiep = () => {
       listDanhmuc();
     }
     fetchData();
-  }, [reloadData, pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, nam]);
+  }, [reloadData, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, search, quickSearch]);
+
+  const handleSearch = () => {
+    setSearch(!search);
+    dispatch(setNam(selectedNam));
+  };
 
   return (
     <>
       <MainCard title={t('danhmuctotnghiep.title')} secondary={<AddButton handleClick={handleAddDanhmucTN} />}>
-        <Grid container my={1}>
+        <Grid container spacing={2} justifyContent={'center'} my={1}>
           <Grid item xs={2} minWidth={120}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel> {t('namthi.title')}</InputLabel>
-              <Select value={nam == '' ? 'all' : nam} onChange={handleChange} label={t('namthi.title')}>
+              <Select value={selectedNam == '' ? 'all' : selectedNam} onChange={handleChange} label={t('namthi.title')}>
                 <MenuItem value="all">{'Tất cả'}</MenuItem>
                 {pageState.namThi.map((item) => (
                   <MenuItem key={item.id} value={item.id}>
@@ -294,6 +302,20 @@ const Danhmuctotnghiep = () => {
                 ))}
               </Select>
             </FormControl>
+          </Grid>
+          <Grid item md={4} sm={4} lg={2} xs={6}>
+            <Button variant="contained" title={t('button.search')} fullWidth onClick={handleSearch} color="info" startIcon={<IconSearch />}>
+              {t('button.search')}
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-5px' }}>
+          <Grid item lg={3} md={4} sm={5} xs={7}>
+            <QuickSearch
+              value={pageState.search}
+              onChange={(value) => setPageState((old) => ({ ...old, search: value }))}
+              onSearch={() => setQuickSearch(!quickSearch)}
+            />
           </Grid>
         </Grid>
         {isAccess ? (

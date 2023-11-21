@@ -24,7 +24,8 @@ const EditAction = () => {
 
   const formik = useFormik({
     initialValues: {
-      action: ''
+      action: '',
+      description: ''
     },
     validationSchema: actionValidationSchema,
     onSubmit: async (values) => {
@@ -47,14 +48,19 @@ const EditAction = () => {
       }
     }
   });
-
+  useEffect(() => {
+    if (openSubPopup) {
+      formik.resetForm();
+    }
+  }, [openSubPopup]);
   useEffect(() => {
     const fetchData = async () => {
       const actionbyid = await getActionByidFunctionAction(selectedAction.functionActionId);
       const dataaction = actionbyid.data;
       if (selectedAction) {
         formik.setValues({
-          action: dataaction.action || ''
+          action: dataaction.action || '',
+          description: dataaction.description || ''
         });
       }
       dispatch(setReloadData(false));
@@ -69,6 +75,9 @@ const EditAction = () => {
       <Grid container spacing={1} my={2}>
         <FormControlComponent xsLabel={isXs ? 0 : 3} xsForm={isXs ? 12 : 9} isRequire label={t('action.input.label.action')}>
           <InputForm formik={formik} name="action" type="text" />
+        </FormControlComponent>
+        <FormControlComponent xsLabel={isXs ? 0 : 3} xsForm={isXs ? 12 : 9} isRequire label={t('action.input.label.description')}>
+          <InputForm formik={formik} name="description" type="text" />
         </FormControlComponent>
         <Grid item xs={12} container spacing={2} justifyContent="flex-end">
           <FormGroupButton type="subpopup" />

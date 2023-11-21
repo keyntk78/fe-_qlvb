@@ -61,7 +61,7 @@ const HistoryAccess = () => {
       flex: 2,
       field: 'fullName',
       headerName: t('user.field.fullname'),
-      minWidth: 180
+      minWidth: 130
     },
     {
       flex: 1,
@@ -70,16 +70,16 @@ const HistoryAccess = () => {
       minWidth: 100
     },
     {
-      flex: 1,
-      field: 'function',
+      flex: 2,
+      field: 'descriptionFunction',
       headerName: t('Chức năng'),
-      minWidth: 100
+      minWidth: 150
     },
     {
-      flex: 1,
-      field: 'action',
+      flex: 2,
+      field: 'descriptionAction',
       headerName: t('Hành động'),
-      minWidth: 100
+      minWidth: 150
     },
     {
       flex: 1.5,
@@ -102,6 +102,7 @@ const HistoryAccess = () => {
       const functions = await getAllFunction();
       console.log(functions);
       if (functions.data && functions.data.length > 0) {
+             console.log(functions.data); 
         setFunctions(functions.data);
       } else {
         setFunctions('');
@@ -116,6 +117,7 @@ const HistoryAccess = () => {
 
   useEffect(() => {
     const fetchDataDL = async () => {
+ 
       const response = await getActionsByFunctionId(functionId);
       if (response.data && response.data.length > 0) {
         setActions(response.data);
@@ -187,8 +189,8 @@ const HistoryAccess = () => {
       STT: item.rowIndex,
       'Họ và Tên': item.fullName,
       'Tài Khoản': item.userName,
-      'Hành động': item.action,
-      'Chức năng': item.function,
+      'Hành động': item.descriptionAction,
+      'Chức năng': item.descriptionFunction,
       'Thời gian truy cập': convertISODateTimeToFormattedDateTime(item.accessTime)
     }));
     const worksheet = XLSX.utils.json_to_sheet(formattedData);
@@ -271,7 +273,7 @@ const HistoryAccess = () => {
                 {actions && actions.length > 0 ? (
                   actions.map((data) => (
                     <MenuItem key={data.action} value={data.action}>
-                      {data.action}
+                      {data.description}
                     </MenuItem>
                   ))
                 ) : (
