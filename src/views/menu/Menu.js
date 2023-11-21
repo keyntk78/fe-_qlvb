@@ -11,7 +11,7 @@ import Delete from './Delete';
 import { getAllMenu } from 'services/menuService';
 import { useTranslation } from 'react-i18next';
 import useLocalText from 'utils/localText';
-import { useNavigate } from 'react-router-dom';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 // import ActionButtons from 'components/button/ActionButtons';
 import AddButton from 'components/button/AddButton';
@@ -36,7 +36,12 @@ const Menu = () => {
   const [isAccess, setIsAccess] = useState(true);
   const [pageState, setPageState] = useState({
     isLoading: false,
-    data: []
+    data: [],
+    total: 0,
+    order: 1,
+    orderDir: 'ASC',
+    startIndex: 0,
+    pageSize: 10
   });
 
   const columns = [
@@ -76,8 +81,8 @@ const Menu = () => {
   useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
-
-      const response = await getAllMenu();
+      const params = await createSearchParams(pageState);
+      const response = await getAllMenu(params);
 
       const check = await handleResponseStatus(response, navigate);
       if (check) {

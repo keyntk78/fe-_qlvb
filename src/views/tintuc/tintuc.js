@@ -258,7 +258,7 @@ const TinTuc = () => {
   return (
     <>
       <MainCard title={t('Tin tức')} secondary={<AddButton handleClick={handleAdd} />}>
-        <Grid container spacing={2} justifyContent="center">
+        <Grid container spacing={2} justifyContent="center" alignItems="center">
           <Grid item lg={3} md={4} sm={4} xs={6}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('Loại tin tức')}</InputLabel>

@@ -137,7 +137,7 @@ const MessageConfig = () => {
           ...old,
           isLoading: false,
           data: dataWithId,
-          total: dataWithId?.totalRow || 0
+          total: dataWithId[0]?.totalRow || 0
         }));
       } else {
         setIsAccess(false);
