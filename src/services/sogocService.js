@@ -106,3 +106,25 @@ export async function getHocSinhBySoGoc(params) {
     throw error;
   }
 }
+
+export async function chuyenDoiSoGoc(params) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`SoGoc/ChuyenDoiSoGoc?${params}`, 'POST');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating Monthi:', error);
+    throw error;
+  }
+}
+
+export async function getLichSuChuyenDoiSoGoc(params) {
+  try {
+    const response = await sendRequest(`SoGoc/GetLichSuChuyenDoiSoGoc?${params}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating history access:', error);
+    throw error;
+  }
+}

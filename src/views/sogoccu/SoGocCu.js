@@ -2,25 +2,25 @@ import { DataGrid } from '@mui/x-data-grid';
 import MainCard from 'components/cards/MainCard';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectedDonvitruong, setOpenPopup, setReloadData } from 'store/actions';
-import { openPopupSelector, reloadDataSelector } from 'store/selectors';
+import { setOpenPopup, setReloadData } from 'store/actions';
+import { openPopupSelector, reloadDataSelector, userLoginSelector } from 'store/selectors';
 import { useNavigate } from 'react-router-dom';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { useTranslation } from 'react-i18next';
 import useLocalText from 'utils/localText';
 import { createSearchParams } from 'utils/createSearchParams';
 import i18n from 'i18n';
-import { getHistoryAccess } from 'services/accesshistoryService';
 import React from 'react';
-import { convertISODateTimeToFormattedDateTime } from 'utils/formatDate';
+import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { IconFileExport, IconSearch, IconTransferIn } from '@tabler/icons';
 import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { format, subMonths } from 'date-fns';
-import { getAllDonvi } from 'services/donvitruongService';
 import Popup from 'components/controls/popup';
-import DeleteDonvi from 'views/donvitruong/Delete';
+import ChuyenDoi from './ChuyenDoi';
+import { getAllTruong } from 'services/sharedService';
+import { getLichSuChuyenDoiSoGoc } from 'services/sogocService';
 
 const SoGocCu = () => {
   const language = i18n.language;
@@ -37,6 +37,7 @@ const SoGocCu = () => {
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
   const openPopup = useSelector(openPopupSelector);
+  const user = useSelector(userLoginSelector);
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -46,16 +47,12 @@ const SoGocCu = () => {
     startIndex: 0,
     pageSize: 10,
     fromDate: format(subMonths(new Date(), 1), 'yyyy-MM-dd'),
-    toDate: format(new Date(), 'yyyy-MM-dd'),
-    idUser: '',
-    userName: '',
-    function: '',
-    action: ''
+    toDate: format(new Date(), 'yyyy-MM-dd')
   });
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const donvi = await getAllDonvi();
+      const donvi = await getAllTruong(user.username);
       console.log(donvi);
       setDonVi(donvi.data);
     };
@@ -64,7 +61,7 @@ const SoGocCu = () => {
 
   const columns = [
     {
-      field: 'rowIndex',
+      field: 'idx',
       headerName: t('serial'),
       width: 50,
       sortable: false,
@@ -72,33 +69,21 @@ const SoGocCu = () => {
     },
     {
       flex: 2,
-      field: 'fullName',
-      headerName: t('user.field.fullname'),
+      field: 'tenTruongCu',
+      headerName: t('Tên trường cũ'),
       minWidth: 180
     },
     {
-      flex: 1,
-      field: 'userName',
-      headerName: t('user.field.username'),
+      flex: 2,
+      field: 'tenTruongMoi',
+      headerName: t('Tên trường mới'),
       minWidth: 100
     },
     {
       flex: 1,
-      field: 'function',
-      headerName: t('Chức năng'),
+      field: 'transferTime',
+      headerName: t('Ngày chuyển đổi'),
       minWidth: 100
-    },
-    {
-      flex: 1,
-      field: 'action',
-      headerName: t('Hành động'),
-      minWidth: 100
-    },
-    {
-      flex: 1.5,
-      field: 'LoginOn_fm',
-      headerName: t('LoginOn'),
-      minWidth: 160
     }
   ];
 
@@ -108,53 +93,16 @@ const SoGocCu = () => {
       const params = await createSearchParams(pageState);
       params.append('FromDate', pageState.fromDate);
       params.append('ToDate', pageState.toDate);
-      params.append('userName', pageState.userName);
-      params.append('Function', pageState.function);
-      params.append('Action', pageState.action);
-      const response = await getHistoryAccess(params);
+      const response = await getLichSuChuyenDoiSoGoc(params);
+      console.log(response);
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;
         const dataWithIds = data.map((row, index) => ({
-          id: index + 1,
-          LoginOn_fm: row.accessTime == null ? 'Chưa truy cập ' : convertISODateTimeToFormattedDateTime(row.accessTime),
+          idx: pageState.startIndex * pageState.pageSize + index + 1,
+          transferTime: row.ngayTao == null ? 'Chưa truy cập ' : convertISODateToFormattedDate(row.ngayTao),
           ...row
         }));
-        // Lưu trữ dữ liệu gốc vào state
-        dispatch(setReloadData(false));
-        setPageState((old) => ({
-          ...old,
-          isLoading: false,
-          data: dataWithIds,
-          total: dataWithIds[0]?.totalRow || 0
-        }));
-      } else {
-        setIsAccess(false);
-      }
-    };
-    fetchData();
-    setSearch(false);
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setPageState((old) => ({ ...old, isLoading: true }));
-      const params = await createSearchParams(pageState);
-      params.append('FromDate', pageState.fromDate);
-      params.append('ToDate', pageState.toDate);
-      params.append('userName', pageState.userName);
-      params.append('Function', pageState.function);
-      params.append('Action', pageState.action);
-      const response = await getHistoryAccess(params);
-      const check = handleResponseStatus(response, navigate);
-      if (check) {
-        const data = await response.data;
-        const dataWithIds = data.map((row, index) => ({
-          id: index + 1,
-          LoginOn_fm: row.accessTime == null ? 'Chưa truy cập ' : convertISODateTimeToFormattedDateTime(row.accessTime),
-          ...row
-        }));
-        // Lưu trữ dữ liệu gốc vào state
         dispatch(setReloadData(false));
         setPageState((old) => ({
           ...old,
@@ -174,10 +122,9 @@ const SoGocCu = () => {
     setSearch(true);
   };
 
-  const handleOpen = () => {
+  const handleChuyenDoi = () => {
     setTitle(t('Chuyển đổi sổ gốc cũ'));
     setForm('transfer');
-    dispatch(selectedDonvitruong(selectedDonViOld));
     dispatch(setOpenPopup(true));
   };
 
@@ -191,17 +138,12 @@ const SoGocCu = () => {
     params.append('PageSize', -1);
     params.append('FromDate', pageState.fromDate);
     params.append('ToDate', pageState.toDate);
-    params.append('Username', pageState.userName);
-    params.append('Function', pageState.function);
-    params.append('Action', pageState.action);
-    const response = await getHistoryAccess(params);
+    const response = await getLichSuChuyenDoiSoGoc(params);
     const formattedData = response.data.map((item) => ({
       STT: item.rowIndex,
-      'Họ và Tên': item.fullName,
-      'Tài Khoản': item.userName,
-      'Hành động': item.action,
-      'Chức năng': item.function,
-      'Thời gian truy cập': convertISODateTimeToFormattedDateTime(item.accessTime)
+      'Tên trường cũ': item.fullName,
+      'Tên trường mới': item.userName,
+      'Ngày chuyển đổi': convertISODateToFormattedDate(item.ngayTao)
     }));
     const worksheet = XLSX.utils.json_to_sheet(formattedData);
 
@@ -211,14 +153,12 @@ const SoGocCu = () => {
     const columnsWidth = [
       { wch: 10 }, // Chiều rộng cột 'serial'
       { wch: 30 }, // Chiều rộng cột 'user.field.fullname'
-      { wch: 20 }, // Chiều rộng cột 'user.field.username'
       { wch: 30 }, // Chiều rộng cột 'user.field.username'
-      { wch: 20 }, // Chiều rộng cột 'user.field.username'
-      { wch: 20 } // Chiều rộng cột 'LoginOn'
+      { wch: 20 } // Chiều rộng cột 'user.field.username'
     ];
 
     worksheet['!cols'] = columnsWidth;
-    XLSX.writeFile(workbook, 'history_access_data.xlsx');
+    XLSX.writeFile(workbook, 'lich_su_chuyen_doi_so_goc.xlsx');
     dispatch(setLoading(false));
   };
 
@@ -281,21 +221,21 @@ const SoGocCu = () => {
         </Grid>
         <Grid item container spacing={1} mb={2} justifyContent={'center'} alignItems={'center'}>
           <Grid item lg={2} md={3} sm={3} xs={6}>
-            <Button variant="contained" fullWidth onClick={handleOpen} color="info" startIcon={<IconTransferIn />}>
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={handleChuyenDoi}
+              color="info"
+              startIcon={<IconTransferIn />}
+              disabled={!selectedDonViOld || !selectedDonViNew}
+            >
               {t('Chuyển đổi')}
             </Button>
           </Grid>
         </Grid>
       </MainCard>
       <Grid mt={2}>
-        <MainCard
-          title={t('Lịch sử chuyển đổi')}
-          secondary={
-            <Grid item>
-              <ButtonSuccess title={t('button.export')} onClick={handleExport} icon={IconFileExport} />
-            </Grid>
-          }
-        >
+        <MainCard title={t('Lịch sử chuyển đổi')}>
           <Grid container justifyContent="center" mb={1} spacing={1} alignItems="center">
             <Grid item xs={2}>
               <FormControl fullWidth variant="outlined">
@@ -340,6 +280,9 @@ const SoGocCu = () => {
                 {t('button.search')}
               </Button>
             </Grid>
+            <Grid item>
+              <ButtonSuccess title={t('button.export')} onClick={handleExport} icon={IconFileExport} />
+            </Grid>
           </Grid>
           {isAccess ? (
             <DataGrid
@@ -378,7 +321,7 @@ const SoGocCu = () => {
       </Grid>
       {form !== '' && (
         <Popup title={title} form={form} maxWidth={'sm'} openPopup={openPopup} bgcolor={'#2196F3'}>
-          {form === 'transfer' ? <DeleteDonvi /> : ''}
+          {form === 'transfer' ? <ChuyenDoi truongCu={selectedDonViOld} truongMoi={selectedDonViNew} /> : ''}
         </Popup>
       )}
       <BackToTop />
