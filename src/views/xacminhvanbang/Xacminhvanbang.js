@@ -425,10 +425,6 @@ export default function Xacminhvanbang() {
   }, [selectNamHoc, selectHTDT]);
 
   useEffect(() => {
-    console.log(pageState);
-  }, [pageState]);
-
-  useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);

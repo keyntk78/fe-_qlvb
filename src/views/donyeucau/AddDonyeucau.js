@@ -146,9 +146,6 @@ const AddDonyeucau = () => {
     }
   }, [openPopup]);
 
-  useEffect(() => {
-    console.log(formik.values);
-  });
   return (
     <form onSubmit={formik.handleSubmit}>
       <div style={{ borderBottom: '2px solid black', fontWeight: 'bold', paddingTop: 3 }}>

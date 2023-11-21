@@ -46,7 +46,7 @@ const XuLyDuLieu = () => {
     setSelectedFileMau(selectedCategoryData ? selectedCategoryData.fileImport : data[0].fileImport);
     setselectedFileExport(selectedCategoryData ? selectedCategoryData.fileExport : data[0].fileExport);
   };
-  console.log(selectedCategory);
+
   const themTuTep = [
     {
       type: 'importFile',

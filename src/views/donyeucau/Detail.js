@@ -150,9 +150,7 @@ const Detail = () => {
     setForm('tuchoi');
     dispatch(setOpenSubPopup(true));
   };
-  useEffect(() => {
-    console.log(formik.values);
-  });
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <div style={{ borderBottom: '2px solid black', fontWeight: 'bold' }}>

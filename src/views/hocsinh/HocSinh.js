@@ -167,7 +167,6 @@ export default function HocSinh() {
     const selectedDanhmucInfo = dMTN.find((dmtn) => dmtn.id === danhmucSelect);
     dispatch(selectedDanhmuc(selectedDanhmucInfo));
     dispatch(selectedDonvitruong(selectedDonviInfo));
-    console.log(pageState.data.length);
   };
 
   useEffect(() => {

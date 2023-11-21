@@ -138,7 +138,6 @@ const PermissionsReport = () => {
       const params = await createSearchParams(pageState);
       if (selectedUser) {
         const response = await getReportsViaUser(selectedUser.userId, params);
-        console.log(response);
         const check = await handleResponseStatus(response, navigate);
         if (check) {
           const data = await response.data;

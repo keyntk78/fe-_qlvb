@@ -17,7 +17,6 @@ function replaceErrors(key, value) {
   return value;
 }
 export function generateDocument(data) {
-  console.log(data);
   loadFile(XacNhanVanBang_motnguoi, function (error, content) {
     if (error) {
       throw error;

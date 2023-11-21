@@ -29,7 +29,7 @@ const ShowVanBang = ({ duLieuHocSinh }) => {
     NGAYTHANGNAMSINH: new Date(duLieuHocSinh.ngaySinh).toLocaleDateString(),
     GIOITINH: duLieuHocSinh.gioiTinh ? 'Nam' : 'Nữ',
     DANTOC: duLieuHocSinh.danToc,
-    HOCSINHTRUONG: duLieuHocSinh.tenTruong,
+    HOCSINHTRUONG: duLieuHocSinh.soGoc.tenTruong,
     NAMTOTNGHIEP: duLieuHocSinh.namThi,
     XEPLOAITOTNGHIEP: duLieuHocSinh.xepLoai,
     HINHTHUCDAOTAO: duLieuHocSinh.tenHinhThucDaoTao,

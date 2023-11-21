@@ -1,7 +1,6 @@
 import ExcelJS from 'exceljs';
 
 const ExportExcelPhuLuc = async (donvi, pageState) => {
-  console.log(pageState);
   const currentDate = new Date();
   const day = currentDate.getDate();
   const month = currentDate.getMonth() + 1; // Tháng bắt đầu từ 0

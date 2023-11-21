@@ -17,10 +17,7 @@ function GuiThongBaoLuaChon({ dataIdTruong }) {
   const openSubSubPopup = useSelector(openSubSubPopupSelector);
   const [notifyReason, setNotifyReason] = useState('');
   const data = [...dataIdTruong].join(',');
-  console.log(data);
   const hanldeGuiThongBao = async () => {
-    console.log(notifyReason, data);
-
     try {
       const response = await GuiThongBaoTungNguoi(notifyReason, data);
       if (response.isSuccess == false) {

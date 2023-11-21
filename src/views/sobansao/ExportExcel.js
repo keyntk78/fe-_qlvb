@@ -2,7 +2,6 @@
 import ExcelJS from 'exceljs';
 
 const ExportExcel = async (formik, pageState, danhmuc, donvi, khoathi, donviql) => {
-  console.log(formik);
   const donviquanly = donviql.donViQuanLy;
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet('Sổ bản sao');

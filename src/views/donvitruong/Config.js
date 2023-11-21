@@ -22,7 +22,6 @@ const Config = () => {
   const reloadData = useSelector(reloadDataSelector);
   const [urlImage, setUrlImage] = useState('');
   const donvi = useSelector(selectedDonvitruongSelector);
-  console.log(donvi);
   // const configDonviValidationSchema = useConfigDonviValidationSchema();
   const dispatch = useDispatch();
   const { t } = useTranslation();

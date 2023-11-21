@@ -74,7 +74,6 @@ const ThongKeSoLuongXepLoai = () => {
     fetchDataDL();
   }, [user.username]);
 
-  console.log(pageState);
   const categories = pageState.labelDanhMuc ? pageState.labelDanhMuc : [''];
   const data = pageState.soLuong ? pageState.soLuong : [0];
   const sum = data ? data.reduce((acc, currentValue) => acc + currentValue, 0) : 0;

@@ -62,11 +62,9 @@ const Xacminhtungnguoi = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await getHocSinhXacMinhByCCCD(selectedHocsinh.cccd);
-      console.log(response);
       const datas = response.data;
       const response_cauhinh = await getCauHinhXacMinhVanBang(donvi.id);
       const data_cauhinh = response_cauhinh.data;
-      console.log(data_cauhinh, datas);
       setDatas({
         uyBanNhanDan: data_cauhinh.uyBanNhanDan.toUpperCase(),
         coQuanCapBang: data_cauhinh.coQuanCapBang.toUpperCase(),

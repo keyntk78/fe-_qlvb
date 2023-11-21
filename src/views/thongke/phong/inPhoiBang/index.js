@@ -138,7 +138,6 @@ export default function ThongKeHocSinh() {
   }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
 
   useEffect(() => {
-    console.log(pageState.namHoc);
     const fetchData = async () => {
       const params = await createSearchParams(pageState1);
       params.append('idNamThi', pageState.namHoc);

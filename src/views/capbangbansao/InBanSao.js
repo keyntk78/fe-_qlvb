@@ -32,7 +32,6 @@ const InBanSao = () => {
       setDuLieuConFig(response_cf.data);
       const hocSinhSoBanSao = await getHocSinhDaDuaVaoSobanSao(hocsinhid.idHocSinh, hocsinhid.id, user.username);
       setHsSoBanSao(hocSinhSoBanSao.data);
-      console.log(response_cf, hocSinhSoBanSao);
     };
     fetchDataDLHS();
   }, [phoisao.id, hocsinhid.hocSinh.id]);

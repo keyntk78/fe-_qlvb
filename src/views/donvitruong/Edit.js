@@ -84,7 +84,6 @@ const EditDonvi = () => {
       const hedaotao = await getAllHedaotao();
       const dvquanly = await getAllLoaiDonVi();
       const dvquanlycha = await getAllDonViCha();
-      console.log(dvquanly, hedaotao, dvquanlycha);
       const check = await handleResponseStatus(hinhthucdaotao, navigate);
       const check2 = await handleResponseStatus(hedaotao, navigate);
       const check3 = await handleResponseStatus(dvquanly, navigate);

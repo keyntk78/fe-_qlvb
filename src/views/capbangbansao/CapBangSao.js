@@ -261,10 +261,6 @@ export default function CapBangBanSao() {
 
   useEffect(() => {
     const fetchData = async () => {
-      // console.log();
-      // const phoidata = await getPhoiBanSaoDangSuDung(donvi);
-      // console.log(phoidata);
-      // dispatch(selectedPhoisao(phoidata.data));
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
       params.append('Ma', pageState.Ma);

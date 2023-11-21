@@ -23,7 +23,6 @@ const InGCN = () => {
   const { t } = useTranslation();
   //const dataCccd = [...dataCCCD];
   const dataCccd = useSelector(selectedCCCDSelector);
-  console.log(dataCccd);
   const openPopup = useSelector(openPopupSelector);
   const donvi = useSelector(donviSelector);
   const user = useSelector(userLoginSelector);
@@ -46,7 +45,6 @@ const InGCN = () => {
     const fetchData = async () => {
       const response = await GetCauHinhByIdDonVi(user.username);
       const data = await response.data;
-      console.log(data);
       const date = new Date(data.ngayBanHanh);
       const formattedDateForInput = date.toISOString().split('T')[0];
       formik.setValues({
