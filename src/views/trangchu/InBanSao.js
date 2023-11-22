@@ -56,7 +56,7 @@ const InBanSao = () => {
     return {
       HOTEN: hsSoBanSao.hoTen,
       NOISINH: hsSoBanSao.noiSinh,
-      NGAYTHANGNAMSINH: convertISODateToFormattedDate(hsSoBanSao.ngaySinh),
+      NGAYTHANGNAMSINH: hsSoBanSao.ngaySinh && convertISODateToFormattedDate(hsSoBanSao.ngaySinh),
       GIOITINH: hsSoBanSao.gioiTinh ? 'Nam' : 'Nữ',
       DANTOC: hsSoBanSao.danToc,
       HOCSINHTRUONG: hsSoBanSao.truong,
