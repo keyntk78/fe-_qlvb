@@ -35,6 +35,7 @@ import ExitButton from 'components/button/ExitButton';
 import { getAllDanhmucTN } from 'services/sharedService';
 import SelectForm from 'components/form/SelectForm';
 import { getHocSinhXacMinhByCCCD } from 'services/xacminhvanbangService';
+import { convertDateTimeToDate } from 'utils/formatDate';
 
 const hocLucOptions = [
   { value: 'Giỏi', label: 'Giỏi' },
@@ -271,7 +272,7 @@ const Detail = () => {
                 formik={formik}
                 name="ngaySinh"
                 type="date"
-                value={formik.values.ngaySinh ? new Date(formik.values.ngaySinh).toISOString().slice(0, 10) : ''}
+                value={formik.values.ngaySinh ? convertDateTimeToDate(formik.values.ngaySinh) : ''}
               />
             </FormControlComponent>
           </Grid>
@@ -480,7 +481,7 @@ const Detail = () => {
                 formik={formik}
                 name="ngayCapBang"
                 type="date"
-                value={formik.values.ngayCapBang ? new Date(formik.values.ngayCapBang).toISOString().slice(0, 10) : ''}
+                value={formik.values.ngayCapBang ? convertDateTimeToDate(formik.values.ngayCapBang) : ''}
               />
             </FormControlComponent>
           </Grid>{' '}

@@ -316,7 +316,7 @@ const Detail = ({ type }) => {
                 formik={formik}
                 name="ngaySinh"
                 type="date"
-                value={formik.values.ngaySinh ? new Date(formik.values.ngaySinh).toISOString().slice(0, 10) : ''}
+                value={formik.values.ngaySinh ? convertDateTimeToDate(formik.values.ngaySinh) : ''}
               />
             </FormControlComponent>
           </Grid>
@@ -521,7 +521,7 @@ const Detail = ({ type }) => {
                 formik={formik}
                 name="ngayCapBang"
                 type="date"
-                value={formik.values.ngayCapBang ? formik.values.ngayCapBang : ''}
+                value={formik.values.ngayCapBang ? convertDateTimeToDate(formik.values.ngayCapBang) : ''}
               />
             </FormControlComponent>
           </Grid>{' '}

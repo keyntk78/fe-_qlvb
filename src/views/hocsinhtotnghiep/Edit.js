@@ -31,6 +31,7 @@ import InputForm from 'components/form/InputForm';
 import { getAllDanhmucTN, getCauHinhTuDongXepLoai } from 'services/sharedService';
 import { getAllDanToc } from 'services/dantocService';
 import SelectForm from 'components/form/SelectForm';
+import { convertDateTimeToDate } from 'utils/formatDate';
 
 const hocLucOptions = [
   { value: 'Giỏi', label: 'Giỏi' },
@@ -312,7 +313,7 @@ const EditHocSinh = () => {
                 formik={formik}
                 name="ngaySinh"
                 type="date"
-                value={formik.values.ngaySinh ? new Date(formik.values.ngaySinh).toISOString().slice(0, 10) : ''}
+                value={formik.values.ngaySinh ? convertDateTimeToDate(formik.values.ngaySinh) : ''}
               />
             </FormControlComponent>
           </Grid>
