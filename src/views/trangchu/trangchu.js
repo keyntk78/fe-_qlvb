@@ -205,12 +205,12 @@ const TrangChu = () => {
       filterable: false,
       renderCell: (params) => (
         <>
-          <Grid container justifyContent="start" spacing={1}>
+          <Grid container>
             <Grid item>
               <ActionButtons type="showvanbang" handleClick={handleShowVanBang} params={params.row} />
             </Grid>
-            <Grid item>
-              {params.row.donYeuCauCapBanSao != null ? (
+            {params.row.donYeuCauCapBanSao != null ? (
+              <Grid item ml={1}>
                 <CombinedActionButtons
                   params={params.row}
                   buttonConfigurations={capbangsao}
@@ -218,11 +218,11 @@ const TrangChu = () => {
                   title={'Cấp bằng bản sao'}
                   color="success"
                 />
-              ) : (
-                ''
-              )}
-            </Grid>
-            <Grid item>
+              </Grid>
+            ) : (
+              ''
+            )}
+            <Grid item ml={1}>
               <CombinedActionButtons
                 params={params.row}
                 buttonConfigurations={chinhsuavb}

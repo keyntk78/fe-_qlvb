@@ -148,7 +148,9 @@ const ActionButtons = ({
             color: 'error',
             onClick: () => {
               handleDelete(params);
-              onClose();
+              if (onClose) {
+                onClose();
+              }
             }
           }
         ];

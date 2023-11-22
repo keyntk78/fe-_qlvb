@@ -14,7 +14,6 @@ import { selectedHocsinh, setLoading, setOpenSubPopup, showAlert } from 'store/a
 import { useTranslation } from 'react-i18next';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { DataGrid } from '@mui/x-data-grid';
-import { Language } from '@mui/icons-material';
 import ActionButtons from 'components/button/ActionButtons';
 import Popup from 'components/controls/popup';
 import BackToTop from 'components/scroll/BackToTop';
@@ -23,8 +22,11 @@ import { AddListLichSuXacMinh, getCauHinhXacMinhVanBang } from 'services/xacminh
 import useXacMinhVanBangValidationSchema from 'components/validations/xacminhvanbangValidation';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import ExportExcel from './ExportExcel';
+import useLocalText from 'utils/localText';
+import i18n from 'i18n';
 
 const Xacminhnhieunguoi = () => {
+  const language = i18n.language;
   const isXs = useMediaQuery('(max-width:800px)');
   const { t } = useTranslation();
   const openPopup = useSelector(openPopupSelector);
@@ -37,6 +39,7 @@ const Xacminhnhieunguoi = () => {
   const donvi = useSelector(donviSelector);
   const [selectFile, setSelectFile] = useState('');
   const user = useSelector(userLoginSelector);
+  const localeText = useLocalText();
 
   const handleDelete = (hocsinh) => {
     setTitle(t('Xóa học sinh được chọn'));
@@ -90,7 +93,11 @@ const Xacminhnhieunguoi = () => {
       filterable: false,
       renderCell: (params) => (
         <>
-          <ActionButtons type="delete" handleDelete={handleDelete} params={params.row} />
+          <Grid container justifyContent="center" spacing={1}>
+            <Grid item>
+              <ActionButtons type="delete" handleDelete={handleDelete} params={params.row} />
+            </Grid>
+          </Grid>
         </>
       )
     }
@@ -229,11 +236,13 @@ const Xacminhnhieunguoi = () => {
       </div>
       <Grid container spacing={1} mt={3}>
         <DataGrid
+          rowsPerPageOptions={[5, 10, 25, 50, 100]}
           autoHeight
           columns={columns}
           rows={rows}
+          // pageSize={10}
           pagination
-          localeText={Language === 'vi' ? localeText : null}
+          localeText={language === 'vi' ? localeText : null}
           disableSelectionOnClick={true}
         />
         {form !== '' && (

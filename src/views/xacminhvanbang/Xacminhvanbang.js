@@ -318,7 +318,13 @@ export default function Xacminhvanbang() {
                 <ActionButtons type="detail" handleGetbyId={handleDetail} params={params.row} />
               </Grid>
               <Grid item>
-                <CombinedActionButtons params={params.row} buttonConfigurations={historyXMHB} icon={IconHistory} title={t('Xem lịch sử')} />
+                <CombinedActionButtons
+                  params={params.row}
+                  buttonConfigurations={historyXMHB}
+                  icon={IconHistory}
+                  title={t('Xem lịch sử')}
+                  color="secondary"
+                />
               </Grid>
             </Grid>
           )}
