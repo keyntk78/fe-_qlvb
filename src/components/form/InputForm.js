@@ -15,7 +15,7 @@ const CustomTextField = styled(TextField)({
   }
 });
 
-const InputForm = ({ formik, name, label, placeholder, type, isFirst, isDisabled, w, value, isMulltiline, rows, minRows, maxRows }) => {
+const InputForm = ({ formik, name, label, placeholder, type, isFirst, isDisabled, w, value, isMulltiline, rows, minRows, maxRows, sx }) => {
   return (
     <Grid item xs={w ? 6 : 12} style={isFirst ? { marginTop: '10px' } : {}}>
       <CustomTextField
@@ -40,6 +40,7 @@ const InputForm = ({ formik, name, label, placeholder, type, isFirst, isDisabled
         minRows={minRows}
         maxRows={maxRows}
         rows={rows}
+        sx={sx}
       />
     </Grid>
   );

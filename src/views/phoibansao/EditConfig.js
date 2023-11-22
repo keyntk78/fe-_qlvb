@@ -93,82 +93,77 @@ const EditConfig = () => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <Grid container spacing={1} my={isXs ? 0 : 2}>
-        <Grid item xs={12} container spacing={1}>
-          <FormControlComponent xsLabel={isXs ? 0 : 3.2} xsForm={isXs ? 12 : 8.8} label={t('phoivanbang.field.configmatruongdulieu')}>
+        <Grid xs={12} item container columnSpacing={isXs ? 1 : 0}>
+          <FormControlComponent xsLabel={isXs ? 0 : 3} xsForm={isXs ? 12 : 9} label={t('phoivanbang.field.configmatruongdulieu')}>
             <InputForm formik={formik} name="MaTruongDuLieu" type="text" isDisabled />
           </FormControlComponent>
-          <Grid item container spacing={1}>
-            {/* chọn định dạng kiểu chữ */}
-            <Grid item xs={6.5}>
-              <FormControlComponent xsLabel={isXs ? 0 : 5.9} xsForm={isXs ? 12 : 6.1} isRequire label={t('config.field.dinhdangkieuchu')}>
-                <Select
-                  style={{
-                    width: '100%',
-                    fontWeight: selectedFormatting === 'Bold' ? 'bold' : '',
-                    fontStyle: selectedFormatting === 'Italic' ? 'italic' : ''
-                  }}
-                  value={selectedFormatting}
-                  name="DinhDangKieuChu"
-                  onChange={(event) => {
-                    formik.handleChange(event); // Handle Formik's change event first
-                    setSelectedFormatting(event.target.value); // Update selectedFormatting
-                  }}
-                  input={<BootstrapInput />}
-                >
-                  {textFormattingOptions.map((item) => (
-                    <MenuItem
-                      key={item.value}
-                      value={item.value}
-                      style={{
-                        fontWeight: item.value === 'Bold' ? 'bold' : 'normal',
-                        fontStyle: item.value === 'Italic' ? 'italic' : 'normal'
-                      }}
-                    >
-                      {item.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControlComponent>
-            </Grid>
-            {/* màu chữ */}
-            <Grid item xs={5.5}>
-              {/* <FormControlComponent xsLabel={4} xsForm={8} isRequire label={t('config.field.mauchu')}> */}
-              <ColorNamePicker name="MauChu" formik={formik} valueDefault={formik.values.MauChu} />
-              {/* </FormControlComponent> */}
-            </Grid>
-          </Grid>
-          <Grid item container spacing={1}>
-            {/* chọn kiểu chữ */}
-            <Grid item xs={8}>
-              <FormControlComponent
-                xsLabel={isXs ? 0 : 4.7}
-                xsForm={isXs ? 12 : 7.3}
-                isRequire
-                label={t('phoivanbang.field.configkieuchu')}
+        </Grid>
+        <Grid xs={12} item container columnSpacing={isXs ? 1 : 0}>
+          <Grid item xs={6}>
+            <FormControlComponent xsLabel={isXs ? 0 : 6} xsForm={isXs ? 12 : 6} isRequire label={t('config.field.dinhdangkieuchu')}>
+              <Select
+                style={{
+                  width: '90%',
+                  fontWeight: selectedFormatting === 'Bold' ? 'bold' : '',
+                  fontStyle: selectedFormatting === 'Italic' ? 'italic' : ''
+                }}
+                value={selectedFormatting}
+                name="DinhDangKieuChu"
+                onChange={(event) => {
+                  formik.handleChange(event); // Handle Formik's change event first
+                  setSelectedFormatting(event.target.value); // Update selectedFormatting
+                }}
+                input={<BootstrapInput />}
               >
-                <InputForm formik={formik} name="KieuChu" type="text" placeholder={t('phoivanbang.field.configkieuchu')} />
-              </FormControlComponent>
-            </Grid>
-            <Grid item xs={4}>
-              <FormControlComponent xsLabel={isXs ? 0 : 4.5} xsForm={isXs ? 12 : 7.5} isRequire label={t('config.field.cochu')}>
-                <InputForm formik={formik} name="CoChu" type="text" placeholder={t('config.field.cochu')} />
-              </FormControlComponent>
-            </Grid>
+                {textFormattingOptions.map((item) => (
+                  <MenuItem
+                    key={item.value}
+                    value={item.value}
+                    style={{
+                      fontWeight: item.value === 'Bold' ? 'bold' : 'normal',
+                      fontStyle: item.value === 'Italic' ? 'italic' : 'normal'
+                    }}
+                  >
+                    {item.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControlComponent>
           </Grid>
-          <Grid item container spacing={1}>
-            <Grid item xs={6.5}>
-              <FormControlComponent xsLabel={isXs ? 0 : 5.7} xsForm={isXs ? 12 : 4.5} isRequire label={t('config.field.vitritren')}>
-                <InputForm formik={formik} name="ViTriTren" type="number" />
-              </FormControlComponent>
-            </Grid>
-            <Grid item xs={5.5}>
-              <FormControlComponent xsLabel={isXs ? 0 : 6.8} xsForm={isXs ? 12 : 5.2} isRequire label={t('config.field.vitritrai')}>
-                <InputForm formik={formik} name="ViTriTrai" type="number" />
-              </FormControlComponent>
-            </Grid>
+          <Grid item xs={6}>
+            <ColorNamePicker name="MauChu" formik={formik} valueDefault={formik.values.MauChu} />
           </Grid>
         </Grid>
-
+        <Grid xs={12} item container columnSpacing={isXs ? 1 : 0}>
+          <Grid item xs={8}>
+            <FormControlComponent xsLabel={isXs ? 0 : 4.5} xsForm={isXs ? 12 : 7.5} isRequire label={t('phoivanbang.field.configkieuchu')}>
+              <InputForm
+                formik={formik}
+                name="KieuChu"
+                type="text"
+                placeholder={t('phoivanbang.field.configkieuchu')}
+                sx={{ width: '95%' }}
+              />
+            </FormControlComponent>
+          </Grid>
+          <Grid item xs={4}>
+            <FormControlComponent xsLabel={isXs ? 0 : 4.5} xsForm={isXs ? 12 : 7.5} isRequire label={t('config.field.cochu')}>
+              <InputForm formik={formik} name="CoChu" type="text" placeholder={t('config.field.cochu')} />
+            </FormControlComponent>
+          </Grid>
+        </Grid>
+        <Grid xs={12} item container columnSpacing={isXs ? 1 : 0}>
+          <Grid item xs={6}>
+            <FormControlComponent xsLabel={isXs ? 0 : 6} xsForm={isXs ? 12 : 6} isRequire label={t('config.field.vitritren')}>
+              <InputForm formik={formik} name="ViTriTren" type="number" sx={{ width: '90%' }} />
+            </FormControlComponent>
+          </Grid>
+          <Grid item xs={6}>
+            <FormControlComponent xsLabel={isXs ? 0 : 6} xsForm={isXs ? 12 : 6} isRequire label={t('config.field.vitritrai')}>
+              <InputForm formik={formik} name="ViTriTrai" type="number" />
+            </FormControlComponent>
+          </Grid>
+        </Grid>
         <Grid item xs={12} container spacing={2} justifyContent="flex-end">
           <FormGroupButton type="subpopup" />
         </Grid>

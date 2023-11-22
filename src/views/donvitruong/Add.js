@@ -22,7 +22,7 @@ const AddDonvi = () => {
   const theme = useTheme();
 
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const isXs = useMediaQuery('(max-width:800px)');
+  // const isXs = useMediaQuery('(max-width:800px)');
   const openPopup = useSelector(openPopupSelector);
   const userlogin = useSelector(userLoginSelector);
   const navigate = useNavigate();
@@ -156,22 +156,15 @@ const AddDonvi = () => {
   }, [isChecked]);
   return (
     <form onSubmit={formik.handleSubmit}>
-      <Grid container>
-        <Grid item xs={12} container spacing={2} mt={1}>
+      <Grid container spacing={1} justifyContent={'center'} mt={1}>
+        <Grid item xs={12} container spacing={2}>
           <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('donvitruong.field.ma')}>
+            <FormControlComponent xsLabel={0} xsForm={12} isRequire label={t('donvitruong.field.ma')}>
               <InputForm formik={formik} name="ma" type="text" placeholder={t('donvitruong.field.ma')} />
             </FormControlComponent>
           </Grid>
           <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('donvitruong.field.ten')}>
-              <InputForm formik={formik} name="ten" type="text" placeholder={t('donvitruong.field.ten')} />
-            </FormControlComponent>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} container spacing={2} mt={1}>
-          <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('hedaotao.title')} isRequire>
+            <FormControlComponent xsLabel={0} xsForm={12} label={t('hedaotao.title')} isRequire>
               <SelectList
                 data={pageState.hedaotao}
                 name="mahedaotao"
@@ -184,28 +177,35 @@ const AddDonvi = () => {
               />
             </FormControlComponent>
           </Grid>
-          <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvi.title.address')}>
+        </Grid>
+        <Grid item xs={12}>
+          <FormControlComponent xsLabel={0} xsForm={12} isRequire label={t('donvitruong.field.ten')}>
+            <InputForm formik={formik} name="ten" type="text" placeholder={t('donvitruong.field.ten')} />
+          </FormControlComponent>
+        </Grid>
+        <Grid item xs={12} container spacing={2}>
+          <Grid item xs={12}>
+            <FormControlComponent xsLabel={0} xsForm={12} label={t('donvi.title.address')}>
               <InputForm formik={formik} name="diaChi" type="text" placeholder={t('donvi.title.address')} />
             </FormControlComponent>
           </Grid>
         </Grid>
-        <Grid item xs={12} container spacing={2} mt={1}>
+        <Grid item xs={12} container spacing={2}>
           <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvitruong.field.url')}>
+            <FormControlComponent xsLabel={0} xsForm={12} label={t('donvitruong.field.url')}>
               <InputForm formik={formik} name="url" type="text" placeholder={t('donvitruong.field.url')} />
             </FormControlComponent>
           </Grid>
           <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('Email')}>
+            <FormControlComponent xsLabel={0} xsForm={12} label={t('Email')}>
               <InputForm formik={formik} name="email" type="email" placeholder={t('Email')} />
             </FormControlComponent>
           </Grid>
         </Grid>
         {donvi === 0 && (
-          <Grid item xs={12} container spacing={2} mt={1}>
+          <Grid item xs={12} container spacing={2}>
             <Grid item xs={isSmallScreen ? 12 : 6}>
-              <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvitruong.field.donviquanly')} isRequire>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('donvitruong.field.donviquanly')} isRequire>
                 <SelectList
                   data={pageState.donviquanly}
                   name="donviquanly"
@@ -219,7 +219,7 @@ const AddDonvi = () => {
               </FormControlComponent>
             </Grid>
             <Grid item xs={isSmallScreen ? 12 : 6}>
-              <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvitruong.field.isManager')}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('donvitruong.field.isManager')}>
                 <Checkbox
                   checked={formik.values.laPhong} // Kiểm tra giá trị isPhong để quyết định trạng thái checked của checkbox
                   onChange={(event) => {
@@ -236,10 +236,10 @@ const AddDonvi = () => {
           ''
         ) : (
           <>
-            <Grid item xs={12} container spacing={2} mt={1}>
+            <Grid item xs={12} container spacing={2}>
               {donvi === 0 && (
                 <Grid item xs={isSmallScreen ? 12 : 6}>
-                  <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('Thuộc đơn vị')} isRequire>
+                  <FormControlComponent xsLabel={0} xsForm={12} label={t('Thuộc đơn vị')} isRequire>
                     <SelectList
                       data={pageState.donviquanlycha}
                       name="idcha"
@@ -255,7 +255,7 @@ const AddDonvi = () => {
               )}
               <Grid item xs={isSmallScreen ? 12 : 6}>
                 {/* Hình thức đào tạo */}
-                <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('hinhthucdaotao.title')} isRequire>
+                <FormControlComponent xsLabel={0} xsForm={12} label={t('hinhthucdaotao.title')} isRequire>
                   <SelectList
                     data={pageState.hinhthucdaotao}
                     name="mahinhthucdaotao"

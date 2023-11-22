@@ -476,7 +476,7 @@ export default function HocSinh() {
           ''
         )}
         <Grid item container spacing={1} my={1} justifyContent={'center'}>
-          <Grid item lg={4} md={4.5} sm={4.5} xs={isXs ? 12 : 4}>
+          <Grid item lg={4} md={4} sm={4} xs={isXs ? 12 : 4}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('donvitruong.title')}</InputLabel>
               <Select
@@ -499,7 +499,7 @@ export default function HocSinh() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item lg={4} md={4.5} sm={4.5} xs={isXs ? 12 : 4}>
+          <Grid item lg={4} md={4} sm={4} xs={isXs ? 12 : 4}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('danhmuc.title')}</InputLabel>
               <Select name="id" value={pageState.DMTN} onChange={handleDanhMucChange} label={t('danhmuc.title')}>
@@ -515,7 +515,7 @@ export default function HocSinh() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item lg={2} md={3} sm={3} xs={isXs ? 6 : 2}>
+          <Grid item lg={2} md={2} sm={2} xs={isXs ? 6 : 2}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('status.title')}</InputLabel>
               <Select
@@ -533,7 +533,7 @@ export default function HocSinh() {
             </FormControl>
           </Grid>
           {pageState.trangThai != 2 && (
-            <Grid item lg={2} md={3} sm={3} xs={isXs ? 6 : 2}>
+            <Grid item lg={2} md={2} sm={2} xs={isXs ? 6 : 2}>
               <FormControl fullWidth variant="outlined" size="small">
                 <InputLabel>{t('Kết quả tốt nghiệp')}</InputLabel>
                 <Select

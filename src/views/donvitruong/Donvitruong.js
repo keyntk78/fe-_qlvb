@@ -228,7 +228,7 @@ const DonVi = () => {
           title={title}
           form={form}
           openPopup={openPopup}
-          maxWidth={form === 'config' || form === 'add' || form === 'edit' ? 'md' : form === 'socapbang' ? 'lg' : 'sm'}
+          maxWidth={form === 'config' ? 'md' : form === 'socapbang' ? 'lg' : 'sm'}
           bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
         >
           {form === 'add' ? <Add /> : form === 'edit' ? <Edit /> : form === 'config' ? <Config /> : <Delete />}

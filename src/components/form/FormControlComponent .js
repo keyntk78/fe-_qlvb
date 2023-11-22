@@ -7,8 +7,8 @@ const FormControlComponent = ({ children, label, xsLabel, xsForm, justifyContent
     color: 'black', // Default color
 
     '& .required': {
-      color: 'red', // Color for the asterisk (*)
-    },
+      color: 'red' // Color for the asterisk (*)
+    }
   }));
 
   return (
@@ -27,4 +27,3 @@ const FormControlComponent = ({ children, label, xsLabel, xsForm, justifyContent
 };
 
 export default FormControlComponent;
-

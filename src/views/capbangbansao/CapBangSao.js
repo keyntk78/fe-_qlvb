@@ -538,7 +538,7 @@ export default function CapBangBanSao() {
           title={title}
           form={form}
           openPopup={openPopup}
-          maxWidth={form === 'vaoso' ? 'lg' : 'md'}
+          maxWidth={form === 'vaoso' ? 'lg' : form === 'xacnhanin' ? 'sm' : 'md'}
           bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
         >
           {form === 'detail' ? (
