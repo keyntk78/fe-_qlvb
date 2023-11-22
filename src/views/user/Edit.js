@@ -217,7 +217,7 @@ const EditUser = () => {
                 </FormControl>
               </FormControlComponent>
             </Grid>
-          ) : (
+          ) : donviquanly !== 0 && donviquanly.laPhong ? (
             <Grid item xs={12}>
               <FormControlComponent xsLabel={isXs ? 0 : 2} xsForm={isXs ? 12 : 10} label={t('user.label.school')} isRequire>
                 <FormControl fullWidth variant="outlined">
@@ -235,6 +235,8 @@ const EditUser = () => {
                 </FormControl>
               </FormControlComponent>
             </Grid>
+          ) : (
+            ''
           )}
         </Grid>
         <Grid
