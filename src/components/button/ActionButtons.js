@@ -632,7 +632,6 @@ const ActionButtons = ({
               <AnimateButton>
                 <Tooltip title={t(button.title)} placement="bottom">
                   <IconButton
-                    backgroundColor={button.color}
                     style={{
                       fontWeight: 'bold',
                       backgroundColor: colorMap[button.color] || button.color,
@@ -642,7 +641,7 @@ const ActionButtons = ({
                     onClick={button.onClick}
                     size="small"
                   >
-                    {button.icon}
+                    {React.cloneElement(button.icon, { color: 'white' })}
                   </IconButton>
                 </Tooltip>
               </AnimateButton>

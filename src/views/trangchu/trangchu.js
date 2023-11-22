@@ -207,7 +207,7 @@ const TrangChu = () => {
         <>
           <Grid container justifyContent="start" spacing={1}>
             <Grid item>
-              <ActionButtons type="showvanbang" handleClick={handleShowVanBang} params={params.row} />
+              <ActionButtons type="delete" handleDelete={handleShowVanBang} params={params.row} />
             </Grid>
             <Grid item>
               {params.row.donYeuCauCapBanSao != null ? (
