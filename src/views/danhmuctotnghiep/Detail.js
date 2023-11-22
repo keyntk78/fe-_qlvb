@@ -68,67 +68,78 @@ const Detail = () => {
 
   return (
     <form>
-      <Grid container>
-        <Grid item container xs={isXs ? 12 : 10} spacing={isXs ? 0 : 2} my={1} ml={isXs ? 0 : 3}>
-          <FormControlComponent xsLabel={isXs ? 0 : 3.5} xsForm={isXs ? 12 : 8.5} label={t('danhmuctotnghiep.field.tieude')}>
-            <InputForm formik={formik} name="TieuDe" type="text" isDisabled />
-          </FormControlComponent>
-          <FormControlComponent xsLabel={isXs ? 0 : 3.5} xsForm={isXs ? 12 : 8.5} label={t('quyetdinhtotnghiep.title')}>
-            <InputForm formik={formik} name="SoQuyetDinh" type="text" isDisabled />
-          </FormControlComponent>
-          <FormControlComponent xsLabel={isXs ? 0 : 3.5} xsForm={isXs ? 12 : 8.5} label={t('hinhthucdaotao.title')}>
-            <InputForm formik={formik} name="HinhThucDaoTao" type="text" isDisabled />
-          </FormControlComponent>
-          <FormControlComponent xsLabel={isXs ? 0 : 3.5} xsForm={isXs ? 12 : 8.5} label={t('kỳ thi')}>
-            <InputForm formik={formik} name="TenKyThi" type="text" isDisabled />
-          </FormControlComponent>
-          <FormControlComponent xsLabel={isXs ? 0 : 3.5} xsForm={isXs ? 12 : 5} label={t('danhmuctotnghiep.title.ngay')}>
-            <InputForm formik={formik} name="NgayCapBang" type="date" isDisabled />
-          </FormControlComponent>
-          <Grid item xs={12} container>
-            <Grid item xs={5.9} container>
-              <FormControlComponent xsLabel={isXs ? 0 : 7} xsForm={isXs ? 12 : 5} label={t('hedaotao.title')}>
+      <Grid container justifyContent={'center'}>
+        <Grid item container xs={12} my={1} spacing={1}>
+          <Grid item container xs={12} spacing={1}>
+            <Grid item xs={isXs ? 12 : 6}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('danhmuctotnghiep.field.tieude')}>
+                <InputForm formik={formik} name="TieuDe" type="text" isDisabled />
+              </FormControlComponent>
+            </Grid>
+            <Grid xs={isXs ? 12 : 6} item>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('quyetdinhtotnghiep.title')}>
+                <InputForm formik={formik} name="SoQuyetDinh" type="text" isDisabled />
+              </FormControlComponent>
+            </Grid>
+          </Grid>
+          <Grid item container xs={12} spacing={1}>
+            <Grid item xs={isXs ? 12 : 6}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('hinhthucdaotao.title')}>
+                <InputForm formik={formik} name="HinhThucDaoTao" type="text" isDisabled />
+              </FormControlComponent>
+            </Grid>
+            <Grid item xs={isXs ? 12 : 6}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('kỳ thi')}>
+                <InputForm formik={formik} name="TenKyThi" type="text" isDisabled />
+              </FormControlComponent>
+            </Grid>
+          </Grid>
+          <Grid item container xs={12} spacing={1}>
+            <Grid item xs={isXs ? 12 : 4}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('danhmuctotnghiep.title.ngay')}>
+                <InputForm formik={formik} name="NgayCapBang" type="date" isDisabled />
+              </FormControlComponent>
+            </Grid>
+            <Grid item xs={isXs ? 12 : 4}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('hedaotao.title')}>
                 <InputForm formik={formik} name="HeDaoTao" type="text" isDisabled />
               </FormControlComponent>
             </Grid>
-            <Grid item xs={0.2} />
-            <Grid item xs={5.9} container>
-              <FormControlComponent xsLabel={isXs ? 0 : 6} xsForm={isXs ? 12 : 6} label={t('danhmuctotnghiep.field.namtotnghiep')}>
+            <Grid item xs={isXs ? 12 : 4}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('danhmuctotnghiep.field.namtotnghiep')}>
                 <InputForm formik={formik} name="NamThi" type="text" isDisabled />
               </FormControlComponent>
             </Grid>
           </Grid>
-          <Grid item xs={12} container>
-            <Grid item xs={5.9} container>
-              <FormControlComponent xsLabel={isXs ? 0 : 7} xsForm={isXs ? 12 : 5} label={t('danhmuctotnghiep.title.sotruongdagui')}>
+          <Grid item container xs={12} spacing={1}>
+            <Grid item xs={isXs ? 12 : 3}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('danhmuctotnghiep.title.sotruongdagui')}>
                 <InputForm formik={formik} name="SoTruongDaGui" type="text" isDisabled />
               </FormControlComponent>
             </Grid>
-            <Grid item xs={0.2} />
-            <Grid item xs={5.9} container>
-              <FormControlComponent xsLabel={isXs ? 0 : 6} xsForm={isXs ? 12 : 6} label={t('danhmuctotnghiep.title.sotruong')}>
+            <Grid item xs={isXs ? 12 : 3}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('danhmuctotnghiep.title.sotruong')}>
                 <InputForm formik={formik} name="SoTruong" type="text" isDisabled />
               </FormControlComponent>
             </Grid>
-          </Grid>
-          <Grid item xs={12} container>
-            <Grid item xs={5.9} container>
-              <FormControlComponent xsLabel={isXs ? 0 : 7} xsForm={isXs ? 12 : 5} label={t('danhmuctotnghiep.title.sotruongdaduyet')}>
+            <Grid item xs={isXs ? 12 : 3}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('danhmuctotnghiep.title.sotruongdaduyet')}>
                 <InputForm formik={formik} name="SoTruongDaDuyet" type="text" isDisabled />
               </FormControlComponent>
             </Grid>
-            <Grid item xs={0.2} />
-            <Grid item xs={5.9} container>
-              <FormControlComponent xsLabel={isXs ? 0 : 6} xsForm={isXs ? 12 : 6} label={t('danhmuctotnghiep.title.sohocsinh')}>
+            <Grid item xs={isXs ? 12 : 3}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('danhmuctotnghiep.title.sohocsinh')}>
                 <InputForm formik={formik} name="SoHocSinh" type="text" isDisabled />
               </FormControlComponent>
             </Grid>
           </Grid>
-          <FormControlComponent xsLabel={isXs ? 0 : 3.5} xsForm={isXs ? 12 : 8.5} label={t('danhmuctotnghiep.field.ghichu')}>
-            <InputForm formik={formik} name="GhiChu" placeholder="ghi chú" isMulltiline minRows={2} isDisabled />
-          </FormControlComponent>
+          <Grid item xs={12}>
+            <FormControlComponent xsLabel={0} xsForm={12} label={t('danhmuctotnghiep.field.ghichu')}>
+              <InputForm formik={formik} name="GhiChu" placeholder="ghi chú" isMulltiline minRows={2} isDisabled />
+            </FormControlComponent>
+          </Grid>
         </Grid>
-        <Grid item xs={12} container spacing={2} justifyContent="flex-end">
+        <Grid item xs={12} container spacing={1} justifyContent="flex-end">
           <Grid item>
             <ExitButton />
           </Grid>

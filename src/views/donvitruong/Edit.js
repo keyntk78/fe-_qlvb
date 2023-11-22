@@ -24,7 +24,7 @@ import { useTheme } from '@emotion/react';
 const EditDonvi = () => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const isXs = useMediaQuery('(max-width:800px)');
+  // const isXs = useMediaQuery('(max-width:800px)');
   const openPopup = useSelector(openPopupSelector);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -168,19 +168,12 @@ const EditDonvi = () => {
       <Grid container>
         <Grid item xs={12} container spacing={2} mt={1}>
           <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('donvitruong.field.ma')}>
+            <FormControlComponent xsLabel={0} xsForm={12} isRequire label={t('donvitruong.field.ma')}>
               <InputForm formik={formik} name="ma" type="text" placeholder={t('donvitruong.field.ma')} />
             </FormControlComponent>
           </Grid>
           <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('donvitruong.field.ten')}>
-              <InputForm formik={formik} name="ten" type="text" placeholder={t('donvitruong.field.ten')} />
-            </FormControlComponent>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} container spacing={2} mt={1}>
-          <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('hedaotao.title')} isRequire>
+            <FormControlComponent xsLabel={0} xsForm={12} label={t('hedaotao.title')} isRequire>
               <SelectList
                 data={pageState.hedaotao}
                 name="mahedaotao"
@@ -193,28 +186,35 @@ const EditDonvi = () => {
               />
             </FormControlComponent>
           </Grid>
-          <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvi.title.address')}>
+        </Grid>
+        <Grid item xs={12}>
+          <FormControlComponent xsLabel={0} xsForm={12} isRequire label={t('donvitruong.field.ten')}>
+            <InputForm formik={formik} name="ten" type="text" placeholder={t('donvitruong.field.ten')} />
+          </FormControlComponent>
+        </Grid>
+        <Grid item xs={12} container spacing={2}>
+          <Grid item xs={12}>
+            <FormControlComponent xsLabel={0} xsForm={12} label={t('donvi.title.address')}>
               <InputForm formik={formik} name="diaChi" type="text" placeholder={t('donvi.title.address')} />
             </FormControlComponent>
           </Grid>
         </Grid>
-        <Grid item xs={12} container spacing={2} mt={1}>
+        <Grid item xs={12} container spacing={2}>
           <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvitruong.field.url')}>
+            <FormControlComponent xsLabel={0} xsForm={12} label={t('donvitruong.field.url')}>
               <InputForm formik={formik} name="url" type="text" placeholder={t('donvitruong.field.url')} />
             </FormControlComponent>
           </Grid>
           <Grid item xs={isSmallScreen ? 12 : 6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('Email')}>
+            <FormControlComponent xsLabel={0} xsForm={12} label={t('Email')}>
               <InputForm formik={formik} name="email" type="email" placeholder={t('Email')} />
             </FormControlComponent>
           </Grid>
         </Grid>
         {dvql === 0 && (
-          <Grid item xs={12} container spacing={2} mt={1}>
+          <Grid item xs={12} container spacing={2}>
             <Grid item xs={isSmallScreen ? 12 : 6}>
-              <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvitruong.field.donviquanly')} isRequire>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('donvitruong.field.donviquanly')} isRequire>
                 <SelectList
                   data={pageState.donviquanly}
                   name="donviquanly"
@@ -228,7 +228,7 @@ const EditDonvi = () => {
               </FormControlComponent>
             </Grid>
             <Grid item xs={isSmallScreen ? 12 : 6}>
-              <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('donvitruong.field.isManager')}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('donvitruong.field.isManager')}>
                 <Checkbox
                   checked={formik.values.laPhong} // Kiểm tra giá trị isPhong để quyết định trạng thái checked của checkbox
                   onChange={(event) => {
@@ -245,10 +245,10 @@ const EditDonvi = () => {
           ''
         ) : (
           <>
-            <Grid item xs={12} container spacing={2} mt={1}>
+            <Grid item xs={12} container spacing={2}>
               {dvql === 0 && (
                 <Grid item xs={isSmallScreen ? 12 : 6}>
-                  <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('Thuộc đơn vị')} isRequire>
+                  <FormControlComponent xsLabel={0} xsForm={12} label={t('Thuộc đơn vị')} isRequire>
                     <SelectList
                       data={pageState.donviquanlycha}
                       name="idcha"
@@ -264,7 +264,7 @@ const EditDonvi = () => {
               )}
               <Grid item xs={isSmallScreen ? 12 : 6}>
                 {/* Hình thức đào tạo */}
-                <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('hinhthucdaotao.title')} isRequire>
+                <FormControlComponent xsLabel={0} xsForm={12} label={t('hinhthucdaotao.title')} isRequire>
                   <SelectList
                     data={pageState.hinhthucdaotao}
                     name="mahinhthucdaotao"
@@ -282,69 +282,6 @@ const EditDonvi = () => {
         )}
       </Grid>
       <FormGroupButton />
-
-      {/* <Grid container>
-        <Grid item container xs={isXs ? 12 : 10} spacing={isXs ? 0 : 2} my={1} ml={isXs ? 0 : 3}>
-          <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('donvitruong.field.ma')}>
-            <InputForm formik={formik} name="ma" type="text" placeholder={t('donvitruong.field.ma')} />
-          </FormControlComponent>
-          <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('donvitruong.field.ten')}>
-            <InputForm formik={formik} name="ten" type="text" placeholder={t('donvitruong.field.ten')} />
-          </FormControlComponent>
-          <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('Là phòng')}>
-            <Checkbox
-              checked={formik.values.laPhong} // Kiểm tra giá trị isPhong để quyết định trạng thái checked của checkbox
-              onChange={(event) => {
-                setIsChecked(event.target.checked);
-                formik.setFieldValue('laPhong', event.target.checked); // Cập nhật giá trị isPhong tùy thuộc vào trạng thái của checkbox
-              }}
-              inputProps={{ 'aria-label': 'controlled' }}
-            />
-          </FormControlComponent>
-          <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('Địa chỉ')}>
-            <InputForm formik={formik} name="diaChi" type="text" placeholder={t('Địa chỉ')} />
-          </FormControlComponent>
-          <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('donvitruong.field.url')}>
-            <InputForm formik={formik} name="url" type="text" placeholder={t('donvitruong.field.url')} />
-          </FormControlComponent>
-          <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} isRequire label={t('Email')}>
-            <InputForm formik={formik} name="email" type="email" placeholder={t('Email')} />
-          </FormControlComponent>
-          {formik.values.laPhong ? (
-            ''
-          ) : (
-            <>
-              {/* Hệ đào tạo */}
-      {/* <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('hedaotao.title')} isRequire>
-                <SelectList
-                  data={pageState.hedaotao}
-                  name="mahedaotao"
-                  value="ma"
-                  request={'ma'}
-                  optionName="ten"
-                  placeholder={t('hedaotao.title')}
-                  formik={formik}
-                  openPopup
-                />
-              </FormControlComponent> */}
-      {/* Hình thức đào tạo */}
-      {/* <FormControlComponent xsLabel={isXs ? 0 : 4} xsForm={isXs ? 12 : 8} label={t('hinhthucdaotao.title')} isRequire>
-                <SelectList
-                  data={pageState.hinhthucdaotao}
-                  name="mahinhthucdaotao"
-                  value="ma"
-                  request={'ma'}
-                  optionName="ten"
-                  placeholder={t('hinhthucdaotao.title')}
-                  formik={formik}
-                  openPopup
-                />
-              </FormControlComponent> */}
-      {/* </>
-          )}
-        </Grid>
-      </Grid>
-      <FormGroupButton /> */}
     </form>
   );
 };
