@@ -13,7 +13,6 @@ const Detaillichsu = () => {
     const fetchData = async () => {
       try {
         const response = await getLichSuXacMinhVanBangByID(selectedCCCD.id);
-        console.log(response);
         setDataIDHS(response.data);
       } catch (error) {
         console.log(error.message);
@@ -21,9 +20,6 @@ const Detaillichsu = () => {
     };
     fetchData();
   }, [selectedCCCD.id]);
-  useEffect(() => {
-    console.log(dataIDHS);
-  }, [dataIDHS]);
 
   return dataIDHS && dataIDHS.hocSinhs && dataIDHS.hocSinhs.length < 2 ? (
     <Detaillichsumotnguoi data={dataIDHS} />

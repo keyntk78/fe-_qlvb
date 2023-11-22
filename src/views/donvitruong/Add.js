@@ -83,7 +83,6 @@ const AddDonvi = () => {
       const hedaotao = await getAllHeDaoTao();
       const dvquanly = await getAllLoaiDonVi();
       const dvquanlycha = await getAllDonViCha();
-      console.log(dvquanly, hedaotao, dvquanlycha);
       const check = await handleResponseStatus(hinhthucdaotao, navigate);
       const check2 = await handleResponseStatus(hedaotao, navigate);
       const check3 = await handleResponseStatus(dvquanly, navigate);
@@ -137,9 +136,6 @@ const AddDonvi = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    console.log(formik.values);
-  });
   useEffect(() => {
     if (openPopup) {
       formik.resetForm();

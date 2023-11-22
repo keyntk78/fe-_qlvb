@@ -23,8 +23,6 @@ const Duyet = () => {
   const openSubPopup = useSelector(openSubPopupSelector);
   const [donYeuCau, setDonYeuCau] = useState('');
 
-  // console.log(capBangBansao);
-
   useEffect(() => {
     if (openSubPopup) {
       setNgayNhan('');

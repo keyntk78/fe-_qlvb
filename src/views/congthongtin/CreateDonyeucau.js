@@ -103,7 +103,6 @@ const CreateDonyeucau = () => {
           formik.resetForm();
           formik.values.FileDonYeuCau = '';
           formik.values.FileHinhAnhCCCD = '';
-          console.log(formik.values);
           dispatch(showAlert(new Date().getTime().toString(), 'success', addDonyeucau.message.toString()));
         }
       } catch (error) {

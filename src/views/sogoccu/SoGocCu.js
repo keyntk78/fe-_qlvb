@@ -54,7 +54,6 @@ const SoGocCu = () => {
   useEffect(() => {
     const fetchDataDL = async () => {
       const donvi = await getAllTruong(user.username);
-      console.log(donvi);
       setDonVi(donvi.data);
     };
     fetchDataDL();
@@ -95,7 +94,6 @@ const SoGocCu = () => {
       params.append('FromDate', pageState.fromDate);
       params.append('ToDate', pageState.toDate);
       const response = await getLichSuChuyenDoiSoGoc(params);
-      console.log(response);
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;

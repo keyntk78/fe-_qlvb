@@ -38,7 +38,7 @@ const HistoryAccess = () => {
     data: [],
     total: 0,
     order: 1,
-    orderDir: 'ASC',
+    orderDir: 'DESC',
     startIndex: 0,
     pageSize: 10,
     fromDate: format(subMonths(new Date(), 1), 'yyyy-MM-dd'),
@@ -100,9 +100,7 @@ const HistoryAccess = () => {
   useEffect(() => {
     const fetchDataDL = async () => {
       const functions = await getAllFunction();
-      console.log(functions);
       if (functions.data && functions.data.length > 0) {
-             console.log(functions.data); 
         setFunctions(functions.data);
       } else {
         setFunctions('');
@@ -112,12 +110,7 @@ const HistoryAccess = () => {
   }, []);
 
   useEffect(() => {
-    console.log(pageState.function);
-  }, [pageState.function]);
-
-  useEffect(() => {
     const fetchDataDL = async () => {
- 
       const response = await getActionsByFunctionId(functionId);
       if (response.data && response.data.length > 0) {
         setActions(response.data);

@@ -35,10 +35,8 @@ const Header = ({ handleLeftDrawerToggle }) => {
       if (user) {
         const message = await getUnreadMessagesCount(user.id);
         const count = message.data;
-        // console.log(count);
         dispatch(setNotificationCount(count));
         const response = await getTop10Message(user.id, pageSize);
-        // console.log(response);
         dispatch(setNotifications(response.data));
       }
     };

@@ -21,7 +21,6 @@ function ChuyenDoi({ truongCu, truongMoi }) {
       params.append('idTruongCu', truongCu);
       params.append('nguoiThucHien', user.username);
       const response = await chuyenDoiSoGoc(params);
-      console.log(response);
       if (response.isSuccess == false) {
         dispatch(showAlert(new Date().getTime().toString(), 'error', response.message.toString()));
       } else {

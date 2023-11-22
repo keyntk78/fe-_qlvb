@@ -48,6 +48,7 @@ const XuLyDuLieu = () => {
     setSelectedFileMau(selectedCategoryData ? selectedCategoryData.fileImport : data[0].fileImport);
     seSelectedName(selectedCategoryData ? selectedCategoryData.name : data[0].name);
   };
+
   // Láy dữ liệu
   useEffect(() => {
     const fetchData = async () => {
@@ -60,7 +61,7 @@ const XuLyDuLieu = () => {
     };
     fetchData();
   }, []);
-  console.log(selectedCategory, selectedName);
+
   const themTuTep = [
     {
       type: 'importFile',

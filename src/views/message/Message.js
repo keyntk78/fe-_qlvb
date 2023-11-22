@@ -116,7 +116,6 @@ const Message = () => {
       params.append('ToDate', pageState.toDate);
       params.append('userId', user.id);
       const response = await GetAllMessagesByUserId(params);
-      console.log(response);
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;

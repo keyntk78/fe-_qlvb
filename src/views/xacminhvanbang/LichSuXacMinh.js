@@ -133,7 +133,6 @@ const LichSuXacMinh = () => {
       setDataExport(data);
       const check = handleResponseStatus(response, navigate);
       if (check) {
-        //console.log(data.length);
         if (data && data.XacMinhVanBang.lichSuXacMinhVanBangs.length > 0) {
           const dataWithIds = data.XacMinhVanBang.lichSuXacMinhVanBangs.map((row, index) => ({
             idx: index + 1,

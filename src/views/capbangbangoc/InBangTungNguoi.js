@@ -62,10 +62,8 @@ const InBangTungNguoi = ({ duLieuHocSinh }) => {
     content: () => componentRef.current
   });
   const handlePrintAndCallApi = async () => {
-    console.log('123');
     handlePrint();
     const cccd = [duLieuHocSinh.cccd];
-    console.log('123');
     try {
       const params = new URLSearchParams();
       params.append('idDanhMucTotNghiep', danhmuc.id);

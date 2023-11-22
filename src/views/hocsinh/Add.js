@@ -128,9 +128,7 @@ const AddHocSinh = () => {
       }
     }
   });
-  useEffect(() => {
-    console.log(formik.values);
-  }, [formik]);
+
   useEffect(() => {
     const fetchDataDL = async () => {
       const monthi = await getAllMonthi();

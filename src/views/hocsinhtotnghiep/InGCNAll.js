@@ -44,7 +44,6 @@ const InGCNAll = () => {
     const fetchData = async () => {
       const response = await GetCauHinhByIdDonVi(user.username);
       const data = await response.data;
-      console.log(data);
       const date = new Date(data.ngayBanHanh);
       const formattedDateForInput = date.toISOString().split('T')[0];
       formik.setValues({
@@ -69,7 +68,6 @@ const InGCNAll = () => {
   useEffect(() => {
     const fetchDataDL = async () => {
       const response = await TongHocSinhDaDuyet(donvi.id, danhmuc.id);
-      console.log(response);
       setCountHS(response.data);
     };
     fetchDataDL();

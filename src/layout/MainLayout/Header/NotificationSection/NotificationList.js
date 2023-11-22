@@ -91,7 +91,6 @@ const NotificationList = ({ closeMenu }) => {
     }
     if (data.valueRedirect) {
       const jsonObject = JSON.parse(data.valueRedirect);
-      // console.log(jsonObject);
       dispatch(setSelectedInfoMessage(jsonObject));
     }
   };

@@ -133,7 +133,6 @@ export default function PhuLucSoGoc({ danhmuc, truong }) {
           NoiDung: ThayDoiChuoi(row.noiDungChinhSua),
           ...row
         }));
-        console.log(dataWithIds);
         dispatch(setReloadData(false));
         setPageState((old) => ({
           ...old,

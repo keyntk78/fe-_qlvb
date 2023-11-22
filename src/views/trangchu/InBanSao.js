@@ -36,7 +36,6 @@ const InBanSao = () => {
       const response_cf = await GetConfigPhoi(phoisao.id);
       setDuLieuConFig(response_cf.data);
       const hocSinhSoBanSao = await getHocSinhDaDuaVaoSobanSao(hocsinhid.id, hocsinhid.donYeuCauCapBanSao.id, user.username);
-      console.log(hocSinhSoBanSao);
       setHsSoBanSao(hocSinhSoBanSao.data);
     };
     if (phoisao) {

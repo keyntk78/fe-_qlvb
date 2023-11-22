@@ -41,7 +41,6 @@ const Xacminhnhieunguoi = () => {
   const handleDelete = (hocsinh) => {
     setTitle(t('Xóa học sinh được chọn'));
     setForm('delete');
-    console.log(hocsinh);
     dispatch(selectedHocsinh(hocsinh));
     dispatch(setOpenSubPopup(true));
   };
@@ -97,7 +96,6 @@ const Xacminhnhieunguoi = () => {
     }
   ];
   const data = JSON.parse(localStorage.getItem(user.username)) || [];
-  console.log(data);
   const rows = data.map((row, index) => ({
     id: index + 1,
     idx: row.idx,
@@ -115,7 +113,6 @@ const Xacminhnhieunguoi = () => {
 
   const idArray = lstData.map((item) => item.idHocSinh);
 
-  console.log(lstData, idArray);
   const formik = useFormik({
     initialValues: {
       donViXacMinh: '',
@@ -154,7 +151,6 @@ const Xacminhnhieunguoi = () => {
     const fetchData = async () => {
       const response = await getCauHinhXacMinhVanBang(donvi.id);
       const datas = response.data;
-      console.log(response.data);
       setDatas({
         uyBanNhanDan: datas.uyBanNhanDan.toUpperCase(),
         coQuanCapBang: datas.coQuanCapBang.toUpperCase(),
