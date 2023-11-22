@@ -107,7 +107,7 @@ const ThongKeSoLuongNguoiHoc = () => {
   };
 
   const chartData = {
-    height: 400,
+    height: 500,
     type: 'bar',
     options: {
       chart: {

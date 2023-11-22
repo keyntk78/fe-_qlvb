@@ -31,8 +31,8 @@ import ShowVanBang from './ShowVanBang';
 import InBanSao from './InBanSao';
 import XacNhanIn from './XacNhanIn';
 import config from 'config';
-import { getAllDanhmucTN } from 'services/danhmuctotnghiepService';
 import ThongKeSoLuongNguoiHoc from './SoLuongHocSinh';
+import { getAllDanhmucTN } from 'services/sharedService';
 
 // import { Component } from 'react';
 
@@ -237,15 +237,13 @@ const TrangChu = () => {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const params = new URLSearchParams();
-      params.append('nguoiThucHien', user ? user.username : '');
-      const response = await getAllDanhmucTN(params);
+      const response = await getAllDanhmucTN(user ? user.username : '');
       dispatch(listDanhMuc(response.data));
     };
     if (donvi != 0) {
       fetchDataDL();
     }
-  }, [donvi]);
+  }, [donvi, user]);
 
   useEffect(() => {
     const fetchData = async () => {
