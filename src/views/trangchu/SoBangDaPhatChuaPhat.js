@@ -38,22 +38,25 @@ const ThongKeSoBangDaPhatChuaPhat = () => {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      setTimeout(async () => {
-        try {
-          const params = new URLSearchParams();
-          params.append('pageSize', -1);
-          const donvi = await GetTruongHasPermision(selectedDanhMuc, params);
-          if (donvi && donvi.data && donvi.data.truongs && donvi.data.truongs.length > 0) {
-            setDonVi(donvi.data.truongs);
-            setSelectedDonVi(donvi.data.truongs[0].idTruong);
-          } else {
-            setDonVi([]);
+      setTimeout(
+        async () => {
+          try {
+            const params = new URLSearchParams();
+            params.append('pageSize', -1);
+            const donvi = await GetTruongHasPermision(selectedDanhMuc, params);
+            if (donvi && donvi.data && donvi.data.truongs && donvi.data.truongs.length > 0) {
+              setDonVi(donvi.data.truongs);
+              setSelectedDonVi(donvi.data.truongs[0].idTruong);
+            } else {
+              setDonVi([]);
+            }
+          } catch (error) {
+            console.error(error);
+            setLoading(false);
           }
-        } catch (error) {
-          console.error(error);
-          setLoading(false);
-        }
-      }, 500);
+        },
+        firstLoad ? 1000 : 0
+      );
     };
     if (selectedDanhMuc) {
       fetchDataDL();
@@ -77,7 +80,7 @@ const ThongKeSoBangDaPhatChuaPhat = () => {
             setLoading(false);
           }
         },
-        firstLoad ? 1500 : 0
+        firstLoad ? 1000 : 0
       );
     };
     if (selectedDanhMuc && selectedDonVi) {

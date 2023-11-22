@@ -11,7 +11,7 @@ import useLocalText from 'utils/localText';
 import { createSearchParams } from 'utils/createSearchParams';
 import i18n from 'i18n';
 import React from 'react';
-import { convertISODateToFormattedDate } from 'utils/formatDate';
+import { convertISODateTimeToFormattedDateTime } from 'utils/formatDate';
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { IconFileExport, IconSearch, IconTransferIn } from '@tabler/icons';
 import BackToTop from 'components/scroll/BackToTop';
@@ -68,13 +68,19 @@ const SoGocCu = () => {
       filterable: false
     },
     {
-      flex: 2,
+      flex: 1,
+      field: 'nguoiTao',
+      headerName: t('Người tạo'),
+      minWidth: 180
+    },
+    {
+      flex: 1.5,
       field: 'tenTruongCu',
       headerName: t('Tên trường cũ'),
       minWidth: 180
     },
     {
-      flex: 2,
+      flex: 1.5,
       field: 'tenTruongMoi',
       headerName: t('Tên trường mới'),
       minWidth: 100
@@ -82,7 +88,7 @@ const SoGocCu = () => {
     {
       flex: 1,
       field: 'transferTime',
-      headerName: t('Ngày chuyển đổi'),
+      headerName: t('Thời gian chuyển đổi'),
       minWidth: 100
     }
   ];
@@ -94,12 +100,13 @@ const SoGocCu = () => {
       params.append('FromDate', pageState.fromDate);
       params.append('ToDate', pageState.toDate);
       const response = await getLichSuChuyenDoiSoGoc(params);
+      console.log(response);
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;
         const dataWithIds = data.map((row, index) => ({
           idx: pageState.startIndex * pageState.pageSize + index + 1,
-          transferTime: row.ngayTao == null ? 'Chưa truy cập ' : convertISODateToFormattedDate(row.ngayTao),
+          transferTime: row.ngayTao == null ? 'Chưa truy cập ' : convertISODateTimeToFormattedDateTime(row.ngayTao),
           ...row
         }));
         dispatch(setReloadData(false));

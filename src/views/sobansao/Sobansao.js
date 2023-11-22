@@ -82,7 +82,7 @@ export default function SoBanSao() {
     order: 1,
     orderDir: 'ASC',
     startIndex: 0,
-    pageSize: -1,
+    pageSize: 25,
     DMTN: '',
     donVi: '',
     khoaThi: ''
@@ -230,9 +230,9 @@ export default function SoBanSao() {
       params.append('idDanhMucTotNghiep', pageState.DMTN);
       params.append('idTruong', pageState.donVi);
       params.append('IdKhoaThi', pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : '');
-
       const response = await GetHocSinhTheoSoBanSao(params);
       const data = response.data;
+      console.log(data.totalRow);
       formik.setValues({
         UyBanNhanDan: data.donViQuanLy.tenUyBanNhanDan || '',
         CoQuanCapBang: data.donViQuanLy.tenCoQuanCapBang || '',
@@ -249,8 +249,7 @@ export default function SoBanSao() {
       });
       const check = handleResponseStatus(response, navigate);
       if (check) {
-        const data = await response.data.donYeuCaus;
-        const dataWithIds = data.map((row, index) => ({
+        const dataWithIds = data.donYeuCaus.map((row, index) => ({
           idx: pageState.startIndex * pageState.pageSize + index + 1,
           gioiTinh_fm: row.hocSinh.gioiTinh ? t('gender.male') : t('gender.female'),
           ngaySinh_fm: convertISODateToFormattedDate(row.hocSinh.ngaySinh),
@@ -349,6 +348,10 @@ export default function SoBanSao() {
     khoaThi: formik.values.KhoaThi,
     tenKyThi: formik.values.TenKyThi
   };
+
+  useEffect(() => {
+    console.log(pageState.total);
+  }, [pageState.total]);
 
   return (
     <>

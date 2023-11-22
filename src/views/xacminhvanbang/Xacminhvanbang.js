@@ -299,6 +299,7 @@ export default function Xacminhvanbang() {
                   buttonConfigurations={xacminhvb}
                   icon={IconChecks}
                   title={t('button.title.xacminh')}
+                  color="success"
                 />
               </Grid>
               <Grid item>
@@ -307,6 +308,7 @@ export default function Xacminhvanbang() {
                   buttonConfigurations={chinhsuavb}
                   icon={IconEdit}
                   title={t('button.title.chinhsua.huybo')}
+                  color="orange"
                 />
               </Grid>
             </Grid>

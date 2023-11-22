@@ -68,7 +68,7 @@ const ThongKeSoLuongXepLoai = () => {
             setLoading(false);
           }
         },
-        firstLoad ? 2500 : 0
+        firstLoad ? 2000 : 0
       );
     };
     fetchDataDL();

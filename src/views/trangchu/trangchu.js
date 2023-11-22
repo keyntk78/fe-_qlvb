@@ -216,6 +216,7 @@ const TrangChu = () => {
                   buttonConfigurations={capbangsao}
                   icon={IconCertificate}
                   title={'Cấp bằng bản sao'}
+                  color="success"
                 />
               ) : (
                 ''
@@ -227,6 +228,7 @@ const TrangChu = () => {
                 buttonConfigurations={chinhsuavb}
                 icon={IconEdit}
                 title={t('button.title.chinhsua.huybo')}
+                color="orange"
               />
             </Grid>
           </Grid>

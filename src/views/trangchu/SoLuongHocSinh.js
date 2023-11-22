@@ -35,6 +35,8 @@ const ThongKeSoLuongNguoiHoc = () => {
   const primaryDark = theme.palette.primary.dark;
   const secondaryMain = theme.palette.secondary.main;
   const secondaryLight = theme.palette.secondary.light;
+  const warningDark = theme.palette.warning.dark;
+  const successDark = theme.palette.success.dark;
 
   useEffect(() => {
     if (listDanhMuc && listDanhMuc.length > 0) {
@@ -49,21 +51,24 @@ const ThongKeSoLuongNguoiHoc = () => {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      setTimeout(async () => {
-        try {
-          const params = new URLSearchParams();
-          params.append('pageSize', -1);
-          const donvi = await GetTruongHasPermision(selectedDanhMuc, params);
-          if (donvi && donvi.data && donvi.data.truongs && donvi.data.truongs.length > 0) {
-            setDonVi(donvi.data.truongs);
-          } else {
-            setDonVi([]);
+      setTimeout(
+        async () => {
+          try {
+            const params = new URLSearchParams();
+            params.append('pageSize', -1);
+            const donvi = await GetTruongHasPermision(selectedDanhMuc, params);
+            if (donvi && donvi.data && donvi.data.truongs && donvi.data.truongs.length > 0) {
+              setDonVi(donvi.data.truongs);
+            } else {
+              setDonVi([]);
+            }
+          } catch (error) {
+            console.error(error);
+            setLoading(false);
           }
-        } catch (error) {
-          console.error(error);
-          setLoading(false);
-        }
-      }, 500);
+        },
+        firstLoad ? 1500 : 0
+      );
     };
     if (selectedDanhMuc) {
       fetchDataDL();
@@ -196,7 +201,7 @@ const ThongKeSoLuongNguoiHoc = () => {
   useEffect(() => {
     const newChartData = {
       ...chartData.options,
-      colors: [primary200, primaryDark, secondaryMain, secondaryLight],
+      colors: [successDark, primaryDark, warningDark],
       xaxis: {
         labels: {
           style: {

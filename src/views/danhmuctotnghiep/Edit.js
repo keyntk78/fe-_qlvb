@@ -149,8 +149,8 @@ const EditDanhmucTN = () => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <Grid container>
-        <Grid item container xs={isXs ? 12 : 10} spacing={isXs ? 0 : 2} my={1} ml={isXs ? 0 : 3}>
+      <Grid container my={1} justifyContent="center">
+        <Grid item container xs={isXs ? 12 : 10} spacing={isXs ? 0 : 1}>
           <FormControlComponent xsLabel={0} xsForm={12} isRequire label={t('danhmuctotnghiep.field.tieude')}>
             <InputForm formik={formik} name="TieuDe" type="text" />
           </FormControlComponent>

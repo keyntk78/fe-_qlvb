@@ -35,6 +35,7 @@ import {
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { useTranslation } from 'react-i18next';
+import { Visibility } from '@mui/icons-material';
 
 const ActionButtons = ({
   menu,
@@ -53,6 +54,15 @@ const ActionButtons = ({
   handleNotify
 }) => {
   const { t } = useTranslation();
+
+  const colorMap = {
+    success: '#4CAF50', // Màu xanh lá cây cho thành công
+    info: '#2196F3', // Màu xanh dương cho thông tin
+    error: '#FF5722', // Màu đỏ cho lỗi
+    primary: '#1976D2', // Màu chính cho primary
+    secondary: '#9E9E9E', // Màu phụ cho secondary
+    warning: '#FFC107' // Màu cảnh báo cho warning
+  };
 
   const getButtons = () => {
     switch (type) {
@@ -206,7 +216,7 @@ const ActionButtons = ({
         return [
           {
             title: 'button.title.detail',
-            icon: <IconEyeCheck size={'20px'} />,
+            icon: <Visibility size={'20px'} fontSize="small" />,
             color: 'info',
             onClick: () => {
               handleGetbyId(params);
@@ -220,7 +230,7 @@ const ActionButtons = ({
         return [
           {
             title: 'Xem văn bằng',
-            icon: <IconEye size={'20px'} />,
+            icon: <Visibility size={'20px'} fontSize="small" />,
             color: 'info',
             onClick: () => {
               handleClick(params);
@@ -621,7 +631,17 @@ const ActionButtons = ({
             <>
               <AnimateButton>
                 <Tooltip title={t(button.title)} placement="bottom">
-                  <IconButton color={button.color} key={index} onClick={button.onClick} style={{ border: '1px solid' }} size="small">
+                  <IconButton
+                    backgroundColor={button.color}
+                    style={{
+                      fontWeight: 'bold',
+                      backgroundColor: colorMap[button.color] || button.color,
+                      color: 'white' // Màu chữ của icon là trắng
+                    }}
+                    key={index}
+                    onClick={button.onClick}
+                    size="small"
+                  >
                     {button.icon}
                   </IconButton>
                 </Tooltip>
