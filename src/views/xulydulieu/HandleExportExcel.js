@@ -27,7 +27,7 @@ export const ExportData = () => {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Năm Thi');
 
-    const headerRow = worksheet.addRow(['STT', 'TenNam']);
+    const headerRow = worksheet.addRow(['STT', 'Ten']);
     const descriptionRow = worksheet.addRow(['Số Thứ Tự', 'Tên Năm']);
     headerRow.eachCell((cell) => {
       cell.alignment = { vertical: 'middle', horizontal: 'center' };
@@ -99,7 +99,7 @@ export const ExportData = () => {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Dân Tộc');
 
-    const headerRow = worksheet.addRow(['STT', 'TenDanToc']);
+    const headerRow = worksheet.addRow(['STT', 'Ten']);
     const descriptionRow = worksheet.addRow(['Số Thứ Tự', 'Tên Dân Tộc']);
     headerRow.eachCell((cell) => {
       cell.alignment = { vertical: 'middle', horizontal: 'center' };
@@ -170,7 +170,7 @@ export const ExportData = () => {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Khóa Thi');
 
-    const headerRow = worksheet.addRow(['STT', 'TenKhoaThi', 'NgayThi', 'TenNamThi']);
+    const headerRow = worksheet.addRow(['STT', 'Ten', 'Ngay', 'Nam']);
     const descriptionRow = worksheet.addRow(['Số Thứ Tự', 'Tên Khóa Thi', 'Ngày Thi', 'Tên Năm Thi']);
     headerRow.eachCell((cell) => {
       cell.alignment = { vertical: 'middle', horizontal: 'center' };
@@ -245,9 +245,9 @@ export const ExportData = () => {
     }));
     dispatch(setLoading(false));
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Khóa Thi');
+    const worksheet = workbook.addWorksheet('Hệ Đào Tạo');
 
-    const headerRow = worksheet.addRow(['STT', 'MaHeDaoTao', 'TenHeHDaoTao']);
+    const headerRow = worksheet.addRow(['STT', 'Ma', 'Ten']);
     const descriptionRow = worksheet.addRow(['Số Thứ Tự', 'Mã Hệ Đào Tạo', 'Tên Hệ Đào Tạo']);
     headerRow.eachCell((cell) => {
       cell.alignment = { vertical: 'middle', horizontal: 'center' };
@@ -321,9 +321,9 @@ export const ExportData = () => {
     }));
     dispatch(setLoading(false));
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Khóa Thi');
+    const worksheet = workbook.addWorksheet('Hình Thức Đào Tạo');
 
-    const headerRow = worksheet.addRow(['STT', 'MaHinhThucDaoTao', 'TenHinhThucDaoTao']);
+    const headerRow = worksheet.addRow(['STT', 'Ma', 'Ten']);
     const descriptionRow = worksheet.addRow(['Số Thứ Tự', 'Mã Hình Thức Đào Tạo', 'Tên Hình Thức Đào Tạo']);
     headerRow.eachCell((cell) => {
       cell.alignment = { vertical: 'middle', horizontal: 'center' };
@@ -397,9 +397,9 @@ export const ExportData = () => {
     }));
     dispatch(setLoading(false));
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Khóa Thi');
+    const worksheet = workbook.addWorksheet('Môn Thi');
 
-    const headerRow = worksheet.addRow(['STT', 'MaMonThi', 'TenMonThi']);
+    const headerRow = worksheet.addRow(['STT', 'Ma', 'Ten']);
     const descriptionRow = worksheet.addRow(['Số Thứ Tự', 'Mã Môn Thi', 'Tên Môn Thi']);
     headerRow.eachCell((cell) => {
       cell.alignment = { vertical: 'middle', horizontal: 'center' };

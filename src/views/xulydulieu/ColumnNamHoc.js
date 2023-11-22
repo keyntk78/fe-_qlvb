@@ -1,48 +1,10 @@
+import { useTheme } from '@emotion/react';
+import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 export const useTranslatedColumns = () => {
   const { t } = useTranslation();
-
-  const columns_namHoc = [
-    {
-      field: 'idx',
-      headerName: t('serial'),
-      width: 50,
-      sortable: false,
-      filterable: false,
-      cellClassName: 'top-aligned-cell'
-    },
-    {
-      field: 'hoTen',
-      headerName: t('hocsinh.field.fullname'),
-      flex: 2,
-      minWidth: 180
-    },
-    {
-      field: 'cccd',
-      headerName: t('hocsinh.field.cccd'),
-      flex: 1.5,
-      minWidth: 100
-    },
-    {
-      field: 'gioiTinh_fm',
-      headerName: t('hocsinh.field.gender'),
-      flex: 1,
-      minWidth: 80
-    },
-    {
-      field: 'ngaySinh_fm',
-      headerName: t('hocsinh.field.bdate'),
-      flex: 1.3,
-      minWidth: 100
-    },
-    {
-      field: 'soHieuVanBang',
-      headerName: t('hocsinh.field.soHieu'),
-      flex: 1.5,
-      minWidth: 100
-    }
-  ];
+  const theme = useTheme();
   const columns_NamThi = [
     {
       field: 'idx',
@@ -55,11 +17,27 @@ export const useTranslatedColumns = () => {
       flex: 1,
       field: 'ten',
       headerName: t('namthi.field.Ten')
+    },
+    {
+      field: 'message',
+      headerName: t('Lý do'),
+      flex: 1,
+      renderCell: (
+        params // Thêm tham số theme vào hàm renderCell
+      ) => (
+        <div
+          style={{
+            color: params.row.errorCode === -1 ? theme.palette.error.main : params.row.errorCode === -2 ? 'orange' : 'inherit'
+          }}
+        >
+          {params.value}
+        </div>
+      )
     }
   ];
   const columns_DanToc = [
     {
-      field: 'idx',
+      field: 'id',
       headerName: t('serial'),
       width: 50,
       sortable: false,
@@ -69,11 +47,27 @@ export const useTranslatedColumns = () => {
       field: 'ten',
       headerName: t('Tên'),
       flex: 1
+    },
+    {
+      field: 'message',
+      headerName: t('Lý do'),
+      flex: 1,
+      renderCell: (
+        params // Thêm tham số theme vào hàm renderCell
+      ) => (
+        <div
+          style={{
+            color: params.row.errorCode === -1 ? theme.palette.error.main : params.row.errorCode === -2 ? 'orange' : 'inherit'
+          }}
+        >
+          {params.value}
+        </div>
+      )
     }
   ];
   const columns_HinhThucDaoTao = [
     {
-      field: 'idx',
+      field: 'id',
       headerName: t('serial'),
       width: 50,
       sortable: false,
@@ -90,11 +84,27 @@ export const useTranslatedColumns = () => {
       headerName: t('hinhthucdaotao.field.ten'),
       flex: 1.5,
       minWidth: 160
+    },
+    {
+      field: 'message',
+      headerName: t('Lý do'),
+      flex: 1,
+      renderCell: (
+        params // Thêm tham số theme vào hàm renderCell
+      ) => (
+        <div
+          style={{
+            color: params.row.errorCode === -1 ? theme.palette.error.main : params.row.errorCode === -2 ? 'orange' : 'inherit'
+          }}
+        >
+          {params.value}
+        </div>
+      )
     }
   ];
   const columns_KhoaThi = [
     {
-      field: 'idx',
+      field: 'id',
       headerName: t('serial'),
       width: 50,
       sortable: false,
@@ -108,9 +118,37 @@ export const useTranslatedColumns = () => {
     },
     {
       flex: 1,
-      field: 'ngay_fm',
+      field: 'ngay',
       headerName: t('khoathi.field.Ngay'),
+      minWidth: 100,
+      valueFormatter: (params) => {
+        // Chuyển đổi ngày từ định dạng ISO sang ngày theo giờ Việt Nam
+        const isoDate = params.value;
+        const localDate = format(new Date(isoDate), 'dd/MM/yyyy');
+        return localDate;
+      }
+    },
+    {
+      flex: 1,
+      field: 'nam',
+      headerName: t('Năm thi'),
       minWidth: 100
+    },
+    {
+      field: 'message',
+      headerName: t('Lý do'),
+      flex: 1,
+      renderCell: (
+        params // Thêm tham số theme vào hàm renderCell
+      ) => (
+        <div
+          style={{
+            color: params.row.errorCode === -1 ? theme.palette.error.main : params.row.errorCode === -2 ? 'orange' : 'inherit'
+          }}
+        >
+          {params.value}
+        </div>
+      )
     }
   ];
   const columns_HeDaoTao = [
@@ -132,11 +170,28 @@ export const useTranslatedColumns = () => {
       field: 'ten',
       headerName: t('hedaotao.field.Ten'),
       minWidth: 150
+    },
+
+    {
+      field: 'message',
+      headerName: t('Lý do'),
+      flex: 1,
+      renderCell: (
+        params // Thêm tham số theme vào hàm renderCell
+      ) => (
+        <div
+          style={{
+            color: params.row.errorCode === -1 ? theme.palette.error.main : params.row.errorCode === -2 ? 'orange' : 'inherit'
+          }}
+        >
+          {params.value}
+        </div>
+      )
     }
   ];
   const columns_MonHoc = [
     {
-      field: 'idx',
+      field: 'id',
       headerName: t('serial'),
       width: 50,
       sortable: false,
@@ -151,10 +206,26 @@ export const useTranslatedColumns = () => {
       field: 'ten',
       headerName: t('monthi.field.ten'),
       flex: 1
+    },
+
+    {
+      field: 'message',
+      headerName: t('Lý do'),
+      flex: 1,
+      renderCell: (
+        params // Thêm tham số theme vào hàm renderCell
+      ) => (
+        <div
+          style={{
+            color: params.row.errorCode === -1 ? theme.palette.error.main : params.row.errorCode === -2 ? 'orange' : 'inherit'
+          }}
+        >
+          {params.value}
+        </div>
+      )
     }
   ];
   return {
-    columns_namHoc,
     columns_DanToc,
     columns_HeDaoTao,
     columns_HinhThucDaoTao,

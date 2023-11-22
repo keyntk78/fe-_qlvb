@@ -14,7 +14,7 @@ import Import from './Import';
 import { ExportData } from './HandleExportExcel';
 import { useEffect } from 'react';
 import { GetCauHinhImportDanhMuc } from 'services/xulydulieuService';
-
+import { FileExports } from './FileMauExport';
 const XuLyDuLieu = () => {
   const isXs = useMediaQuery('(max-width:600px)');
   const { t } = useTranslation();
@@ -26,9 +26,13 @@ const XuLyDuLieu = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const openPopup = useSelector(openPopupSelector);
   const dispatch = useDispatch();
+
   const handleDowloadTemplate = async () => {
-    console.log(selectedFileMau ? selectedFileMau : data[0].fileImport);
-    // window.location.href = selectedFileMau;
+    console.log(FileExports);
+    const fileMau = selectedFileMau
+      ? FileExports.find((file) => file.name === selectedFileMau)
+      : FileExports.find((file) => file.name === data[0].fileImport);
+    window.location.href = fileMau.path;
   };
 
   const {
@@ -44,6 +48,7 @@ const XuLyDuLieu = () => {
     setForm('import');
     dispatch(setOpenPopup(true));
   };
+
   const handleExport = (e) => {
     selectedCategory === 'namhoc'
       ? handleExport_NamHoc(e)
@@ -59,6 +64,7 @@ const XuLyDuLieu = () => {
       ? handleExport_KhoaThi(e)
       : '';
   };
+
   const handleDanhMucChange = (event) => {
     const value = event.target.value;
     setSelectedCategory(value);
@@ -71,7 +77,7 @@ const XuLyDuLieu = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await GetCauHinhImportDanhMuc();
-      if (response.data.length > 0) {
+      if (response && response.data && response.data.length > 0) {
         seSelectedName(response.data[0].name);
         setSelectedCategory(response.data[0].table);
         setData(response.data);

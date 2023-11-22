@@ -1,77 +1,28 @@
 import { Button, Grid, Input, useMediaQuery } from '@mui/material';
 import SaveButton from 'components/button/SaveButton';
 import ExitButton from 'components/button/ExitButton';
-//import FormControlComponent from 'components/form/FormControlComponent ';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { openPopupSelector, openSubPopupSelector } from 'store/selectors';
+import { openPopupSelector, openSubPopupSelector, userLoginSelector } from 'store/selectors';
 import { setOpenSubPopup, showAlert } from 'store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { IconFilePlus } from '@tabler/icons';
 import { useTranslation } from 'react-i18next';
-// import { getAllDanhmucTN, getAllTruong } from 'services/sharedService';
-//import { getAllDonvi } from 'services/donvitruongService';
-// import { getAllKhoathiByDMTN } from 'services/khoathiService';
-//import { convertISODateToFormattedDate } from 'utils/formatDate';
-// import { ImportDanhSachVanBang } from 'services/xacminhvanbangService';
 import Popup from 'components/controls/popup';
-//import DanhSachImport from './DanhSachImport';
-//import InputForm1 from 'components/form/InputForm1';
 import DanhSachImport from './DanhSachImport';
+import { ImportDanhMuc } from 'services/xulydulieuService';
 
 function Import({ selectedValue, selectedName }) {
   const isXs = useMediaQuery('(max-width:800px)');
   const dispatch = useDispatch();
-  //   const [dataDMTNs, setDataDMTNs] = useState('');
-  //   const [dataDonvis, setDataDonvis] = useState('');
-  //   const [dataDMTN, setDataDMTN] = useState('');
-  //   const [dataDonvi, setDataDonvi] = useState('');
-  //   const [khoaThis, setKhoaThis] = useState([]);
-  // const [selectKhoaThi, setSelectKhoaThi] = useState('');
   const [selectFile, setSelectFile] = useState('');
-  //   const user = useSelector(userLoginSelector);
+  const user = useSelector(userLoginSelector);
   const openPopup = useSelector(openPopupSelector);
   const [selectedFileName, setSelectedFileName] = useState('');
-  //   const [selectDanhmuc, setSelectDanhmuc] = useState('');
   const openSubPopup = useSelector(openSubPopupSelector);
   const { t } = useTranslation();
-
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
-  //   useEffect(() => {
-  //     const fetchDataDL = async () => {
-  //       try {
-  //         dispatch(setLoading(true));
-  //         const danhmuc = await getAllDanhmucTN(user ? user.username : '');
-  //         setDataDMTNs(danhmuc.data);
-  //         const donvi = await getAllTruong(user ? user.username : '');
-  //         setDataDonvis(donvi.data);
-  //         setSelectDanhmuc(danhmuc && danhmuc.data.length > 0 ? danhmuc.data[0].id : '');
-  //       } catch (error) {
-  //         console.error('Error fetching data:', error);
-  //         setDataDMTN([]);
-  //         setDataDonvi([]);
-  //       }
-  //     };
-  //     fetchDataDL();
-  //   }, [user]);
-
-  //   useEffect(() => {
-  //     const fetchDataDL = async () => {
-  //       const response = await getAllKhoathiByDMTN(selectDanhmuc);
-  //       if (response.data && response.data.length > 0) {
-  //         setKhoaThis(response.data);
-  //         setSelectKhoaThi(response.data[0].id);
-  //       } else {
-  //         setKhoaThis([]);
-  //         setSelectKhoaThi('');
-  //       }
-  //       dispatch(setLoading(false));
-  //     };
-  //     if (selectDanhmuc) {
-  //       fetchDataDL();
-  //     }
-  //   }, [selectDanhmuc]);
 
   const handleOnchangfile = (e) => {
     const file = e.target.files[0];
@@ -90,26 +41,19 @@ function Import({ selectedValue, selectedName }) {
       return;
     }
     try {
-      setTitle(t('Danh Sách văn bằng import'));
-      setForm('import');
-      dispatch(setOpenSubPopup(true));
-      //   const values = new FormData();
-      //   values.append('IdTruong', dataDonvi ? dataDonvi : dataDonvis && dataDonvis.length > 0 ? dataDonvis[0].id : '');
-      //   values.append('IdDanhMucTotNghiep', dataDMTN ? dataDMTN : dataDMTNs && dataDMTNs.length > 0 ? dataDMTNs[0].id : '');
-      //   values.append('IdKhoaThi', selectKhoaThi ? selectKhoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : '');
-      //   values.append('NguoiThucHien', user.username);
-      //   values.append('fileExcel', selectFile);
-      //   dispatch(selectedDonvitruong(dataDonvi ? dataDonvi : dataDonvis && dataDonvis.length > 0 ? dataDonvis[0].id : ''));
-      //   dispatch(selectedDanhmuctotnghiep(dataDMTN ? dataDMTN : dataDMTNs && dataDMTNs.length > 0 ? dataDMTNs[0].id : ''));
-      //   const Import = await ImportDanhSachVanBang(values);
-      //   if (Import.isSuccess == false) {
-      //     //dispatch(showAlert(new Date().getTime().toString(), 'error', Import.message.toString()));
-      //   } else {
-      //     setTitle(t('Danh Sách văn bằng import'));
-      //     setForm('import');
-      //     dispatch(setOpenSubPopup(true));
-      //     // dispatch(showAlert(new Date().getTime().toString(), 'success', Import.message.toString()));
-      //   }
+      const values = new FormData();
+      values.append('Key', selectedValue);
+      values.append('NguoiThucHien', user.username);
+      values.append('FileImport', selectFile);
+      const Import = await ImportDanhMuc(values);
+      if (Import.isSuccess == false) {
+        dispatch(setOpenSubPopup(false));
+        dispatch(showAlert(new Date().getTime().toString(), 'error', Import.error));
+      } else {
+        setTitle(t(`Danh Mục [${selectedName}]`));
+        setForm('import');
+        dispatch(setOpenSubPopup(true));
+      }
     } catch (error) {
       console.error('error' + error);
       dispatch(showAlert(new Date().getTime().toString(), 'error', error.toString()));
@@ -118,11 +62,8 @@ function Import({ selectedValue, selectedName }) {
 
   useEffect(() => {
     if (openPopup) {
-      //setDataDMTN('');
-      //setDataDonvi('');
       setSelectFile(null);
       setSelectedFileName(null);
-      // formik.resetForm();
     }
   }, [openPopup]);
 
