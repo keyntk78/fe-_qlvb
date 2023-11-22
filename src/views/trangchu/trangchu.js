@@ -417,7 +417,7 @@ const TrangChu = () => {
             ''
           )}
           {form !== '' && (
-            <Popup title={title} form={form} openPopup={openPopup} maxWidth={'md'} bgcolor={'#2196F3'}>
+            <Popup title={title} form={form} openPopup={openPopup} maxWidth={form == 'xacnhanin' ? 'sm' : 'md'} bgcolor={'#2196F3'}>
               {form === 'showvanbang' ? (
                 <ShowVanBang duLieuHocSinh={hsSoGoc} />
               ) : form === 'inbang' ? (

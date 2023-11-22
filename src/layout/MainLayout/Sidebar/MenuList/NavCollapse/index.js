@@ -40,24 +40,39 @@ const NavCollapse = ({ menu, level }) => {
     });
   };
 
-  // menu collapse for sub-levels
+  // // Giới hạn useEffect
+  const [effectCount, setEffectCount] = useState(0);
+
+  // Sử dụng biến trạng thái để theo dõi tên đường dẫn hiện tại
+  const [currentPathname, setCurrentPathname] = useState(null);
+
   useEffect(() => {
-    // setOpen(false);
-    setSelected(null);
-    if (menu.children) {
-      menu.children.forEach((item) => {
-        if (item.children?.length) {
-          checkOpenForParent(item.children, menu.id);
-        }
-        if (item.url === pathname) {
-          setSelected(menu.id);
-          setOpen(true);
-        }
-      });
+    // Kiểm tra nếu tên đường dẫn thay đổi thì đặt lại effectCount
+    if (pathname !== currentPathname) {
+      setCurrentPathname(pathname);
+      setEffectCount(0);
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname, menu.children]);
+    // Giới hạn useEffect tối đa 2 lần
+    if (effectCount < 2) {
+      setOpen(false);
+      setSelected(null);
+      if (menu.children) {
+        menu.children.forEach((item) => {
+          console.log(item.url);
+          if (item.children?.length) {
+            checkOpenForParent(item.children, menu.id);
+          }
+          if (item.url === pathname) {
+            setSelected(menu.id);
+            setOpen(true);
+          }
+        });
+      }
+
+      setEffectCount((prevCount) => prevCount + 1);
+    }
+  }, [pathname, menu.children, effectCount, currentPathname]);
 
   let isSelected;
 
