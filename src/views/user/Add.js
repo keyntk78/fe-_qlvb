@@ -45,7 +45,7 @@ const AddUser = () => {
       birthday: '',
       gender: '',
       avatar: '',
-      truongId: '0',
+      truongId: donviquanly !== 0 && donviquanly.laPhong == false ? donviquanly.id : '0',
       fileImage: '',
       createdBy: userLogin.username
     },
@@ -199,7 +199,7 @@ const AddUser = () => {
                 </FormControl>
               </FormControlComponent>
             </Grid>
-          ) : (
+          ) : donviquanly !== 0 && donviquanly.laPhong ? (
             <Grid item xs={12}>
               <FormControlComponent xsLabel={isXs ? 0 : 2} xsForm={isXs ? 12 : 10} label={t('user.label.school')} isRequire>
                 <FormControl fullWidth variant="outlined">
@@ -217,6 +217,8 @@ const AddUser = () => {
                 </FormControl>
               </FormControlComponent>
             </Grid>
+          ) : (
+            ''
           )}
         </Grid>
         <Grid

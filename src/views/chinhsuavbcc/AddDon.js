@@ -33,7 +33,7 @@ import SelectForm from 'components/form/SelectForm';
 import { convertJsonToFormData } from 'utils/convertJsonToFormData';
 import useChinhSuaVanBangValidationSchema from 'components/validations/chinhsuavbccValidation';
 import { getAllHinhThucDaoTao, getAllNamThi, getKhoaThiByNamThi } from 'services/sharedService';
-import { convertISODateToFormattedDate } from 'utils/formatDate';
+import { convertDateTimeToDate, convertISODateToFormattedDate } from 'utils/formatDate';
 import { IconBook, IconCertificate, IconFile, IconUser } from '@tabler/icons';
 const AddDonChinhSua = ({ thaotac }) => {
   const { t } = useTranslation();
@@ -218,7 +218,7 @@ const AddDonChinhSua = ({ thaotac }) => {
             formik={formik}
             name="NgaySinh"
             type="date"
-            value={formik.values.NgaySinh ? new Date(formik.values.NgaySinh).toISOString().slice(0, 10) : ''}
+            value={formik.values.NgaySinh ? convertDateTimeToDate(formik.values.NgaySinh) : ''}
           />
         </Grid>
       </Grid>
@@ -282,7 +282,7 @@ const AddDonChinhSua = ({ thaotac }) => {
             formik={formik}
             name="NgayCap"
             type="date"
-            value={formik.values.NgayCap ? new Date(formik.values.NgayCap).toISOString().slice(0, 10) : ''}
+            value={formik.values.NgayCap ? convertDateTimeToDate(formik.values.NgayCap) : ''}
           />
         </Grid>
       </Grid>

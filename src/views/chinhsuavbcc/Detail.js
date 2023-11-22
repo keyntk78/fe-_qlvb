@@ -31,7 +31,7 @@ import SelectForm from 'components/form/SelectForm';
 import { getAllDanToc, getAllHinhThucDaoTao, getAllNamThi, getKhoaThiByNamThi } from 'services/sharedService';
 import { IconBook, IconCertificate, IconDownload, IconFile, IconUser } from '@tabler/icons';
 import ResetButton from 'components/button/ExitButton';
-import { convertISODateToFormattedDate } from 'utils/formatDate';
+import { convertDateTimeToDate, convertISODateToFormattedDate } from 'utils/formatDate';
 const DetailHistory = () => {
   const [hinhThucDaoTao, setHinhThucDaoTao] = useState([]);
   const user = useSelector(userLoginSelector);
@@ -155,7 +155,7 @@ const DetailHistory = () => {
             formik={formik}
             name="NgaySinh"
             type="date"
-            value={formik.values.NgaySinh ? new Date(formik.values.NgaySinh).toISOString().slice(0, 10) : ''}
+            value={formik.values.NgaySinh ? convertDateTimeToDate(formik.values.NgaySinh) : ''}
           />
         </Grid>
       </Grid>
@@ -209,7 +209,7 @@ const DetailHistory = () => {
             formik={formik}
             name="NgayCapBang"
             type="date"
-            value={formik.values.NgayCapBang ? new Date(formik.values.NgayCapBang).toISOString().slice(0, 10) : ''}
+            value={formik.values.NgayCapBang ? convertDateTimeToDate(formik.values.NgayCapBang) : ''}
           />
         </Grid>
       </Grid>

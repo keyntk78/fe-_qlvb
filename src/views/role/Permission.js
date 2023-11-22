@@ -174,17 +174,20 @@ const Decentralization = () => {
 
         // Create a Map to hold the actionNames for each functionName
         const functionActionMap = responseData.reduce((map, row) => {
-          const { functionId, functionName, actionId, actionName, hasPermission } = row;
+          const { functionId, functionName, description_Function, actionId, actionName, description_Action, hasPermission } = row;
           if (map.has(functionId)) {
             map.get(functionId).actionIds.push(actionId);
             map.get(functionId).actionNames.push(actionName);
+            map.get(functionId).description_Actions.push(description_Action);
             map.get(functionId).hasPermissions.push(hasPermission);
           } else {
             map.set(functionId, {
               functionId,
               functionName,
+              description_Function,
               actionIds: [actionId],
               actionNames: [actionName],
+              description_Actions: [description_Action],
               hasPermissions: [hasPermission]
             });
           }
@@ -229,12 +232,14 @@ const Decentralization = () => {
       id: index + 1,
       actionId,
       actionName: row.actionNames[index],
+      description_Action: row.description_Actions[index],
       hasPermission: row.hasPermissions[index]
     }));
     return {
       id: row.id,
       rowIndex: row.rowIndex,
       functionName: row.functionName,
+      description_Function: row.description_Function,
       functionId: row.functionId,
       hasPermissions: row.hasPermissions,
       actions,
@@ -284,7 +289,7 @@ const Decentralization = () => {
                       />
                     }
                   />
-                  <span style={{ marginLeft: -20 }}>{row.functionName}</span>
+                  <span style={{ marginLeft: -20 }}>{row.description_Function}</span>
                 </h3>
                 {row.actions.map((action) => (
                   <FormControlLabel
@@ -296,7 +301,7 @@ const Decentralization = () => {
                         onChange={(e) => handleCheckboxChange(action.actionId, e.target.checked, row.id)}
                       />
                     }
-                    label={action.actionName}
+                    label={action.description_Action}
                   />
                 ))}
               </Box>

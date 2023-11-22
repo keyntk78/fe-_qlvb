@@ -7,12 +7,13 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { capBangBansaoSelector, userLoginSelector } from 'store/selectors';
 import { useState } from 'react';
-import { GetConfigPhoi, getPhoiBanSaoDangSuDung } from 'services/phoisaoService';
+import { GetConfigPhoi } from 'services/phoisaoService';
 import ExitButton from 'components/button/ExitButton';
 import { getHocSinhDaDuaVaoSobanSao } from 'services/capbangbansaoService';
 import XuLyDuLieuInBanSao from 'views/capbangbansao/XuLyDuLieuInBanSao';
 import { selectedPhoisao } from 'store/actions';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
+import { GetPhoiBanSaoById } from 'services/sharedService';
 
 const InBanSao = () => {
   const [hsSoBanSao, setHsSoBanSao] = useState([]);
@@ -23,7 +24,7 @@ const InBanSao = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchDataDLHS = async () => {
-      const phoidata = await getPhoiBanSaoDangSuDung(hocsinhid.idTruong);
+      const phoidata = hocsinhid && (await GetPhoiBanSaoById(hocsinhid.donYeuCauCapBanSao.idPhoiBanSao));
       setPhoiSao(phoidata.data);
       dispatch(selectedPhoisao(phoidata.data));
     };
@@ -63,7 +64,7 @@ const InBanSao = () => {
       NAMTOTNGHIEP: hsSoBanSao.namThi,
       XEPLOAITOTNGHIEP: hsSoBanSao.xepLoai,
       HINHTHUCDAOTAO: hsSoBanSao.hinhThucDaoTao,
-      SAO_SOVAOSOBANSAO: hsSoBanSao.soVaoSoCapBang,
+      SAO_SOVAOSOBANSAO: hsSoBanSao.soVaoSoBanSao,
       NAMCAP: new Date(hsSoBanSao.ngayTao).getFullYear(),
       NGAYCAP: new Date(hsSoBanSao.ngayTao).getDate(),
       THANGCAP: new Date(hsSoBanSao.ngayTao).getMonth() + 1,
