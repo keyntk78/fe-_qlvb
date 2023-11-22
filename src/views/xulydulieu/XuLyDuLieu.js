@@ -3,50 +3,64 @@ import { IconFileExport, IconFileImport } from '@tabler/icons';
 import GroupButtons from 'components/button/GroupButton';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import MainCard from 'components/cards/MainCard';
+import Popup from 'components/controls/popup';
 import React from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { setOpenPopup } from 'store/actions';
+import { openPopupSelector } from 'store/selectors';
+import Import from './Import';
+import { ExportData } from './HandleExportExcel';
+import { useEffect } from 'react';
+import { GetCauHinhImportDanhMuc } from 'services/xulydulieuService';
 
-const data = [
-  {
-    table: 'namhoc',
-    name: 'Năm học',
-    fileImport: 'namhoc_import.xlsx',
-    fileExport: 'namhoc_export.xlsx'
-  },
-  {
-    table: 'dantoc',
-    name: 'Dân tộc',
-    fileImport: 'dantoc_import.xlsx',
-    fileExport: 'dantoc_export.xlsx'
-  }
-];
 const XuLyDuLieu = () => {
-  const [selectedFileMau, setSelectedFileMau] = useState('');
-  const [selectedFileExport, setselectedFileExport] = useState('');
   const isXs = useMediaQuery('(max-width:600px)');
   const { t } = useTranslation();
-  const [selectedCategory, setSelectedCategory] = useState(data && data.length > 0 ? data[0].table : '');
+  const [title, setTitle] = useState('');
+  const [form, setForm] = useState('');
+  const [data, setData] = useState([]);
+  const [selectedFileMau, setSelectedFileMau] = useState('');
+  const [selectedName, seSelectedName] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const openPopup = useSelector(openPopupSelector);
+  const dispatch = useDispatch();
   const handleDowloadTemplate = async () => {
     console.log(selectedFileMau ? selectedFileMau : data[0].fileImport);
     // window.location.href = selectedFileMau;
   };
+  // handleExport_DanToc,
+  //handleExport_NamHoc, handleExport_DanToc, handleExport_KhoaThi, handleExport_HeDaoTao, handleExport_HinhThucDaoTao, handleExport_MonThi;
+  const { handleExport_NamHoc, handleExport_MonThi } = ExportData();
   const handleImport = () => {
-    // setTitle(t('Import dữ liệu danh mục'));
-    // setForm('import');
-    // dispatch(setOpenPopup(true));
+    setTitle(t('Import dữ liệu danh mục'));
+    setForm('import');
+    dispatch(setOpenPopup(true));
   };
-  const handleExport = () => {
-    console.log(selectedFileExport ? selectedFileExport : data[0].fileExport);
+  const handleExport = (e) => {
+    selectedCategory == 'namhoc' ? handleExport_NamHoc(e) : selectedCategory == 'dantoc' ? handleExport_MonThi(e) : '';
   };
   const handleDanhMucChange = (event) => {
     const value = event.target.value;
     setSelectedCategory(value);
     const selectedCategoryData = data.find((item) => item.table === value);
     setSelectedFileMau(selectedCategoryData ? selectedCategoryData.fileImport : data[0].fileImport);
-    setselectedFileExport(selectedCategoryData ? selectedCategoryData.fileExport : data[0].fileExport);
+    seSelectedName(selectedCategoryData ? selectedCategoryData.name : data[0].name);
   };
-  console.log(selectedCategory);
+  // Láy dữ liệu
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await GetCauHinhImportDanhMuc();
+      if (response.data.length > 0) {
+        seSelectedName(response.data[0].name);
+        setSelectedCategory(response.data[0].table);
+        setData(response.data);
+      }
+    };
+    fetchData();
+  }, []);
+  console.log(selectedCategory, selectedName);
   const themTuTep = [
     {
       type: 'importFile',
@@ -60,8 +74,8 @@ const XuLyDuLieu = () => {
   return (
     <>
       <MainCard title={t('Xử lý dữ liệu')}>
-        <Grid container justifyContent="center">
-          <Grid item xs={isXs ? 12 : 4} sx={{ ml: 2, mb: 2 }}>
+        <Grid container justifyContent="center" alignItems="center">
+          <Grid item xs={isXs ? 12 : 3} sx={{ ml: 2, mb: 2 }}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('Chọn danh mục')}</InputLabel>
               <Select name="id" label={t('Chọn danh mục')} onChange={handleDanhMucChange} value={selectedCategory}>
@@ -85,6 +99,11 @@ const XuLyDuLieu = () => {
           </Grid>
         </Grid>
       </MainCard>
+      {form !== '' && (
+        <Popup title={title} form={form} openPopup={openPopup} maxWidth={'sm'} bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}>
+          {form === 'import' ? <Import selectedName={selectedName} selectedValue={selectedCategory} /> : ''}
+        </Popup>
+      )}
     </>
   );
 };
