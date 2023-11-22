@@ -202,3 +202,14 @@ export async function getTruongCuByTruongMoi(idTruong) {
     throw error;
   }
 }
+export async function GetPhoiBanSaoById(id) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(`Shared/GetPhoiBanSaoById?id=${id}`, 'GET');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating DanhmucTN:', error);
+    throw error;
+  }
+}

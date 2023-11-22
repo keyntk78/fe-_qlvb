@@ -9,6 +9,7 @@ import { GetConfigPhoi, getPhoiDangSuDung } from 'services/phoigocService';
 import ExitButton from 'components/button/ExitButton';
 import XuLyDuLieuInThu from 'views/capbangbangoc/XuLyDuLieuInThu';
 import { selectedPhoigoc } from 'store/actions';
+import { convertISODateToFormattedDate } from 'utils/formatDate';
 
 const ShowVanBang = ({ duLieuHocSinh }) => {
   const phoigoc = useSelector(selectedPhoigocSelector);
@@ -26,7 +27,7 @@ const ShowVanBang = ({ duLieuHocSinh }) => {
   const DataInBang = {
     HOTEN: duLieuHocSinh.hoTen,
     NOISINH: duLieuHocSinh.noiSinh, // Assuming you want the second part after the " - "
-    NGAYTHANGNAMSINH: new Date(duLieuHocSinh.ngaySinh).toLocaleDateString(),
+    NGAYTHANGNAMSINH: convertISODateToFormattedDate(duLieuHocSinh.ngaySinh),
     GIOITINH: duLieuHocSinh.gioiTinh ? 'Nam' : 'Nữ',
     DANTOC: duLieuHocSinh.danToc,
     HOCSINHTRUONG: duLieuHocSinh.soGoc.tenTruong,

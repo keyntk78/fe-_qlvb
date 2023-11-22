@@ -10,6 +10,7 @@ import { selectedPhoigocSelector } from 'store/selectors';
 import { useState } from 'react';
 import { GetConfigPhoi } from 'services/phoigocService';
 import ExitButton from 'components/button/ExitButton';
+import { convertISODateToFormattedDate } from 'utils/formatDate';
 
 const InThu = ({ duLieuHocSinh }) => {
   const phoigoc = useSelector(selectedPhoigocSelector);
@@ -24,7 +25,7 @@ const InThu = ({ duLieuHocSinh }) => {
   const DataInBang = {
     HOTEN: duLieuHocSinh.hoTen,
     NOISINH: duLieuHocSinh.noiSinh, // Assuming you want the second part after the " - "
-    NGAYTHANGNAMSINH: new Date(duLieuHocSinh.ngaySinh).toLocaleDateString(),
+    NGAYTHANGNAMSINH: convertISODateToFormattedDate(duLieuHocSinh.ngaySinh),
     GIOITINH: duLieuHocSinh.gioiTinh ? 'Nam' : 'Nữ',
     DANTOC: duLieuHocSinh.danToc,
     HOCSINHTRUONG: duLieuHocSinh.truong,
@@ -39,6 +40,8 @@ const InThu = ({ duLieuHocSinh }) => {
     TRUONGPHONGDGDT: duLieuHocSinh.nguoiKyBang,
     NOICAP: duLieuHocSinh.diaPhuongCapBang
   };
+  console.log(DataInBang);
+  console.log(duLieuHocSinh);
   const cauHinhViTri = {};
 
   for (const item of duLieuConFig) {

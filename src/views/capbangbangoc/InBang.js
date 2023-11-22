@@ -15,6 +15,7 @@ import ExitButton from 'components/button/ExitButton';
 // import { CapBang, CapBangTatCa } from 'services/capbangbanchinhService';
 import { CapBang } from 'services/capbangbanchinhService';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
+import { convertISODateToFormattedDate } from 'utils/formatDate';
 
 const InBang = ({ duLieuHocSinhSoGoc }) => {
   const total = duLieuHocSinhSoGoc.length;
@@ -37,7 +38,7 @@ const InBang = ({ duLieuHocSinhSoGoc }) => {
     return {
       HOTEN: item.hoTen,
       NOISINH: item.noiSinh, // Assuming you want the second part after the " - "
-      NGAYTHANGNAMSINH: new Date(item.ngaySinh).toLocaleDateString(),
+      NGAYTHANGNAMSINH: convertISODateToFormattedDate(item.ngaySinh),
       GIOITINH: item.gioiTinh ? 'Nam' : 'Nữ',
       DANTOC: item.danToc,
       HOCSINHTRUONG: item.truong,

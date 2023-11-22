@@ -11,6 +11,7 @@ import ExitButton from 'components/button/ExitButton';
 import DuLieuInTungNguoi from './DataInBang';
 import { getByIdHistory } from 'services/chinhsuavbccService';
 import { GetPhoiGocDangSuDung } from 'services/sharedService';
+import { convertISODateToFormattedDate } from 'utils/formatDate';
 
 const InLaiVBCC = () => {
   const donvi = useSelector(donviSelector);
@@ -31,7 +32,7 @@ const InLaiVBCC = () => {
   const DataInBang = {
     HOTEN: history.hoTen,
     NOISINH: history.noiSinh, // Assuming you want the second part after the " - "
-    NGAYTHANGNAMSINH: new Date(history.ngaySinh).toLocaleDateString(),
+    NGAYTHANGNAMSINH: convertISODateToFormattedDate(history.ngaySinh),
     GIOITINH: history.gioiTinh ? 'Nam' : 'Nữ',
     DANTOC: history.danToc,
     HOCSINHTRUONG: duLieuHocSinh && duLieuHocSinh.hocSinhs ? duLieuHocSinh.hocSinhs.truong.ten : '',

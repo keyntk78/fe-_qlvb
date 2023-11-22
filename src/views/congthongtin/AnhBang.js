@@ -8,6 +8,7 @@ import { tracuuSelector } from 'store/selectors';
 import { useState } from 'react';
 import { GetPhoiGocById, getHocSinhByCCC } from 'services/congthongtinService';
 import ExitButton from 'components/button/ExitButton';
+import { convertISODateToFormattedDate } from 'utils/formatDate';
 
 const AnhBang = () => {
   const phoigoc = useSelector(tracuuSelector);
@@ -26,7 +27,7 @@ const AnhBang = () => {
   const DataInBang = {
     HOTEN: duLieuHocsinh.hoTen,
     NOISINH: duLieuHocsinh.noiSinh, // Assuming you want the second part after the " - "
-    NGAYTHANGNAMSINH: new Date(duLieuHocsinh.ngaySinh).toLocaleDateString(),
+    NGAYTHANGNAMSINH: convertISODateToFormattedDate(duLieuHocsinh.ngaySinh),
     GIOITINH: duLieuHocsinh.gioiTinh ? 'Nam' : 'Nữ',
     DANTOC: duLieuHocsinh.danToc,
     HOCSINHTRUONG: duLieuHocsinh && duLieuHocsinh.truong ? duLieuHocsinh.truong.ten : '',

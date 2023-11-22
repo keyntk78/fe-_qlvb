@@ -5,12 +5,14 @@ import MainCard from 'components/cards/MainCard';
 import { IconPrinter } from '@tabler/icons';
 import { Button, Grid } from '@mui/material';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { capBangBansaoSelector, userLoginSelector } from 'store/selectors';
 import { useState } from 'react';
 import { GetConfigPhoi, getPhoiBanSaoDangSuDung } from 'services/phoisaoService';
 import ExitButton from 'components/button/ExitButton';
 import { getHocSinhDaDuaVaoSobanSao } from 'services/capbangbansaoService';
+import { convertISODateToFormattedDate } from 'utils/formatDate';
+import { selectedPhoisao } from 'store/actions';
 
 const InBanSao = () => {
   const [hsSoBanSao, setHsSoBanSao] = useState([]);
@@ -18,14 +20,16 @@ const InBanSao = () => {
   const [phoisao, setPhoiSao] = useState('');
   const [duLieuConFig, setDuLieuConFig] = useState([]);
   const user = useSelector(userLoginSelector);
+  const dispatch = useDispatch();
   useEffect(() => {
     const fetchDataDLHS = async () => {
       const phoidata = await getPhoiBanSaoDangSuDung(hocsinhid.idTruong);
       setPhoiSao(phoidata.data);
+      dispatch(selectedPhoisao(phoidata.data));
     };
     fetchDataDLHS();
   }, []);
-
+  console.log(hocsinhid);
   useEffect(() => {
     const fetchDataDLHS = async () => {
       const response_cf = await GetConfigPhoi(phoisao.id);
@@ -33,8 +37,10 @@ const InBanSao = () => {
       const hocSinhSoBanSao = await getHocSinhDaDuaVaoSobanSao(hocsinhid.idHocSinh, hocsinhid.id, user.username);
       setHsSoBanSao(hocSinhSoBanSao.data);
     };
-    fetchDataDLHS();
-  }, [phoisao.id, hocsinhid.hocSinh.id]);
+    if (phoisao) {
+      fetchDataDLHS();
+    }
+  }, [phoisao, hocsinhid.hocSinh.id]);
   const soLuongBanSao = hsSoBanSao.soLuongBanSao ? hsSoBanSao.soLuongBanSao : 1;
 
   //Tạo ra dữ liệu in phù hợp với số lượng bản sao yêu cầu
@@ -44,11 +50,12 @@ const InBanSao = () => {
   // Chuyển dữ liệu in thành mảng json.
   const hsSoBanSao_mang = hsSoBanSao_soLuong.map((item) => item.data);
   // Format dữ liệu phù hợp với với Config
+  console.log(hsSoBanSao_mang);
   const DataInBang = hsSoBanSao_mang.map((hsSoBanSao) => {
     return {
       HOTEN: hsSoBanSao.hoTen,
       NOISINH: hsSoBanSao.noiSinh,
-      NGAYTHANGNAMSINH: new Date(hsSoBanSao.ngaySinh).toLocaleDateString(),
+      NGAYTHANGNAMSINH: hsSoBanSao.ngaySinh && convertISODateToFormattedDate(hsSoBanSao.ngaySinh),
       GIOITINH: hsSoBanSao.gioiTinh ? 'Nam' : 'Nữ',
       DANTOC: hsSoBanSao.danToc,
       HOCSINHTRUONG: hsSoBanSao.truong,

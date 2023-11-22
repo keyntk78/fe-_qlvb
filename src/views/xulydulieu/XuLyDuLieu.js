@@ -30,16 +30,34 @@ const XuLyDuLieu = () => {
     console.log(selectedFileMau ? selectedFileMau : data[0].fileImport);
     // window.location.href = selectedFileMau;
   };
-  // handleExport_DanToc,
-  //handleExport_NamHoc, handleExport_DanToc, handleExport_KhoaThi, handleExport_HeDaoTao, handleExport_HinhThucDaoTao, handleExport_MonThi;
-  const { handleExport_NamHoc, handleExport_MonThi } = ExportData();
+
+  const {
+    handleExport_NamHoc,
+    handleExport_DanToc,
+    handleExport_KhoaThi,
+    handleExport_HeDaoTao,
+    handleExport_HinhThucDaoTao,
+    handleExport_MonThi
+  } = ExportData();
   const handleImport = () => {
     setTitle(t('Import dữ liệu danh mục'));
     setForm('import');
     dispatch(setOpenPopup(true));
   };
   const handleExport = (e) => {
-    selectedCategory == 'namhoc' ? handleExport_NamHoc(e) : selectedCategory == 'dantoc' ? handleExport_MonThi(e) : '';
+    selectedCategory === 'namhoc'
+      ? handleExport_NamHoc(e)
+      : selectedCategory === 'dantoc'
+      ? handleExport_DanToc(e)
+      : selectedCategory === 'monthi'
+      ? handleExport_MonThi(e)
+      : selectedCategory === 'hedaotao'
+      ? handleExport_HeDaoTao(e)
+      : selectedCategory === 'hinhthucdaotao'
+      ? handleExport_HinhThucDaoTao(e)
+      : selectedCategory === 'khoathi'
+      ? handleExport_KhoaThi(e)
+      : '';
   };
   const handleDanhMucChange = (event) => {
     const value = event.target.value;

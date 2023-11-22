@@ -12,6 +12,7 @@ import ExitButton from 'components/button/ExitButton';
 import { getHocSinhDaDuaVaoSobanSao } from 'services/capbangbansaoService';
 import XuLyDuLieuInBanSao from 'views/capbangbansao/XuLyDuLieuInBanSao';
 import { selectedPhoisao } from 'store/actions';
+import { convertISODateToFormattedDate } from 'utils/formatDate';
 
 const InBanSao = () => {
   const [hsSoBanSao, setHsSoBanSao] = useState([]);
@@ -55,7 +56,7 @@ const InBanSao = () => {
     return {
       HOTEN: hsSoBanSao.hoTen,
       NOISINH: hsSoBanSao.noiSinh,
-      NGAYTHANGNAMSINH: new Date(hsSoBanSao.ngaySinh).toLocaleDateString(),
+      NGAYTHANGNAMSINH: convertISODateToFormattedDate(hsSoBanSao.ngaySinh),
       GIOITINH: hsSoBanSao.gioiTinh ? 'Nam' : 'Nữ',
       DANTOC: hsSoBanSao.danToc,
       HOCSINHTRUONG: hsSoBanSao.truong,
