@@ -151,3 +151,23 @@ export async function TongHocSinhChoDuyet(idTruong, idDanhMucTotNghiep) {
     throw error;
   }
 }
+
+export async function getHocSinhXepLoaiTotNghiep(donvi, DMTN) {
+  try {
+    const response = await sendRequest(`HocSinhPhong/GetHocSinhXepLoaiTotNghiep?idTruong=${donvi}&idDanhMucTotNghiep=${DMTN}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating hoc sinh:', error);
+    throw error;
+  }
+}
+
+export async function getHocSinhXepLoaiTotNghiepTruong(donvi, DMTN) {
+  try {
+    const response = await sendRequest(`HocSinhTruong/GetHocSinhXepLoaiTotNghiep?idTruong=${donvi}&idDanhMucTotNghiep=${DMTN}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating hoc sinh:', error);
+    throw error;
+  }
+}

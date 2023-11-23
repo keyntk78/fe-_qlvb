@@ -9,7 +9,15 @@ import GuiDuyet from './GuiDuyet';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { donviSelector, openPopupSelector, reloadDataSelector, selectedInfoMessageSelector, userLoginSelector } from 'store/selectors';
-import { selectedCCCD, selectedDanhmuc, selectedHocsinh, setOpenPopup, setReloadData, setSelectedInfoMessage } from 'store/actions';
+import {
+  selectedCCCD,
+  selectedDanhmuc,
+  selectedHocsinh,
+  setLoading,
+  setOpenPopup,
+  setReloadData,
+  setSelectedInfoMessage
+} from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import Import from './Import';
 import Delete from './Delete';
@@ -23,7 +31,7 @@ import { useNavigate } from 'react-router-dom';
 import GuiDuyetAll from './GuiDuyetAll';
 import DeleteAll from './DeleteAll';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
-import { IconCertificate, IconFileImport, IconPlus, IconSearch, IconSend, IconTrash } from '@tabler/icons';
+import { IconCertificate, IconFileExport, IconFileImport, IconPlus, IconSearch, IconSend, IconTrash } from '@tabler/icons';
 import Detail from './Detail';
 import { getAllDanToc, getAllDanhmucTN, getCauHinhTuDongXepLoai } from 'services/sharedService';
 import BackToTop from 'components/scroll/BackToTop';
@@ -35,6 +43,7 @@ import InGCN from './InGCN';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import GroupButtons from 'components/button/GroupButton';
+import ExportHocSinh from 'views/hocsinh/ExportHocSinh';
 
 const trangThaiOptions = [
   { value: '0', label: 'Chưa gửi duyệt' },
@@ -85,6 +94,12 @@ export default function HocSinh() {
     trangThai: ''
   });
 
+  const handleExport = async (e) => {
+    e.preventDefault();
+    dispatch(setLoading(true));
+    await ExportHocSinh(pageState.DMTN, donvi.id, false, donvi.ten);
+    dispatch(setLoading(false));
+  };
   const handleInGCNAll = () => {
     setTitle(t('In giấy chứng nhận Tất cả'));
     setForm('ingcnall');
@@ -540,6 +555,9 @@ export default function HocSinh() {
           </Grid>
         </Grid>
         <Grid item container justifyContent="flex-end" mb={1} spacing={1}>
+          <Grid item>
+            <ButtonSuccess title={t('button.export.excel')} onClick={handleExport} icon={IconFileExport} disabled={!selectedDMTN} />
+          </Grid>
           {selectedRowData.length !== 0 ? (
             <>
               <Grid item>
