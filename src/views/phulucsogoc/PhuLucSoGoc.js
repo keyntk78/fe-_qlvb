@@ -12,12 +12,17 @@ import {
   TablePagination,
   TableRow,
   Typography,
-  useMediaQuery
+  useMediaQuery,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { donviSelector, reloadDataSelector } from 'store/selectors';
+import { donviSelector, reloadDataSelector, userLoginSelector } from 'store/selectors';
 import { setLoading, setReloadData } from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import { createSearchParams } from 'utils/createSearchParams';
@@ -29,12 +34,13 @@ import { styled } from '@mui/system';
 import { generateDocument } from './ExportWord';
 import ExportExcel from './ExportExel';
 import { getSearchPhuLuc } from 'services/phulucService';
-import { IconFileExport } from '@tabler/icons';
+import { IconDownload, IconFileExport, IconSearch } from '@tabler/icons';
 import ResetButton from 'components/button/ExitButton';
 import { ThayDoiChuoi } from 'utils/changeTextDownLine';
 import GroupButtons from 'components/button/GroupButton';
+import { getAllDanhmucTN, getAllTruong } from 'services/sharedService';
 
-export default function PhuLucSoGoc({ danhmuc, truong }) {
+export default function PhuLucSoGoc() {
   const isXs = useMediaQuery('(max-width:600px)');
   const { t } = useTranslation();
   const [search, setSearch] = useState(false);
@@ -42,7 +48,9 @@ export default function PhuLucSoGoc({ danhmuc, truong }) {
   const donvi = useSelector(donviSelector);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [firstLoad, setFirstLoad] = useState(false);
+  const [dMTN, setDMTN] = useState([]);
+  const [donvis, setDonvis] = useState([]);
+  const user = useSelector(userLoginSelector);
   const currentDate = new Date();
   const day = currentDate.getDate();
   const month = currentDate.getMonth() + 1; // Tháng bắt đầu từ 0
@@ -75,19 +83,34 @@ export default function PhuLucSoGoc({ danhmuc, truong }) {
     orderDir: 'ASC',
     startIndex: 0,
     pageSize: 25,
-    danhMuc: '',
+    DMTN: '',
     donVi: ''
   });
 
+  const [pageState1, setPageState1] = useState({
+    isLoading: false,
+    data: [],
+    total: 0,
+    order: 1,
+    orderDir: 'ASC',
+    startIndex: 0,
+    pageSize: -1,
+    DMTN: '',
+    donVi: ''
+  });
+
+  const handleSearch = () => {
+    setSearch(true);
+  };
   const handleExport = async () => {
     dispatch(setLoading(true));
-    await ExportExcel(donvi, pageState);
+    await ExportExcel(donvi, pageState1);
     dispatch(setLoading(false));
   };
 
   const handleExportWord = async () => {
     setLoading(true);
-    generateDocument(pageState.data, additionalData);
+    generateDocument(pageState1.data, additionalData);
     setLoading(false);
   };
 
@@ -113,16 +136,42 @@ export default function PhuLucSoGoc({ danhmuc, truong }) {
   ];
 
   useEffect(() => {
-    if (danhmuc && truong) {
-      setFirstLoad(true);
-    }
-  }, [danhmuc, truong]);
+    const fetchDataDL = async () => {
+      dispatch(setLoading(true));
+      const donvi = await getAllTruong(user.username);
+      if (donvi.data && donvi.data.length > 0) {
+        setDonvis(donvi.data);
+        setPageState((old) => ({ ...old, donVi: donvi.data[0].id }));
+      } else {
+        setDonvis([]);
+        setPageState((old) => ({ ...old, donVi: '' }));
+      }
+    };
+    fetchDataDL();
+  }, []);
+
+  useEffect(() => {
+    const fetchDataDL = async () => {
+      const danhmuc = await getAllDanhmucTN(user ? user.username : '');
+      if (danhmuc.data && danhmuc.data.length > 0) {
+        setDMTN(danhmuc.data);
+        setPageState((old) => ({ ...old, DMTN: danhmuc.data[0].id }));
+      } else {
+        setDMTN([]);
+        setPageState((old) => ({ ...old, DMTN: '' }));
+      }
+      dispatch(setLoading(false));
+    };
+    fetchDataDL();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
-      const response = await getSearchPhuLuc(danhmuc, truong, params);
+      params.append('IdDanhMucTotNghiep', pageState.DMTN);
+      params.append('IdTruong', pageState.donVi);
+      const response = await getSearchPhuLuc(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;
@@ -144,22 +193,45 @@ export default function PhuLucSoGoc({ danhmuc, truong }) {
         setIsAccess(false);
       }
     };
-    if (firstLoad || search || reloadData) {
+    if (search || reloadData) {
       fetchData();
       setSearch(false);
     }
-  }, [
-    pageState.search,
-    pageState.order,
-    pageState.orderDir,
-    pageState.startIndex,
-    pageState.pageSize,
-    reloadData,
-    firstLoad,
-    search,
-    danhmuc,
-    truong
-  ]);
+  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setPageState((old) => ({ ...old, isLoading: true }));
+      const params = await createSearchParams(pageState);
+      params.append('IdDanhMucTotNghiep', pageState.DMTN);
+      params.append('IdTruong', pageState.donVi);
+      const response = await getSearchPhuLuc(params);
+      const check = handleResponseStatus(response, navigate);
+      if (check) {
+        const data = await response.data;
+        const dataWithIds = data.phuLuc.map((row, index) => ({
+          idx: pageState.startIndex * pageState.pageSize + index + 1,
+          gioiTinh_fm: row.gioiTinh ? t('gender.male') : t('gender.female'),
+          ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
+          NoiDung: ThayDoiChuoi(row.noiDungChinhSua),
+          ...row
+        }));
+        dispatch(setReloadData(false));
+        setPageState1((old) => ({
+          ...old,
+          isLoading: false,
+          data: dataWithIds,
+          total: data.totalRow || 0
+        }));
+      } else {
+        setIsAccess(false);
+      }
+    };
+    if (search || reloadData) {
+      fetchData();
+      setSearch(false);
+    }
+  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
   const additionalData = {
     uyBanNhanDan: donvi.cauHinh.tenUyBanNhanDan.toUpperCase(),
     coQuanCapBang: donvi.cauHinh.tenCoQuanCapBang.toUpperCase(),
@@ -170,31 +242,63 @@ export default function PhuLucSoGoc({ danhmuc, truong }) {
     nguoiKy: donvi.cauHinh.hoTenNguoiKySoGoc
   };
 
+  const handleDanhMucChange = (event) => {
+    const selectedValue = event.target.value;
+    setPageState((old) => ({ ...old, DMTN: selectedValue }));
+  };
+
+  const handleSchoolChange = (event) => {
+    const selectedValue = event.target.value;
+    setPageState((old) => ({ ...old, donVi: selectedValue }));
+  };
+
   return (
     <>
-      <MainCard
-        title={t('phulucsogoc.title')}
-        secondary={
-          !isXs && pageState.data.length > 0 ? (
-            <Grid container justifyContent="flex-end" spacing={1}>
-              <Grid item>
-                <GroupButtons buttonConfigurations={xuatTep} icon={IconFileExport} title={t('button.export')} />
-              </Grid>
-            </Grid>
-          ) : (
-            ''
-          )
-        }
-      >
-        {isXs && pageState.data.length > 0 ? (
-          <Grid container justifyContent="flex-end" spacing={1}>
-            <Grid item>
-              <GroupButtons buttonConfigurations={xuatTep} icon={IconFileExport} title={t('button.export')} />
-            </Grid>
+      <MainCard title={t('phulucsogoc.title')} secondary={''}>
+        <Grid item container spacing={1} mt={1} justifyContent={'center'}>
+          <Grid item xs={isXs ? 12 : 3}>
+            <FormControl fullWidth variant="outlined" size="small">
+              <InputLabel>{t('danhmuc.title')}</InputLabel>
+              <Select name="id" value={pageState.DMTN} onChange={handleDanhMucChange} label={t('danhmuc.title')}>
+                {dMTN && dMTN.length > 0 ? (
+                  dMTN.map((dmtn) => (
+                    <MenuItem key={dmtn.id} value={dmtn.id}>
+                      {dmtn.tieuDe}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value="">No data available</MenuItem>
+                )}
+              </Select>
+            </FormControl>
           </Grid>
-        ) : (
-          ''
-        )}
+          <Grid item xs={isXs ? 12 : 3}>
+            <FormControl fullWidth variant="outlined" size="small">
+              <InputLabel>{t('donvitruong.title')}</InputLabel>
+              <Select name="truongId" value={pageState.donVi} onChange={handleSchoolChange} label={t('donvitruong.title')}>
+                {donvis && donvis.length > 0 ? (
+                  donvis.map((donvi) => (
+                    <MenuItem key={donvi.id} value={donvi.id}>
+                      {donvi.ten}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value="">No data available</MenuItem>
+                )}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} container spacing={1} justifyContent="center" mt={1}>
+          <Grid item>
+            <Button variant="contained" title={t('button.search')} fullWidth onClick={handleSearch} color="info" startIcon={<IconSearch />}>
+              {t('button.search')}
+            </Button>
+          </Grid>
+          <Grid item>
+            <GroupButtons buttonConfigurations={xuatTep} icon={IconFileExport} title={t('button.export')} />
+          </Grid>
+        </Grid>
         {pageState.data.length > 0 ? (
           <>
             <Grid container justifyContent={'flex-start'}>
@@ -259,8 +363,8 @@ export default function PhuLucSoGoc({ danhmuc, truong }) {
                 <TableCell1 style={{ width: '90PX' }}>Số hiệu văn bằng được cấp lại (nếu có)</TableCell1>
                 <TableCell1 style={{ width: '100PX' }}>Số vào sổ gốc cấp bằng mới (nếu có)</TableCell1>
                 <TableCell1 style={{ width: 'auto' }}>Nội dung</TableCell1>
-                <TableCell1 style={{ width: '120PX' }}>Chữ ký người nhận</TableCell1>
-                <TableCell1 style={{ width: 'auto' }}>Ghi chú</TableCell1>
+                <TableCell1 style={{ width: '90PX' }}>Ghi chú</TableCell1>
+                <TableCell1 style={{ width: '90PX' }}>File chỉnh sửa</TableCell1>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -275,7 +379,11 @@ export default function PhuLucSoGoc({ danhmuc, truong }) {
                   <TableCell2>{row.soVaoSoCapBangCapLai}</TableCell2>
                   <TableCell2>{row.NoiDung}</TableCell2>
                   <TableCell2></TableCell2>
-                  <TableCell2></TableCell2>
+                  <TableCell2 style={{ textAlign: 'center' }}>
+                    <a href={row.pathFileVanBan} download title="Tải xuống">
+                      {row.pathFileVanBan ? <IconDownload /> : ''}
+                    </a>
+                  </TableCell2>
                 </TableRow>
               ))}
             </TableBody>

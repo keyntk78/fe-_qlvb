@@ -2,10 +2,10 @@ import { sendRequest } from 'utils/apiUtils';
 import { setLoading } from 'store/actions';
 import { store } from '../store/index';
 
-export async function getSearchPhuLuc(iddanhmuc, idtruong, params) {
+export async function getSearchPhuLuc(params) {
   try {
     store.dispatch(setLoading(true));
-    const response = await sendRequest(`PhuLuc/GetSerachPhuLuc?IdDanhMucTotNghiep=${iddanhmuc}&IdTruong=${idtruong}&${params}`, 'GET');
+    const response = await sendRequest(`PhuLuc/GetSerachPhuLuc?${params}`, 'GET');
     store.dispatch(setLoading(false));
     return response;
   } catch (error) {
