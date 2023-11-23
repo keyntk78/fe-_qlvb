@@ -51,10 +51,15 @@ const AddRole = () => {
     formik.setFieldValue('level', check);
   };
   useEffect(() => {
+    formik.setFieldValue('level', levelPhong);
     if (openPopup) {
       formik.resetForm();
     }
   }, [openPopup]);
+
+  useEffect(() => {
+    formik.setFieldValue('level', levelPhong);
+  }, []);
 
   return (
     <form onSubmit={formik.handleSubmit}>
