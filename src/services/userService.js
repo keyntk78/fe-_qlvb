@@ -133,6 +133,22 @@ export async function getReportsViaUser(id, params) {
   }
 }
 
+export async function getReportsViaUserManagerment(user_id_managerment, user_id) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(
+      `User/GetReportsViaUserManagerment?user_id_managerment=${user_id_managerment}&user_id=${user_id}`,
+      'GET',
+      null
+    );
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating User:', error);
+    throw error;
+  }
+}
+
 export async function saveUserReport(data) {
   try {
     store.dispatch(setLoading(true));
