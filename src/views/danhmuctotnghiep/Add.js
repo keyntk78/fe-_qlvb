@@ -196,7 +196,7 @@ const Add = () => {
             formik={formik}
             isMulltiline
             name="GhiChu"
-            placeholder="ghi chú"
+            placeholder="Ghi chú"
             style="100%"
             minRows={3}
             maxRows={10}
