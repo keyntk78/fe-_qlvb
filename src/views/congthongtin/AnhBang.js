@@ -21,6 +21,7 @@ const AnhBang = () => {
       setDuLieuConFig(response_cf.data.cauHinhPhoiGocs);
 
       const dataHocsinh = await getHocSinhByCCC(phoigoc.cccd);
+      console.log(dataHocsinh);
       setDuLieuHocsinh(dataHocsinh.data);
     };
     fetchDataDLHS();
@@ -31,10 +32,11 @@ const AnhBang = () => {
     NGAYTHANGNAMSINH: duLieuHocsinh.ngaySinh && convertISODateToFormattedDate(duLieuHocsinh.ngaySinh),
     GIOITINH: duLieuHocsinh.gioiTinh ? 'Nam' : 'Nữ',
     DANTOC: duLieuHocsinh.danToc,
-    HOCSINHTRUONG: duLieuHocsinh && duLieuHocsinh.truong ? duLieuHocsinh.truong.ten : '',
+    //HOCSINHTRUONG: duLieuHocsinh && duLieuHocsinh.truong ? duLieuHocsinh.truong.ten : '',
+    HOCSINHTRUONG: duLieuHocsinh && duLieuHocsinh.soGoc ? duLieuHocsinh.soGoc.tenTruong : '',
     NAMTOTNGHIEP: duLieuHocsinh.namThi,
     XEPLOAITOTNGHIEP: duLieuHocsinh.xepLoai,
-    HINHTHUCDAOTAO: duLieuHocsinh.hinhThucDaoTao,
+    HINHTHUCDAOTAO: duLieuHocsinh.tenHinhThucDaoTao,
     GOC_SOHIEUVANBANG: duLieuHocsinh.soHieuVanBang,
     GOC_SOVAOSOCAP: duLieuHocsinh.soVaoSoCapBang,
     NAMCAP: new Date(duLieuHocsinh && duLieuHocsinh.danhMucTotNghiep ? duLieuHocsinh.danhMucTotNghiep.ngayCapBang : '').getFullYear(),

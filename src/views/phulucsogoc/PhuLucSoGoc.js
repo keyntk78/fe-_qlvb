@@ -39,6 +39,7 @@ import ResetButton from 'components/button/ExitButton';
 import { ThayDoiChuoi } from 'utils/changeTextDownLine';
 import GroupButtons from 'components/button/GroupButton';
 import { getAllDanhmucTN, getAllTruong } from 'services/sharedService';
+import config from 'config';
 
 export default function PhuLucSoGoc() {
   const isXs = useMediaQuery('(max-width:600px)');
@@ -380,7 +381,7 @@ export default function PhuLucSoGoc() {
                   <TableCell2>{row.NoiDung}</TableCell2>
                   <TableCell2></TableCell2>
                   <TableCell2 style={{ textAlign: 'center' }}>
-                    <a href={row.pathFileVanBan} download title="Tải xuống">
+                    <a href={config.urlImages + row.pathFileVanBan} download title="Tải xuống">
                       {row.pathFileVanBan ? <IconDownload /> : ''}
                     </a>
                   </TableCell2>
