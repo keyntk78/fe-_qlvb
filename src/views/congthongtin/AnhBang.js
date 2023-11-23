@@ -28,7 +28,7 @@ const AnhBang = () => {
   const DataInBang = {
     HOTEN: duLieuHocsinh.hoTen,
     NOISINH: duLieuHocsinh.noiSinh, // Assuming you want the second part after the " - "
-    NGAYTHANGNAMSINH: convertISODateToFormattedDate(duLieuHocsinh.ngaySinh),
+    NGAYTHANGNAMSINH: duLieuHocsinh.ngaySinh && convertISODateToFormattedDate(duLieuHocsinh.ngaySinh),
     GIOITINH: duLieuHocsinh.gioiTinh ? 'Nam' : 'Nữ',
     DANTOC: duLieuHocsinh.danToc,
     HOCSINHTRUONG: duLieuHocsinh && duLieuHocsinh.truong ? duLieuHocsinh.truong.ten : '',
