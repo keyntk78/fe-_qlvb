@@ -74,7 +74,6 @@ export default function HocSinh() {
   const [danToc, setDanToc] = useState([]);
   const [search, setSearch] = useState(false);
   const [firstLoad, setFirstLoad] = useState(true);
-  const [disabledExport, setDisabledExport] = useState(true);
   const reloadData = useSelector(reloadDataSelector);
   const dispatch = useDispatch();
   const localeText = useLocalText();
@@ -169,14 +168,6 @@ export default function HocSinh() {
     dispatch(selectedDanhmuc(selectedDanhmucInfo));
     dispatch(selectedDonvitruong(selectedDonviInfo));
   };
-
-  useEffect(() => {
-    if (pageState.data && pageState.data.length > 0) {
-      setDisabledExport(false);
-    } else {
-      setDisabledExport(true);
-    }
-  }, [pageState.data]);
 
   const buttonConfigurations = [
     {
@@ -427,7 +418,7 @@ export default function HocSinh() {
   const handleExport = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
-    await ExportHocSinh(pageState.data);
+    await ExportHocSinh(pageState.DMTN, pageState.donVi, true);
     dispatch(setLoading(false));
   };
   const handleDanhMucChange = (event) => {
@@ -675,7 +666,12 @@ export default function HocSinh() {
         </Grid>
         <Grid item container mb={1} justifyContent="flex-end" spacing={1}>
           <Grid item>
-            <ButtonSuccess title={t('button.export.excel')} onClick={handleExport} icon={IconFileExport} disabled={disabledExport} />
+            <ButtonSuccess
+              title={t('button.export.excel')}
+              onClick={handleExport}
+              icon={IconFileExport}
+              disabled={!selectDanhmuc || !selectDonvi}
+            />
           </Grid>
           {selectedRowData.length !== 0 ? (
             <>
