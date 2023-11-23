@@ -49,7 +49,7 @@ const EditRole = () => {
   });
 
   const handelCheckLevel = (event) => {
-    const check = event.target.checked == true ? 1 : 2;
+    const check = event.target.checked == true ? 2 : 1;
     setLevelPhong(check);
     setIsChecked(!isChecked);
     formik.setFieldValue('level', check);
@@ -83,9 +83,9 @@ const EditRole = () => {
           </FormControlComponent>
         </Grid>
         <Grid item xs={12}>
-          <FormControlComponent xsLabel={isXs ? 0 : 3} xsForm={isXs ? 12 : 9} label={t('Nhóm thuộc phòng')}>
+          <FormControlComponent xsLabel={isXs ? 0 : 3} xsForm={isXs ? 12 : 9} label={t('Nhóm thuộc trường')}>
             <Checkbox
-              checked={levelPhong == 1 ? true : false} // Kiểm tra giá trị levelPhong để quyết định trạng thái checked của checkbox
+              checked={levelPhong == 2 ? true : false} // Kiểm tra giá trị levelPhong để quyết định trạng thái checked của checkbox
               onChange={handelCheckLevel}
               inputProps={{ 'aria-label': 'controlled' }}
             />
