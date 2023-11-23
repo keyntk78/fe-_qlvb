@@ -80,7 +80,7 @@ export default function TracuuVBCC() {
     {
       field: 'hoTen',
       headerName: t('hocsinh.field.fullname'),
-      flex: 3,
+      flex: 2.2,
       minWidth: 200
     },
     {
@@ -111,7 +111,7 @@ export default function TracuuVBCC() {
     },
     {
       headerName: t('donvi.title'),
-      flex: 2,
+      flex: 2.8,
       renderCell: (params) => <>{params.row.truong.ten}</>
     },
     {
@@ -122,7 +122,9 @@ export default function TracuuVBCC() {
       filterable: false,
       renderCell: (params) => (
         <>
-          <ActionButtons type="detail" handleGetbyId={handleDetail} params={params.row} />
+          <Grid container justifyContent="center">
+            <ActionButtons type="detail" handleGetbyId={handleDetail} params={params.row} />
+          </Grid>
         </>
       )
     }
