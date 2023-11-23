@@ -135,7 +135,7 @@ const Detail = () => {
           </Grid>
           <Grid item xs={12}>
             <FormControlComponent xsLabel={0} xsForm={12} label={t('danhmuctotnghiep.field.ghichu')}>
-              <InputForm formik={formik} name="GhiChu" placeholder="ghi chú" isMulltiline minRows={2} isDisabled />
+              <InputForm formik={formik} name="GhiChu" placeholder="Ghi chú" isMulltiline minRows={3} isDisabled />
             </FormControlComponent>
           </Grid>
         </Grid>

@@ -29,7 +29,6 @@ import { getDanhSachDanhMucTmp } from 'services/xulydulieuService';
 import config from 'config';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 const DanhSachImport = ({ selectedValue, selectedName }) => {
-  console.log(selectedValue);
   const language = i18n.language;
   const { t } = useTranslation();
   const localeText = useLocalText();
@@ -100,10 +99,8 @@ const DanhSachImport = ({ selectedValue, selectedName }) => {
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;
-        console.log(data);
         if (data) {
           setDataImport(data);
-          console.log(data);
           let dataWithIds = [];
           if (selectedValue === 'khoathi') {
             dataWithIds =

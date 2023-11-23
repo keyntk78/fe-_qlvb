@@ -4,7 +4,7 @@ import AnimateButton from 'components/extended/AnimateButton';
 
 const CustomButton = ({ handleClick, icon: Icon, title, label, variant, color }) => {
   return (
-    <Grid container spacing={2} alignItems="center">
+    <Grid>
       <Grid item xs={3}>
         <AnimateButton>
           <Tooltip title={title} placement="bottom">

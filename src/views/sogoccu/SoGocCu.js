@@ -13,7 +13,7 @@ import i18n from 'i18n';
 import React from 'react';
 import { convertISODateTimeToFormattedDateTime } from 'utils/formatDate';
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-import { IconFileExport, IconSearch, IconTransferIn } from '@tabler/icons';
+import { IconAddressBook, IconFileExport, IconSearch, IconTransferIn } from '@tabler/icons';
 import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { format, subMonths } from 'date-fns';
@@ -22,6 +22,8 @@ import ChuyenDoi from './ChuyenDoi';
 import * as XLSX from 'xlsx';
 import { getAllTruong } from 'services/sharedService';
 import { getLichSuChuyenDoiSoGoc } from 'services/sogocService';
+import CustomButton from 'components/button/CustomButton';
+import HuongDan from './HuongDan';
 
 const SoGocCu = () => {
   const language = i18n.language;
@@ -71,7 +73,7 @@ const SoGocCu = () => {
       flex: 1,
       field: 'nguoiTao',
       headerName: t('Người tạo'),
-      minWidth: 180
+      minWidth: 100
     },
     {
       flex: 1.5,
@@ -83,13 +85,13 @@ const SoGocCu = () => {
       flex: 1.5,
       field: 'tenTruongMoi',
       headerName: t('Tên trường mới'),
-      minWidth: 100
+      minWidth: 180
     },
     {
       flex: 1,
       field: 'transferTime',
       headerName: t('Thời gian chuyển đổi'),
-      minWidth: 100
+      minWidth: 150
     }
   ];
 
@@ -134,6 +136,12 @@ const SoGocCu = () => {
     dispatch(setOpenPopup(true));
   };
 
+  const handleHuongDan = () => {
+    setTitle(t('Hướng dẫn chuyển đổi sổ gốc'));
+    setForm('instruct');
+    dispatch(setOpenPopup(true));
+  };
+
   const handleExport = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
@@ -147,21 +155,17 @@ const SoGocCu = () => {
     const response = await getLichSuChuyenDoiSoGoc(params);
     const formattedData = response.data.map((item, index) => ({
       STT: index + 1,
+      'Người tạo': item.nguoiTao,
       'Tên trường cũ': item.tenTruongCu,
       'Tên trường mới': item.tenTruongMoi,
-      'Ngày chuyển đổi': convertISODateToFormattedDate(item.ngayTao)
+      'Ngày chuyển đổi': convertISODateTimeToFormattedDateTime(item.ngayTao)
     }));
     const worksheet = XLSX.utils.json_to_sheet(formattedData);
 
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'HistoryAccessData');
     // Điều chỉnh chiều rộng của các cột trong file xuất ra
-    const columnsWidth = [
-      { wch: 10 }, // Chiều rộng cột 'serial'
-      { wch: 30 }, // Chiều rộng cột 'user.field.fullname'
-      { wch: 30 }, // Chiều rộng cột 'user.field.username'
-      { wch: 20 } // Chiều rộng cột 'user.field.username'
-    ];
+    const columnsWidth = [{ wch: 10 }, { wch: 20 }, { wch: 30 }, { wch: 30 }, { wch: 20 }];
 
     worksheet['!cols'] = columnsWidth;
     XLSX.writeFile(workbook, 'lich_su_chuyen_doi_so_goc.xlsx');
@@ -180,7 +184,18 @@ const SoGocCu = () => {
 
   return (
     <>
-      <MainCard title={t('Chuyển đổi sổ gốc cũ')}>
+      <MainCard
+        title={t('Chuyển đổi sổ gốc cũ')}
+        secondary={
+          <CustomButton
+            title={t('Hướng dẫn')}
+            label={t('Hướng dẫn')}
+            variant="contained"
+            icon={IconAddressBook}
+            handleClick={handleHuongDan}
+          />
+        }
+      >
         <Grid item container spacing={1} mb={2} justifyContent={'center'} alignItems={'center'}>
           <Grid item lg={4} md={6} sm={6} xs={8}>
             <FormControl fullWidth variant="outlined" size="small">
@@ -192,11 +207,14 @@ const SoGocCu = () => {
                 style={{ minWidth: '150px' }}
               >
                 {donvi && donvi.length > 0 ? (
-                  donvi.map((data) => (
-                    <MenuItem key={data.id} value={data.id}>
-                      {data.ten}
-                    </MenuItem>
-                  ))
+                  donvi.map(
+                    (data) =>
+                      data.id !== selectedDonViNew && (
+                        <MenuItem key={data.id} value={data.id}>
+                          {data.ten}
+                        </MenuItem>
+                      )
+                  )
                 ) : (
                   <MenuItem value="nodata">{t('noRowsLabel')}</MenuItem>
                 )}
@@ -213,11 +231,14 @@ const SoGocCu = () => {
                 style={{ minWidth: '150px' }}
               >
                 {donvi && donvi.length > 0 ? (
-                  donvi.map((data) => (
-                    <MenuItem key={data.id} value={data.id}>
-                      {data.ten}
-                    </MenuItem>
-                  ))
+                  donvi.map(
+                    (data) =>
+                      data.id !== selectedDonViOld && (
+                        <MenuItem key={data.id} value={data.id}>
+                          {data.ten}
+                        </MenuItem>
+                      )
+                  )
                 ) : (
                   <MenuItem value="nodata">{t('noRowsLabel')}</MenuItem>
                 )}
@@ -327,7 +348,13 @@ const SoGocCu = () => {
       </Grid>
       {form !== '' && (
         <Popup title={title} form={form} maxWidth={'sm'} openPopup={openPopup} bgcolor={'#2196F3'}>
-          {form === 'transfer' ? <ChuyenDoi truongCu={selectedDonViOld} truongMoi={selectedDonViNew} /> : ''}
+          {form === 'transfer' ? (
+            <ChuyenDoi truongCu={selectedDonViOld} truongMoi={selectedDonViNew} />
+          ) : form === 'instruct' ? (
+            <HuongDan />
+          ) : (
+            ''
+          )}
         </Popup>
       )}
       <BackToTop />

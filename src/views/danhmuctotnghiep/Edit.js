@@ -217,9 +217,11 @@ const EditDanhmucTN = () => {
           <InputForm1
             formik={formik}
             name="GhiChu"
-            placeholder="ghi chú"
+            isMulltiline
+            placeholder="Ghi chú"
             style="100%"
             minRows={3}
+            maxRows={10}
             xs={12}
             label={t('danhmuctotnghiep.field.ghichu')}
           />

@@ -744,7 +744,7 @@ export default function SoGoc() {
           maxWidth={form === 'phuluc' ? 'lg' : 'md'}
           bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
         >
-          {form === 'phuluc' ? <PhuLucSoGoc danhmuc={pageState.DMTN} truong={pageState.donVi} /> : ''}
+          {form === 'phuluc' ? <PhuLucSoGoc /> : ''}
           {form === 'import' ? <Import /> : ''}
         </Popup>
       )}

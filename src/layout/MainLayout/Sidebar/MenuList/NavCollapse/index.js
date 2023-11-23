@@ -59,7 +59,6 @@ const NavCollapse = ({ menu, level }) => {
       setSelected(null);
       if (menu.children) {
         menu.children.forEach((item) => {
-          console.log(item.url);
           if (item.children?.length) {
             checkOpenForParent(item.children, menu.id);
           }

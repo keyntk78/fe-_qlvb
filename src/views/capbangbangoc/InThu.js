@@ -40,8 +40,6 @@ const InThu = ({ duLieuHocSinh }) => {
     TRUONGPHONGDGDT: duLieuHocSinh.nguoiKyBang,
     NOICAP: duLieuHocSinh.diaPhuongCapBang
   };
-  console.log(DataInBang);
-  console.log(duLieuHocSinh);
   const cauHinhViTri = {};
 
   for (const item of duLieuConFig) {
