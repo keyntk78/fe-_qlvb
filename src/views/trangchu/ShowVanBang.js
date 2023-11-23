@@ -10,8 +10,10 @@ import ExitButton from 'components/button/ExitButton';
 import XuLyDuLieuInThu from 'views/capbangbangoc/XuLyDuLieuInThu';
 import { selectedPhoigoc } from 'store/actions';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
+import { handleAddNumberZeroDayAndMonth } from 'utils/handleAddNumberZeroDayAndMonth';
 
 const ShowVanBang = ({ duLieuHocSinh }) => {
+  console.log(duLieuHocSinh);
   const phoigoc = useSelector(selectedPhoigocSelector);
   const [duLieuConFig, setDuLieuConFig] = useState([]);
   const dispatch = useDispatch();
@@ -24,6 +26,7 @@ const ShowVanBang = ({ duLieuHocSinh }) => {
     };
     fetchDataDLHS();
   }, [phoigoc.id]);
+
   const DataInBang = {
     HOTEN: duLieuHocSinh.hoTen,
     NOISINH: duLieuHocSinh.noiSinh, // Assuming you want the second part after the " - "
@@ -36,9 +39,9 @@ const ShowVanBang = ({ duLieuHocSinh }) => {
     HINHTHUCDAOTAO: duLieuHocSinh.tenHinhThucDaoTao,
     GOC_SOHIEUVANBANG: duLieuHocSinh.soHieuVanBang,
     GOC_SOVAOSOCAP: duLieuHocSinh.soVaoSoCapBang,
-    NAMCAP: new Date(duLieuHocSinh.ngayTao).getFullYear(),
-    NGAYCAP: new Date(duLieuHocSinh.ngayTao).getDate(),
-    THANGCAP: new Date(duLieuHocSinh.ngayTao).getMonth() + 1,
+    NAMCAP: new Date(duLieuHocSinh.danhMucTotNghiep.ngayCapBang).getFullYear(),
+    NGAYCAP: handleAddNumberZeroDayAndMonth(new Date(duLieuHocSinh.danhMucTotNghiep.ngayCapBang).getDate()),
+    THANGCAP: handleAddNumberZeroDayAndMonth(new Date(duLieuHocSinh.danhMucTotNghiep.ngayCapBang).getMonth() + 1),
     TRUONGPHONGDGDT: duLieuHocSinh.soGoc.nguoiKyBang,
     NOICAP: duLieuHocSinh.soGoc.diaPhuongCapBang
   };

@@ -16,6 +16,7 @@ import ExitButton from 'components/button/ExitButton';
 import { CapBang } from 'services/capbangbanchinhService';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
+import { handleAddNumberZeroDayAndMonth } from 'utils/handleAddNumberZeroDayAndMonth';
 
 const InBang = ({ duLieuHocSinhSoGoc }) => {
   const total = duLieuHocSinhSoGoc.length;
@@ -48,8 +49,8 @@ const InBang = ({ duLieuHocSinhSoGoc }) => {
       GOC_SOHIEUVANBANG: item.soHieuVanBang,
       GOC_SOVAOSOCAP: item.soVaoSoCapBang,
       NAMCAP: new Date(item.ngayCapBang).getFullYear(),
-      NGAYCAP: new Date(item.ngayCapBang).getDate(),
-      THANGCAP: new Date(item.ngayCapBang).getMonth() + 1,
+      NGAYCAP: handleAddNumberZeroDayAndMonth(new Date(item.ngayCapBang).getDate()),
+      THANGCAP: handleAddNumberZeroDayAndMonth(new Date(item.ngayCapBang).getMonth() + 1),
       TRUONGPHONGDGDT: item.nguoiKyBang,
       NOICAP: item.diaPhuongCapBang
     };

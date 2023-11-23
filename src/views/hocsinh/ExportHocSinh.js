@@ -11,7 +11,7 @@ const ExportHocSinh = async (data) => {
   title.font = { bold: true, size: 15 };
   worksheet.mergeCells('A1:L1');
 
-  const cellTenTruong = worksheet.getCell('A3');
+  const cellTenTruong = worksheet.getCell('A2');
   cellTenTruong.value = '';
 
   // Adding the header row with bold formatting

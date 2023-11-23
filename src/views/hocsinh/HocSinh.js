@@ -89,6 +89,7 @@ export default function HocSinh() {
   const [configAuto, setConfigAuto] = useState(false);
   const infoHocSinh = useSelector(infoHocSinhSelector);
   const user = useSelector(userLoginSelector);
+  const [firstLoad3, setFirstLoad3] = useState(true);
 
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -268,8 +269,8 @@ export default function HocSinh() {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const response = await getAllDanhmucTN(user ? user.username : '');
-      setDMTN(response.data);
+      // const response = await getAllDanhmucTN(user ? user.username : '');
+      // setDMTN(response.data);
       const donvi = await getAllTruong(user.username);
       setDonvis(donvi.data);
       const dantoc = await getAllDanToc();
@@ -279,6 +280,26 @@ export default function HocSinh() {
     };
     fetchDataDL();
   }, []);
+  useEffect(() => {
+    const fetchDataDL = async () => {
+      setTimeout(
+        async () => {
+          try {
+            setLoading(true);
+            const response = await getAllDanhmucTN(user ? user.username : '');
+            setDMTN(response.data);
+            setFirstLoad3(false);
+            setLoading(false);
+          } catch (error) {
+            console.error(error);
+            setLoading(false);
+          }
+        },
+        firstLoad3 ? 2500 : 0
+      );
+    };
+    fetchDataDL();
+  }, [user]);
 
   useEffect(() => {
     if (donvis.length > 0 && dMTN.length > 0) {

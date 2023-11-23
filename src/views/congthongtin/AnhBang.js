@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { GetPhoiGocById, getHocSinhByCCC } from 'services/congthongtinService';
 import ExitButton from 'components/button/ExitButton';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
+import { handleAddNumberZeroDayAndMonth } from 'utils/handleAddNumberZeroDayAndMonth';
 
 const AnhBang = () => {
   const phoigoc = useSelector(tracuuSelector);
@@ -37,8 +38,12 @@ const AnhBang = () => {
     GOC_SOHIEUVANBANG: duLieuHocsinh.soHieuVanBang,
     GOC_SOVAOSOCAP: duLieuHocsinh.soVaoSoCapBang,
     NAMCAP: new Date(duLieuHocsinh && duLieuHocsinh.danhMucTotNghiep ? duLieuHocsinh.danhMucTotNghiep.ngayCapBang : '').getFullYear(),
-    NGAYCAP: new Date(duLieuHocsinh && duLieuHocsinh.danhMucTotNghiep ? duLieuHocsinh.danhMucTotNghiep.ngayCapBang : '').getDate(),
-    THANGCAP: new Date(duLieuHocsinh && duLieuHocsinh.danhMucTotNghiep ? duLieuHocsinh.danhMucTotNghiep.ngayCapBang : '').getMonth() + 1,
+    NGAYCAP: handleAddNumberZeroDayAndMonth(
+      new Date(duLieuHocsinh && duLieuHocsinh.danhMucTotNghiep ? duLieuHocsinh.danhMucTotNghiep.ngayCapBang : '').getDate()
+    ),
+    THANGCAP: handleAddNumberZeroDayAndMonth(
+      new Date(duLieuHocsinh && duLieuHocsinh.danhMucTotNghiep ? duLieuHocsinh.danhMucTotNghiep.ngayCapBang : '').getMonth() + 1
+    ),
     TRUONGPHONGDGDT: duLieuHocsinh && duLieuHocsinh.soGoc ? duLieuHocsinh.soGoc.nguoiKyBang : '',
     NOICAP: duLieuHocsinh && duLieuHocsinh.soGoc ? duLieuHocsinh.soGoc.diaPhuongCapBang : ''
   };
