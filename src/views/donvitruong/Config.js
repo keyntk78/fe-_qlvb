@@ -105,7 +105,7 @@ const Config = () => {
       //}
       if (datadonvi) {
         if (datadonvi.logoDonvi) {
-          setUrlImage(config.urlFile + 'Logo/' + datadonvi.logoDonvi);
+          setUrlImage(config.urlImages + datadonvi.logoDonvi);
         } else {
           setUrlImage(''); // If no avatar value, reset the urlImage state to an empty string
         }

@@ -143,7 +143,7 @@ export default function Header() {
       setTimeout(async () => {
         try {
           setPhong(donvibyid.data.ten);
-          setUrlImage(dataphong.logoDonvi ? config.urlFile + 'Logo/' + dataphong.logoDonvi : '');
+          setUrlImage(dataphong.logoDonvi ? config.urlImages + dataphong.logoDonvi : '');
         } catch (error) {
           console.error(error);
         }
