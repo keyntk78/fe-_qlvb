@@ -232,7 +232,6 @@ export default function SoBanSao() {
       params.append('IdKhoaThi', pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : '');
       const response = await GetHocSinhTheoSoBanSao(params);
       const data = response.data;
-      console.log(data.totalRow);
       formik.setValues({
         UyBanNhanDan: data.donViQuanLy.tenUyBanNhanDan || '',
         CoQuanCapBang: data.donViQuanLy.tenCoQuanCapBang || '',
@@ -348,10 +347,6 @@ export default function SoBanSao() {
     khoaThi: formik.values.KhoaThi,
     tenKyThi: formik.values.TenKyThi
   };
-
-  useEffect(() => {
-    console.log(pageState.total);
-  }, [pageState.total]);
 
   return (
     <>

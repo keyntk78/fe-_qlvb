@@ -28,7 +28,6 @@ const XuLyDuLieu = () => {
   const dispatch = useDispatch();
 
   const handleDowloadTemplate = async () => {
-    console.log(FileExports);
     const fileMau = selectedFileMau
       ? FileExports.find((file) => file.name === selectedFileMau)
       : FileExports.find((file) => file.name === data[0].fileImport);

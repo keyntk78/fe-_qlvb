@@ -28,7 +28,6 @@ import { useEffect } from 'react';
 import { getDanhSachDanhMucTmp } from 'services/xulydulieuService';
 import config from 'config';
 const DanhSachImport = ({ selectedValue }) => {
-  console.log(selectedValue);
   const language = i18n.language;
   const { t } = useTranslation();
   const localeText = useLocalText();
@@ -103,10 +102,8 @@ const DanhSachImport = ({ selectedValue }) => {
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;
-        console.log(data);
         if (data) {
           setDataImport(data);
-          console.log(data);
           const dataWithIds =
             data &&
             data.list.map((row, index) => ({
