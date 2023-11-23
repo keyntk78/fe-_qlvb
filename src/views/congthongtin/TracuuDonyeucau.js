@@ -81,6 +81,7 @@ export default function TracuuDonyeucau() {
     setCCCD('');
     setNgaySinh('');
     setMaDon('');
+    setError('');
   };
 
   const handleReset = () => {
@@ -151,52 +152,56 @@ export default function TracuuDonyeucau() {
     setSelectNamHoc(selectedValue);
   };
   const handleSubmit = async () => {
-    setError('');
-    if (isChecked === true && (maDon || (namHoc && hoTen && ngaSinh))) {
-      setShowmain(true);
-      setPageState((old) => ({ ...old, isLoading: true }));
-      const params = await createSearchParams(pageState);
-      if (maDon != '') {
-        params.append('Ma', maDon);
-      } else {
-        params.append('Cccd', cccd);
-        params.append('HoTen', hoTen);
-        params.append('NgaySinh', ngaSinh);
-      }
-
-      const response = await getSearchDonYeuCau(selectNamHoc, params);
-
-      const check = handleResponseStatus(response, navigate);
-      if (check) {
-        const data = await response.data;
-        const dataWithIds = data.donYeuCaus.map((row, index) => ({
-          idx: pageState.startIndex * pageState.pageSize + index + 1,
-          gioiTinh_fm: row.hocSinh.gioiTinh ? t('gender.male') : t('gender.female'),
-          HoTen: row.hocSinh.hoTen,
-          CCCD: row.hocSinh.cccd,
-          trangThai_fm:
-            row.trangThai == 0
-              ? t('status.unapproved')
-              : row.trangThai == 1
-              ? t('status.approved')
-              : row.trangThai == -1
-              ? t('status.refuse')
-              : t('status.delivered'),
-          ngaySinh_fm: convertISODateToFormattedDate(row.hocSinh.ngaySinh),
-          ...row
-        }));
-        dispatch(setReloadData(false));
-        setPageState((old) => ({
-          ...old,
-          isLoading: false,
-          data: dataWithIds,
-          total: data.totalRow || 0
-        }));
-      } else {
-        setIsAccess(false);
-      }
+    if (isChecked === false) {
+      setError('Vui lòng kiểm tra Recapcha');
     } else {
-      ('');
+      setError('');
+      if (isChecked === true && (maDon || (namHoc && hoTen && ngaSinh))) {
+        setShowmain(true);
+        setPageState((old) => ({ ...old, isLoading: true }));
+        const params = await createSearchParams(pageState);
+        if (maDon != '') {
+          params.append('Ma', maDon);
+        } else {
+          params.append('Cccd', cccd);
+          params.append('HoTen', hoTen);
+          params.append('NgaySinh', ngaSinh);
+        }
+
+        const response = await getSearchDonYeuCau(selectNamHoc, params);
+
+        const check = handleResponseStatus(response, navigate);
+        if (check) {
+          const data = await response.data;
+          const dataWithIds = data.donYeuCaus.map((row, index) => ({
+            idx: pageState.startIndex * pageState.pageSize + index + 1,
+            gioiTinh_fm: row.hocSinh.gioiTinh ? t('gender.male') : t('gender.female'),
+            HoTen: row.hocSinh.hoTen,
+            CCCD: row.hocSinh.cccd,
+            trangThai_fm:
+              row.trangThai == 0
+                ? t('status.unapproved')
+                : row.trangThai == 1
+                ? t('status.approved')
+                : row.trangThai == -1
+                ? t('status.refuse')
+                : t('status.delivered'),
+            ngaySinh_fm: convertISODateToFormattedDate(row.hocSinh.ngaySinh),
+            ...row
+          }));
+          dispatch(setReloadData(false));
+          setPageState((old) => ({
+            ...old,
+            isLoading: false,
+            data: dataWithIds,
+            total: data.totalRow || 0
+          }));
+        } else {
+          setIsAccess(false);
+        }
+      } else {
+        setError('Hãy điền đầy đủ thông tin');
+      }
     }
   };
   useEffect(() => {
@@ -345,9 +350,9 @@ export default function TracuuDonyeucau() {
                 </Box>
               </Grid>
             </Grid>
-            <Grid item container xs={12} justifyContent={'center'}>
-              <Grid item xs={12}>
-                <Typography variant="body" sx={{ color: 'red', marginLeft: 3 }}>
+            <Grid item container xs={12} justifyContent={'center'} alignContent={'center'} alignItems="center" mt={1} mb={1}>
+              <Grid item>
+                <Typography variant="body" sx={{ color: 'red' }}>
                   {error}
                 </Typography>
               </Grid>
