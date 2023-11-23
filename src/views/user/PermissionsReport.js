@@ -5,14 +5,14 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { setOpenPopup, setReloadData, showAlert } from 'store/actions';
-import { selectedUserSelector, reloadDataSelector, openPopupSelector } from 'store/selectors';
+import { selectedUserSelector, reloadDataSelector, openPopupSelector, userLoginSelector, donviSelector } from 'store/selectors';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import useLocalText from 'utils/localText';
 import { useTranslation } from 'react-i18next';
 import { Checkbox, Grid } from '@mui/material';
 import SaveButtonTable from 'components/button/SaveButtonTable';
 import ExitButton from 'components/button/ExitButton';
-import { getReportsViaUser, saveUserReport } from 'services/userService';
+import { getReportsViaUser, getReportsViaUserManagerment, saveUserReport } from 'services/userService';
 
 const PermissionsReport = () => {
   const language = i18n.language;
@@ -24,6 +24,8 @@ const PermissionsReport = () => {
   const [isAccess, setIsAccess] = useState(true);
   const selectedUser = useSelector(selectedUserSelector);
   const openPopup = useSelector(openPopupSelector);
+  const user = useSelector(userLoginSelector);
+  const donvi = useSelector(donviSelector);
 
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -135,9 +137,12 @@ const PermissionsReport = () => {
   useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
-      const params = await createSearchParams(pageState);
       if (selectedUser) {
-        const response = await getReportsViaUser(selectedUser.userId, params);
+        const params = await createSearchParams(pageState);
+        const response =
+          donvi != 0 && donvi.laPhong == false
+            ? await getReportsViaUserManagerment(user.id, selectedUser.userId)
+            : await getReportsViaUser(selectedUser.userId, params);
         const check = await handleResponseStatus(response, navigate);
         if (check) {
           const data = await response.data;
