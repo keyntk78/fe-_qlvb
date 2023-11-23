@@ -19,8 +19,6 @@ function replaceErrors(key, value) {
 }
 
 export function generateDocument(hocsinhs, data) {
-  console.log(hocsinhs);
-  console.log(data);
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   loadFile(FileWordMau_SoGoc, function (error, content) {
