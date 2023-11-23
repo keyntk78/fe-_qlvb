@@ -3,13 +3,13 @@ import { getById } from 'services/donvitruongService';
 import { getHocSinhXepLoaiTotNghiep, getHocSinhXepLoaiTotNghiepTruong } from 'services/hocsinhService';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 
-const ExportHocSinh = async (DMTN, donvi, phong, tentruong) => {
+const ExportHocSinh = async (DMTN, tenDMTN, donvi, phong, tentruong) => {
   const donVi = await getById(donvi);
   const dataDonVi = donVi.data;
   const workbook = new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet('Danh sách học sinh tốt nghiệp');
+  const worksheet = workbook.addWorksheet(`DSKetQuaXetTotNgiep_${tentruong ? tentruong : dataDonVi.ten}.xlsx`);
   const title = worksheet.getCell('A1');
-  title.value = 'DANH SÁCH HỌC SINH TỐT NGHIỆP';
+  title.value = 'KẾT QUẢ XÉT TỐT NGHIỆP';
   title.alignment = { horizontal: 'center' };
   title.font = { bold: true, size: 15 };
   worksheet.mergeCells('A1:L1');
@@ -19,6 +19,9 @@ const ExportHocSinh = async (DMTN, donvi, phong, tentruong) => {
   const cellTenTruong = worksheet.getCell('A2');
   cellTenTruong.value = tentruong ? tentruong : dataDonVi.ten;
   cellTenTruong.font = { bold: true };
+  const cellTenDMTN = worksheet.getCell('A3');
+  cellTenDMTN.value = tenDMTN ? tenDMTN : '';
+  cellTenDMTN.font = { bold: true };
 
   // Adding the header row with bold formatting
   const headerRow = worksheet.addRow([
@@ -114,7 +117,7 @@ const ExportHocSinh = async (DMTN, donvi, phong, tentruong) => {
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'DSHocSinhTotNghiep.xlsx';
+  a.download = `DSKetQuaXetTotNgiep_${tentruong ? tentruong : dataDonVi.ten}.xlsx`;
   a.click();
 };
 

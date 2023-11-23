@@ -80,6 +80,7 @@ export default function HocSinh() {
   const navigate = useNavigate();
   const [selectDonvi, setSelectDonvi] = useState('');
   const [selectDanhmuc, setSelectDanhmuc] = useState('');
+  const [tenDMTN, setSelectTenDMTN] = useState('');
   const [selectedRowData, setSelectedRowData] = useState([]);
   const [disabled, setDisabled] = useState(false);
   const [disabled1, setDisabled1] = useState(false);
@@ -418,11 +419,13 @@ export default function HocSinh() {
   const handleExport = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
-    await ExportHocSinh(pageState.DMTN, pageState.donVi, true);
+    await ExportHocSinh(pageState.DMTN, tenDMTN, pageState.donVi, true);
     dispatch(setLoading(false));
   };
   const handleDanhMucChange = (event) => {
     const selectedValue = event.target.value;
+    const selectedCategory = dMTN.find((dmtn) => dmtn.id === selectedValue);
+    setSelectTenDMTN(selectedCategory ? selectedCategory.tieuDe : '');
     setPageState((old) => ({ ...old, DMTN: selectedValue }));
   };
 
