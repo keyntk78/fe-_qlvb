@@ -1,18 +1,27 @@
 import ExcelJS from 'exceljs';
-import { getHocSinhByCCCD } from 'services/hocsinhService';
+import { getById } from 'services/donvitruongService';
+import { getHocSinhXepLoaiTotNghiep, getHocSinhXepLoaiTotNghiepTruong } from 'services/hocsinhService';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 
-const ExportHocSinh = async (data) => {
+const ExportHocSinh = async (DMTN, tenDMTN, donvi, phong, tentruong) => {
+  const donVi = await getById(donvi);
+  const dataDonVi = donVi.data;
   const workbook = new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet('Danh sách học sinh tốt nghiệp');
+  const worksheet = workbook.addWorksheet(`DSKetQuaXetTotNgiep_${tentruong ? tentruong : dataDonVi.ten}.xlsx`);
   const title = worksheet.getCell('A1');
-  title.value = 'DANH SÁCH HỌC SINH TỐT NGHIỆP';
+  title.value = 'KẾT QUẢ XÉT TỐT NGHIỆP';
   title.alignment = { horizontal: 'center' };
   title.font = { bold: true, size: 15 };
   worksheet.mergeCells('A1:L1');
 
-  const cellTenTruong = worksheet.getCell('A3');
-  cellTenTruong.value = '';
+  const response = phong ? await getHocSinhXepLoaiTotNghiep(donvi, DMTN) : await getHocSinhXepLoaiTotNghiepTruong(donvi, DMTN);
+  const data = response.data;
+  const cellTenTruong = worksheet.getCell('A2');
+  cellTenTruong.value = tentruong ? tentruong : dataDonVi.ten;
+  cellTenTruong.font = { bold: true };
+  const cellTenDMTN = worksheet.getCell('A3');
+  cellTenDMTN.value = tenDMTN ? tenDMTN : '';
+  cellTenDMTN.font = { bold: true };
 
   // Adding the header row with bold formatting
   const headerRow = worksheet.addRow([
@@ -23,11 +32,11 @@ const ExportHocSinh = async (data) => {
     'Ngày sinh',
     'Nơi sinh',
     'Dân tộc',
-    'Đơn vị',
     'Lớp',
     'Hạnh kiểm',
     'Học lực',
-    'Xếp loại'
+    'Xếp loại',
+    'Kết quả'
   ]);
   headerRow.eachCell((cell) => {
     cell.font = { bold: true };
@@ -42,46 +51,51 @@ const ExportHocSinh = async (data) => {
   });
 
   // Adding data rows
-  if (data && data.length) {
-    for (let index = 0; index < data.length; index++) {
-      const item = data[index];
-      const userbyid = await getHocSinhByCCCD(item.cccd);
-      const datauser = userbyid.data;
-      const dataRow = worksheet.addRow([
-        index + 1,
-        datauser.hoTen,
-        datauser.cccd,
-        datauser.gioiTinh ? 'Nam' : 'Nữ',
-        datauser.ngaySinh ? convertISODateToFormattedDate(datauser.ngaySinh) : '',
-        datauser.noiSinh,
-        datauser.danToc,
-        item.tenTruong,
-        datauser.lop,
-        datauser.hanhKiem,
-        datauser.hocLuc,
-        datauser.xepLoai
-      ]);
-      dataRow.eachCell((cell) => {
+  data.forEach((item, index) => {
+    const dataRow = worksheet.addRow([
+      index + 1,
+      item.hoTen,
+      item.cccd,
+      item.gioiTinh ? 'Nam' : 'Nữ',
+      item.ngaySinh ? convertISODateToFormattedDate(item.ngaySinh) : '',
+      item.noiSinh,
+      item.danToc,
+      item.lop,
+      item.hanhKiem,
+      item.hocLuc,
+      item.xepLoai != (null || '' || undefined) ? item.xepLoai : '-',
+      item.ketQua
+    ]);
+    dataRow.eachCell((cell) => {
+      cell.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' }
+      };
+
+      if (cell.value == null || '') {
+        // Đặt border cho các ô có giá trị null
         cell.border = {
           top: { style: 'thin' },
           left: { style: 'thin' },
           bottom: { style: 'thin' },
           right: { style: 'thin' }
-        }; // Apply borders
-      });
-      dataRow.getCell(2).alignment = { horizontal: 'center' };
-      dataRow.getCell(3).alignment = { horizontal: 'center' };
-      dataRow.getCell(4).alignment = { horizontal: 'center' };
-      dataRow.getCell(5).alignment = { horizontal: 'center' };
-      dataRow.getCell(6).alignment = { horizontal: 'center' };
-      dataRow.getCell(7).alignment = { horizontal: 'center' };
-      dataRow.getCell(8).alignment = { horizontal: 'center' };
-      dataRow.getCell(9).alignment = { horizontal: 'center' };
-      dataRow.getCell(10).alignment = { horizontal: 'center' };
-      dataRow.getCell(11).alignment = { horizontal: 'center' };
-      dataRow.getCell(12).alignment = { horizontal: 'center' };
-    }
-  }
+        };
+      }
+    });
+    dataRow.getCell(2).alignment = { horizontal: 'center' };
+    dataRow.getCell(3).alignment = { horizontal: 'center' };
+    dataRow.getCell(4).alignment = { horizontal: 'center' };
+    dataRow.getCell(5).alignment = { horizontal: 'center' };
+    dataRow.getCell(6).alignment = { horizontal: 'center' };
+    dataRow.getCell(7).alignment = { horizontal: 'center' };
+    dataRow.getCell(8).alignment = { horizontal: 'center' };
+    dataRow.getCell(9).alignment = { horizontal: 'center' };
+    dataRow.getCell(10).alignment = { horizontal: 'center' };
+    dataRow.getCell(11).alignment = { horizontal: 'center' };
+    dataRow.getCell(12).alignment = { horizontal: 'center' };
+  });
 
   // Adjust column widths
   worksheet.getColumn(1).width = 5; //stt
@@ -103,7 +117,7 @@ const ExportHocSinh = async (data) => {
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'DSHocSinhTotNghiep.xlsx';
+  a.download = `DSKetQuaXetTotNgiep_${tentruong ? tentruong : dataDonVi.ten}.xlsx`;
   a.click();
 };
 

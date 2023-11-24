@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { userLoginSelector } from 'store/selectors';
 import { SaveImport } from 'services/xulydulieuService';
 
-function DuaVaoBangChinh({ selectedValue }) {
+function DuaVaoBangChinh({ selectedValue, selectedName }) {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const user = useSelector(userLoginSelector);
@@ -41,7 +41,7 @@ function DuaVaoBangChinh({ selectedValue }) {
         <IconCircleCheck size={100} color="#2196F3" />
       </Grid>
       <MuiTypography variant="h4" gutterBottom m={1}>
-        {`${t('Bạn có chắc chắn import danh sách văn bằng ')}`}
+        {`${t(`Bạn có chắc chắn lưu danh sách [${selectedName}] vào hệ thống ?`)}`}
       </MuiTypography>
 
       <Grid container spacing={1} direction="row" justifyContent="center" my={2}>

@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { GetConfigPhoi } from 'services/phoigocService';
 import ExitButton from 'components/button/ExitButton';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
+import { handleAddNumberZeroDayAndMonth } from 'utils/handleAddNumberZeroDayAndMonth';
 
 const InThu = ({ duLieuHocSinh }) => {
   const phoigoc = useSelector(selectedPhoigocSelector);
@@ -35,8 +36,8 @@ const InThu = ({ duLieuHocSinh }) => {
     GOC_SOHIEUVANBANG: duLieuHocSinh.soHieuVanBang,
     GOC_SOVAOSOCAP: duLieuHocSinh.soVaoSoCapBang,
     NAMCAP: new Date(duLieuHocSinh.ngayCapBang).getFullYear(),
-    NGAYCAP: new Date(duLieuHocSinh.ngayCapBang).getDate(),
-    THANGCAP: new Date(duLieuHocSinh.ngayCapBang).getMonth() + 1,
+    NGAYCAP: handleAddNumberZeroDayAndMonth(new Date(duLieuHocSinh.ngayCapBang).getDate()),
+    THANGCAP: handleAddNumberZeroDayAndMonth(new Date(duLieuHocSinh.ngayCapBang).getMonth() + 1),
     TRUONGPHONGDGDT: duLieuHocSinh.nguoiKyBang,
     NOICAP: duLieuHocSinh.diaPhuongCapBang
   };

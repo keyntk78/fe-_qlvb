@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { GetPhoiGocById, getHocSinhByCCC } from 'services/congthongtinService';
 import ExitButton from 'components/button/ExitButton';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
+import { handleAddNumberZeroDayAndMonth } from 'utils/handleAddNumberZeroDayAndMonth';
 
 const AnhBang = () => {
   const phoigoc = useSelector(tracuuSelector);
@@ -20,6 +21,7 @@ const AnhBang = () => {
       setDuLieuConFig(response_cf.data.cauHinhPhoiGocs);
 
       const dataHocsinh = await getHocSinhByCCC(phoigoc.cccd);
+      console.log(dataHocsinh);
       setDuLieuHocsinh(dataHocsinh.data);
     };
     fetchDataDLHS();
@@ -27,18 +29,23 @@ const AnhBang = () => {
   const DataInBang = {
     HOTEN: duLieuHocsinh.hoTen,
     NOISINH: duLieuHocsinh.noiSinh, // Assuming you want the second part after the " - "
-    NGAYTHANGNAMSINH: convertISODateToFormattedDate(duLieuHocsinh.ngaySinh),
+    NGAYTHANGNAMSINH: duLieuHocsinh.ngaySinh && convertISODateToFormattedDate(duLieuHocsinh.ngaySinh),
     GIOITINH: duLieuHocsinh.gioiTinh ? 'Nam' : 'Nữ',
     DANTOC: duLieuHocsinh.danToc,
-    HOCSINHTRUONG: duLieuHocsinh && duLieuHocsinh.truong ? duLieuHocsinh.truong.ten : '',
+    //HOCSINHTRUONG: duLieuHocsinh && duLieuHocsinh.truong ? duLieuHocsinh.truong.ten : '',
+    HOCSINHTRUONG: duLieuHocsinh && duLieuHocsinh.soGoc ? duLieuHocsinh.soGoc.tenTruong : '',
     NAMTOTNGHIEP: duLieuHocsinh.namThi,
     XEPLOAITOTNGHIEP: duLieuHocsinh.xepLoai,
-    HINHTHUCDAOTAO: duLieuHocsinh.hinhThucDaoTao,
+    HINHTHUCDAOTAO: duLieuHocsinh.tenHinhThucDaoTao,
     GOC_SOHIEUVANBANG: duLieuHocsinh.soHieuVanBang,
     GOC_SOVAOSOCAP: duLieuHocsinh.soVaoSoCapBang,
     NAMCAP: new Date(duLieuHocsinh && duLieuHocsinh.danhMucTotNghiep ? duLieuHocsinh.danhMucTotNghiep.ngayCapBang : '').getFullYear(),
-    NGAYCAP: new Date(duLieuHocsinh && duLieuHocsinh.danhMucTotNghiep ? duLieuHocsinh.danhMucTotNghiep.ngayCapBang : '').getDate(),
-    THANGCAP: new Date(duLieuHocsinh && duLieuHocsinh.danhMucTotNghiep ? duLieuHocsinh.danhMucTotNghiep.ngayCapBang : '').getMonth() + 1,
+    NGAYCAP: handleAddNumberZeroDayAndMonth(
+      new Date(duLieuHocsinh && duLieuHocsinh.danhMucTotNghiep ? duLieuHocsinh.danhMucTotNghiep.ngayCapBang : '').getDate()
+    ),
+    THANGCAP: handleAddNumberZeroDayAndMonth(
+      new Date(duLieuHocsinh && duLieuHocsinh.danhMucTotNghiep ? duLieuHocsinh.danhMucTotNghiep.ngayCapBang : '').getMonth() + 1
+    ),
     TRUONGPHONGDGDT: duLieuHocsinh && duLieuHocsinh.soGoc ? duLieuHocsinh.soGoc.nguoiKyBang : '',
     NOICAP: duLieuHocsinh && duLieuHocsinh.soGoc ? duLieuHocsinh.soGoc.diaPhuongCapBang : ''
   };

@@ -14,6 +14,7 @@ import { getHocSinhDaDuaVaoSobanSao } from 'services/capbangbansaoService';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { selectedPhoisao } from 'store/actions';
 import { GetPhoiBanSaoById } from 'services/sharedService';
+import { handleAddNumberZeroDayAndMonth } from 'utils/handleAddNumberZeroDayAndMonth';
 
 const InBanSao = () => {
   const [hsSoBanSao, setHsSoBanSao] = useState([]);
@@ -62,9 +63,9 @@ const InBanSao = () => {
       XEPLOAITOTNGHIEP: hsSoBanSao.xepLoai,
       HINHTHUCDAOTAO: hsSoBanSao.hinhThucDaoTao,
       SAO_SOVAOSOBANSAO: hsSoBanSao.soVaoSoBanSao,
-      NAMCAP: new Date(hsSoBanSao.ngayTao).getFullYear(),
-      NGAYCAP: new Date(hsSoBanSao.ngayTao).getDate(),
-      THANGCAP: new Date(hsSoBanSao.ngayTao).getMonth() + 1,
+      NAMCAP: new Date(hsSoBanSao.ngayCapBang).getFullYear(),
+      NGAYCAP: handleAddNumberZeroDayAndMonth(new Date(hsSoBanSao.ngayCapBang).getDate()),
+      THANGCAP: handleAddNumberZeroDayAndMonth(new Date(hsSoBanSao.ngayCapBang).getMonth() + 1),
       TRUONGPHONGDGDT: hsSoBanSao.nguoiKyBang,
       NOICAP: hsSoBanSao.diaPhuongCapBang
     };

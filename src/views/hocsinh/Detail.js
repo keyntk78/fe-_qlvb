@@ -24,7 +24,6 @@ import { useEffect } from 'react';
 import FormControlComponent from 'components/form/FormControlComponent ';
 import { IconBook2, IconCertificate, IconUser } from '@tabler/icons';
 import { useState } from 'react';
-import { getAllDonvi } from 'services/donvitruongService';
 import InputForm1 from 'components/form/InputForm1';
 import { getHocSinhByCCCD } from 'services/hocsinhService';
 import { getAllMonthi } from 'services/monthiService';
@@ -33,7 +32,7 @@ import { getAllHinhthucdaotao } from 'services/hinhthucdaotaoService';
 import { getAllKhoathi } from 'services/khoathiService';
 import InputForm from 'components/form/InputForm';
 import ExitButton from 'components/button/ExitButton';
-import { getAllDanhmucTN } from 'services/sharedService';
+import { getAllDanhmucTN, getAllTruong } from 'services/sharedService';
 import SelectForm from 'components/form/SelectForm';
 import { convertDateTimeToDate } from 'utils/formatDate';
 
@@ -164,7 +163,7 @@ const Detail = () => {
     const fetchDataDL = async () => {
       const monthi = await getAllMonthi();
       setMonThi(monthi.data);
-      const donvi = await getAllDonvi();
+      const donvi = await getAllTruong(user ? user.username : '');
       setDonVi(donvi.data);
       const danhmuc = await getAllDanhmucTN(user ? user.username : '');
       setDanhMuc(danhmuc.data);

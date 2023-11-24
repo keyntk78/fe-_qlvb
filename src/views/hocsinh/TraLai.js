@@ -6,7 +6,7 @@ import MuiTypography from '@mui/material/Typography';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoading, setOpenPopup, setReloadData, showAlert } from 'store/actions';
 import { useTranslation } from 'react-i18next';
-import { TongHocSinhChoDuyet, giveBackAllHocSinh } from 'services/hocsinhService';
+import { TongHocSinhTraLai, giveBackAllHocSinh } from 'services/hocsinhService';
 import { openPopupSelector, selectedDanhmucSelector, selectedDonvitruongSelector } from 'store/selectors';
 import { useEffect, useState } from 'react';
 
@@ -21,7 +21,7 @@ function TraLai() {
   useEffect(() => {
     const fetchDataDL = async () => {
       dispatch(setLoading(true));
-      const response = await TongHocSinhChoDuyet(donvi.id, danhmuc.id);
+      const response = await TongHocSinhTraLai(donvi.id, danhmuc.id);
       setCountHS(response.data);
       dispatch(setLoading(false));
     };

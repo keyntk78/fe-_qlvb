@@ -15,7 +15,7 @@ const Logo = () => {
 
   useEffect(() => {
     if (donvi) {
-      setUrlImage(donvi.cauHinh && donvi.cauHinh.logoDonvi ? config.urlFile + 'Logo/' + donvi.cauHinh.logoDonvi : logo);
+      setUrlImage(donvi.cauHinh && donvi.cauHinh.logoDonvi ? config.urlImages + donvi.cauHinh.logoDonvi : logo);
     }
   }, [donvi]);
 

@@ -10,14 +10,10 @@ import useLocalText from 'utils/localText';
 import { createSearchParams } from 'utils/createSearchParams';
 import i18n from 'i18n';
 import React from 'react';
-//import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { Grid, Paper, Typography } from '@mui/material';
 import { IconCheck, IconFileExport, IconX } from '@tabler/icons';
-//import * as XLSX from 'xlsx';
 import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
-// import { ThongKeDanhSachVanBangTmp, getDanhSachVanBangTmp } from 'services/xacminhvanbangService';
-// import { useTheme } from '@emotion/react';
 import CustomButton from 'components/button/CustomButton';
 import Popup from 'components/controls/popup';
 import DuaVaoBangChinh from './DuaVaoBangChinh';
@@ -27,25 +23,22 @@ import { useTranslatedColumns } from './ColumnNamHoc';
 import { useEffect } from 'react';
 import { getDanhSachDanhMucTmp } from 'services/xulydulieuService';
 import config from 'config';
-const DanhSachImport = ({ selectedValue }) => {
+import { convertISODateToFormattedDate } from 'utils/formatDate';
+const DanhSachImport = ({ selectedValue, selectedName }) => {
   const language = i18n.language;
   const { t } = useTranslation();
   const localeText = useLocalText();
   const dispatch = useDispatch();
-  const { columns_DanToc, columns_HeDaoTao, columns_HinhThucDaoTao, columns_KhoaThi, columns_MonHoc, columns_NamThi } =
+  const { columns_DanToc, columns_HeDaoTao, columns_HinhThucDaoTao, columns_KhoaThi, columns_MonHoc, columns_NamThi, columns_DonVi } =
     useTranslatedColumns();
   const navigate = useNavigate();
-  // const [isAccess, setIsAccess] = useState(true);
   const reloadData = useSelector(reloadDataSelector);
   const [dataImport, setDataImport] = useState([]);
-
   const user = useSelector(userLoginSelector);
-  //   const [dataTK, setdataTK] = useState([]);
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
   const openSubSubPopup = useSelector(openSubSubPopupSelector);
   const openSubPopup = useSelector(openSubPopupSelector);
-  //   const theme = useTheme();
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -57,11 +50,9 @@ const DanhSachImport = ({ selectedValue }) => {
   });
   const styles = {
     paper: {
-      //opacity: 0.8,
       borderRadius: '10px',
       width: '90%',
       marginBottom: '10px'
-      //boxShadow: '0 4px 8px rgba(0,0,0,0.3)'
     },
     countContainer: {
       width: '56px',
@@ -90,6 +81,8 @@ const DanhSachImport = ({ selectedValue }) => {
       ? columns_KhoaThi
       : selectedValue === 'namhoc'
       ? columns_NamThi
+      : selectedValue === 'donvi'
+      ? columns_DonVi
       : '';
 
   useEffect(() => {
@@ -104,12 +97,23 @@ const DanhSachImport = ({ selectedValue }) => {
         const data = await response.data;
         if (data) {
           setDataImport(data);
-          const dataWithIds =
-            data &&
-            data.list.map((row, index) => ({
-              id: pageState.startIndex * pageState.pageSize + index + 1,
-              ...row
-            }));
+          let dataWithIds = [];
+          if (selectedValue === 'khoathi') {
+            dataWithIds =
+              data &&
+              data.list.map((row, index) => ({
+                id: pageState.startIndex * pageState.pageSize + index + 1,
+                ngay_fm: convertISODateToFormattedDate(row.ngay),
+                ...row
+              }));
+          } else {
+            dataWithIds =
+              data &&
+              data.list.map((row, index) => ({
+                id: pageState.startIndex * pageState.pageSize + index + 1,
+                ...row
+              }));
+          }
           // Lưu trữ dữ liệu gốc vào state
           dispatch(setReloadData(false));
           setPageState((old) => ({
@@ -263,11 +267,11 @@ const DanhSachImport = ({ selectedValue }) => {
       </MainCard>{' '}
       <div style={{ textAlign: 'center' }}>
         <Grid container spacing={1} direction="row" justifyContent="center" my={2}>
-          {/* {dataTK && dataTK.errorRow == 0 && ( */}
-          <Grid item>
-            <CustomButton icon={IconCheck} label="Import" variant="contained" color="info" handleClick={openConfirm} />
-          </Grid>
-          {/* )} */}
+          {dataImport && dataImport.countError === 0 && (
+            <Grid item>
+              <CustomButton icon={IconCheck} label="Import" variant="contained" color="info" handleClick={openConfirm} />
+            </Grid>
+          )}
           <Grid item>
             <CustomButton icon={IconX} label="Hủy" variant="contained" color="error" handleClick={openDelete} />
           </Grid>
@@ -283,7 +287,7 @@ const DanhSachImport = ({ selectedValue }) => {
           bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
         >
           {form === 'addlist' ? (
-            <DuaVaoBangChinh selectedValue={selectedValue} />
+            <DuaVaoBangChinh selectedValue={selectedValue} selectedName={selectedName} />
           ) : form === 'delete' ? (
             <XoaKhoiBangTam selectedValue={selectedValue} />
           ) : (

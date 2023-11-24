@@ -5,7 +5,7 @@ import { useUserValidationSchema } from '../../components/validations/userValida
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { setOpenPopup, setReloadData, showAlert } from 'store/actions';
-import { donviSelector, openPopupSelector, selectedUserSelector } from 'store/selectors';
+import { donviSelector, openPopupSelector, selectedUserSelector, userLoginSelector } from 'store/selectors';
 import InputForm from 'components/form/InputForm';
 import ImageForm from 'components/form/ImageForm';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,7 @@ import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { convertJsonToFormData } from 'utils/convertJsonToFormData';
 import { useNavigate } from 'react-router';
 import FormControlComponent from 'components/form/FormControlComponent ';
-import { getAllDonviHavePhong } from 'services/donvitruongService';
+import { getAllDonViByUsername } from 'services/sharedService';
 import FormGroupButton from 'components/button/FormGroupButton';
 import SelectForm from 'components/form/SelectForm';
 import { convertDateTimeToDate } from 'utils/formatDate';
@@ -26,6 +26,7 @@ const EditUser = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const userValidationSchema = useUserValidationSchema(true);
+  const user = useSelector(userLoginSelector);
   const selectedUser = useSelector(selectedUserSelector);
   const [urlImage, setUrlImage] = useState('');
   const openPopup = useSelector(openPopupSelector);
@@ -102,7 +103,7 @@ const EditUser = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getAllDonviHavePhong();
+        const response = await getAllDonViByUsername(user.username);
         setDonvi(response.data);
       } catch (error) {
         console.log(error);

@@ -80,7 +80,7 @@ export default function TracuuVBCC() {
     {
       field: 'hoTen',
       headerName: t('hocsinh.field.fullname'),
-      flex: 3,
+      flex: 2,
       minWidth: 200
     },
     {
@@ -111,7 +111,7 @@ export default function TracuuVBCC() {
     },
     {
       headerName: t('donvi.title'),
-      flex: 2,
+      flex: 3,
       renderCell: (params) => <>{params.row.truong.ten}</>
     },
     {
@@ -122,7 +122,9 @@ export default function TracuuVBCC() {
       filterable: false,
       renderCell: (params) => (
         <>
-          <ActionButtons type="detail" handleGetbyId={handleDetail} params={params.row} />
+          <Grid container justifyContent="center">
+            <ActionButtons type="detail" handleGetbyId={handleDetail} params={params.row} />
+          </Grid>
         </>
       )
     }
@@ -135,39 +137,43 @@ export default function TracuuVBCC() {
   };
 
   const handleSubmit = async () => {
-    setError('');
-    if (isChecked === true && namHoc && hoTen && ngaSinh) {
-      setShowmain(true);
-      setPageState((old) => ({ ...old, isLoading: true }));
-      const params = await createSearchParams(pageState);
-      params.append('Cccd', cccd);
-      params.append('HoTen', hoTen);
-      params.append('NgaySinh', ngaSinh);
-      params.append('SoHieuVanBang', soHieuVanbang);
-      const response = await getSearchVBCC(selectNamHoc, params);
-      const check = handleResponseStatus(response, navigate);
-      if (check) {
-        const data = await response.data;
-        const dataWithIds = data.hocSinhs.map((row, index) => ({
-          idx: pageState.startIndex * pageState.pageSize + index + 1,
-          soHieuVanBang: row.soHieuVanBang ? row.soHieu : t('chuacap'),
-          soVaoSoCapBang: row.soVaoSoCapBang || t('chuacap'),
-          gioiTinh_fm: row.gioiTinh ? t('gender.male') : t('gender.female'),
-          ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
-          ...row
-        }));
-        dispatch(setReloadData(false));
-        setPageState((old) => ({
-          ...old,
-          isLoading: false,
-          data: dataWithIds,
-          total: data.totalRow || 0
-        }));
-      } else {
-        setIsAccess(false);
-      }
+    if (isChecked === false) {
+      setError('Vui lòng kiểm tra Recapcha');
     } else {
-      ('');
+      setError('');
+      if (isChecked === true && namHoc && hoTen && ngaSinh) {
+        setShowmain(true);
+        setPageState((old) => ({ ...old, isLoading: true }));
+        const params = await createSearchParams(pageState);
+        params.append('Cccd', cccd);
+        params.append('HoTen', hoTen);
+        params.append('NgaySinh', ngaSinh);
+        params.append('SoHieuVanBang', soHieuVanbang);
+        const response = await getSearchVBCC(selectNamHoc, params);
+        const check = handleResponseStatus(response, navigate);
+        if (check) {
+          const data = await response.data;
+          const dataWithIds = data.hocSinhs.map((row, index) => ({
+            idx: pageState.startIndex * pageState.pageSize + index + 1,
+            soHieuVanBang: row.soHieuVanBang ? row.soHieu : t('chuacap'),
+            soVaoSoCapBang: row.soVaoSoCapBang || t('chuacap'),
+            gioiTinh_fm: row.gioiTinh ? t('gender.male') : t('gender.female'),
+            ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
+            ...row
+          }));
+          dispatch(setReloadData(false));
+          setPageState((old) => ({
+            ...old,
+            isLoading: false,
+            data: dataWithIds,
+            total: data.totalRow || 0
+          }));
+        } else {
+          setIsAccess(false);
+        }
+      } else {
+        setError('Hãy điền đầy đủ thông tin');
+      }
     }
   };
 
@@ -303,9 +309,9 @@ export default function TracuuVBCC() {
                 </Box>
               </Grid>
             </Grid>
-            <Grid item container xs={12} justifyContent={'center'}>
-              <Grid item xs={12}>
-                <Typography variant="body" sx={{ color: 'red', marginLeft: 3 }}>
+            <Grid item container xs={12} justifyContent={'center'} alignContent={'center'} alignItems="center" mt={1} mb={1}>
+              <Grid item>
+                <Typography variant="body" sx={{ color: 'red' }}>
                   {error}
                 </Typography>
               </Grid>

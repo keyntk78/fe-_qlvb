@@ -40,7 +40,8 @@ const XuLyDuLieu = () => {
     handleExport_KhoaThi,
     handleExport_HeDaoTao,
     handleExport_HinhThucDaoTao,
-    handleExport_MonThi
+    handleExport_MonThi,
+    handleExport_DonVi
   } = ExportData();
   const handleImport = () => {
     setTitle(t('Import dữ liệu danh mục'));
@@ -61,6 +62,8 @@ const XuLyDuLieu = () => {
       ? handleExport_HinhThucDaoTao(e)
       : selectedCategory === 'khoathi'
       ? handleExport_KhoaThi(e)
+      : selectedCategory === 'donvi'
+      ? handleExport_DonVi(e)
       : '';
   };
 
@@ -104,9 +107,9 @@ const XuLyDuLieu = () => {
               <InputLabel>{t('Chọn danh mục')}</InputLabel>
               <Select name="id" label={t('Chọn danh mục')} onChange={handleDanhMucChange} value={selectedCategory}>
                 {data && data.length > 0 ? (
-                  data.map((dmtn) => (
-                    <MenuItem key={dmtn.table} value={dmtn.table}>
-                      {dmtn.name}
+                  data.map((dm) => (
+                    <MenuItem key={dm.table} value={dm.table}>
+                      {dm.name}
                     </MenuItem>
                   ))
                 ) : (

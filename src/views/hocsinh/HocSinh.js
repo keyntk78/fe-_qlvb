@@ -74,13 +74,13 @@ export default function HocSinh() {
   const [danToc, setDanToc] = useState([]);
   const [search, setSearch] = useState(false);
   const [firstLoad, setFirstLoad] = useState(true);
-  const [disabledExport, setDisabledExport] = useState(true);
   const reloadData = useSelector(reloadDataSelector);
   const dispatch = useDispatch();
   const localeText = useLocalText();
   const navigate = useNavigate();
   const [selectDonvi, setSelectDonvi] = useState('');
   const [selectDanhmuc, setSelectDanhmuc] = useState('');
+  const [tenDMTN, setSelectTenDMTN] = useState('');
   const [selectedRowData, setSelectedRowData] = useState([]);
   const [disabled, setDisabled] = useState(false);
   const [disabled1, setDisabled1] = useState(false);
@@ -89,6 +89,7 @@ export default function HocSinh() {
   const [configAuto, setConfigAuto] = useState(false);
   const infoHocSinh = useSelector(infoHocSinhSelector);
   const user = useSelector(userLoginSelector);
+  const [firstLoad3, setFirstLoad3] = useState(true);
 
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -168,14 +169,6 @@ export default function HocSinh() {
     dispatch(selectedDanhmuc(selectedDanhmucInfo));
     dispatch(selectedDonvitruong(selectedDonviInfo));
   };
-
-  useEffect(() => {
-    if (pageState.data && pageState.data.length > 0) {
-      setDisabledExport(false);
-    } else {
-      setDisabledExport(true);
-    }
-  }, [pageState.data]);
 
   const buttonConfigurations = [
     {
@@ -268,8 +261,8 @@ export default function HocSinh() {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const response = await getAllDanhmucTN(user ? user.username : '');
-      setDMTN(response.data);
+      // const response = await getAllDanhmucTN(user ? user.username : '');
+      // setDMTN(response.data);
       const donvi = await getAllTruong(user.username);
       setDonvis(donvi.data);
       const dantoc = await getAllDanToc();
@@ -279,6 +272,26 @@ export default function HocSinh() {
     };
     fetchDataDL();
   }, []);
+  useEffect(() => {
+    const fetchDataDL = async () => {
+      setTimeout(
+        async () => {
+          try {
+            setLoading(true);
+            const response = await getAllDanhmucTN(user ? user.username : '');
+            setDMTN(response.data);
+            setFirstLoad3(false);
+            setLoading(false);
+          } catch (error) {
+            console.error(error);
+            setLoading(false);
+          }
+        },
+        firstLoad3 ? 2500 : 0
+      );
+    };
+    fetchDataDL();
+  }, [user]);
 
   useEffect(() => {
     if (donvis.length > 0 && dMTN.length > 0) {
@@ -406,11 +419,13 @@ export default function HocSinh() {
   const handleExport = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
-    await ExportHocSinh(pageState.data);
+    await ExportHocSinh(pageState.DMTN, tenDMTN, pageState.donVi, true);
     dispatch(setLoading(false));
   };
   const handleDanhMucChange = (event) => {
     const selectedValue = event.target.value;
+    const selectedCategory = dMTN.find((dmtn) => dmtn.id === selectedValue);
+    setSelectTenDMTN(selectedCategory ? selectedCategory.tieuDe : '');
     setPageState((old) => ({ ...old, DMTN: selectedValue }));
   };
 
@@ -654,7 +669,12 @@ export default function HocSinh() {
         </Grid>
         <Grid item container mb={1} justifyContent="flex-end" spacing={1}>
           <Grid item>
-            <ButtonSuccess title={t('button.export.excel')} onClick={handleExport} icon={IconFileExport} disabled={disabledExport} />
+            <ButtonSuccess
+              title={t('button.export.excel')}
+              onClick={handleExport}
+              icon={IconFileExport}
+              disabled={!selectDanhmuc || !selectDonvi}
+            />
           </Grid>
           {selectedRowData.length !== 0 ? (
             <>

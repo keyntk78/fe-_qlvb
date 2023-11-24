@@ -14,7 +14,7 @@ import useLocalText from 'utils/localText';
 import i18n from 'i18n';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import DetailPhatBang from 'views/capphatbang/Detail';
-import Detail from 'views/capbangbangoc/Detail';
+import Detail from 'views/hocsinhtotnghiep/Detail';
 import MainCard from 'components/cards/MainCard';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import BackToTop from 'components/scroll/BackToTop';

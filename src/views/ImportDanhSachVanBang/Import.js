@@ -9,7 +9,7 @@ import { setLoading, setOpenPopup, setOpenSubPopup, showAlert } from 'store/acti
 import { useDispatch, useSelector } from 'react-redux';
 import { IconEye, IconFilePlus } from '@tabler/icons';
 import { useTranslation } from 'react-i18next';
-import { getAllDanhmucTN, getAllTruong } from 'services/sharedService';
+import { GetCauHinhByIdDonVi, getAllDanhmucTN, getAllTruong } from 'services/sharedService';
 //import { getAllDonvi } from 'services/donvitruongService';
 import { getAllKhoathiByDMTN } from 'services/khoathiService';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
@@ -126,6 +126,21 @@ function Import() {
       }
     }
   });
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await GetCauHinhByIdDonVi(user.username);
+      const data = await response.data;
+      formik.setValues({
+        UyBanNhanDan: data.tenUyBanNhanDan || '',
+        CoQuanCapBang: data.tenCoQuanCapBang || '',
+        NguoiKyBang: data.hoTenNguoiKySoGoc || '',
+        DiaPhuongCapBang: data.tenDiaPhuongCapBang || ''
+      });
+    };
+    if (openPopup) {
+      fetchData();
+    }
+  }, [openPopup]);
   // const submitFile = async (e) => {
   //   e.preventDefault();
   //   if (!selectFile) {

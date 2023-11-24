@@ -106,7 +106,7 @@ const SoGocCu = () => {
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;
-        const dataWithIds = data.map((row, index) => ({
+        const dataWithIds = data.hocSinhs.map((row, index) => ({
           idx: pageState.startIndex * pageState.pageSize + index + 1,
           transferTime: row.ngayTao == null ? 'Chưa truy cập ' : convertISODateTimeToFormattedDateTime(row.ngayTao),
           ...row
@@ -116,7 +116,7 @@ const SoGocCu = () => {
           ...old,
           isLoading: false,
           data: dataWithIds,
-          total: dataWithIds[0]?.totalRow || 0
+          total: data.totalRow || 0
         }));
       } else {
         setIsAccess(false);

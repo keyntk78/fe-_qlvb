@@ -1,5 +1,4 @@
 import { useTheme } from '@emotion/react';
-import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 export const useTranslatedColumns = () => {
@@ -118,15 +117,9 @@ export const useTranslatedColumns = () => {
     },
     {
       flex: 1,
-      field: 'ngay',
+      field: 'ngay_fm',
       headerName: t('khoathi.field.Ngay'),
-      minWidth: 100,
-      valueFormatter: (params) => {
-        // Chuyển đổi ngày từ định dạng ISO sang ngày theo giờ Việt Nam
-        const isoDate = params.value;
-        const localDate = format(new Date(isoDate), 'dd/MM/yyyy');
-        return localDate;
-      }
+      minWidth: 100
     },
     {
       flex: 1,
@@ -225,12 +218,68 @@ export const useTranslatedColumns = () => {
       )
     }
   ];
+  const columns_DonVi = [
+    {
+      field: 'id',
+      headerName: t('serial'),
+      width: 50,
+      sortable: false,
+      filterable: false
+    },
+    {
+      field: 'ma',
+      headerName: t('Mã trường'),
+      width: 70
+    },
+    {
+      field: 'ten',
+      headerName: t('Tên trường'),
+      width: 250
+    },
+    {
+      field: 'maHeDaoTao',
+      headerName: t('Mã HĐT'),
+      width: 70
+    },
+    {
+      field: 'maHinhThucDaoTao',
+      headerName: t('Mã HTĐT'),
+      width: 70
+    },
+    {
+      field: 'hieuTruong',
+      headerName: t('Hiệu trưởng'),
+      flex: 1
+    },
+    {
+      field: 'tenDiaPhuong',
+      headerName: t('Tên địa phương'),
+      flex: 1
+    },
+    {
+      field: 'message',
+      headerName: t('Lý do'),
+      flex: 1,
+      renderCell: (
+        params // Thêm tham số theme vào hàm renderCell
+      ) => (
+        <div
+          style={{
+            color: params.row.errorCode === -1 ? theme.palette.error.main : params.row.errorCode === -2 ? 'orange' : 'inherit'
+          }}
+        >
+          {params.value}
+        </div>
+      )
+    }
+  ];
   return {
     columns_DanToc,
     columns_HeDaoTao,
     columns_HinhThucDaoTao,
     columns_KhoaThi,
     columns_MonHoc,
-    columns_NamThi
+    columns_NamThi,
+    columns_DonVi
   };
 };
