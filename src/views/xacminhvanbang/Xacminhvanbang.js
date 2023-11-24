@@ -91,6 +91,7 @@ export default function Xacminhvanbang() {
     hoTen: '',
     noiSinh: '',
     DMTN: '',
+    HTDT: '',
     danToc: '',
     donVi: '',
     namHoc: '',
@@ -498,6 +499,8 @@ export default function Xacminhvanbang() {
 
   const handleHTDTChange = (event) => {
     const selectedValue = event.target.value;
+    const htdtId = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, HTDT: htdtId }));
     setSelectHTDT(selectedValue);
   };
 
@@ -544,7 +547,7 @@ export default function Xacminhvanbang() {
           <Grid item md={3} sm={3} lg={1.2} xs={isXs ? 5 : 1.5}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('namhoc')}</InputLabel>
-              <Select name="truongId" value={selectNamHoc === '' ? 'all' : selectNamHoc} onChange={handleNamHocChange} label={t('Năm học')}>
+              <Select name="namHoc" value={selectNamHoc === '' ? 'all' : selectNamHoc} onChange={handleNamHocChange} label={t('Năm học')}>
                 <MenuItem value="all">Tất cả</MenuItem>
                 {namHoc && namHoc.length > 0 ? (
                   namHoc.map((data) => (
@@ -561,7 +564,13 @@ export default function Xacminhvanbang() {
           <Grid item md={3.5} sm={3.5} lg={2.5} xs={isXs ? 7 : 2.5}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('hinhthucdaotao.title')}</InputLabel>
-              <Select name="truongId" value={selectHTDT} onChange={handleHTDTChange} label={t('hinhthucdaotao.title')}>
+              <Select
+                name="truongId"
+                value={selectHTDT === '' ? 'all' : selectHTDT}
+                onChange={handleHTDTChange}
+                label={t('hinhthucdaotao.title')}
+              >
+                <MenuItem value="all">Tất cả</MenuItem>
                 {htdt && htdt.length > 0 ? (
                   htdt.map((data) => (
                     <MenuItem key={data.ma} value={data.ma}>
