@@ -32,14 +32,13 @@ import { handleResponseStatus } from 'utils/handleResponseStatus';
 import useLocalText from 'utils/localText';
 import i18n from 'i18n';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
-import { getHocSinhs } from 'services/hocsinhService';
+import { getHocSinhs, getThongkeByPhong } from 'services/hocsinhService';
 import Detail from './Detail';
 import MainCard from 'components/cards/MainCard';
 import Popup from 'components/controls/popup';
 import FileExcel from '../FileMau/FileMauTuDong.xlsx';
 import FileExcel_thucong from '../FileMau/FileMauKhongTuDong.xlsx';
-// import { getAllDonvi } from 'services/donvitruongService';
-import { getAllDanToc, getAllTruong, getCauHinhTuDongXepLoai } from 'services/sharedService';
+import { getAllDanToc, getCauHinhTuDongXepLoai } from 'services/sharedService';
 
 import DuyetAll from './DuyetAll';
 import { getAllDanhmucTN } from 'services/sharedService';
@@ -50,6 +49,7 @@ import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import ExportHocSinh from './ExportHocSinh';
 import GroupButtons from 'components/button/GroupButton';
+import { GetTruongHasPermision } from 'services/danhmuctotnghiepService';
 
 const trangThaiOptions = [
   { value: '1', label: 'Chưa duyệt' },
@@ -62,6 +62,7 @@ const ketQuaOptions = [
 
 export default function HocSinh() {
   const isXs = useMediaQuery('(max-width:600px)');
+  const isMd = useMediaQuery('(max-width:1200px)');
   const language = i18n.language;
   const { t } = useTranslation();
   const openPopup = useSelector(openPopupSelector);
@@ -90,6 +91,7 @@ export default function HocSinh() {
   const infoHocSinh = useSelector(infoHocSinhSelector);
   const user = useSelector(userLoginSelector);
   const [firstLoad3, setFirstLoad3] = useState(true);
+  const [data, setData] = useState([]);
 
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -160,13 +162,13 @@ export default function HocSinh() {
 
   const handleSearch = () => {
     setSearch(!search);
-    setSelectDonvi(pageState.donVi);
     setSelectDanhmuc(pageState.DMTN);
-    const donviSelect = pageState.donVi;
-    const selectedDonviInfo = donvis.find((donvi) => donvi.id === donviSelect);
+    setSelectDonvi(pageState.donVi);
     const danhmucSelect = pageState.DMTN;
     const selectedDanhmucInfo = dMTN.find((dmtn) => dmtn.id === danhmucSelect);
     dispatch(selectedDanhmuc(selectedDanhmucInfo));
+    const donviSelect = pageState.donVi;
+    const selectedDonviInfo = donvis.find((donvi) => donvi.idTruong === donviSelect);
     dispatch(selectedDonvitruong(selectedDonviInfo));
   };
 
@@ -261,10 +263,6 @@ export default function HocSinh() {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      // const response = await getAllDanhmucTN(user ? user.username : '');
-      // setDMTN(response.data);
-      const donvi = await getAllTruong(user.username);
-      setDonvis(donvi.data);
       const dantoc = await getAllDanToc();
       setDanToc(dantoc.data);
       const configAuto = await getCauHinhTuDongXepLoai();
@@ -288,14 +286,30 @@ export default function HocSinh() {
             setLoading(false);
           }
         },
-        firstLoad3 ? 2500 : 0
+        firstLoad3 ? 1000 : 0
       );
     };
     fetchDataDL();
   }, [user]);
 
   useEffect(() => {
-    if (donvis.length > 0 && dMTN.length > 0) {
+    const fetchDataDL = async () => {
+      const params = new URLSearchParams();
+      params.append('pageSize', -1);
+      const donvi = await GetTruongHasPermision(selectDanhmuc, params);
+      if (donvi && donvi.data && donvi.data.truongs && donvi.data.truongs.length > 0) {
+        setDonvis(donvi.data.truongs);
+      } else {
+        setDonvis([]);
+      }
+    };
+    if (selectDanhmuc) {
+      fetchDataDL();
+    }
+  }, [selectDanhmuc]);
+
+  useEffect(() => {
+    if (donvis && donvis.length > 0 && dMTN && dMTN.length > 0) {
       if (infoMessage) {
         setPageState((old) => ({ ...old, donVi: infoMessage.IdTruong, DMTN: infoMessage.IdDanhMucTotNghiep }));
         setSelectDanhmuc(infoMessage.IdDanhMucTotNghiep);
@@ -347,14 +361,19 @@ export default function HocSinh() {
       params.append('danToc', pageState.danToc);
       params.append('idDanhMucTotNghiep', pageState.DMTN);
       params.append('idTruong', pageState.donVi);
-      params.append('trangThai', pageState.trangThai ? pageState.trangThai : '1');
-      params.append('ketQua', pageState.ketQua ? pageState.ketQua : 'x');
+      params.append('trangThai', pageState.trangThai);
+      params.append('ketQua', pageState.ketQua);
       const response = await getHocSinhs(params);
       const data = response.data;
-      const hasActiveHocSinh = data && data.hocSinhs.length > 0 ? data.hocSinhs.some((hocSinh) => hocSinh.trangThai === 1) : false;
-      setDisabled(!hasActiveHocSinh);
-      const hasActiveApprov = data && data.hocSinhs.length > 0 ? data.hocSinhs.some((hocSinh) => hocSinh.ketQua === 'x') : false;
-      setDisabledApprov(!hasActiveApprov);
+      if (data && data.hocSinhs) {
+        const hasActiveHocSinh = data.hocSinhs.length === 0 || data.hocSinhs.some((hocSinh) => hocSinh.trangThai === 2);
+        setDisabled(hasActiveHocSinh);
+        const hasActiveApprov = data.hocSinhs.length > 0 ? data.hocSinhs.some((hocSinh) => hocSinh.ketQua === 'x') : false;
+        setDisabledApprov(!hasActiveApprov);
+      } else {
+        setDisabled(true);
+        setDisabledApprov(true);
+      }
       const check = handleResponseStatus(response, navigate);
       if (check) {
         if (data && data.hocSinhs.length > 0) {
@@ -408,6 +427,26 @@ export default function HocSinh() {
   }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search, loadData]);
 
   useEffect(() => {
+    const fetchData = async () => {
+      setPageState((old) => ({ ...old, isLoading: true }));
+      const response = await getThongkeByPhong(pageState.donVi, pageState.DMTN);
+      setData(response.data);
+    };
+    if (!firstLoad || loadData) {
+      if (loadData) {
+        fetchData();
+        setLoadData(false);
+        dispatch(setSelectedInfoMessage(''));
+        dispatch(setInfoHocSinh(null));
+      } else {
+        fetchData();
+      }
+    } else {
+      setFirstLoad(false);
+    }
+  }, [reloadData, search, loadData]);
+
+  useEffect(() => {
     setDataCCCD(selectedRowData.map((row) => row.cccd));
   }, [selectedRowData]);
 
@@ -423,12 +462,14 @@ export default function HocSinh() {
     await ExportHocSinh(pageState.DMTN, tenDMTN, pageState.donVi, true);
     dispatch(setLoading(false));
   };
+
   const handleDanhMucChange = (event) => {
     const selectedValue = event.target.value;
     const selectedCategory = dMTN.find((dmtn) => dmtn.id === selectedValue);
     setSelectTenDMTN(selectedCategory ? selectedCategory.tieuDe : '');
     const danhMuc = selectedValue === 'all' ? '' : selectedValue;
     setPageState((old) => ({ ...old, DMTN: danhMuc }));
+    setSelectDanhmuc(selectedValue);
   };
 
   const handleTrangThaiChange = (event) => {
@@ -497,28 +538,6 @@ export default function HocSinh() {
         <Grid item container spacing={1} my={1} justifyContent={'center'}>
           <Grid item lg={4} md={4} sm={4} xs={isXs ? 12 : 4}>
             <FormControl fullWidth variant="outlined" size="small">
-              <InputLabel>{t('donvitruong.title')}</InputLabel>
-              <Select
-                name="truongId"
-                value={pageState.donVi === '' ? 'all' : pageState.donVi}
-                onChange={handleSchoolChange}
-                label={t('donvitruong.title')}
-              >
-                <MenuItem value="all">{t('select.all')}</MenuItem>
-                {donvis && donvis.length > 0 ? (
-                  donvis.map((donvi) => (
-                    <MenuItem key={donvi.id} value={donvi.id}>
-                      {donvi.ten}
-                    </MenuItem>
-                  ))
-                ) : (
-                  <MenuItem value="">No data available</MenuItem>
-                )}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item lg={4} md={4} sm={4} xs={isXs ? 12 : 4}>
-            <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('danhmuc.title')}</InputLabel>
               <Select
                 name="id"
@@ -534,7 +553,29 @@ export default function HocSinh() {
                     </MenuItem>
                   ))
                 ) : (
-                  <MenuItem value="">No data available</MenuItem>
+                  <MenuItem value="">Không có dữ liệu</MenuItem>
+                )}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item lg={4} md={4} sm={4} xs={isXs ? 12 : 4}>
+            <FormControl fullWidth variant="outlined" size="small">
+              <InputLabel>{t('donvitruong.title')}</InputLabel>
+              <Select
+                name="truongId"
+                value={pageState.donVi === '' ? 'all' : pageState.donVi}
+                onChange={handleSchoolChange}
+                label={t('donvitruong.title')}
+              >
+                <MenuItem value="all">{t('select.all')}</MenuItem>
+                {donvis && donvis.length > 0 ? (
+                  donvis.map((donvi) => (
+                    <MenuItem key={donvi.idTruong} value={donvi.idTruong}>
+                      {donvi.tenTruong}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value="">Không có dữ liệu</MenuItem>
                 )}
               </Select>
             </FormControl>
@@ -647,7 +688,7 @@ export default function HocSinh() {
                       </MenuItem>
                     ))
                   ) : (
-                    <MenuItem value="">No data available</MenuItem>
+                    <MenuItem value="">Không có dữ liệu</MenuItem>
                   )}
                 </Select>
               </FormControl>
@@ -666,66 +707,135 @@ export default function HocSinh() {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item container mb={1} justifyContent="flex-end" spacing={1}>
-          <Grid item>
-            <ButtonSuccess
-              title={t('button.export.excel')}
-              onClick={handleExport}
-              icon={IconFileExport}
-              disabled={!selectDanhmuc || !selectDonvi}
-            />
-          </Grid>
-          {selectedRowData.length !== 0 ? (
+        <Grid item container mb={1} spacing={1} alignItems="center">
+          {!isMd ? (
             <>
-              <Grid item>
-                <Button
-                  color="error"
-                  onClick={handleTraLaiLuaChon}
-                  variant="contained"
-                  startIcon={<IconArrowBack />}
-                  disabled={!selectDanhmuc || !selectDonvi || disabled || disabled1}
-                >
-                  {t('button.tralai')}
-                </Button>
-              </Grid>
-
-              <Grid item>
-                <ButtonSuccess
-                  title={t('button.duyet')}
-                  onClick={handleDuyet}
-                  icon={IconCircleCheck}
-                  disabled={
-                    !selectDanhmuc ||
-                    !selectDonvi ||
-                    selectedRowData.some((row) => row.trangThai === 2) ||
-                    selectedRowData.some((row) => row.ketQua === 'o')
-                  }
-                />
+              <Grid item xs={12} sm={12} md={12} lg={6}>
+                <Grid item container spacing={1}>
+                  <Grid item xs={6} md={4} lg={4}>
+                    <Typography variant="h5">
+                      {t('Số lượng học sinh')}: {data && data.totalRow ? data.totalRow : 0}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} md={4} lg={4}>
+                    <Typography variant="h5">
+                      {t('Chưa duyệt')}: {data && data.soHocSinhChuaDuyetDuyet ? data.soHocSinhChuaDuyetDuyet : 0}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} md={4} lg={4}>
+                    <Typography variant="h5">
+                      {t('Đã duyệt')}: {data && data.soHocSinhDaDuyet ? data.soHocSinhDaDuyet : 0}
+                    </Typography>
+                  </Grid>
+                </Grid>
               </Grid>
             </>
           ) : (
-            <>
-              <Grid item>
-                <Button
-                  color="error"
-                  onClick={handleTraLai}
-                  variant="contained"
-                  startIcon={<IconArrowBack />}
-                  disabled={!selectDanhmuc || !selectDonvi || disabled || disabled1}
-                >
-                  {t('trả lại tất cả')}
-                </Button>
-              </Grid>
+            ''
+          )}
+          <Grid item xs={12} sm={12} md={12} lg={6}>
+            <Grid item container spacing={1} justifyContent="flex-end">
               <Grid item>
                 <ButtonSuccess
-                  title={t('button.duyetall')}
-                  onClick={handleDuyetAll}
-                  icon={IconCircleCheck}
-                  disabled={!selectDanhmuc || !selectDonvi || disabled || disabled1 || disabledApprov}
+                  title={t('button.export.excel')}
+                  onClick={handleExport}
+                  icon={IconFileExport}
+                  disabled={!selectDanhmuc || !selectDonvi}
                 />
               </Grid>
-            </>
-          )}
+              {selectedRowData.length !== 0 ? (
+                <>
+                  <Grid item>
+                    <Button
+                      color="error"
+                      onClick={handleTraLaiLuaChon}
+                      variant="contained"
+                      startIcon={<IconArrowBack />}
+                      disabled={!selectDanhmuc || !selectDonvi || selectedRowData.some((row) => row.trangThai === 2)}
+                    >
+                      {t('button.tralai')}
+                    </Button>
+                  </Grid>
+
+                  <Grid item>
+                    <ButtonSuccess
+                      title={t('button.duyet')}
+                      onClick={handleDuyet}
+                      icon={IconCircleCheck}
+                      disabled={
+                        !selectDanhmuc ||
+                        !selectDonvi ||
+                        selectedRowData.some((row) => row.trangThai === 2) ||
+                        selectedRowData.some((row) => row.ketQua === 'o')
+                      }
+                    />
+                  </Grid>
+                </>
+              ) : (
+                <>
+                  <Grid item>
+                    <Button
+                      color="error"
+                      onClick={handleTraLai}
+                      variant="contained"
+                      startIcon={<IconArrowBack />}
+                      disabled={!selectDanhmuc || !selectDonvi || disabled || disabled1}
+                    >
+                      {t('trả lại tất cả')}
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <ButtonSuccess
+                      title={t('button.duyetall')}
+                      onClick={handleDuyetAll}
+                      icon={IconCircleCheck}
+                      disabled={!selectDanhmuc || !selectDonvi || disabled || disabled1 || disabledApprov}
+                    />
+                  </Grid>
+                </>
+              )}
+            </Grid>
+          </Grid>
+        </Grid>
+        {isMd ? (
+          <>
+            <Grid item container spacing={1}>
+              <Grid item xs={6} md={4} lg={4}>
+                <Typography variant="h5">
+                  {t('Số lượng học sinh')}: {data && data.totalRow ? data.totalRow : 0}
+                </Typography>
+              </Grid>
+              <Grid item xs={6} md={4} lg={4}>
+                <Typography variant="h5">
+                  {t('Chưa duyệt')}: {data && data.soHocSinhChuaDuyetDuyet ? data.soHocSinhChuaDuyetDuyet : 0}
+                </Typography>
+              </Grid>
+              <Grid item xs={6} md={4} lg={4}>
+                <Typography variant="h5">
+                  {t('Đã duyệt')}: {data && data.soHocSinhDaDuyet ? data.soHocSinhDaDuyet : 0}
+                </Typography>
+              </Grid>
+            </Grid>
+          </>
+        ) : (
+          ''
+        )}
+        <Grid item container spacing={1} mb={1}>
+          <Grid item xs={6} md={4} lg={2}>
+            <Typography variant="h5">
+              {t('Giỏi')}: {data && data.tongGioi ? data.tongGioi : 0}
+            </Typography>
+          </Grid>
+          <Grid item xs={6} md={4} lg={2}>
+            <Typography variant="h5">
+              {t('Khá')}: {data && data.tongKha ? data.tongKha : 0}
+            </Typography>
+          </Grid>
+          <Grid item xs={6} md={4} lg={2}>
+            <Typography variant="h5">
+              {t('Trung bình')}: {data && data.tongTB ? data.tongTB : 0}
+            </Typography>
+          </Grid>
         </Grid>
         <DataGrid
           autoHeight

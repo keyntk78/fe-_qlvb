@@ -21,7 +21,7 @@ function DuyetAll() {
   useEffect(() => {
     const fetchDataDL = async () => {
       dispatch(setLoading(true));
-      const response = await TongHocSinhChoDuyet(donvi.id, danhmuc.id);
+      const response = await TongHocSinhChoDuyet(donvi.idTruong, danhmuc.id);
       setCountHS(response.data);
       dispatch(setLoading(false));
     };
@@ -51,7 +51,7 @@ function DuyetAll() {
         <IconCircleCheck size={100} color="#2196F3" />
       </Grid>
       <MuiTypography variant="h4" gutterBottom m={1}>
-        {`${t('form.duyetall.warning')}${t('donvitruong.title')} [${donvi ? donvi.ten : ''}], ${t('danhmuc.title')} [${
+        {`${t('form.duyetall.warning')}${t('donvitruong.title')} [${donvi ? donvi.tenTruong : ''}], ${t('danhmuc.title')} [${
           danhmuc ? danhmuc.tieuDe : ''
         }]?`}
       </MuiTypography>

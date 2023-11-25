@@ -23,6 +23,7 @@ import '@splidejs/splide/dist/css/splide.min.css';
 import { getPhong } from 'services/congthongtinService';
 import config from 'config';
 import { useTranslation } from 'react-i18next';
+import { getCauHinhBatTatDangKyCapBanSao } from 'services/sharedService';
 
 export default function Header() {
   const [currentDateTime, setCurrentDateTime] = useState('');
@@ -35,13 +36,14 @@ export default function Header() {
   const [phong, setPhong] = useState([]);
   const [selectedItem, setSelectedItem] = useState('/');
   const [isHeaderFixed, setIsHeaderFixed] = useState(false);
+  const [batTat, setbatTat] = useState('true');
   const menuItems = [
     { path: '/', icon: <IconHome />, text: 'Trang chủ' },
     { path: '/tracuu-vanbang', icon: <IconCertificate />, text: 'Tra cứu văn bằng' },
     { path: '/tracuu-donyeucau', icon: <IconFileCertificate />, text: 'Tra cứu đơn cấp bản sao' },
-    { path: '/dangky-donyeucau', icon: <IconPencil />, text: 'Đăng ký cấp bản sao' }
+    batTat === 'true' ? { path: '/dangky-donyeucau', icon: <IconPencil />, text: 'Đăng ký cấp bản sao' } : ''
   ];
-
+  console.log('â', batTat);
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 85) {
@@ -138,6 +140,9 @@ export default function Header() {
 
   useEffect(() => {
     const fetchData = async () => {
+      const batTatdangkybanSao = await getCauHinhBatTatDangKyCapBanSao();
+      console.log(batTatdangkybanSao.data.configValue);
+      setbatTat(batTatdangkybanSao.data.configValue);
       const donvibyid = await getPhong();
       const dataphong = donvibyid.data.cauHinh;
       setTimeout(async () => {

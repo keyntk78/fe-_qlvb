@@ -21,7 +21,7 @@ function TraLai() {
   useEffect(() => {
     const fetchDataDL = async () => {
       dispatch(setLoading(true));
-      const response = await TongHocSinhTraLai(donvi.id, danhmuc.id);
+      const response = await TongHocSinhTraLai(donvi.idTruong, danhmuc.id);
       setCountHS(response.data);
       dispatch(setLoading(false));
     };
@@ -51,7 +51,7 @@ function TraLai() {
         <IconArrowBack size={100} color="#F44336" />
       </Grid>
       <MuiTypography variant="h4" gutterBottom m={2}>
-        {`${t('form.tralai.warning')}${t('donvitruong.title')} [${donvi ? donvi.ten : ''}], ${t('danhmuc.title')} [${
+        {`${t('form.tralai.warning')}${t('donvitruong.title')} [${donvi ? donvi.tenTruong : ''}], ${t('danhmuc.title')} [${
           danhmuc ? danhmuc.tieuDe : ''
         }]`}
       </MuiTypography>

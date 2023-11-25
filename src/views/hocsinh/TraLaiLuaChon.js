@@ -17,7 +17,7 @@ function TraLaiLuaChon({ dataCCCD }) {
   const data = [...dataCCCD];
   const hanldeTraLaiLuaChon = async () => {
     try {
-      const response = await giveBackHocSinh(donvi.id, danhmuc.id, data);
+      const response = await giveBackHocSinh(donvi.idTruong, danhmuc.id, data);
       if (response.isSuccess == false) {
         dispatch(showAlert(new Date().getTime().toString(), 'error', response.message.toString()));
       } else {
@@ -36,7 +36,7 @@ function TraLaiLuaChon({ dataCCCD }) {
         <IconArrowBack size={100} color="#F44336" />
       </Grid>
       <MuiTypography variant="h4" gutterBottom m={2}>
-        {`${t('form.tralai.warning')}${t('donvitruong.title')} [${donvi ? donvi.ten : ''}], ${t('danhmuc.title')} [${
+        {`${t('form.tralai.warning')}${t('donvitruong.title')} [${donvi ? donvi.tenTruong : ''}], ${t('danhmuc.title')} [${
           danhmuc ? danhmuc.tieuDe : ''
         }]`}
       </MuiTypography>

@@ -172,3 +172,16 @@ export async function TongHocSinhDaDuyet(idTruong, idDanhMucTotNghiep) {
     throw error;
   }
 }
+
+export async function getThongKeByTruong(idTruong, idDanhMucTotNghiep) {
+  try {
+    const response = await sendRequest(
+      `HocSinhTruong/ThongKeByTruong?idTruong=${idTruong}&idDanhMucTotNghiep=${idDanhMucTotNghiep}`,
+      'GET'
+    );
+    return response;
+  } catch (error) {
+    console.error('Error creating history access:', error);
+    throw error;
+  }
+}
