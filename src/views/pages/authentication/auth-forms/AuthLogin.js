@@ -65,7 +65,6 @@ const FirebaseLogin = ({ ...others }) => {
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
             const loggedInUser = await LoginSSO(values);
-            console.log(loggedInUser);
             if (loggedInUser.isSuccess) {
               setUser(loggedInUser.data);
               dispatch(setOpenPopup(true));

@@ -363,7 +363,7 @@ export default function CapBangGoc() {
       params.append('danToc', pageState.danToc);
       params.append('idDanhMucTotNghiep', pageState.DMTN);
       params.append('idTruong', pageState.donVi);
-      params.append('trangThai', pageState.trangThai ? pageState.trangThai : '2');
+      params.append('trangThai', pageState.trangThai || '');
       const response = await getHocSinhCapBang(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -440,7 +440,8 @@ export default function CapBangGoc() {
 
   const handleTrangThaiChange = (event) => {
     const selectedValue = event.target.value;
-    setPageState((old) => ({ ...old, trangThai: selectedValue }));
+    const trangthai = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, trangThai: trangthai }));
   };
   useEffect(() => {
     setDataCCCD(selectedRowData.map((row) => row.cccd));
@@ -452,7 +453,7 @@ export default function CapBangGoc() {
       const params = await createSearchParams(updatedPageState);
       params.append('idTruong', selectDonvi);
       params.append('idDanhMucTotNghiep', selectDanhmuc);
-      params.append('trangThai', pageState.trangThai ? pageState.trangThai : 2);
+      params.append('trangThai', pageState.trangThai || '');
       const response = await getHocSinhCapBang(params);
       const hocSinhs = response.data.hocSinhs;
       const hasActiveVaoSo = hocSinhs.length > 0 && hocSinhs.every((hocSinh) => hocSinh.trangThai === 2);
@@ -553,10 +554,11 @@ export default function CapBangGoc() {
               <InputLabel>{t('status.title')}</InputLabel>
               <Select
                 name="trangThai"
-                value={pageState.trangThai ? pageState.trangThai : 2}
+                value={pageState.trangThai === '' ? 'all' : pageState.trangThai}
                 onChange={handleTrangThaiChange}
                 label={t('status.title')}
               >
+                <MenuItem value="all">Tất cả</MenuItem>
                 {trangThaiOptions.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
                     {option.label}

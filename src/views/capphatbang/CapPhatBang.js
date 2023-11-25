@@ -261,7 +261,7 @@ export default function CapPhatBang() {
       params.append('hoTen', pageState.hoTen);
       params.append('soVaoSoCapBang', pageState.soVaoSoCapBang);
       params.append('idDanhMucTotNghiep', pageState.DMTN);
-      params.append('trangThai', pageState.trangThai ? pageState.trangThai : '5');
+      params.append('trangThai', pageState.trangThai || '');
       const response = await getSearchHocSinhCapPhatBang(donvi.id, params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -316,7 +316,8 @@ export default function CapPhatBang() {
 
   const handleTrangThaiChange = (event) => {
     const selectedValue = event.target.value;
-    setPageState((old) => ({ ...old, trangThai: selectedValue }));
+    const trangthai = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, trangThai: trangthai }));
   };
 
   useEffect(() => {
@@ -405,10 +406,11 @@ export default function CapPhatBang() {
               <InputLabel>{t('status.title')}</InputLabel>
               <Select
                 name="trangThai"
-                value={pageState.trangThai ? pageState.trangThai : 5}
+                value={pageState.trangThai === '' ? 'all' : pageState.trangThai}
                 onChange={handleTrangThaiChange}
                 label={t('status.title')}
               >
+                <MenuItem value="all">Tất cả</MenuItem>
                 {trangThaiOptions.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
                     {option.label}
