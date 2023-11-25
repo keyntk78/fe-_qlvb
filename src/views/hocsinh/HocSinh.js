@@ -272,6 +272,7 @@ export default function HocSinh() {
     };
     fetchDataDL();
   }, []);
+
   useEffect(() => {
     const fetchDataDL = async () => {
       setTimeout(
@@ -412,8 +413,8 @@ export default function HocSinh() {
 
   const handleSchoolChange = (event) => {
     const selectedValue = event.target.value;
-    // const maDonvi = selectedValue === 'all' ? '' : selectedValue;
-    setPageState((old) => ({ ...old, donVi: selectedValue }));
+    const maDonvi = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, donVi: maDonvi }));
   };
 
   const handleExport = async (e) => {
@@ -426,16 +427,19 @@ export default function HocSinh() {
     const selectedValue = event.target.value;
     const selectedCategory = dMTN.find((dmtn) => dmtn.id === selectedValue);
     setSelectTenDMTN(selectedCategory ? selectedCategory.tieuDe : '');
-    setPageState((old) => ({ ...old, DMTN: selectedValue }));
+    const danhMuc = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, DMTN: danhMuc }));
   };
 
   const handleTrangThaiChange = (event) => {
     const selectedValue = event.target.value;
-    setPageState((old) => ({ ...old, trangThai: selectedValue }));
+    const trangThai = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, trangThai: trangThai }));
   };
   const handleKetQuaTotNghiepChange = (event) => {
     const selectedValue = event.target.value;
-    setPageState((old) => ({ ...old, ketQua: selectedValue }));
+    const ketQua = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, ketQua: ketQua }));
   };
   const handleDanTocChange = (event) => {
     const selectedValue = event.target.value;
@@ -496,12 +500,11 @@ export default function HocSinh() {
               <InputLabel>{t('donvitruong.title')}</InputLabel>
               <Select
                 name="truongId"
-                // value={pageState.donVi === '' ? 'all' : pageState.donVi}
-                value={pageState.donVi}
+                value={pageState.donVi === '' ? 'all' : pageState.donVi}
                 onChange={handleSchoolChange}
                 label={t('donvitruong.title')}
               >
-                {/* <MenuItem value="all">{t('select.all')}</MenuItem> */}
+                <MenuItem value="all">{t('select.all')}</MenuItem>
                 {donvis && donvis.length > 0 ? (
                   donvis.map((donvi) => (
                     <MenuItem key={donvi.id} value={donvi.id}>
@@ -517,7 +520,13 @@ export default function HocSinh() {
           <Grid item lg={4} md={4} sm={4} xs={isXs ? 12 : 4}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('danhmuc.title')}</InputLabel>
-              <Select name="id" value={pageState.DMTN} onChange={handleDanhMucChange} label={t('danhmuc.title')}>
+              <Select
+                name="id"
+                value={pageState.DMTN === '' ? 'all' : pageState.DMTN}
+                onChange={handleDanhMucChange}
+                label={t('danhmuc.title')}
+              >
+                <MenuItem value="all">Tất cả</MenuItem>
                 {dMTN && dMTN.length > 0 ? (
                   dMTN.map((dmtn) => (
                     <MenuItem key={dmtn.id} value={dmtn.id}>
@@ -535,10 +544,11 @@ export default function HocSinh() {
               <InputLabel>{t('status.title')}</InputLabel>
               <Select
                 name="trangThai"
-                value={pageState.trangThai ? pageState.trangThai : 1}
+                value={pageState.trangThai === '' ? 'all' : pageState.trangThai}
                 onChange={handleTrangThaiChange}
                 label={t('status.title')}
               >
+                <MenuItem value="all">Tất cả</MenuItem>
                 {trangThaiOptions.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
                     {option.label}
@@ -553,10 +563,11 @@ export default function HocSinh() {
                 <InputLabel>{t('Kết quả tốt nghiệp')}</InputLabel>
                 <Select
                   name="ketQua"
-                  value={pageState.ketQua ? pageState.ketQua : 'x'}
+                  value={pageState.ketQua === '' ? 'all' : pageState.ketQua}
                   onChange={handleKetQuaTotNghiepChange}
                   label={t('Kết quả tốt nghiệp')}
                 >
+                  <MenuItem value="all">Tất cả</MenuItem>
                   {ketQuaOptions.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
@@ -619,18 +630,6 @@ export default function HocSinh() {
                 value={pageState.noiSinh}
               />
             </Grid>
-            {/* <Grid item lg={2} md={3} sm={3} xs={isXs ? 6 : 2}>
-              <TextField
-                fullWidth
-                id="outlined-basic"
-                label={t('dantoc')}
-                variant="outlined"
-                size="small"
-                onChange={(e) => setPageState((old) => ({ ...old, danToc: e.target.value }))}
-                value={pageState.danToc}
-              />
-            </Grid> */}
-
             <Grid item lg={2} md={3} sm={3} xs={isXs ? 6 : 2}>
               <FormControl fullWidth variant="outlined" size="small">
                 <InputLabel>{t('hocsinh.field.nation')}</InputLabel>

@@ -5,15 +5,16 @@ const config = {
   fontFamily: `'Roboto', sans-serif`,
   borderRadius: 12,
 
-  // apiUrl: 'http://localhost:5203/api',
-  // urlFile: 'http://localhost:5203/Resources/',
-  apiUrl: 'https://api.quanlyvanbang.cenit.vn/api',
-  urlFile: 'https://api.quanlyvanbang.cenit.vn/Resources/',
+  apiUrl: 'http://localhost:5203/api',
+  urlFile: 'http://localhost:5203/Resources/',
+
+  // apiUrl: 'https://api.quanlyvanbang.cenit.vn/api',
+  // urlFile: 'https://api.quanlyvanbang.cenit.vn/Resources/',
 
   secretKey: 'mytopsecretkeywithatleast32characterslong',
 
-  urlImages: 'https://api.quanlyvanbang.cenit.vn'
-  // urlImages: 'http://localhost:5203'
+  // urlImages: 'https://api.quanlyvanbang.cenit.vn'
+  urlImages: 'http://localhost:5203'
 };
 
 export default config;
