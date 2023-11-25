@@ -31,7 +31,7 @@ const AuthenticationRoutes = {
     {
       path: '/reset-password',
       element: <ResetPassword />
-    },
+    }
   ]
 };
 

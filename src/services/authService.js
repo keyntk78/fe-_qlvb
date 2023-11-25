@@ -105,3 +105,29 @@ export async function saveDeviceToken(data) {
     throw error;
   }
 }
+
+export async function LoginSSO(data) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(`Auth/LoginSSO`, 'POST', data);
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error('Error creating role:', error);
+    throw error;
+  }
+}
+
+export async function checkLoginSSO(data) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(`Auth/CheckLoginSSO`, 'POST', data);
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    store.dispatch(setLoading(false));
+    console.error('Error creating role:', error);
+    throw error;
+  }
+}

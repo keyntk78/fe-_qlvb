@@ -10,10 +10,10 @@ const CustomTextField = styled(TextField)({
   },
   '& .MuiInputBase-input.Mui-disabled': {
     backgroundColor: '#ededed',
-    color: 'success',
+    color: 'success'
   },
   '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': {
-    borderColor: '#ededed',
+    borderColor: '#ededed'
   }
 });
 
