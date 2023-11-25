@@ -179,13 +179,13 @@ const Danhmuctotnghiep = () => {
   };
 
   const handlePhanQuyenTungTruongDanhmucTN = (danhmuctotnghiep) => {
-    setTitle(t('Phân Quyền gửi học sinh'));
+    setTitle(t('Phân Quyền trường gửi đề nghị xét tốt nghiệp'));
     setForm('permission');
     dispatch(selectedDanhmuctotnghiep(danhmuctotnghiep));
     dispatch(setOpenPopup(true));
   };
   const handleThongBaoTungTruong = (danhmuctotnghiep) => {
-    setTitle(t('Thông báo'));
+    setTitle(t('Thông báo trường gửi đề nghị xét tốt nghiệp'));
     setForm('notify');
     dispatch(selectedDanhmuctotnghiep(danhmuctotnghiep));
     dispatch(selectedNamthi(nam));
