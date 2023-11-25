@@ -242,14 +242,18 @@ export default function TracuuDonyeucau() {
             <Typography paddingLeft={4} variant="body1" sx={{ lineHeight: '1.5' }}>
               {t('ghichuvbcc2')}
             </Typography>
-            <Grid item container xs={12} justifyContent={'end'} mt={1}>
-              <Grid item xs={6}>
+            <Grid item container xs={12} justifyContent={'center'} mt={1}>
+              <Grid container item xs={6}>
                 <FormControlComponent xsLabel={0} xsForm={12}>
                   <FormControl fullWidth variant="outlined">
                     <RadioGroup value={isMaDon} onChange={handleChaneMaDon}>
-                      <Grid container>
-                        <FormControlLabel size="small" value="true" control={<Radio size="small" />} label="Tìm theo mã đơn" />
-                        <FormControlLabel size="small" value="false" control={<Radio size="small" />} label="Tìm theo họ tên" />
+                      <Grid container item justifyContent={'center'}>
+                        <Grid item>
+                          <FormControlLabel size="small" value="true" control={<Radio size="small" />} label="Tìm theo mã đơn" />
+                        </Grid>
+                        <Grid item>
+                          <FormControlLabel size="small" value="false" control={<Radio size="small" />} label="Tìm theo họ tên" />
+                        </Grid>
                       </Grid>
                     </RadioGroup>
                   </FormControl>
