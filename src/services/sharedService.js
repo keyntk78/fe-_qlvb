@@ -193,10 +193,7 @@ export async function getCauHinhTuDongXepLoai() {
 
 export async function getCauHinhBatTatDangKyCapBanSao() {
   try {
-    store.dispatch(setLoading(true));
     const response = await sendRequest(`Shared/GetCauHinhBatTatDangKyCapBanSao`, 'GET');
-    store.dispatch(setLoading(false));
-    return response;
   } catch (error) {
     console.error('Error creating DanhmucTN:', error);
     throw error;

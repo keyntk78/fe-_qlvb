@@ -598,7 +598,7 @@ export default function HocSinh() {
                   </Grid>
                   <Grid item xs={6} md={4} lg={4}>
                     <Typography variant="h5">
-                      {t('Chưa duyệt')}: {data && data.soHocSinhChuaDuyetDuyet ? data.soHocSinhChuaDuyetDuyet : 0}
+                      {t('Chưa duyệt')}: {data && data.soHocSinhChuaDuyet ? data.soHocSinhChuaDuyet : 0}
                     </Typography>
                   </Grid>
                   <Grid item xs={6} md={4} lg={3}>
