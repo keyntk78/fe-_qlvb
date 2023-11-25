@@ -255,7 +255,8 @@ export default function DonYeuCau() {
 
   const handleTrangThaiChange = (event) => {
     const selectedValue = event.target.value;
-    setPageState((old) => ({ ...old, trangThai: selectedValue }));
+    const trangThai = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, trangThai: trangThai }));
   };
 
   return (
@@ -300,10 +301,11 @@ export default function DonYeuCau() {
               <InputLabel>{t('status.title')}</InputLabel>
               <Select
                 name="trangThai"
-                value={pageState.trangThai ? pageState.trangThai : 0}
+                value={pageState.trangThai === '' ? 'all' : pageState.trangThai}
                 onChange={handleTrangThaiChange}
                 label={t('status.title')}
               >
+                <MenuItem value="all">Tất cả</MenuItem>
                 {trangThaiOptions.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
                     {option.label}
