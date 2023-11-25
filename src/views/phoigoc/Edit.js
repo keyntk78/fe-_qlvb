@@ -1,5 +1,5 @@
 import { React } from 'react';
-import { FormControl, Grid, useMediaQuery } from '@mui/material';
+import { Checkbox, FormControl, FormControlLabel, Grid, useMediaQuery } from '@mui/material';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
@@ -39,10 +39,16 @@ const Edit = () => {
       TenPhoi: '',
       SoHieuPhoi: '',
       SoBatDau: '',
+      NgayMua: '',
       SoLuongPhoi: 0,
       AnhPhoi: '',
+      ChieuNgang: '',
+      ChieuDoc: '',
+      // NgayApDung: '',
+      NguoiThucHien: user.username,
       FileImage: '',
-      NgayApDung: '',
+      TuDongKhoa: false,
+      MoTa: '',
       lyDo: ''
     },
     validationSchema: PhoiValidationSchema,
@@ -69,6 +75,8 @@ const Edit = () => {
       const Phoigocbyid = await getPhoigocById(selectedPhoigoc.id);
       const dataPhoigoc = Phoigocbyid.data;
       const NgayApDung = convertISODateToFormattedDate(dataPhoigoc.ngayApDung);
+      const NgayMua = convertISODateToFormattedDate(dataPhoigoc.ngayMua);
+
       if (selectedPhoigoc) {
         formik.setValues({
           Id: selectedPhoigoc.id,
@@ -78,7 +86,12 @@ const Edit = () => {
           SoBatDau: dataPhoigoc.soBatDau || '',
           SoLuongPhoi: dataPhoigoc.soLuongPhoi || 0,
           AnhPhoi: dataPhoigoc.anhPhoi || '',
+          TuDongKhoa: dataPhoigoc.tuDongKhoa || '',
+          ChieuDoc: dataPhoigoc.chieuDoc || '',
+          ChieuNgang: dataPhoigoc.chieuNgang || '',
+          MoTa: dataPhoigoc.moTa || '',
           lyDo: dataPhoigoc.lyDo || '',
+          NgayMua: convertFormattedDateToISODate(NgayMua || ''),
           NgayApDung: convertFormattedDateToISODate(NgayApDung) || '',
           NguoiThucHien: user.username
         });
@@ -129,23 +142,51 @@ const Edit = () => {
                 <InputForm formik={formik} name="SoHieuPhoi" type="text" placeholder={t('phoivanbang.field.tientophoi')} />
               </FormControlComponent>
             </Grid>
-            <Grid item xs={6}>
+            {/* <Grid item xs={6}>
               <FormControlComponent xsLabel={isXs ? 0 : 4.5} xsForm={isXs ? 12 : 7.5} isRequire label={t('phoivanbang.field.sobatdau')}>
                 <InputForm formik={formik} name="SoBatDau" type="text" placeholder={t('phoivanbang.field.sobatdau')} />
               </FormControlComponent>
+            </Grid> */}
+            <Grid item xs={6}>
+              <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} isRequire label={t('Ngày mua')}>
+                <InputForm formik={formik} name="NgayMua" type="date" placeholder={t('Ngày mua')} />
+              </FormControlComponent>
             </Grid>
           </Grid>
-          <Grid item container spacing={1}>
+          <Grid item container spacing={isXs ? 0 : 1} columnSpacing={isXs ? 1 : 0}>
             <Grid item xs={6}>
-              <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} isRequire label={t('phoivanbang.field.ngayapdung')}>
-                <InputForm formik={formik} name="NgayApDung" type="date" placeholder={t('phoivanbang.field.ngayapdung')} />
+              <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} isRequire label={t('phoivanbang.field.sobatdau')}>
+                <InputForm formik={formik} name="SoBatDau" type="text" placeholder={t('phoivanbang.field.sobatdau')} />
               </FormControlComponent>
             </Grid>
             <Grid item xs={6}>
-              <FormControlComponent xsLabel={isXs ? 0 : 4.5} xsForm={isXs ? 12 : 7.5} isRequire label={t('phoivanbang.field.soluongphoi')}>
+              <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} isRequire label={t('phoivanbang.field.soluongphoi')}>
                 <InputForm formik={formik} name="SoLuongPhoi" type="number" placeholder={t('phoivanbang.field.soluongphoi')} />
               </FormControlComponent>
             </Grid>
+          </Grid>
+          <Grid item container spacing={isXs ? 0 : 1} columnSpacing={isXs ? 1 : 0}>
+            <Grid item xs={6}>
+              <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} isRequire label={t('Chiều ngang')}>
+                <InputForm formik={formik} name="ChieuNgang" type="number" placeholder={t('Chiều ngang')} />
+              </FormControlComponent>
+            </Grid>
+            <Grid item xs={6}>
+              <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} isRequire label={t('Chiều dọc phôi')}>
+                <InputForm formik={formik} name="ChieuDoc" type="number" placeholder={t('Chiều ngang phôi')} />
+              </FormControlComponent>
+            </Grid>
+          </Grid>
+          <Grid item xs={6}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={formik.values.TuDongKhoa} // Check if the value is 'x'
+                  onChange={(e) => formik.setFieldValue('TuDongKhoa', e.target.checked)}
+                />
+              }
+              label="Khóa di chuyển phôi"
+            />
           </Grid>
           <Grid item xs={12} sx={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <ImageForm
@@ -158,6 +199,9 @@ const Edit = () => {
               noAvata
               isImagePreview={openPopup}
             />
+          </Grid>
+          <Grid item xs={12}>
+            <InputForm1 formik={formik} name="MoTa" label={t('Mô tả')} isMulltiline minRows={3} maxRows={10} />
           </Grid>
           <InputForm1
             formik={formik}

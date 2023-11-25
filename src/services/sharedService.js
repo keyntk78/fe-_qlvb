@@ -213,3 +213,14 @@ export async function GetPhoiBanSaoById(id) {
     throw error;
   }
 }
+export async function GetCauHinhPhoiGocKichThuoc() {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(`Shared/GetCauHinhPhoiGocKichThuoc`, 'GET');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating DanhmucTN:', error);
+    throw error;
+  }
+}

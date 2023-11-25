@@ -21,7 +21,7 @@ import AnimateButton from 'components/extended/AnimateButton';
 import { checkLoginSSO, saveDeviceToken } from 'services/authService';
 import Alert from 'components/controls/alert';
 import { useTranslation } from 'react-i18next';
-import { showAlertSelector } from 'store/selectors';
+import { openPopupSelector, showAlertSelector } from 'store/selectors';
 import InputFormOutlined from 'components/form/InputFormOutlined';
 import { setOpenPopup, showAlert } from 'store/actions';
 import { useEffect } from 'react';
@@ -29,6 +29,7 @@ import { getToken } from 'firebase/messaging';
 import { messaging } from 'utils/firebase';
 import useAuthenticationValidationSchema from 'components/validations/authenticationValidation';
 import { useTheme } from '@emotion/react';
+import { useRef } from 'react';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -42,6 +43,7 @@ const Authentication = ({ user, email, ...others }) => {
   const [errorBE, setErrorBE] = useState([]);
   const [deviceToken, setDeviceToken] = useState('');
   const token = localStorage.getItem('token');
+  const openPopup = useSelector(openPopupSelector);
   const theme = useTheme();
 
   useEffect(() => {
@@ -76,9 +78,23 @@ const Authentication = ({ user, email, ...others }) => {
     requestPermission();
   }, []);
 
+  const formikRef = useRef(null);
+
+  useEffect(() => {
+    const resetForm = () => {
+      if (formikRef.current) {
+        formikRef.current.resetForm();
+      }
+    };
+    if (openPopup) {
+      resetForm();
+    }
+  }, [openPopup]);
+
   return (
     <>
       <Formik
+        innerRef={formikRef}
         initialValues={{
           otp: '',
           submit: null
@@ -144,10 +160,10 @@ const Authentication = ({ user, email, ...others }) => {
             <Grid container justifyContent={'center'} mt={3}>
               <Grid container justifyContent="center" spacing={1}>
                 <Grid item>
-                  <Typography variant="h4">Xin chào: </Typography>
+                  <Typography variant="h3">Xin chào: </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="h4" color={theme.palette.primary.main}>
+                  <Typography variant="h3" color={theme.palette.primary.main}>
                     {user}
                   </Typography>
                 </Grid>

@@ -33,7 +33,8 @@ import {
   IconBellPlus,
   IconTransferIn,
   IconFileReport,
-  IconAddressBook
+  IconAddressBook,
+  IconRefresh
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { setOpenPopup, setOpenProfile, setOpenSubPopup, setOpenSubSubPopup } from '../../store/actions';
@@ -104,6 +105,10 @@ export default function Popup(props) {
                   <IconAlertCircle sx={{ order: 2 }} />
                 ) : form === 'detail' ? (
                   <IconEyeCheck sx={{ order: 2 }} />
+                ) : form === 'recover' ? (
+                  <IconRefresh sx={{ order: 2 }} />
+                ) : form === 'active' ? (
+                  <IconCheckbox sx={{ order: 2 }} />
                 ) : form === 'detaildonyeucau' ? (
                   <IconCurrencyEuro sx={{ order: 2 }} />
                 ) : form === 'detailPhatBang' ? (

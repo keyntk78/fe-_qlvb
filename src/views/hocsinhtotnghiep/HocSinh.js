@@ -474,10 +474,11 @@ export default function HocSinh() {
               <InputLabel>{t('status.title')}</InputLabel>
               <Select
                 name="trangThai"
-                value={pageState.trangThai ? pageState.trangThai : 0}
+                value={pageState.trangThai === '' ? 'all' : pageState.trangThai}
                 onChange={handleTrangThaiChange}
                 label={t('status.title')}
               >
+                <MenuItem value="all">Tất cả</MenuItem>
                 {trangThaiOptions.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
                     {option.label}

@@ -5,8 +5,8 @@ export const useHuyphoiValidationSchema = () => {
   const { t } = useTranslation();
 
   const phoivabbangValidationSchema = Yup.object({
-    LyDoHuy: Yup.string().required(t('validation.phoivanbang.lydohuy')),
-    FileBienBanHuyPhoi: Yup.mixed().required('Vui lòng chọn tệp!')
+    LyDoHuy: Yup.string().required(t('validation.phoivanbang.lydohuy'))
+    // FileBienBanHuyPhoi: Yup.mixed().required('Vui lòng chọn tệp!')
   });
 
   return phoivabbangValidationSchema;

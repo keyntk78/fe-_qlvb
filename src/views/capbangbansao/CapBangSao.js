@@ -264,7 +264,7 @@ export default function CapBangBanSao() {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
       params.append('Ma', pageState.Ma);
-      params.append('TrangThai', pageState.trangThai ? pageState.trangThai : 1);
+      params.append('TrangThai', pageState.trangThai || '');
       params.append('CCCD', pageState.cccd);
       params.append('HoTen', pageState.hoTen);
       params.append('NguoiThucHien', user ? user.username : '');
@@ -312,10 +312,10 @@ export default function CapBangBanSao() {
       params.append('Order', 1);
       params.append('OrderDir', 'ASC');
       params.append('StartIndex', '0');
-      params.append('PageSize', 1000);
+      params.append('PageSize', -1);
       params.append('NgayDuyet', pageState.ngayDuyet == '' ? format(new Date(), 'yyyy-MM-dd') : pageState.ngayDuyet);
       params.append('NguoiThucHien', user.username ? user.username : '');
-      params.append('TrangThai', '');
+      params.append('TrangThai', pageState.trangThai || '');
       const response = await getSearchDonYeuCauDaDuyet(params);
       const response1 = await GetCauHinhByIdDonVi(user.username ? user.username : '');
       setDataExport(response.data.donYeuCaus);
@@ -378,7 +378,8 @@ export default function CapBangBanSao() {
 
   const handleTrangThaiChange = (event) => {
     const selectedValue = event.target.value;
-    setPageState((old) => ({ ...old, trangThai: selectedValue }));
+    const trangthai = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, trangThai: trangthai }));
   };
 
   return (
@@ -423,10 +424,11 @@ export default function CapBangBanSao() {
               <InputLabel>{t('status.title')}</InputLabel>
               <Select
                 name="trangThai"
-                value={pageState.trangThai ? pageState.trangThai : 1}
+                value={pageState.trangThai === '' ? 'all' : pageState.trangThai}
                 onChange={handleTrangThaiChange}
                 label={t('status.title')}
               >
+                <MenuItem value="all">Tất cả</MenuItem>
                 {trangThaiOptions.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
                     {option.label}
