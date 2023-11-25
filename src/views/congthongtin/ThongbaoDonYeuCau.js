@@ -5,7 +5,7 @@ const ThongBaoDonyeuCau = ({ thongbao }) => {
     <Grid container xs={12} mt={2}>
       <Grid item>
         <Typography variant="h4">
-          {'Đơn yêu cầu của học sinh ' + thongbao.data.hoTen + ' đã thêm thành công với mã đơn yêu cầu: ' + thongbao.data.maDonYeuCau}
+          {'Đơn yêu cầu của học sinh ' + thongbao.data.hoTen + ' đã đăng ký thành công với mã đơn yêu cầu: ' + thongbao.data.maDonYeuCau}
         </Typography>
       </Grid>
       <Grid item>
