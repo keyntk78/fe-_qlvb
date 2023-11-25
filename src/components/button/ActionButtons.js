@@ -545,6 +545,18 @@ const ActionButtons = ({
             }
           }
         ];
+      case 'exportPDF':
+        return [
+          {
+            title: 'Xuất tệp PDF',
+            icon: <IconFileExport color="red" size={'20px'} />,
+            color: 'error',
+            onClick: () => {
+              handleClick(params);
+              onClose();
+            }
+          }
+        ];
       case 'exportWord':
         return [
           {
