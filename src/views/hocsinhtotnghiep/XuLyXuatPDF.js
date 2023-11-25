@@ -23,7 +23,7 @@ export function generatePDF(data, paperSize, donvi) {
       doc.addPage();
     }
     doc.setFont('Time-New-Roman-Bold', 'bold');
-    doc.text([`PHÒNG GD&ĐT ${item.diaPhuong}`, `TRƯỜNG ${item.tenTruong}`, ``], (width / 4) * 1 + 6, textHeight, {
+    doc.text([`${donvi === 1 ? 'SỞ' : 'PHÒNG'} GD&ĐT ${item.diaPhuong}`, `TRƯỜNG ${item.tenTruong}`, ``], (width / 4) * 1 + 6, textHeight, {
       align: 'center'
     });
 
@@ -55,7 +55,9 @@ export function generatePDF(data, paperSize, donvi) {
     doc.text(`Hiện cư trú tại: ${item.queQuan}`, minWidth, textHeight * 5);
 
     doc.text(
-      `Đã được công nhận tốt nghiệp trung học phổ thông tại Hội đồng xét công nhận tốt nghiệp: ${item.tenTruong} ngày ${item.ngay} tháng ${item.thang} năm ${item.nam}.`,
+      `Đã được công nhận tốt nghiệp trung học ${donvi === 1 ? 'phổ thông' : 'cơ sở'} tại Hội đồng xét công nhận tốt nghiệp: ${
+        item.tenTruong
+      } ngày ${item.ngay} tháng ${item.thang} năm ${item.nam}.`,
       minWidth,
       textHeight * 5 + 10,
       {
