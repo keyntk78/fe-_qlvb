@@ -280,6 +280,7 @@ export default function SoCapPhatBang() {
       fetchDataDL();
     }
   }, [selectDanhmuc]);
+
   const handleDanhMucChange = (event) => {
     const selectedValue = event.target.value;
     setPageState((old) => ({ ...old, DMTN: selectedValue }));
@@ -333,6 +334,22 @@ export default function SoCapPhatBang() {
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('Khóa thi')}</InputLabel>
               <Select label={t('Khóa thi')} name="khoaThi" value={selectKhoaThi} onChange={handleKhoaThiChange}>
+                {khoaThis && khoaThis.length > 0 ? (
+                  khoaThis.map((data) => (
+                    <MenuItem key={data.id} value={data.id}>
+                      {data && data.ngay ? convertISODateToFormattedDate(data.ngay) : ''}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value="">{t('selected.nodata')}</MenuItem>
+                )}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item container xs={isXs ? 12 : 2}>
+            <FormControl fullWidth variant="outlined" size="small">
+              <InputLabel>{t('Trường')}</InputLabel>
+              <Select label={t('Trường')} name="khoaThi" value={selectKhoaThi} onChange={handleKhoaThiChange}>
                 {khoaThis && khoaThis.length > 0 ? (
                   khoaThis.map((data) => (
                     <MenuItem key={data.id} value={data.id}>
