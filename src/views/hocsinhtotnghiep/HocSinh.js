@@ -23,7 +23,7 @@ import Import from './Import';
 import Delete from './Delete';
 import { useEffect } from 'react';
 import { createSearchParams } from 'utils/createSearchParams';
-import { getHocSinhByTruong } from 'services/nguoihoctotnghiepService';
+import { getHocSinhByTruong, getThongKeByTruong } from 'services/nguoihoctotnghiepService';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import useLocalText from 'utils/localText';
 import i18n from 'i18n';
@@ -54,6 +54,7 @@ const trangThaiOptions = [
 
 export default function HocSinh() {
   const isXs = useMediaQuery('(max-width:700px)');
+  const isMd = useMediaQuery('(max-width:1200px)');
   const infoMessage = useSelector(selectedInfoMessageSelector);
   const openPopup = useSelector(openPopupSelector);
   const [title, setTitle] = useState('');
@@ -73,7 +74,7 @@ export default function HocSinh() {
   const language = i18n.language;
   const [selectedRowData, setSelectedRowData] = useState([]);
   const [search, setSearch] = useState(false);
-  // const [disableImport, setDisableImport] = useState(false);
+  const [data, setData] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [disabledInGCN, setDisabledInGCN] = useState(true);
   const [loadData, setLoadData] = useState(false);
@@ -306,7 +307,7 @@ export default function HocSinh() {
       params.append('noiSinh', pageState.noiSinh);
       params.append('danToc', pageState.danToc);
       params.append('idDanhMucTotNghiep', pageState.DMTN);
-      params.append('trangThai', pageState.trangThai ? pageState.trangThai : 0);
+      params.append('trangThai', pageState.trangThai);
       const response = await getHocSinhByTruong(donvi.id, params);
       const data = response.data;
       const hasActiveHocSinh = data && data.hocSinhs.length > 0 && data.hocSinhs.every((hocSinh) => hocSinh.trangThai === 0);
@@ -367,6 +368,26 @@ export default function HocSinh() {
   }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search, loadData]);
 
   useEffect(() => {
+    const fetchData = async () => {
+      setPageState((old) => ({ ...old, isLoading: true }));
+      const response = await getThongKeByTruong(donvi.id, pageState.DMTN);
+      setData(response.data);
+    };
+    if (!firstLoad || loadData) {
+      if (loadData) {
+        fetchData();
+        setLoadData(false);
+        dispatch(setSelectedInfoMessage(''));
+        dispatch(setInfoHocSinh(null));
+      } else {
+        fetchData();
+      }
+    } else {
+      setFirstLoad(false);
+    }
+  }, [reloadData, search, loadData]);
+
+  useEffect(() => {
     setDataCCCD(selectedRowData.map((row) => row.cccd));
   }, [selectedRowData]);
 
@@ -380,7 +401,8 @@ export default function HocSinh() {
     const selectedValue = event.target.value;
     const selectedCategory = dMTN.find((dmtn) => dmtn.id === selectedValue);
     setSelectTenDMTN(selectedCategory ? selectedCategory.tieuDe : '');
-    setPageState((old) => ({ ...old, DMTN: selectedValue }));
+    const danhMuc = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, DMTN: danhMuc }));
   };
   const handleDanTocChange = (event) => {
     const selectedValue = event.target.value;
@@ -445,7 +467,13 @@ export default function HocSinh() {
           <Grid item xs={12} sm={6} md={6} lg={5}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('danhmuc.title')}</InputLabel>
-              <Select name="id" value={pageState.DMTN} onChange={handleDanhMucChange} label={t('danhmuc.title')}>
+              <Select
+                name="id"
+                value={pageState.DMTN === '' ? 'all' : pageState.DMTN}
+                onChange={handleDanhMucChange}
+                label={t('danhmuc.title')}
+              >
+                <MenuItem value="all">Tất cả</MenuItem>
                 {dMTN && dMTN.length > 0 ? (
                   dMTN.map((dmtn) => (
                     <MenuItem key={dmtn.id} value={dmtn.id}>
@@ -558,74 +586,147 @@ export default function HocSinh() {
             </Button>
           </Grid>
         </Grid>
-        <Grid item container justifyContent="flex-end" mb={1} spacing={1}>
-          <Grid item>
-            <ButtonSuccess title={t('button.export.excel')} onClick={handleExport} icon={IconFileExport} disabled={!selectedDMTN} />
-          </Grid>
-          {selectedRowData.length !== 0 ? (
+        <Grid item container alignItems="center" spacing={1}>
+          {!isMd ? (
             <>
-              <Grid item>
-                <ButtonSuccess
-                  title={t('button.ingcn')}
-                  onClick={handleInGCN}
-                  icon={IconCertificate}
-                  disabled={
-                    selectedRowData.some((row) => row.trangThai === 0 || row.trangThai === 1 || row.trangThai === 3) || !selectedDMTN
-                  }
-                />
-              </Grid>
-              <Grid item>
-                <Button
-                  color="info"
-                  variant="contained"
-                  onClick={handleGuiDuyet}
-                  sx={{ mx: 1 }}
-                  startIcon={<IconSend />}
-                  disabled={selectedRowData.some((row) => row.trangThai !== 0) || !selectedDMTN}
-                >
-                  {t('button.send')}
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={handleDelete}
-                  startIcon={<IconTrash />}
-                  disabled={selectedRowData.some((row) => row.trangThai !== 0)}
-                >
-                  {t('button.delete')}
-                </Button>
+              <Grid item xs={12} sm={12} md={12} lg={4}>
+                <Grid item container spacing={1}>
+                  <Grid item xs={6} md={4} lg={5}>
+                    <Typography variant="h5">
+                      {t('Số lượng học sinh')}: {data && data.totalRow ? data.totalRow : 0}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} md={4} lg={4}>
+                    <Typography variant="h5">
+                      {t('Chưa duyệt')}: {data && data.soHocSinhChuaDuyetDuyet ? data.soHocSinhChuaDuyetDuyet : 0}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} md={4} lg={3}>
+                    <Typography variant="h5">
+                      {t('Đã duyệt')}: {data && data.soHocSinhDaDuyet ? data.soHocSinhDaDuyet : 0}
+                    </Typography>
+                  </Grid>
+                </Grid>
               </Grid>
             </>
           ) : (
-            <>
-              <Grid item>
-                <ButtonSuccess
-                  title={t('button.ingcntatca')}
-                  onClick={handleInGCNAll}
-                  icon={IconCertificate}
-                  disabled={disabledInGCN || !selectedDMTN}
-                />
-              </Grid>
-              <Grid item>
-                <Button
-                  onClick={handleGuiDuyetAll}
-                  color="info"
-                  variant="contained"
-                  startIcon={<IconSend />}
-                  disabled={disabled || !selectedDMTN}
-                >
-                  {t('button.sendall')}
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button color="error" variant="contained" onClick={handleDeleteAll} startIcon={<IconTrash />} disabled={disabled}>
-                  {t('button.deleteall')}
-                </Button>
-              </Grid>
-            </>
+            ''
           )}
+          <Grid item xs={12} sm={12} md={12} lg={8}>
+            <Grid item container spacing={1} justifyContent="flex-end">
+              <Grid item>
+                <ButtonSuccess title={t('button.export.excel')} onClick={handleExport} icon={IconFileExport} disabled={!selectedDMTN} />
+              </Grid>
+              {selectedRowData.length !== 0 ? (
+                <>
+                  <Grid item>
+                    <ButtonSuccess
+                      title={t('button.ingcn')}
+                      onClick={handleInGCN}
+                      icon={IconCertificate}
+                      disabled={
+                        selectedRowData.some((row) => row.trangThai === 0 || row.trangThai === 1 || row.trangThai === 3) || !selectedDMTN
+                      }
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      color="info"
+                      variant="contained"
+                      onClick={handleGuiDuyet}
+                      sx={{ mx: 1 }}
+                      startIcon={<IconSend />}
+                      disabled={selectedRowData.some((row) => row.trangThai !== 0) || !selectedDMTN}
+                    >
+                      {t('button.send')}
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={handleDelete}
+                      startIcon={<IconTrash />}
+                      disabled={selectedRowData.some((row) => row.trangThai !== 0)}
+                    >
+                      {t('button.delete')}
+                    </Button>
+                  </Grid>
+                </>
+              ) : (
+                <>
+                  <Grid item>
+                    <ButtonSuccess
+                      title={t('button.ingcntatca')}
+                      onClick={handleInGCNAll}
+                      icon={IconCertificate}
+                      disabled={disabledInGCN || !selectedDMTN}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      onClick={handleGuiDuyetAll}
+                      color="info"
+                      variant="contained"
+                      startIcon={<IconSend />}
+                      disabled={disabled || !selectedDMTN}
+                    >
+                      {t('button.sendall')}
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button color="error" variant="contained" onClick={handleDeleteAll} startIcon={<IconTrash />} disabled={disabled}>
+                      {t('button.deleteall')}
+                    </Button>
+                  </Grid>
+                </>
+              )}
+            </Grid>
+          </Grid>
+        </Grid>
+        {isMd ? (
+          <>
+            <Grid item container spacing={1} mt={1}>
+              <Grid item xs={5} md={5} lg={5}>
+                <Typography variant="h5">
+                  {t('Số lượng học sinh')}: {data && data.totalRow ? data.totalRow : 0}
+                </Typography>
+              </Grid>
+              <Grid item xs={4} md={4} lg={4}>
+                <Typography variant="h5">
+                  {t('Chưa duyệt')}: {data && data.soHocSinhChuaDuyetDuyet ? data.soHocSinhChuaDuyetDuyet : 0}
+                </Typography>
+              </Grid>
+              <Grid item xs={3} md={3} lg={3}>
+                <Typography variant="h5">
+                  {t('Đã duyệt')}: {data && data.soHocSinhDaDuyet ? data.soHocSinhDaDuyet : 0}
+                </Typography>
+              </Grid>
+            </Grid>
+          </>
+        ) : (
+          ''
+        )}
+        <Grid item container spacing={1} mb={1}>
+          <Grid item xs={isMd ? 12 : 4}>
+            <Grid item container spacing={1}>
+              <Grid item xs={5} md={5} lg={5}>
+                <Typography variant="h5">
+                  {t('Giỏi')}: {data && data.tongGioi ? data.tongGioi : 0}
+                </Typography>
+              </Grid>
+              <Grid item xs={4} md={4} lg={4}>
+                <Typography variant="h5">
+                  {t('Khá')}: {data && data.tongKha ? data.tongKha : 0}
+                </Typography>
+              </Grid>
+              <Grid item xs={3} md={3} lg={3}>
+                <Typography variant="h5">
+                  {t('Trung bình')}: {data && data.tongTB ? data.tongTB : 0}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
         </Grid>
         <DataGrid
           autoHeight

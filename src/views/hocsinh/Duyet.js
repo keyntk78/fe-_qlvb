@@ -20,7 +20,7 @@ function Duyet({ dataCCCD }) {
     try {
       const params = new URLSearchParams();
       params.append('idDanhMucTotNghiep', danhmuc.id);
-      params.append('idTruong', donvi.id);
+      params.append('idTruong', donvi.idTruong);
       const response = await approveHocSinh(params, data);
       if (response.isSuccess == false) {
         dispatch(showAlert(new Date().getTime().toString(), 'error', response.message.toString()));
@@ -41,10 +41,13 @@ function Duyet({ dataCCCD }) {
         <IconCircleCheck size={100} color="#2196F3" />
       </Grid>
       <MuiTypography variant="h4" gutterBottom m={1}>
-        {`${t('form.duyet.warning')}`}
+        {`${t('form.duyetall.warning')}${t('donvitruong.title')} [${donvi ? donvi.tenTruong : ''}], ${t('danhmuc.title')} [${
+          danhmuc ? danhmuc.tieuDe : ''
+        }]?`}
       </MuiTypography>
       <MuiTypography variant="h5" gutterBottom m={1}>
-        {`${t('hocsinh.total')} ${data.length}`}
+        {t('hocsinh.total')}
+        <span style={{ fontSize: '16px', fontWeight: 'bold' }}>{data.length}</span>
       </MuiTypography>
       <Grid container spacing={1} direction="row" justifyContent="center" my={2}>
         <Grid item>

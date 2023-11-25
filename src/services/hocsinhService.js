@@ -183,3 +183,13 @@ export async function getHocSinhXepLoaiTotNghiepTruong(donvi, DMTN) {
     throw error;
   }
 }
+
+export async function getThongkeByPhong(donvi, DMTN) {
+  try {
+    const response = await sendRequest(`HocSinhPhong/ThongkeByPhong?idTruong=${donvi}&idDanhMucTotNghiep=${DMTN}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating hoc sinh:', error);
+    throw error;
+  }
+}
