@@ -141,3 +141,25 @@ export async function GetConfigPhoi(idphoi) {
     throw error;
   }
 }
+export async function KichHoatPhoiGoc(idphoi) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`PhoiGoc/KichHoat?idPhoiGoc=${idphoi}`, 'POST');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating User:', error);
+    throw error;
+  }
+}
+export async function PhucHoiPhoiGoc(idphoi) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`PhoiGoc/PhucHoi?idPhoiGoc=${idphoi}`, 'POST');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating User:', error);
+    throw error;
+  }
+}

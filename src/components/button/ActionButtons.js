@@ -31,7 +31,8 @@ import {
   IconFileExport,
   IconFileImport,
   IconDownload,
-  IconFileReport
+  IconFileReport,
+  IconRefresh
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { useTranslation } from 'react-i18next';
@@ -195,6 +196,18 @@ const ActionButtons = ({
           {
             title: 'button.title.active',
             icon: <IconCheckbox size={'20px'} />,
+            color: 'info',
+            onClick: () => {
+              handleActive(params);
+              onClose();
+            }
+          }
+        ];
+      case 'recover':
+        return [
+          {
+            title: 'Phục hồi',
+            icon: <IconRefresh size={'20px'} />,
             color: 'info',
             onClick: () => {
               handleActive(params);

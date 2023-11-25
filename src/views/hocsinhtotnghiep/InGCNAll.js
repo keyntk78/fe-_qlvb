@@ -17,6 +17,7 @@ import { setOpenPopup, showAlert } from 'store/actions';
 import FormControlComponent from 'components/form/FormControlComponent ';
 import { useTranslation } from 'react-i18next';
 import { GetCauHinhByIdDonVi } from 'services/sharedService';
+import { generatePDF } from './XuLyXuatPDF';
 const InGCNAll = () => {
   const isXs = useMediaQuery('(max-width:800px)');
   const openPopup = useSelector(openPopupSelector);
@@ -35,7 +36,11 @@ const InGCNAll = () => {
     },
     validationSchema: useInGiayChungNhanValidationSchema(),
     onSubmit: () => {
-      generateDocument(DataToExportWord, paperSize, donvi.donViQuanLy);
+      if (fileType === 'word') {
+        generateDocument(DataToExportWord, paperSize, donvi.donViQuanLy);
+      } else {
+        generatePDF(DataToExportWord, paperSize, donvi.donViQuanLy);
+      }
       dispatch(setOpenPopup(false));
       dispatch(showAlert(new Date().getTime().toString(), 'success', 'In Thành Công'));
     }
@@ -60,9 +65,18 @@ const InGCNAll = () => {
     { value: 'A4', label: 'Khổ giấy A4' },
     { value: 'A5', label: 'Khổ giấy A5' }
   ];
+  const dinhDangFile = [
+    { value: 'pdf', label: 'File PDF' },
+    { value: 'word', label: 'File Word' }
+  ];
   const [paperSize, setPaperSize] = useState('A4');
   const handlePaperSizeChange = (event) => {
     setPaperSize(event.target.value);
+  };
+
+  const [fileType, setFileType] = useState('pdf');
+  const handleFileTypeChange = (event) => {
+    setFileType(event.target.value);
   };
 
   useEffect(() => {
@@ -126,6 +140,17 @@ const InGCNAll = () => {
           <FormControl fullWidth variant="outlined">
             <Select size="small" value={paperSize} onChange={handlePaperSizeChange}>
               {khogiayOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={isXs ? 6 : 4} mt={isXs ? 3.5 : 1.5}>
+          <FormControl fullWidth variant="outlined">
+            <Select size="small" value={fileType} onChange={handleFileTypeChange}>
+              {dinhDangFile.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
