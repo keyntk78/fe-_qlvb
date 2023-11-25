@@ -16,9 +16,6 @@ const config = {
   // urlImages: 'https://api.quanlyvanbang.cenit.vn'
   //apiUrl: 'https://api.quanlyvanbang.cenit.vn/api',
   //urlFile: 'https://api.quanlyvanbang.cenit.vn/Resources/',
-
-  secretKey: 'mytopsecretkeywithatleast32characterslong',
-
   //urlImages: 'https://api.quanlyvanbang.cenit.vn'
   urlImages: 'http://localhost:5203'
 };
