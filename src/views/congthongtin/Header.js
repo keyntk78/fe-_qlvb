@@ -141,7 +141,6 @@ export default function Header() {
   useEffect(() => {
     const fetchData = async () => {
       const batTatdangkybanSao = await getCauHinhBatTatDangKyCapBanSao();
-      console.log(batTatdangkybanSao.data.configValue);
       setbatTat(batTatdangkybanSao.data.configValue);
       const donvibyid = await getPhong();
       const dataphong = donvibyid.data.cauHinh;
