@@ -14,9 +14,11 @@ import { setLoading, setReloadData } from 'store/actions';
 import ExitButton from 'components/button/ExitButton';
 // import { CapBang, CapBangTatCa } from 'services/capbangbanchinhService';
 import { CapBang } from 'services/capbangbanchinhService';
-import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
+//import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { handleAddNumberZeroDayAndMonth } from 'utils/handleAddNumberZeroDayAndMonth';
+import GroupButtons from 'components/button/GroupButton';
+import { generateDocument } from './ExportWordTTInBang';
 
 const InBang = ({ duLieuHocSinhSoGoc }) => {
   const total = duLieuHocSinhSoGoc.length;
@@ -35,8 +37,9 @@ const InBang = ({ duLieuHocSinhSoGoc }) => {
     fetchDataDLHS();
   }, [phoigoc.id]);
 
-  const DataInBang = duLieuHocSinhSoGoc.map((item) => {
+  const DataInBang = duLieuHocSinhSoGoc.map((item, index) => {
     return {
+      STT: index + 1,
       HOTEN: item.hoTen,
       NOISINH: item.noiSinh, // Assuming you want the second part after the " - "
       NGAYTHANGNAMSINH: convertISODateToFormattedDate(item.ngaySinh),
@@ -55,9 +58,15 @@ const InBang = ({ duLieuHocSinhSoGoc }) => {
       NOICAP: item.diaPhuongCapBang
     };
   });
+  const handleExportWord = async () => {
+    console.log(DataInBang);
+    dispatch(setLoading(true));
+    generateDocument(DataInBang);
+    dispatch(setLoading(false));
+  };
 
-  const handleExportTTIn = async (e) => {
-    e.preventDefault();
+  const handleExportTTIn = async () => {
+    //e.preventDefault();
     dispatch(setLoading(true));
     const formattedData = DataInBang.map((item, index) => ({
       STT: index + 1,
@@ -107,7 +116,16 @@ const InBang = ({ duLieuHocSinhSoGoc }) => {
     XLSX.writeFile(workbook, 'thongtinin.xlsx');
     dispatch(setLoading(false));
   };
-
+  const xuatTep = [
+    {
+      type: 'exportExcel',
+      handleClick: handleExportTTIn
+    },
+    {
+      type: 'exportWord',
+      handleClick: handleExportWord
+    }
+  ];
   const cauHinhViTri = {};
 
   for (const item of duLieuConFig) {
@@ -156,8 +174,11 @@ const InBang = ({ duLieuHocSinhSoGoc }) => {
               In
             </Button>
           </Grid>
-          <Grid item>
+          {/* <Grid item>
             <ButtonSuccess title="Xuất thông tin in bằng" onClick={handleExportTTIn} icon={IconFileExport} />
+          </Grid> */}
+          <Grid item>
+            <GroupButtons buttonConfigurations={xuatTep} color="info" icon={IconFileExport} title={'Xuất thông tin in bằng'} />
           </Grid>
         </Grid>
         <div>
