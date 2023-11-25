@@ -19,6 +19,7 @@ import {
   TableRow,
   Tooltip,
   Typography,
+  TextField,
   useMediaQuery
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -95,7 +96,9 @@ export default function SoGoc() {
     pageSize: 25,
     DMTN: '',
     donVi: '',
-    khoaThi: ''
+    khoaThi: '',
+    hoTen: '',
+    soVaoSoGoc: ''
   });
 
   const [pageState1, setPageState1] = useState({
@@ -109,7 +112,9 @@ export default function SoGoc() {
     DMTN: '',
     donVi: '',
     khoaThi: '',
-    donViOld: ''
+    donViOld: '',
+    hoTen: '',
+    soVaoSoGoc: ''
   });
 
   const handleSearch = () => {
@@ -267,6 +272,8 @@ export default function SoGoc() {
       params.append('IdTruong', pageState.donVi);
       params.append('IdKhoaThi', pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : '');
       params.append('IdTruongCu', pageState.donViOld || '');
+      params.append('HoTen', pageState.hoTen);
+      params.append('SoVaoSoGoc', pageState.soVaoSoGoc);
       const response = await getHocSinhBySoGoc(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -359,6 +366,8 @@ export default function SoGoc() {
       params.append('IdTruong', pageState.donVi);
       params.append('IdTruongCu', pageState.donViOld || '');
       params.append('IdKhoaThi', pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : '');
+      params.append('HoTen', pageState.hoTen);
+      params.append('SoVaoSoGoc', pageState.soVaoSoGoc);
       const response = await getHocSinhBySoGoc(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -529,6 +538,28 @@ export default function SoGoc() {
           ) : (
             ''
           )}
+          <Grid item xs={isXs ? 12 : 2}>
+            <TextField
+              fullWidth
+              id="outlined-basic"
+              label={t('Họ tên')}
+              variant="outlined"
+              size="small"
+              onChange={(e) => setPageState((old) => ({ ...old, hoTen: e.target.value }))}
+              value={pageState.hoTen}
+            />
+          </Grid>
+          <Grid item xs={isXs ? 12 : 2}>
+            <TextField
+              fullWidth
+              id="outlined-basic"
+              label={t('Sổ cấp sổ gốc')}
+              variant="outlined"
+              size="small"
+              onChange={(e) => setPageState((old) => ({ ...old, soVaoSoGoc: e.target.value }))}
+              value={pageState.soVaoSoGoc}
+            />
+          </Grid>
         </Grid>
         <Grid item xs={12} container spacing={1} justifyContent="center" mt={1}>
           <Grid item>

@@ -15,6 +15,7 @@ import {
   TableContainer,
   TableHead,
   TablePagination,
+  TextField,
   TableRow,
   // Tooltip,
   Typography,
@@ -85,7 +86,9 @@ export default function SoBanSao() {
     pageSize: 25,
     DMTN: '',
     donVi: '',
-    khoaThi: ''
+    khoaThi: '',
+    hoTen: '',
+    soVaoSoBanSao: ''
   });
 
   const [pageState1, setPageState1] = useState({
@@ -98,7 +101,9 @@ export default function SoBanSao() {
     pageSize: -1,
     DMTN: '',
     donVi: '',
-    khoaThi: ''
+    khoaThi: '',
+    hoTen: '',
+    soVaoSoBanSao: ''
   });
   const [khoaThis, setKhoaThis] = useState([]);
 
@@ -230,6 +235,8 @@ export default function SoBanSao() {
       params.append('idDanhMucTotNghiep', pageState.DMTN);
       params.append('idTruong', pageState.donVi);
       params.append('IdKhoaThi', pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : '');
+      params.append('HoTen', pageState.hoTen);
+      params.append('SoVaoSoBanGoc', pageState.soVaoSoBanSao);
       const response = await GetHocSinhTheoSoBanSao(params);
       const data = response.data;
       formik.setValues({
@@ -284,7 +291,8 @@ export default function SoBanSao() {
       params.append('idDanhMucTotNghiep', pageState.DMTN);
       params.append('idTruong', pageState.donVi);
       params.append('IdKhoaThi', pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : '');
-
+      params.append('HoTen', pageState.hoTen);
+      params.append('SoVaoSoBanGoc', pageState.soVaoSoBanSao);
       const response = await GetHocSinhTheoSoBanSao(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -399,6 +407,28 @@ export default function SoBanSao() {
                 )}
               </Select>
             </FormControl>
+          </Grid>
+          <Grid item xs={isXs ? 12 : 2}>
+            <TextField
+              fullWidth
+              id="outlined-basic"
+              label={t('Họ tên')}
+              variant="outlined"
+              size="small"
+              onChange={(e) => setPageState((old) => ({ ...old, hoTen: e.target.value }))}
+              value={pageState.hoTen}
+            />
+          </Grid>
+          <Grid item xs={isXs ? 12 : 2}>
+            <TextField
+              fullWidth
+              id="outlined-basic"
+              label={t('Sổ cấp sổ bản sao')}
+              variant="outlined"
+              size="small"
+              onChange={(e) => setPageState((old) => ({ ...old, soVaoSoCapBang: e.target.value }))}
+              value={pageState.soVaoSoBanSao}
+            />
           </Grid>
         </Grid>
         <Grid item xs={12} container spacing={1} justifyContent="center" mt={1}>

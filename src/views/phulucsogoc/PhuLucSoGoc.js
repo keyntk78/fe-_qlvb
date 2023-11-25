@@ -17,7 +17,8 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Button
+  Button,
+  TextField
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -85,7 +86,9 @@ export default function PhuLucSoGoc() {
     startIndex: 0,
     pageSize: 25,
     DMTN: '',
-    donVi: ''
+    donVi: '',
+    hoTen: '',
+    CCCD: ''
   });
 
   const [pageState1, setPageState1] = useState({
@@ -97,7 +100,9 @@ export default function PhuLucSoGoc() {
     startIndex: 0,
     pageSize: -1,
     DMTN: '',
-    donVi: ''
+    donVi: '',
+    hoTen: '',
+    CCCD: ''
   });
 
   const handleSearch = () => {
@@ -172,6 +177,8 @@ export default function PhuLucSoGoc() {
       const params = await createSearchParams(pageState);
       params.append('IdDanhMucTotNghiep', pageState.DMTN);
       params.append('IdTruong', pageState.donVi);
+      params.append('HoTen', pageState.hoTen);
+      params.append('CCCD', pageState.CCCD);
       const response = await getSearchPhuLuc(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -206,6 +213,8 @@ export default function PhuLucSoGoc() {
       const params = await createSearchParams(pageState);
       params.append('IdDanhMucTotNghiep', pageState.DMTN);
       params.append('IdTruong', pageState.donVi);
+      params.append('HoTen', pageState.hoTen);
+      params.append('CCCD', pageState.CCCD);
       const response = await getSearchPhuLuc(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -288,6 +297,28 @@ export default function PhuLucSoGoc() {
                 )}
               </Select>
             </FormControl>
+          </Grid>
+          <Grid item xs={isXs ? 12 : 2}>
+            <TextField
+              fullWidth
+              id="outlined-basic"
+              label={t('Họ tên')}
+              variant="outlined"
+              size="small"
+              onChange={(e) => setPageState((old) => ({ ...old, hoTen: e.target.value }))}
+              value={pageState.hoTen}
+            />
+          </Grid>
+          <Grid item xs={isXs ? 12 : 2}>
+            <TextField
+              fullWidth
+              id="outlined-basic"
+              label={t('CCCD')}
+              variant="outlined"
+              size="small"
+              onChange={(e) => setPageState((old) => ({ ...old, CCCD: e.target.value }))}
+              value={pageState.CCCD}
+            />
           </Grid>
         </Grid>
         <Grid item xs={12} container spacing={1} justifyContent="center" mt={1}>

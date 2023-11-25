@@ -18,6 +18,7 @@ import {
   TablePagination,
   TableRow,
   Typography,
+  TextField,
   useMediaQuery
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -83,7 +84,9 @@ export default function SoCapPhatBang() {
     pageSize: 25,
     DMTN: '',
     donVi: donvi.ten,
-    khoaThi: ''
+    khoaThi: '',
+    hoTen: '',
+    soVaoSoCapBang: ''
   });
 
   const [pageState1, setPageState1] = useState({
@@ -96,7 +99,9 @@ export default function SoCapPhatBang() {
     pageSize: -1,
     DMTN: '',
     donVi: donvi.ten,
-    khoaThi: ''
+    khoaThi: '',
+    hoTen: '',
+    soVaoSoCapBang: ''
   });
 
   const handleSearch = () => {
@@ -180,6 +185,8 @@ export default function SoCapPhatBang() {
       params.append('idDanhMucTotNghiep', pageState.DMTN);
       params.append('idTruong', donvi.id);
       params.append('IdKhoaThi', pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : '');
+      params.append('HoTen', pageState.hoTen);
+      params.append('SoVaoSoCapBang', pageState.soVaoSoCapBang);
       const response = await getHocSinhTheoSoCapPhatBang(params);
       const data = response.data;
       formik.setValues({
@@ -227,6 +234,8 @@ export default function SoCapPhatBang() {
       params.append('idDanhMucTotNghiep', pageState.DMTN);
       params.append('idTruong', donvi.id);
       params.append('IdKhoaThi', pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : '');
+      params.append('HoTen', pageState.hoTen);
+      params.append('SoVaoSoCapBang', pageState.soVaoSoCapBang);
       const response = await getHocSinhTheoSoCapPhatBang(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -259,6 +268,9 @@ export default function SoCapPhatBang() {
       if (response.data && response.data.length > 0) {
         setKhoaThis(response.data);
         setSelectKhoaThi(response.data[0].id);
+        setPageState((prev) => {
+          return { ...prev, khoaThi: response.data[0].id };
+        });
       } else {
         setKhoaThis([]);
       }
@@ -279,6 +291,7 @@ export default function SoCapPhatBang() {
     setPageState((old) => ({ ...old, khoaThi: selectedValue }));
     setSelectKhoaThi(selectedValue);
   };
+
   const additionalData = {
     uyBanNhanDan: formik.values.UyBanNhanDan.toUpperCase(),
     coQuanCapBang: formik.values.CoQuanCapBang.toUpperCase(),
@@ -331,6 +344,28 @@ export default function SoCapPhatBang() {
                 )}
               </Select>
             </FormControl>
+          </Grid>
+          <Grid item xs={isXs ? 12 : 2}>
+            <TextField
+              fullWidth
+              id="outlined-basic"
+              label={t('Họ tên')}
+              variant="outlined"
+              size="small"
+              onChange={(e) => setPageState((old) => ({ ...old, hoTen: e.target.value }))}
+              value={pageState.hoTen}
+            />
+          </Grid>
+          <Grid item xs={isXs ? 12 : 2}>
+            <TextField
+              fullWidth
+              id="outlined-basic"
+              label={t('Sổ cấp vào bằng')}
+              variant="outlined"
+              size="small"
+              onChange={(e) => setPageState((old) => ({ ...old, soVaoSoCapBang: e.target.value }))}
+              value={pageState.soVaoSoCapBang}
+            />
           </Grid>
         </Grid>
         <Grid item xs={12} container spacing={1} justifyContent="center" mt={1}>
