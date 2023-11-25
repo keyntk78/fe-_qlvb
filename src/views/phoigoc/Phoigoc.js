@@ -23,6 +23,11 @@ import MainCard from 'components/cards/MainCard';
 import Config from './Config';
 import Detail from './Detail';
 import { Chip, Grid } from '@mui/material';
+import ActivePhoiGoc from './Active';
+import { IconDownload } from '@tabler/icons';
+import config from 'config';
+import RecoverPhoiGoc from './DeActive';
+import QuickSearch from 'components/form/QuickSearch';
 
 const Phoigoc = () => {
   const { t } = useTranslation();
@@ -33,6 +38,7 @@ const Phoigoc = () => {
   const openPopup = useSelector(openPopupSelector);
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
+  const [search, setSearch] = useState(false);
   const [isAccess, setIsAccess] = useState(true);
   const reloadData = useSelector(reloadDataSelector);
   const [pageState, setPageState] = useState({
@@ -82,7 +88,18 @@ const Phoigoc = () => {
     dispatch(selectedPhoigoc(phoigoc));
     dispatch(setOpenPopup(true));
   };
-
+  const handleKichHoat = (phoigoc) => {
+    setTitle(t('Kích hoạt phôi'));
+    setForm('active');
+    dispatch(selectedPhoigoc(phoigoc));
+    dispatch(setOpenPopup(true));
+  };
+  const handlePhucHoi = (phoigoc) => {
+    setTitle(t('Phục hồi phôi'));
+    setForm('recover');
+    dispatch(selectedPhoigoc(phoigoc));
+    dispatch(setOpenPopup(true));
+  };
   const buttonConfigurations = [
     {
       type: 'config',
@@ -102,10 +119,80 @@ const Phoigoc = () => {
     }
   ];
 
-  const buttonConfigurations1 = [
+  const buttonConfigurations_NotBB = [
     {
       type: 'detail',
       handleGetbyId: handleDetailPhoi
+    },
+    {
+      type: 'recover',
+      handleActive: handlePhucHoi
+    },
+    {
+      type: 'delete',
+      handleDelete: handleDeletePhoi
+    }
+  ];
+  const buttonConfigurations_BB = [
+    {
+      type: 'detail',
+      handleGetbyId: handleDetailPhoi
+    },
+    {
+      type: 'delete',
+      handleDelete: handleDeletePhoi
+    }
+  ];
+  const buttonConfigurations2 = [
+    {
+      type: 'edit',
+      handleEdit: handleEditPhoi
+    },
+    {
+      type: 'huyphoi',
+      handleClick: handleDestroy
+    },
+    {
+      type: 'delete',
+      handleDelete: handleDeletePhoi
+    }
+  ];
+
+  const buttonConfigurations3 = [
+    {
+      type: 'config',
+      handleClick: handleConfig
+    },
+    {
+      type: 'edit',
+      handleEdit: handleEditPhoi
+    },
+    {
+      type: 'active',
+      handleActive: handleKichHoat
+    },
+    {
+      type: 'huyphoi',
+      handleClick: handleDestroy
+    },
+    {
+      type: 'delete',
+      handleDelete: handleDeletePhoi
+    }
+  ];
+  const buttonConfigurations4 = [
+    {
+      type: 'edit',
+      handleEdit: handleEditPhoi
+    },
+
+    {
+      type: 'active',
+      handleActive: handleKichHoat
+    },
+    {
+      type: 'huyphoi',
+      handleClick: handleDestroy
     },
     {
       type: 'delete',
@@ -129,21 +216,39 @@ const Phoigoc = () => {
     },
     {
       flex: 1,
-      field: 'soHieuPhoi',
-      headerName: t('phoivanbang.field.tientophoi'),
-      minWidth: 100
+      field: 'SoBatDau',
+      headerName: t('Số hiệu bắt đầu'),
+      minWidth: 80
     },
+
     {
       flex: 1,
-      field: 'soBatDau',
-      headerName: t('phoivanbang.field.sobatdau'),
+      field: 'SoKetThuc',
+      headerName: t('Số hiệu kết thúc'),
       minWidth: 80
     },
     {
       flex: 1,
+      field: 'soLuongPhoi',
+      headerName: t('Số Lượng'),
+      minWidth: 80
+    },
+    {
+      flex: 1,
+      field: 'soLuongPhoiDaSuDung',
+      headerName: t('Đã sử dụng'),
+      minWidth: 100
+    },
+    {
+      flex: 1,
+      field: 'NgayMua',
+      headerName: t('Ngày mua'),
+      minWidth: 100
+    },
+    {
       field: 'tinhTrang',
       headerName: t('phoivanbang.field.tinhtrang'),
-      minWidth: 100,
+      minWidth: 120,
       renderCell: (params) => (
         <Grid container>
           <Grid item xs={12} mt={0.2}>
@@ -151,8 +256,8 @@ const Phoigoc = () => {
               <Chip
                 // variant='outlined'
                 size="small"
-                label={params.row.tinhTrang === 0 ? 'Hoạt động' : 'Đã hủy phôi'}
-                color={params.row.tinhTrang === 0 ? 'success' : 'error'}
+                label={params.row.tinhTrang === 0 ? 'Hoạt động' : params.row.tinhTrang === -1 ? 'Chưa hoạt động' : 'Đã hủy phôi'}
+                color={params.row.tinhTrang === 0 ? 'success' : params.row.tinhTrang === -1 ? 'primary' : 'error'}
               />
             </div>
           </Grid>
@@ -160,16 +265,19 @@ const Phoigoc = () => {
       )
     },
     {
-      flex: 1,
-      field: 'soLuongPhoi',
-      headerName: t('phoivanbang.field.soluongphoi'),
-      minWidth: 80
-    },
-    {
-      flex: 1,
-      field: 'NgayApDung',
-      headerName: t('phoivanbang.field.ngayapdung'),
-      minWidth: 100
+      flex: 0.1,
+      field: 'FileBienBanHuyBo',
+      headerName: t('BB Hủy Bỏ'),
+      minWidth: 100,
+      align: 'center',
+      renderCell: (params) => {
+        const pathFileYeuCau = config.urlImages + params.row.bienBanHuyPhoi.fileBienBanHuyPhoi;
+        return (
+          <a href={pathFileYeuCau} download title="Tải xuống">
+            {params.row.bienBanHuyPhoi.fileBienBanHuyPhoi ? <IconDownload /> : ''}
+          </a>
+        );
+      }
     },
     {
       field: 'actions',
@@ -179,15 +287,43 @@ const Phoigoc = () => {
       filterable: false,
       renderCell: (params) =>
         params.row.tinhTrang == 1 ? (
+          params.row.bienBanHuyPhoi.fileBienBanHuyPhoi ? (
+            <>
+              <Grid container justifyContent="center">
+                <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations_BB} />
+              </Grid>
+            </>
+          ) : (
+            <>
+              <Grid container justifyContent="center">
+                <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations_NotBB} />
+              </Grid>
+            </>
+          )
+        ) : params.row.tinhTrang == 0 ? (
+          params.row.tuDongKhoa ? (
+            <>
+              <Grid container justifyContent="center">
+                <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations2} />
+              </Grid>
+            </>
+          ) : (
+            <>
+              <Grid container justifyContent="center">
+                <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
+              </Grid>
+            </>
+          )
+        ) : params.row.tuDongKhoa ? (
           <>
             <Grid container justifyContent="center">
-              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations1} />
+              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations4} />
             </Grid>
           </>
         ) : (
           <>
             <Grid container justifyContent="center">
-              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
+              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations3} />
             </Grid>
           </>
         )
@@ -204,7 +340,10 @@ const Phoigoc = () => {
         const dataWithIds = data.phoiGocs.map((row, index) => ({
           id: index + 1,
           idx: pageState.startIndex * pageState.pageSize + index + 1,
-          NgayApDung: convertISODateToFormattedDate(row.ngayApDung),
+          NgayMua: convertISODateToFormattedDate(row.ngayMua),
+          SoKetThuc: row.soHieuPhoi + (+row.soBatDau + row.soLuongPhoi + row.soLuongPhoiDaSuDung),
+          SoBatDau: row.soHieuPhoi + row.soBatDau,
+          FileBienBanHuyBo: row.bienBanHuyPhoi.fileBienBanHuyPhoi,
           ...row
         }));
 
@@ -221,11 +360,20 @@ const Phoigoc = () => {
       }
     };
     fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
+  }, [search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
 
   return (
     <>
       <MainCard title={t('phoivanbang.title.bangoc')} secondary={<AddButton handleClick={handleAddPhoi} />}>
+        <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
+          <Grid item lg={3} md={4} sm={5} xs={7}>
+            <QuickSearch
+              value={pageState.search}
+              onChange={(value) => setPageState((old) => ({ ...old, search: value }))}
+              onSearch={() => setSearch(!search)}
+            />
+          </Grid>
+        </Grid>
         {isAccess ? (
           <DataGrid
             autoHeight
@@ -277,6 +425,10 @@ const Phoigoc = () => {
               <Config />
             ) : form === 'detail' ? (
               <Detail />
+            ) : form === 'active' ? (
+              <ActivePhoiGoc />
+            ) : form === 'recover' ? (
+              <RecoverPhoiGoc />
             ) : (
               <Delete />
             )}
