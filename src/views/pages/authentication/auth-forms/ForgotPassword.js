@@ -1,14 +1,6 @@
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import {
-  Box,
-  Button,
-  FormControl,
-  FormHelperText,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-} from '@mui/material';
+import { Box, Button, FormControl, FormHelperText, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
 
 // third party
 import { Formik } from 'formik';
@@ -51,7 +43,7 @@ const ForgotPassword = ({ ...others }) => {
             const forgotpassword = await forgotpass(values.email);
             if (forgotpassword.isSuccess) {
               dispatch(showAlert(new Date().getTime().toString(), 'success', forgotpassword.message.toString()));
-              navigate('/login')
+              navigate('/login');
             } else {
               if (forgotpassword?.errors) {
                 console.log(forgotpassword?.errors);

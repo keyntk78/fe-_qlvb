@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
 
 // material-ui
 // import { useTheme } from '@mui/material/styles';
@@ -18,48 +17,33 @@ import AnimateButton from 'components/extended/AnimateButton';
 // import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 // import Google from 'assets/images/icons/social-google.svg';
-import { login, saveDeviceToken } from 'services/authService';
-import Alert from 'components/controls/alert';
+import { LoginSSO } from 'services/authService';
 import { useTranslation } from 'react-i18next';
 import useLoginValidationSchema from 'components/validations/loginValidation';
 import { Link } from 'react-router-dom';
-import { showAlertSelector } from 'store/selectors';
+import { openPopupSelector } from 'store/selectors';
 import InputFormOutlined from 'components/form/InputFormOutlined';
 import { useTheme } from '@emotion/react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { showAlert } from 'store/actions';
-import { useEffect } from 'react';
-import { getToken } from 'firebase/messaging';
-import { messaging } from 'utils/firebase';
+import { setOpenPopup } from 'store/actions';
+// import { getToken } from 'firebase/messaging';
+// import { messaging } from 'utils/firebase';
+import Popup from 'components/controls/popup';
+import Authentication from '../authentication3/Authentication';
+import { IconKey } from '@tabler/icons';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const FirebaseLogin = ({ ...others }) => {
   const { t } = useTranslation();
   const loginValidationSchema = useLoginValidationSchema();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const theme = useTheme();
-  const showAlertLogin = useSelector(showAlertSelector);
   const scriptedRef = useScriptRef();
   const [showPassword, setShowPassword] = useState(false);
   const [errorBE, setErrorBE] = useState([]);
-  const [deviceToken, setDeviceToken] = useState('');
-  const token = localStorage.getItem('token');
-
-  useEffect(() => {
-    if (token) {
-      // Điều hướng người dùng đến trang chính hoặc trang đã đăng nhập
-      navigate('/admin'); // Sử dụng react-router-dom
-    } else {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      localStorage.removeItem('menu');
-      localStorage.removeItem('deviceToken');
-      localStorage.removeItem('donvi');
-      localStorage.removeItem('reports');
-    }
-  }, []);
+  const openPopup = useSelector(openPopupSelector);
+  const [user, setUser] = useState('');
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -68,24 +52,6 @@ const FirebaseLogin = ({ ...others }) => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
-  async function requestPermission() {
-    const permission = await Notification.requestPermission();
-    if (permission === 'granted') {
-      // Generate Token
-      const token = await getToken(messaging, {
-        vapidKey: 'BG4KudpEwieF4KEGCIwH-mprCCfUzK4Ywid30nnjoa3Wi1EU9fksRZDTA7TpeXYSbyD2J--vd5JvSVz9RxfPVUo'
-      });
-      // console.log(token);
-      setDeviceToken(token);
-      // Send this token  to server ( db)
-    }
-  }
-
-  useEffect(() => {
-    // Req user for notification permission
-    requestPermission();
-  }, []);
 
   return (
     <>
@@ -98,41 +64,10 @@ const FirebaseLogin = ({ ...others }) => {
         validationSchema={loginValidationSchema}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
-            const loggedInUser = await login(values);
-            // console.log(loggedInUser);
+            const loggedInUser = await LoginSSO(values);
             if (loggedInUser.isSuccess) {
-              const user = {
-                id: loggedInUser.data.userLogin.userId,
-                username: loggedInUser.data.userLogin.username,
-                fullname: loggedInUser.data.userLogin.fullName,
-                avatar: loggedInUser.data.userLogin.avatar,
-                token: loggedInUser.data.userLogin.token
-              };
-
-              let data;
-              const donvi = JSON.stringify(loggedInUser.data.donvi);
-              if (!loggedInUser.data.donvi.id) {
-                localStorage.setItem('donvi', '0');
-              } else {
-                data = {
-                  deviceToken: deviceToken,
-                  token: user.token,
-                  userId: user.id,
-                  donViId: loggedInUser.data.donvi.id
-                };
-                await saveDeviceToken(data);
-                localStorage.setItem('donvi', donvi);
-              }
-
-              const menu = JSON.stringify(loggedInUser.data.menu);
-              const reports = JSON.stringify(loggedInUser.data.reporst);
-              localStorage.setItem('token', loggedInUser.data.userLogin.token);
-              localStorage.setItem('user', JSON.stringify(user));
-              localStorage.setItem('menu', menu);
-              localStorage.setItem('reports', reports);
-
-              dispatch(showAlert(new Date().getTime().toString(), 'success', loggedInUser.message.toString()));
-              navigate('/admin');
+              setUser(loggedInUser.data);
+              dispatch(setOpenPopup(true));
             } else {
               if (loggedInUser?.errors) {
                 setErrorBE(loggedInUser?.errors);
@@ -140,7 +75,6 @@ const FirebaseLogin = ({ ...others }) => {
                 setStatus({ success: false });
                 setErrors({ submit: loggedInUser.message });
                 setSubmitting(false);
-                dispatch(showAlert(new Date().getTime().toString(), 'error', loggedInUser.message.toString()));
               }
             }
             if (scriptedRef.current) {
@@ -221,7 +155,9 @@ const FirebaseLogin = ({ ...others }) => {
           </form>
         )}
       </Formik>
-      {showAlertLogin && <Alert />}
+      <Popup title={'Xác thực tài khoản'} icon={IconKey} maxWidth={'sm'} openPopup={openPopup} bgcolor={'#2196F3'}>
+        <Authentication user={user.username || ''} email={user.email || ''} />
+      </Popup>
     </>
   );
 };

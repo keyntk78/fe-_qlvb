@@ -9,7 +9,7 @@ import useLocalText from 'utils/localText';
 import MainCard from 'components/cards/MainCard';
 import { DataGrid } from '@mui/x-data-grid';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { getAllNam, getSearchVBCC } from 'services/congthongtinService';
+import { getAllNam, getAllTruong, getSearchVBCC } from 'services/congthongtinService';
 // import { useSelector } from 'react-redux';
 import { createSearchParams } from 'utils/createSearchParams';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
@@ -22,6 +22,7 @@ import Popup from 'components/controls/popup';
 import InThu from './AnhBang';
 import { openPopupSelector } from 'store/selectors';
 import BackToTop from 'components/scroll/BackToTop';
+
 export default function TracuuVBCC() {
   const openPopup = useSelector(openPopupSelector);
   const { t } = useTranslation();
@@ -29,14 +30,16 @@ export default function TracuuVBCC() {
   const [showMain, setShowmain] = useState(false);
   const theme = useTheme();
   const [namHoc, setNamHoc] = useState([]);
+  const [donVi, setDonVi] = useState([]);
   const [hoTen, setHoTen] = useState('');
   const [cccd, setCCCD] = useState('');
   const [error, setError] = useState('');
   const [soHieuVanbang, setSoHieuVanbang] = useState('');
   const language = i18n.language;
   const localeText = useLocalText();
-  const [ngaSinh, setNgaySinh] = useState('');
+  const [ngaySinh, setNgaySinh] = useState('');
   const [selectNamHoc, setSelectNamHoc] = useState('');
+  const [selectDonVi, setSelectDonVi] = useState('');
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const dispatch = useDispatch();
   const [title, setTitle] = useState('');
@@ -131,9 +134,15 @@ export default function TracuuVBCC() {
   ];
 
   useEffect(() => {}, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize]);
+
   const handleNamHocChange = (event) => {
     const selectedValue = event.target.value;
     setSelectNamHoc(selectedValue);
+  };
+
+  const handleDonViChange = (event) => {
+    const selectedValue = event.target.value;
+    setSelectDonVi(selectedValue);
   };
 
   const handleSubmit = async () => {
@@ -141,14 +150,15 @@ export default function TracuuVBCC() {
       setError('Vui lòng kiểm tra Recapcha');
     } else {
       setError('');
-      if (isChecked === true && namHoc && hoTen && ngaSinh) {
+      if (isChecked === true && namHoc && hoTen && ngaySinh) {
         setShowmain(true);
         setPageState((old) => ({ ...old, isLoading: true }));
         const params = await createSearchParams(pageState);
         params.append('Cccd', cccd);
         params.append('HoTen', hoTen);
-        params.append('NgaySinh', ngaSinh);
+        params.append('NgaySinh', ngaySinh);
         params.append('SoHieuVanBang', soHieuVanbang);
+        params.append('donViTruongId', selectDonVi);
         const response = await getSearchVBCC(selectNamHoc, params);
         const check = handleResponseStatus(response, navigate);
         if (check) {
@@ -186,9 +196,11 @@ export default function TracuuVBCC() {
   useEffect(() => {
     const fetchData = async () => {
       const namhoc = await getAllNam();
-
       setNamHoc(namhoc.data);
       setSelectNamHoc(namhoc && namhoc.data.length > 0 ? namhoc.data[0].id : '');
+      const donvi = await getAllTruong();
+      setDonVi(donvi.data);
+      setSelectDonVi(donvi && donvi.data.length > 0 ? donvi.data[0].id : '');
     };
     fetchData();
   }, []);
@@ -221,10 +233,10 @@ export default function TracuuVBCC() {
               {t('ghichuvbcc2')}
             </Typography>
             <Grid item container xs={12} justifyContent={'center'} spacing={2} mt={2}>
-              <Grid item xs={12} sm={6} md={4} lg={3}>
-                <FormControl fullWidth variant="outlined">
+              <Grid item xs={12} sm={3} md={3} lg={3}>
+                <FormControl fullWidth variant="outlined" size="small">
                   <InputLabel>{t('socapbang.field.namtotnghiep')}</InputLabel>
-                  <Select size="small" value={selectNamHoc} onChange={handleNamHocChange} label={t('socapbang.field.namtotnghiep')}>
+                  <Select value={selectNamHoc} onChange={handleNamHocChange} label={t('socapbang.field.namtotnghiep')}>
                     {namHoc && namHoc.length > 0 ? (
                       namHoc.map((data) => (
                         <MenuItem key={data.id} value={data.id}>
@@ -237,7 +249,47 @@ export default function TracuuVBCC() {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item container xs={12} sm={6} md={4} lg={4}>
+              <Grid item xs={12} sm={6} md={6} lg={6}>
+                <FormControl fullWidth variant="outlined" size="small">
+                  <InputLabel>{t('Đơn vị trường')}</InputLabel>
+                  <Select value={selectDonVi} onChange={handleDonViChange} label={t('Đơn vị trường')}>
+                    {donVi && donVi.length > 0 ? (
+                      donVi.map((data) => (
+                        <MenuItem key={data.id} value={data.id}>
+                          {data.ten}
+                        </MenuItem>
+                      ))
+                    ) : (
+                      <MenuItem value="nodata">{t('noRowsLabel')}</MenuItem>
+                    )}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={3} md={3} lg={3}>
+                <TextField
+                  fullWidth
+                  id="outlined-basic"
+                  label={t('hocsinh.field.sohieuvb')}
+                  variant="outlined"
+                  size="small"
+                  onChange={(e) => setSoHieuVanbang(e.target.value)}
+                  value={soHieuVanbang}
+                />
+              </Grid>
+            </Grid>
+            <Grid item container xs={12} justifyContent={'center'} spacing={2} mt={0}>
+              <Grid Grid item xs={12} sm={3} md={3} lg={3}>
+                <TextField
+                  fullWidth
+                  id="outlined-basic"
+                  label="CCCD"
+                  variant="outlined"
+                  size="small"
+                  onChange={(e) => setCCCD(e.target.value)}
+                  value={cccd}
+                />
+              </Grid>
+              <Grid item container xs={12} sm={6} md={6} lg={6}>
                 <TextField
                   fullWidth
                   required
@@ -250,7 +302,7 @@ export default function TracuuVBCC() {
                   value={hoTen}
                 />
               </Grid>
-              <Grid item container xs={12} sm={6} md={4} lg={3}>
+              <Grid item container xs={12} sm={3} md={3} lg={3}>
                 <TextField
                   style={{ borderRadius: '0' }}
                   fullWidth
@@ -261,37 +313,13 @@ export default function TracuuVBCC() {
                   variant="outlined"
                   size="small"
                   onChange={(e) => setNgaySinh(e.target.value)}
-                  value={ngaSinh}
+                  value={ngaySinh}
                   InputLabelProps={{
                     shrink: true
                   }}
                   inputProps={{
                     max: new Date().toISOString().split('T')[0]
                   }}
-                />
-              </Grid>
-            </Grid>
-            <Grid item container xs={12} justifyContent={'center'} spacing={2} mt={2}>
-              <Grid Grid item xs={12} sm={6} md={4} lg={3}>
-                <TextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="CCCD"
-                  variant="outlined"
-                  size="small"
-                  onChange={(e) => setCCCD(e.target.value)}
-                  value={cccd}
-                />
-              </Grid>
-              <Grid Grid item xs={12} sm={6} md={4} lg={3}>
-                <TextField
-                  fullWidth
-                  id="outlined-basic"
-                  label={t('hocsinh.field.sohieuvb')}
-                  variant="outlined"
-                  size="small"
-                  onChange={(e) => setSoHieuVanbang(e.target.value)}
-                  value={soHieuVanbang}
                 />
               </Grid>
             </Grid>
@@ -303,7 +331,7 @@ export default function TracuuVBCC() {
                   <ReCAPTCHA
                     sitekey="6Ld5MtInAAAAAN7ECCJyndwfjGaiAaWEX9PUTLlU"
                     onChange={handleChange}
-                    disabled={!hoTen && !ngaSinh}
+                    disabled={!hoTen && !ngaySinh}
                     size={'normal'}
                   />
                 </Box>
