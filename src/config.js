@@ -7,6 +7,7 @@ const config = {
 
   apiUrl: 'http://localhost:5203/api',
   urlFile: 'http://localhost:5203/Resources/',
+<<<<<<< Updated upstream
 
   // apiUrl: 'https://api.quanlyvanbang.cenit.vn/api',
   // urlFile: 'https://api.quanlyvanbang.cenit.vn/Resources/',
@@ -14,6 +15,14 @@ const config = {
   secretKey: 'mytopsecretkeywithatleast32characterslong',
 
   // urlImages: 'https://api.quanlyvanbang.cenit.vn'
+=======
+  //apiUrl: 'https://api.quanlyvanbang.cenit.vn/api',
+  //urlFile: 'https://api.quanlyvanbang.cenit.vn/Resources/',
+
+  secretKey: 'mytopsecretkeywithatleast32characterslong',
+
+  //urlImages: 'https://api.quanlyvanbang.cenit.vn'
+>>>>>>> Stashed changes
   urlImages: 'http://localhost:5203'
 };
 
