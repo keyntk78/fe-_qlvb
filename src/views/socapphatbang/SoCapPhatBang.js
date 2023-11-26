@@ -121,6 +121,7 @@ export default function SoCapPhatBang() {
     setSelectDonvi(pageState.DonVi);
     const selectedDanhmucInfo = dMTN.find((dmtn) => dmtn.id === danhmucSelect);
     setSelectDanhmuc(selectedDanhmucInfo.id);
+
     const khoaThiSelect = pageState.khoaThi;
     const selectedKhoaThiInfo = khoaThis.find((khoathi) => khoathi.id === khoaThiSelect);
     setSelectKhoaThi(selectedKhoaThiInfo.id);
@@ -128,6 +129,7 @@ export default function SoCapPhatBang() {
     const donviSelect = pageState.DonVi;
     const selectedDonviInfo = donvis.find((donvi) => donvi.idTruong === donviSelect);
     dispatch(selectedDonvitruong(selectedDonviInfo));
+    setSelectTenDonvi(selectedDonviInfo.tenTruong);
   };
 
   const handleExport = async () => {
@@ -221,7 +223,6 @@ export default function SoCapPhatBang() {
       }
     }
   }, [infoMessage, donvis, dMTN]);
-  console.log(selectDonvi);
   useEffect(() => {
     if (dMTN.length > 0 && donvis.length > 0 && infoHocSinh) {
       const fetchData = async () => {
@@ -411,7 +412,7 @@ export default function SoCapPhatBang() {
     uyBanNhanDan: formik.values.UyBanNhanDan.toUpperCase(),
     coQuanCapBang: formik.values.CoQuanCapBang.toUpperCase(),
     quyetDinh: formik.values.QuyetDinh,
-    donVi: donvi != 0 && donvi.laPhong ? selectDonvi : donvi.ten,
+    donVi: donvi != 0 && donvi.laPhong ? selectTenDonVi : donvi.ten,
     namThi: formik.values.NamThi,
     title: `SỔ CẤP PHÁT BẰNG TỐT NGHIỆP ${formik.values.HeDaoTao.toUpperCase()}`,
     hinhThucDaoTao: formik.values.HinhThucDaoTao,
@@ -641,8 +642,8 @@ export default function SoCapPhatBang() {
                 <TableCell1 style={{ width: '80px' }}>Xếp loại tốt nghiệp</TableCell1>
                 <TableCell1 style={{ width: '100px' }}>Số hiệu văn bằng</TableCell1>
                 <TableCell1 style={{ width: 'auto' }}>Số vào sổ gốc</TableCell1>
-                <TableCell1 style={{ width: '87px' }}>Chữ ký người nhận</TableCell1>
-                <TableCell1 style={{ width: '35px' }}>Ghi chú</TableCell1>
+                <TableCell1 style={{ width: '87px' }}>CCCD người nhận</TableCell1>
+                <TableCell1 style={{ width: '80px' }}>Ghi chú</TableCell1>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -665,8 +666,8 @@ export default function SoCapPhatBang() {
                     <TableCell2>{row.XepLoai}</TableCell2>
                     <TableCell2>{row.SoHieuVanBang}</TableCell2>
                     <TableCell2 style={{ textAlign: 'center' }}>{row.SoVaoSoCapBang}</TableCell2>
-                    <TableCell2></TableCell2>
-                    <TableCell2></TableCell2>
+                    <TableCell2>{row.CccdNguoiNhanBang}</TableCell2>
+                    <TableCell2>{row.MoiQuanHe}</TableCell2>
                   </TableRow>
                 ))
               )}
