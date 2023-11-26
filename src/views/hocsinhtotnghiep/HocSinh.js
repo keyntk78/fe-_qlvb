@@ -345,7 +345,7 @@ export default function HocSinh() {
                 ? t('status.davaoso')
                 : '',
             ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
-            ketQua_fm: row.ketQua == 'x' ? t('Đạt') : t('Chưa đạt'),
+            ketQua_fm: row.ketQua == 'x' ? t('Đạt') : row.ketQua == 'o' ? t('Chưa đạt') : '',
             ...row
           }));
           dispatch(setReloadData(false));
@@ -664,7 +664,7 @@ export default function HocSinh() {
           </Grid>
           <Grid item xs={6} md={4} lg={1.5}>
             <Typography variant="h5">
-              {t('Chưa duyệt')}: {data?.soHocSinhChuaDuyetDuyet || 0}
+              {t('Chưa duyệt')}: {data?.soHocSinhChuaDuyet || 0}
             </Typography>
           </Grid>
           <Grid item xs={6} md={4} lg={1.5}>
