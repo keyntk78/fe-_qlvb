@@ -12,12 +12,11 @@ import { createSearchParams } from 'utils/createSearchParams';
 import i18n from 'i18n';
 import React from 'react';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
-import { Button, Chip, FormControl, Grid, TextField } from '@mui/material';
-import { IconFileExport, IconSearch } from '@tabler/icons';
+import { Chip, Grid } from '@mui/material';
+import { IconFileExport } from '@tabler/icons';
 import * as XLSX from 'xlsx';
 import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
-import { getHistoryXacMinh } from 'services/xacminhvanbangService';
 import { GetSearchLichSuDonYeuCau } from 'services/capbangbansaoService';
 const LichSuCapBanSao = () => {
   const language = i18n.language;
@@ -63,14 +62,26 @@ const LichSuCapBanSao = () => {
     },
     {
       flex: 1,
-      field: 'ngayTao_fm',
-      headerName: t('Ngày yêu cầu'),
+      field: 'ngayDuyet_fm',
+      headerName: t('Ngày duyệt'),
       minWidth: 100
     },
     {
       flex: 1,
       field: 'nguoiDuyet',
       headerName: t('Người duyệt'),
+      minWidth: 100
+    },
+    {
+      flex: 1,
+      field: 'ngayXacNhanIn_fm',
+      headerName: t('Ngày xác nhận in'),
+      minWidth: 100
+    },
+    {
+      flex: 1,
+      field: 'nguoiXacNhanIn',
+      headerName: t('Người xác nhận in'),
       minWidth: 100
     },
     {
@@ -117,7 +128,8 @@ const LichSuCapBanSao = () => {
         if (data && data.danhMucTotNghieps.length > 0) {
           const dataWithIds = data.danhMucTotNghieps.map((row, index) => ({
             idx: index + 1,
-            ngayTao_fm: convertISODateToFormattedDate(row.ngayTao),
+            ngayDuyet_fm: row.ngayDuyet ? convertISODateToFormattedDate(row.ngayDuyet) : '',
+            ngayXacNhanIn_fm: row.ngayXacNhanIn ? convertISODateToFormattedDate(row.ngayXacNhanIn) : '',
             trangThai_fm:
               row.trangThai == -1
                 ? t('Bị từ chối')
@@ -164,9 +176,9 @@ const LichSuCapBanSao = () => {
     selectHocsinh.id
   ]);
 
-  const handleSearch = () => {
-    setSearch(true);
-  };
+  // const handleSearch = () => {
+  //   setSearch(true);
+  // };
 
   const handleExport = async (e) => {
     e.preventDefault();
@@ -175,21 +187,23 @@ const LichSuCapBanSao = () => {
     params.append('Order', 1);
     params.append('OrderDir', 'ASC');
     params.append('StartIndex', '0');
-    params.append('PageSize', -1);
+    params.append('PageSize', 1000);
     params.append('idHocSinh', selectHocsinh.idHocSinh);
     // params.append('TuNgay', pageState.fromDate);
     // params.append('DenNgay', pageState.toDate);
     // params.append('Username', pageState.userName);
-    const response = await getHistoryXacMinh(params);
+    const response = await GetSearchLichSuDonYeuCau(params);
     const data = await response.data;
     const formattedData =
-      data.data.danhMucTotNghieps.length > 0 &&
-      data.data.danhMucTotNghieps.map((item, index) => ({
+      data.danhMucTotNghieps.length > 0 &&
+      data.danhMucTotNghieps.map((item, index) => ({
         STT: index + 1,
         'Số vào sổ bản sao': item.soVaoSoBanSao,
         'Số lượng bản sao': item.soLuongBanSao,
-        'Ngày tạo đơn': convertISODateToFormattedDate(item.ngayTao),
-        'Người duyệt': item.nguoiTao,
+        'Ngày duyệt': convertISODateToFormattedDate(item.ngayDuyet),
+        'Người duyệt': item.nguoiDuyet,
+        'Ngày xác nhận in': item.ngayXacNhanIn ? convertISODateToFormattedDate(item.ngayXacNhanIn) : '',
+        'Người xác nhận in': item.nguoiXacNhanIn,
         'Trạng thái':
           item.trangThai == -1
             ? t('Bị từ chối')
@@ -218,7 +232,7 @@ const LichSuCapBanSao = () => {
     ];
 
     worksheet['!cols'] = columnsWidth;
-    XLSX.writeFile(workbook, 'LichSuXacMinh_' + selectHocsinh.hoTen + '.xlsx');
+    XLSX.writeFile(workbook, 'LichSuCapBanSao_' + selectHocsinh.hoTen + '.xlsx');
     dispatch(setLoading(false));
   };
   return (
@@ -232,7 +246,7 @@ const LichSuCapBanSao = () => {
           </Grid>
         }
       >
-        <Grid container justifyContent="center" mb={1} spacing={1}>
+        {/* <Grid container justifyContent="center" mb={1} spacing={1}>
           <Grid item maxWidth={140}>
             <FormControl fullWidth variant="outlined">
               <TextField
@@ -276,7 +290,7 @@ const LichSuCapBanSao = () => {
               {t('button.search')}
             </Button>
           </Grid>
-        </Grid>
+        </Grid> */}
         {isAccess ? (
           <DataGrid
             autoHeight

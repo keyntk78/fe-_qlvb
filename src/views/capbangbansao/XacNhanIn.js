@@ -4,7 +4,7 @@ import YesButton from 'components/button/YesButton';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { capBangBansaoSelector, usersSelector } from 'store/selectors';
+import { capBangBansaoSelector, userLoginSelector } from 'store/selectors';
 import MuiTypography from '@mui/material/Typography';
 import NoButton from 'components/button/NoButton';
 import { setLoading, setOpenPopup, setReloadData, showAlert } from 'store/actions';
@@ -14,7 +14,7 @@ const XacNhanIn = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const hocsinh_madon = useSelector(capBangBansaoSelector);
-  const user = useSelector(usersSelector);
+  const user = useSelector(userLoginSelector);
   const hanldeXacNhanIn = async () => {
     dispatch(setLoading(true));
     try {

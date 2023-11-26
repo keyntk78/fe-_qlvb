@@ -312,7 +312,7 @@ export default function CapBangBanSao() {
       params.append('Order', 1);
       params.append('OrderDir', 'ASC');
       params.append('StartIndex', '0');
-      params.append('PageSize', -1);
+      params.append('PageSize', 1000);
       params.append('NgayDuyet', pageState.ngayDuyet == '' ? format(new Date(), 'yyyy-MM-dd') : pageState.ngayDuyet);
       params.append('NguoiThucHien', user.username ? user.username : '');
       params.append('TrangThai', pageState.trangThai || '');
