@@ -453,7 +453,7 @@ export default function CapPhatBang() {
               </Grid>
             </>
           )}
-          <Grid item lg={2} md={2} sm={2} xs={isXs ? 4 : 2}>
+          <Grid item lg={1.5} md={2} sm={2} xs={isXs ? 4 : 2}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('status.title')}</InputLabel>
               <Select name="trangThai" value={pageState.trangThai || 'all'} onChange={handleTrangThaiChange} label={t('status.title')}>
