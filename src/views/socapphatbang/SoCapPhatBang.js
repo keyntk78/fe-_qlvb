@@ -24,8 +24,8 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { donviSelector, reloadDataSelector, userLoginSelector } from 'store/selectors';
-import { setLoading, setReloadData } from 'store/actions';
+import { donviSelector, infoHocSinhSelector, reloadDataSelector, selectedInfoMessageSelector, userLoginSelector } from 'store/selectors';
+import { selectedDanhmuc, selectedDonvitruong, setLoading, setReloadData } from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import { createSearchParams } from 'utils/createSearchParams';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
@@ -40,6 +40,7 @@ import ExportExcel from '../sogoc/ExportExcel';
 import { getHocSinhTheoSoCapPhatBang } from 'services/socapphatbangService';
 import { getAllKhoathiByDMTN } from 'services/khoathiService';
 import GroupButtons from 'components/button/GroupButton';
+import { GetTruongHasPermision } from 'services/danhmuctotnghiepService';
 
 export default function SoCapPhatBang() {
   const isXs = useMediaQuery('(max-width:600px)');
@@ -54,6 +55,13 @@ export default function SoCapPhatBang() {
   const navigate = useNavigate();
   const [dMTN, setDMTN] = useState([]);
   const [selectDanhmuc, setSelectDanhmuc] = useState('');
+  const [donvis, setDonvis] = useState([]);
+  const [selectDonvi, setSelectDonvi] = useState('');
+  const [selectTenDonVi, setSelectTenDonvi] = useState('');
+  const [firstLoad, setFirstLoad] = useState(true);
+  const [loadData, setLoadData] = useState(false);
+  const infoHocSinh = useSelector(infoHocSinhSelector);
+  const infoMessage = useSelector(selectedInfoMessageSelector);
   const user = useSelector(userLoginSelector);
 
   const TableCell2 = styled(TableCell)(
@@ -86,7 +94,8 @@ export default function SoCapPhatBang() {
     donVi: donvi.ten,
     khoaThi: '',
     hoTen: '',
-    soVaoSoCapBang: ''
+    soVaoSoCapBang: '',
+    DonVi: ''
   });
 
   const [pageState1, setPageState1] = useState({
@@ -105,18 +114,24 @@ export default function SoCapPhatBang() {
   });
 
   const handleSearch = () => {
-    setSearch(true);
+    setSearch(!search);
+    setSelectDanhmuc(pageState.DMTN);
     const danhmucSelect = pageState.DMTN;
+    setSelectDonvi(pageState.DonVi);
     const selectedDanhmucInfo = dMTN.find((dmtn) => dmtn.id === danhmucSelect);
     setSelectDanhmuc(selectedDanhmucInfo.id);
     const khoaThiSelect = pageState.khoaThi;
     const selectedKhoaThiInfo = khoaThis.find((khoathi) => khoathi.id === khoaThiSelect);
     setSelectKhoaThi(selectedKhoaThiInfo.id);
+
+    const donviSelect = pageState.DonVi;
+    const selectedDonviInfo = donvis.find((donvi) => donvi.idTruong === donviSelect);
+    dispatch(selectedDonvitruong(selectedDonviInfo));
   };
 
   const handleExport = async () => {
     dispatch(setLoading(true));
-    await ExportExcel(formik, pageState1, selectDanhmuc, donvi, selectKhoaThi, donvi);
+    await ExportExcel(formik, pageState1, selectDanhmuc, donvi, selectKhoaThi, donvi, selectDonvi);
     dispatch(setLoading(false));
   };
 
@@ -151,8 +166,6 @@ export default function SoCapPhatBang() {
       const danhmuc = await getAllDanhmucTN(user ? user.username : '');
       if (danhmuc.data && danhmuc.data.length > 0) {
         setDMTN(danhmuc.data);
-        setPageState((old) => ({ ...old, DMTN: danhmuc.data[0].id }));
-        setSelectDanhmuc(danhmuc.data[0].id);
       } else {
         setDMTN([]);
         setPageState((old) => ({ ...old, DMTN: '' }));
@@ -161,7 +174,68 @@ export default function SoCapPhatBang() {
       dispatch(setLoading(false));
     };
     fetchDataDL();
-  }, []);
+  }, [user]);
+
+  useEffect(() => {
+    const fetchDataDL = async () => {
+      if (donvi != 0 && donvi.laPhong) {
+        const params = new URLSearchParams();
+        params.append('pageSize', -1);
+        const donvi = await GetTruongHasPermision(selectDanhmuc, params);
+        if (donvi && donvi.data && donvi.data.truongs && donvi.data.truongs.length > 0) {
+          setDonvis(donvi.data.truongs);
+        } else {
+          setDonvis([]);
+        }
+      }
+    };
+    if (selectDanhmuc) {
+      fetchDataDL();
+    }
+  }, [selectDanhmuc]);
+
+  useEffect(() => {
+    if (donvis && donvis.length > 0 && dMTN && dMTN.length > 0) {
+      if (infoMessage) {
+        setPageState((old) => ({ ...old, donVi: infoMessage.IdTruong, DMTN: infoMessage.IdDanhMucTotNghiep }));
+        setSelectDanhmuc(infoMessage.IdDanhMucTotNghiep);
+        setSelectDonvi(infoMessage.IdTruong);
+        const selectedDonviInfo = donvis.find((donvi) => donvi.id === infoMessage.IdTruong);
+        const selectedDanhmucInfo = dMTN.find((dmtn) => dmtn.id === infoMessage.IdDanhMucTotNghiep);
+        dispatch(selectedDanhmuc(selectedDanhmucInfo));
+        dispatch(selectedDonvitruong(selectedDonviInfo));
+        setLoadData(true);
+      }
+    }
+  }, [infoMessage, donvis, dMTN]);
+  console.log(selectDonvi);
+  useEffect(() => {
+    if (dMTN.length > 0 && donvis.length > 0 && infoHocSinh) {
+      const fetchData = async () => {
+        try {
+          const selectDonvi = donvis.find((item) => item.ten === infoHocSinh.tenTruong);
+          dispatch(selectedDonvitruong(selectDonvi));
+          setPageState((old) => ({
+            ...old,
+            cccd: infoHocSinh.cccd,
+            hoTen: infoHocSinh.hoTen,
+            trangThai: infoHocSinh.trangThai,
+            DMTN: infoHocSinh.idDanhMucTotNghiep,
+            DonVi: selectDonvi.id
+          }));
+          setSelectDanhmuc(infoHocSinh.idDanhMucTotNghiep);
+          setSelectDonvi(selectDonvi.id);
+          const selectDanhmuc = dMTN.find((item) => item.id === infoHocSinh.idDanhMucTotNghiep);
+          dispatch(selectedDanhmuc(selectDanhmuc));
+          setLoadData(true);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      setDisabled1(true);
+      fetchData();
+    }
+  }, [infoHocSinh, dMTN, donvis]);
 
   const formik = useFormik({
     initialValues: {
@@ -174,7 +248,8 @@ export default function SoCapPhatBang() {
       HinhThucDaoTao: '',
       NgayCapBang: '',
       KhoaThi: '',
-      TenKyThi: ''
+      TenKyThi: '',
+      TenTruong: ''
     }
   });
 
@@ -183,10 +258,12 @@ export default function SoCapPhatBang() {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
       params.append('idDanhMucTotNghiep', pageState.DMTN);
-      params.append('idTruong', donvi.id);
-      params.append('IdKhoaThi', pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : '');
+      params.append('idTruong', donvi != 0 && donvi.laPhong ? pageState.DonVi : donvi.id);
+      params.append('IdKhoaThi', pageState.khoaThi ? pageState.khoaThi : '');
       params.append('HoTen', pageState.hoTen);
       params.append('SoVaoSoCapBang', pageState.soVaoSoCapBang);
+
+      console.log(pageState, donvi.id);
       const response = await getHocSinhTheoSoCapPhatBang(params);
       const data = response.data;
       formik.setValues({
@@ -200,7 +277,8 @@ export default function SoCapPhatBang() {
         HinhThucDaoTao: data.Truong.HinhThucDaoTao || '',
         NgayCapBang: formatDate(data.DanhMucTotNghiep.NgayCapBang) || '',
         TenKyThi: data.DanhMucTotNghiep.TenKyThi || '',
-        KhoaThi: convertISODateToFormattedDate(data.KhoaThi.Ngay) || ''
+        KhoaThi: convertISODateToFormattedDate(data.KhoaThi.Ngay) || '',
+        TenTruong: donvi != 0 && donvi.laPhong ? selectTenDonVi : donvi.ten
       });
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -222,18 +300,26 @@ export default function SoCapPhatBang() {
         setIsAccess(false);
       }
     };
-    if (search || reloadData) {
-      fetchData();
-      setSearch(false);
+    if (!firstLoad || loadData) {
+      if (loadData) {
+        fetchData();
+        setLoadData(false);
+        dispatch(setSelectedInfoMessage(''));
+        dispatch(setInfoHocSinh(null));
+      } else {
+        fetchData();
+      }
+    } else {
+      setFirstLoad(false);
     }
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
+  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search, loadData]);
 
   useEffect(() => {
     const fetchData = async () => {
       const params = await createSearchParams(pageState1);
       params.append('idDanhMucTotNghiep', pageState.DMTN);
-      params.append('idTruong', donvi.id);
-      params.append('IdKhoaThi', pageState.khoaThi ? pageState.khoaThi : khoaThis && khoaThis.length > 0 ? khoaThis[0].id : '');
+      params.append('idTruong', donvi != 0 && donvi.laPhong ? pageState.DonVi : donvi.id);
+      params.append('IdKhoaThi', pageState.khoaThi ? pageState.khoaThi : '');
       params.append('HoTen', pageState.hoTen);
       params.append('SoVaoSoCapBang', pageState.soVaoSoCapBang);
       const response = await getHocSinhTheoSoCapPhatBang(params);
@@ -257,24 +343,28 @@ export default function SoCapPhatBang() {
         setIsAccess(false);
       }
     };
-    if (search || reloadData) {
-      fetchData();
+    if (!firstLoad || loadData) {
+      if (loadData) {
+        fetchData();
+        setLoadData(false);
+        dispatch(setSelectedInfoMessage(''));
+        dispatch(setInfoHocSinh(null));
+      } else {
+        fetchData();
+      }
+    } else {
+      setFirstLoad(false);
     }
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
+  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search, loadData]);
 
   useEffect(() => {
     const fetchDataDL = async () => {
       const response = await getAllKhoathiByDMTN(selectDanhmuc);
       if (response.data && response.data.length > 0) {
         setKhoaThis(response.data);
-        setSelectKhoaThi(response.data[0].id);
-        setPageState((prev) => {
-          return { ...prev, khoaThi: response.data[0].id };
-        });
       } else {
         setKhoaThis([]);
       }
-      dispatch(setLoading(false));
     };
     if (selectDanhmuc) {
       fetchDataDL();
@@ -283,13 +373,23 @@ export default function SoCapPhatBang() {
 
   const handleDanhMucChange = (event) => {
     const selectedValue = event.target.value;
-    setPageState((old) => ({ ...old, DMTN: selectedValue }));
-    setSelectDanhmuc(selectedValue);
+    const danhMuc = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, DMTN: danhMuc }));
+    setSelectDanhmuc(danhMuc);
+  };
+
+  const handleSchoolChange = (event) => {
+    const selectedValue = event.target.value;
+    const maDonvi = selectedValue === 'all' ? '' : selectedValue;
+    const selectedCategory = donvis.find((donvi) => donvi.id === selectedValue);
+    setSelectTenDonvi(selectedCategory ? selectedCategory.tenTruong : '');
+    setPageState((old) => ({ ...old, DonVi: maDonvi }));
   };
 
   const handleKhoaThiChange = (event) => {
     const selectedValue = event.target.value;
-    setPageState((old) => ({ ...old, khoaThi: selectedValue }));
+    const khoathi = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, khoaThi: khoathi }));
     setSelectKhoaThi(selectedValue);
   };
 
@@ -297,7 +397,7 @@ export default function SoCapPhatBang() {
     uyBanNhanDan: formik.values.UyBanNhanDan.toUpperCase(),
     coQuanCapBang: formik.values.CoQuanCapBang.toUpperCase(),
     quyetDinh: formik.values.QuyetDinh,
-    donVi: donvi.ten,
+    donVi: donvi != 0 && donvi.laPhong ? selectDonvi : donvi.ten,
     namThi: formik.values.NamThi,
     title: `SỔ CẤP PHÁT BẰNG TỐT NGHIỆP ${formik.values.HeDaoTao.toUpperCase()}`,
     hinhThucDaoTao: formik.values.HinhThucDaoTao,
@@ -314,10 +414,16 @@ export default function SoCapPhatBang() {
     <>
       <MainCard title={t('socapphatbang.title')}>
         <Grid item container mb={1} spacing={1} mt={1} justifyContent={'center'} alignItems="center">
-          <Grid item xs={isXs ? 12 : 4}>
+          <Grid item lg={4} md={4} sm={4} xs={isXs ? 12 : 4}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('danhmuc.title')}</InputLabel>
-              <Select name="id" value={pageState.DMTN} onChange={handleDanhMucChange} label={t('danhmuc.title')}>
+              <Select
+                name="id"
+                value={pageState.DMTN === '' ? 'all' : pageState.DMTN}
+                onChange={handleDanhMucChange}
+                label={t('danhmuc.title')}
+              >
+                <MenuItem value="all">Tất cả</MenuItem>
                 {dMTN && dMTN.length > 0 ? (
                   dMTN.map((dmtn) => (
                     <MenuItem key={dmtn.id} value={dmtn.id}>
@@ -325,31 +431,47 @@ export default function SoCapPhatBang() {
                     </MenuItem>
                   ))
                 ) : (
-                  <MenuItem value="">No data available</MenuItem>
+                  <MenuItem value="">Không có dữ liệu</MenuItem>
                 )}
               </Select>
             </FormControl>
           </Grid>
+          {donvi != 0 && donvi.laPhong && (
+            <Grid item lg={4} md={4} sm={4} xs={isXs ? 12 : 4}>
+              <FormControl fullWidth variant="outlined" size="small">
+                <InputLabel>{t('donvitruong.title')}</InputLabel>
+                <Select
+                  name="truongId"
+                  value={pageState.DonVi === '' ? 'all' : pageState.DonVi}
+                  onChange={handleSchoolChange}
+                  label={t('donvitruong.title')}
+                >
+                  <MenuItem value="all">{t('select.all')}</MenuItem>
+                  {donvis && donvis.length > 0 ? (
+                    donvis.map((donvi) => (
+                      <MenuItem key={donvi.idTruong} value={donvi.idTruong}>
+                        {donvi.tenTruong}
+                      </MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem value="">Không có dữ liệu</MenuItem>
+                  )}
+                </Select>
+              </FormControl>
+            </Grid>
+          )}
+
           <Grid item container xs={isXs ? 12 : 2}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('Khóa thi')}</InputLabel>
-              <Select label={t('Khóa thi')} name="khoaThi" value={selectKhoaThi} onChange={handleKhoaThiChange}>
-                {khoaThis && khoaThis.length > 0 ? (
-                  khoaThis.map((data) => (
-                    <MenuItem key={data.id} value={data.id}>
-                      {data && data.ngay ? convertISODateToFormattedDate(data.ngay) : ''}
-                    </MenuItem>
-                  ))
-                ) : (
-                  <MenuItem value="">{t('selected.nodata')}</MenuItem>
-                )}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item container xs={isXs ? 12 : 2}>
-            <FormControl fullWidth variant="outlined" size="small">
-              <InputLabel>{t('Trường')}</InputLabel>
-              <Select label={t('Trường')} name="khoaThi" value={selectKhoaThi} onChange={handleKhoaThiChange}>
+
+              <Select
+                label={t('Khóa thi')}
+                name="khoaThi"
+                value={pageState.khoaThi === '' ? 'all' : pageState.khoaThi}
+                onChange={handleKhoaThiChange}
+              >
+                <MenuItem value="all">{t('select.all')}</MenuItem>
                 {khoaThis && khoaThis.length > 0 ? (
                   khoaThis.map((data) => (
                     <MenuItem key={data.id} value={data.id}>
