@@ -344,6 +344,12 @@ export default function SoCapPhatBang() {
           idx: index + 1,
           gioiTinh_fm: row.GioiTinh ? t('gender.male') : t('gender.female'),
           ngaySinh_fm: convertISODateToFormattedDate(row.NgaySinh),
+          hoTen: row.HoTen,
+          noiSinh: row.NoiSinh,
+          danToc: row.DanToc,
+          xepLoai: row.XepLoai,
+          soHieuVanBang: row.SoHieuVanBang,
+          soVaoSoCapBang: row.SoVaoSoCapBang,
           ...row
         }));
         dispatch(setReloadData(false));
@@ -643,6 +649,7 @@ export default function SoCapPhatBang() {
                 <TableCell1 style={{ width: '100px' }}>Số hiệu văn bằng</TableCell1>
                 <TableCell1 style={{ width: 'auto' }}>Số vào sổ gốc</TableCell1>
                 <TableCell1 style={{ width: '87px' }}>CCCD người nhận</TableCell1>
+                <TableCell1 style={{ width: '80px' }}>Mối quan hệ </TableCell1>
                 <TableCell1 style={{ width: '80px' }}>Ghi chú</TableCell1>
               </TableRow>
             </TableHead>
@@ -668,6 +675,7 @@ export default function SoCapPhatBang() {
                     <TableCell2 style={{ textAlign: 'center' }}>{row.SoVaoSoCapBang}</TableCell2>
                     <TableCell2>{row.CccdNguoiNhanBang}</TableCell2>
                     <TableCell2>{row.MoiQuanHe}</TableCell2>
+                    <TableCell2></TableCell2>
                   </TableRow>
                 ))
               )}
