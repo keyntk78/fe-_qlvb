@@ -33,6 +33,7 @@ import MainCard from 'components/cards/MainCard';
 import BackToTop from 'components/scroll/BackToTop';
 import { styled } from '@mui/system';
 import { generateDocument } from './ExportWord';
+import { generatePDF } from './ExportPDF';
 import ExportExcel from './ExportExel';
 import { getSearchPhuLuc } from 'services/phulucService';
 import { IconDownload, IconFileExport, IconSearch } from '@tabler/icons';
@@ -120,6 +121,12 @@ export default function PhuLucSoGoc() {
     setLoading(false);
   };
 
+  const handleExportPDF = async () => {
+    setLoading(true);
+    generatePDF(pageState1.data, additionalData);
+    setLoading(false);
+  };
+
   const handleChange = (e, value) => {
     e.preventDefault();
     setPageState((old) => ({ ...old, startIndex: value }));
@@ -138,6 +145,10 @@ export default function PhuLucSoGoc() {
     {
       type: 'exportWord',
       handleClick: handleExportWord
+    },
+    {
+      type: 'exportPDF',
+      handleClick: handleExportPDF
     }
   ];
 

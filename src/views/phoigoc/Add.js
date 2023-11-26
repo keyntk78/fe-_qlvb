@@ -83,9 +83,10 @@ const Add = () => {
         });
       }
     };
-
-    fetchDataDL();
-  }, []);
+    if (openPopup) {
+      fetchDataDL();
+    }
+  }, [openPopup]);
 
   useEffect(() => {
     if (openPopup) {

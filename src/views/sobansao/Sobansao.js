@@ -37,6 +37,7 @@ import { styled } from '@mui/system';
 // import AnimateButton from 'components/extended/AnimateButton';
 import { useFormik } from 'formik';
 import { generateDocument } from './ExportWord';
+import { generatePDF } from './ExportPDF';
 import ExportExcel from './ExportExcel';
 import { GetHocSinhTheoSoBanSao } from 'services/sobansaoService';
 // import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
@@ -134,6 +135,13 @@ export default function SoBanSao() {
     setLoading(false);
   };
 
+  const handleExportPDF = async () => {
+    // e.preventDefault();
+    setLoading(true);
+    generatePDF(pageState1.data, additionalData, donvi);
+    setLoading(false);
+  };
+
   const xuatTep = [
     {
       type: 'exportExcel',
@@ -142,6 +150,10 @@ export default function SoBanSao() {
     {
       type: 'exportWord',
       handleClick: handleExportWord
+    },
+    {
+      type: 'exportPDF',
+      handleClick: handleExportPDF
     }
   ];
 

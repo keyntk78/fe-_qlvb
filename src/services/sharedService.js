@@ -191,6 +191,16 @@ export async function getCauHinhTuDongXepLoai() {
   }
 }
 
+export async function getCauHinhBatTatDangKyCapBanSao() {
+  try {
+    const response = await sendRequest(`Shared/GetCauHinhBatTatDangKyCapBanSao`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating DanhmucTN:', error);
+    throw error;
+  }
+}
+
 export async function getTruongCuByTruongMoi(idTruong) {
   try {
     store.dispatch(setLoading(true));

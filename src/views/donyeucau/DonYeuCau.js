@@ -27,6 +27,7 @@ import ActionButtons from 'components/button/ActionButtons';
 import AddButton from 'components/button/AddButton';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { GetSerachDonYeuCapBanSao } from 'services/capbangbansaoService';
+import { getCauHinhBatTatDangKyCapBanSao } from 'services/sharedService';
 
 export default function DonYeuCau() {
   const openPopup = useSelector(openPopupSelector);
@@ -48,6 +49,7 @@ export default function DonYeuCau() {
   const infoMessage = useSelector(selectedInfoMessageSelector);
   const [loadData, setLoadData] = useState(false);
   const infoHocSinh = useSelector(infoHocSinhSelector);
+  const [batTat, setbatTat] = useState('true');
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -183,7 +185,13 @@ export default function DonYeuCau() {
       setLoadData(true);
     }
   }, [infoHocSinh]);
-
+  useEffect(() => {
+    const fetchData = async () => {
+      const batTatdangkybanSao = await getCauHinhBatTatDangKyCapBanSao();
+      setbatTat(batTatdangkybanSao.data.configValue);
+    };
+    fetchData();
+  }, []);
   useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
@@ -261,7 +269,7 @@ export default function DonYeuCau() {
 
   return (
     <>
-      <MainCard title={t('Đơn yêu cầu')} secondary={<AddButton handleClick={handleAddDonyeucau} />}>
+      <MainCard title={t('Đơn yêu cầu')} secondary={batTat === 'true' ? <AddButton handleClick={handleAddDonyeucau} /> : null}>
         <Grid item container mb={1} spacing={1} justifyContent={'center'} alignItems="center">
           <Grid item lg={2} md={2.5} sm={4.5} xs={5}>
             <TextField

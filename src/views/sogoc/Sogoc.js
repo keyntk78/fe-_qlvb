@@ -48,6 +48,8 @@ import { getAllKhoathiByDMTN } from 'services/khoathiService';
 import PhuLucSoGoc from 'views/phulucsogoc/PhuLucSoGoc';
 import Import from 'views/ImportDanhSachVanBang/Import';
 import GroupButtons from 'components/button/GroupButton';
+import { generatePDF } from './ExportPDF';
+
 export default function SoGoc() {
   const isXs = useMediaQuery('(max-width:600px)');
   const { t } = useTranslation();
@@ -151,6 +153,12 @@ export default function SoGoc() {
     dispatch(setLoading(false));
   };
 
+  const handleExportPDF = async () => {
+    dispatch(setLoading(true));
+    generatePDF(pageState1.data, additionalData, donvi);
+    dispatch(setLoading(false));
+  };
+
   const handleChange = (e, value) => {
     e.preventDefault();
     setPageState((old) => ({ ...old, startIndex: value }));
@@ -169,6 +177,10 @@ export default function SoGoc() {
     {
       type: 'exportWord',
       handleClick: handleExportWord
+    },
+    {
+      type: 'exportPDF',
+      handleClick: handleExportPDF
     }
   ];
 
