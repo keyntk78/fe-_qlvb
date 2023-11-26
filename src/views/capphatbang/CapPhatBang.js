@@ -41,9 +41,10 @@ export default function CapPhatBang() {
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
   const [dMTN, setDMTN] = useState([]);
+  const [donvis, setDonvis] = useState([]);
   const [namHoc, setNamHoc] = useState([]);
   const [htdt, setHTDT] = useState([]);
-  const [donvis, setDonvis] = useState([]);
+  // const [donvis, setDonvis] = useState([]);
   const [search, setSearch] = useState(false);
   const [firstLoad, setFirstLoad] = useState(true);
   const [firstLoad1, setFirstLoad1] = useState(true);
@@ -75,7 +76,8 @@ export default function CapPhatBang() {
     donvi: '',
     trangThai: '',
     namHoc: '',
-    hinhThucDaoDao: ''
+    hinhThucDaoDao: '',
+    donVi: ''
   });
 
   const handleSearch = () => {
@@ -85,7 +87,11 @@ export default function CapPhatBang() {
     setSelectDanhmuc(pageState.DMTN);
     dispatch(selectedDanhmuc(selectedDanhmucInfo));
   };
-
+  // const handleSchoolChange = (event) => {
+  //   const selectedValue = event.target.value;
+  //   const maDonvi = selectedValue === 'all' ? '' : selectedValue;
+  //   setPageState((old) => ({ ...old, donVi: maDonvi }));
+  // };
   const handleDetail = (hocsinh) => {
     setTitle(t('hocsinh.title.info'));
     setForm('detail');
@@ -221,6 +227,21 @@ export default function CapPhatBang() {
     }
   }, [donvi, selectDanhmuc]);
 
+  //     if (donvi != 0 && donvi.laPhong) {
+  //       const params = new URLSearchParams();
+  //       params.append('pageSize', -1);
+  //       const donvi = await GetTruongHasPermision(selectDanhmuc, params);
+  //       if (donvi && donvi.data && donvi.data.truongs && donvi.data.truongs.length > 0) {
+  //         setDonvis(donvi.data.truongs);
+  //       } else {
+  //         setDonvis([]);
+  //       }
+  //     }
+  //   };
+  //   if (selectDanhmuc) {
+  //     fetchDataDL();
+  //   }
+  // }, [selectDanhmuc]);
   useEffect(() => {
     if (namHoc.length > 0 && htdt.length > 0 && infoMessage) {
       const fetchData = async () => {
@@ -272,13 +293,14 @@ export default function CapPhatBang() {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
+      params.append('idTruong', donvi != 0 && donvi.laPhong ? pageState.donVi : donvi.id);
       params.append('cccd', pageState.cccd);
       params.append('hoTen', pageState.hoTen);
       params.append('soVaoSoCapBang', pageState.soVaoSoCapBang);
       params.append('idDanhMucTotNghiep', pageState.DMTN);
       params.append('idTruong', pageState.donvi);
       params.append('trangThai', pageState.trangThai || '');
-      const response = await getSearchHocSinhCapPhatBang(donvi.id, params);
+      const response = await getSearchHocSinhCapPhatBang(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;
@@ -451,7 +473,32 @@ export default function CapPhatBang() {
               </Grid>
             </>
           )}
-          <Grid item lg={1.5} md={2} sm={2} xs={isXs ? 4 : 2}>
+
+          {/* {donvi !== 0 && donvi.laPhong && (
+            <Grid item lg={4} md={4} sm={4} xs={isXs ? 12 : 4}>
+              <FormControl fullWidth variant="outlined" size="small">
+                <InputLabel>{t('donvitruong.title')}</InputLabel>
+                <Select
+                  name="truongId"
+                  value={pageState.donVi === '' ? 'all' : pageState.donVi}
+                  onChange={handleSchoolChange}
+                  label={t('donvitruong.title')}
+                >
+                  <MenuItem value="all">{t('select.all')}</MenuItem>
+                  {donvis && donvis.length > 0 ? (
+                    donvis.map((donvi) => (
+                      <MenuItem key={donvi.idTruong} value={donvi.idTruong}>
+                        {donvi.tenTruong}
+                      </MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem value="">Không có dữ liệu</MenuItem>
+                  )}
+                </Select>
+              </FormControl>
+            </Grid>
+          )} */}
+          <Grid item lg={2} md={2} sm={2} xs={isXs ? 4 : 2}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('status.title')}</InputLabel>
               <Select name="trangThai" value={pageState.trangThai || 'all'} onChange={handleTrangThaiChange} label={t('status.title')}>
