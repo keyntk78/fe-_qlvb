@@ -12,6 +12,8 @@ import { DuyetDon, getDonyeucauById } from 'services/capbangbansaoService';
 import { useState } from 'react';
 import FormControlComponent from 'components/form/FormControlComponent ';
 import { useEffect } from 'react';
+import { format } from 'date-fns';
+import { GetCauHinhLaySoNgayCapBanSao } from 'services/sharedService';
 
 const Duyet = () => {
   const { t } = useTranslation();
@@ -22,10 +24,11 @@ const Duyet = () => {
   const user = useSelector(userLoginSelector);
   const openSubPopup = useSelector(openSubPopupSelector);
   const [donYeuCau, setDonYeuCau] = useState('');
-
+  //const [cauHinhNgay, setCauHinhNgay] = useState('');
   useEffect(() => {
     if (openSubPopup) {
-      setNgayNhan('');
+      // console.log(cauHinhNgay);
+      // setNgayNhan(format(new Date(), 'yyyy-MM-dd') + cauHinhNgay);
       setLePhi('');
     }
   }, [openSubPopup]);
@@ -35,9 +38,27 @@ const Duyet = () => {
       const Donyeucau = await getDonyeucauById(capBangBansao.id);
       const DataDonyeucau = Donyeucau.data;
       setDonYeuCau(DataDonyeucau);
+      const response_cauhinhsongay = await GetCauHinhLaySoNgayCapBanSao();
+      const songayConfig = response_cauhinhsongay.data.configValue;
+      //const songayConfig = '4';
+      // setNgayNhan(format(new Date(), 'yyyy-MM-dd') + songayConfig);
+      //setCauHinhNgay(songayConfig.configValue);
+      // Lấy ngày hiện tại
+      const currentDate = new Date();
+
+      // Cộng thêm số ngày từ config (đã đảm bảo songayConfig là một số)
+      const ngayNhanDate = new Date(currentDate.getTime() + songayConfig * 24 * 60 * 60 * 1000);
+
+      // Format ngày theo định dạng 'yyyy-MM-dd'
+      const formattedNgayNhan = format(ngayNhanDate, 'yyyy-MM-dd');
+
+      // Set state cho NgayNhan
+      setNgayNhan(formattedNgayNhan);
     };
-    fetchData();
-  }, []);
+    if (openSubPopup) {
+      fetchData();
+    }
+  }, [openSubPopup]);
 
   // Lấy ngày hiện tại và chuyển đổi sang chuỗi ngày tháng hợp lệ cho thuộc tính min
   const currentDate = new Date();
