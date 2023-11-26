@@ -13,7 +13,7 @@ import i18n from 'i18n';
 import React from 'react';
 import AddDonChinhSua from './AddDon';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
-import { Button, Grid, Tooltip } from '@mui/material';
+import { Button, Chip, Grid, Tooltip, Typography } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
 import { getSearchLichSuChinhSuaVanBang } from 'services/chinhsuavbccService';
 import ActionButtons from 'components/button/ActionButtons';
@@ -23,6 +23,7 @@ import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import InLaiVBCC from 'views/caplaivbcc/InlaiVBCC';
 import { IconEdit } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
+import Duyet from './Duyet';
 //import config from 'config';
 const ChinhSuaVBCC = () => {
   const language = i18n.language;
@@ -37,7 +38,7 @@ const ChinhSuaVBCC = () => {
   const [search, setSearch] = useState(false);
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
-  // const [data, setData] = useState([]);
+  const [hasPermission, setHasPermission] = useState(false);
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -53,9 +54,17 @@ const ChinhSuaVBCC = () => {
     dispatch(upDateVBCC(hocsinh));
     dispatch(setOpenSubPopup(true));
   };
+
   const handleCapLai = (hocsinh) => {
     setTitle(t('Cấp lại văn bằng chứng chỉ'));
     setForm('caplai');
+    dispatch(upDateVBCC(hocsinh));
+    dispatch(setOpenSubPopup(true));
+  };
+
+  const handleDuyet = (hocsinh) => {
+    setTitle(t('Duyệt nội dung chỉnh sửa VBCC'));
+    setForm('duyet');
     dispatch(upDateVBCC(hocsinh));
     dispatch(setOpenSubPopup(true));
   };
@@ -77,7 +86,24 @@ const ChinhSuaVBCC = () => {
       flex: 1,
       field: 'hoTen',
       headerName: t('Họ tên'),
-      minWidth: 180
+      minWidth: 180,
+      renderCell: (params) => (
+        <>
+          <Grid container>
+            <Grid item xs={12}>
+              <Typography variant="body1">{params.value}</Typography>
+            </Grid>
+            <Grid item xs={12} mt={0.2}>
+              <Chip
+                // variant='outlined'
+                size="small"
+                label={params.row.trangThai_fm}
+                color={params.row.trangThai_fm === 'Chưa duyệt' ? 'info' : 'success'}
+              />
+            </Grid>
+          </Grid>
+        </>
+      )
     },
     {
       flex: 0.6,
@@ -126,6 +152,8 @@ const ChinhSuaVBCC = () => {
           <Grid container justifyContent="center">
             {params.row.loaiHanhDong == 1 ? (
               <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
+            ) : hasPermission && params.row.trangThai == 0 ? (
+              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations1} />
             ) : (
               <ActionButtons type="detail" handleGetbyId={handleDetail} params={params.row} />
             )}
@@ -146,12 +174,25 @@ const ChinhSuaVBCC = () => {
     }
   ];
 
+  const buttonConfigurations1 = [
+    {
+      type: 'detail',
+      handleGetbyId: handleDetail
+    },
+    {
+      type: 'duyetchinhsua',
+      handleClick: handleDuyet
+    }
+  ];
+
   useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
       const response = await getSearchLichSuChinhSuaVanBang(selectHocsinh.cccd, params);
       const data = await response.data;
+      console.log(data);
+      setHasPermission(data.isPermission);
       const check = handleResponseStatus(response, navigate);
       if (check) {
         if (data && data.lichSus.length > 0) {
@@ -159,6 +200,7 @@ const ChinhSuaVBCC = () => {
             idx: index + 1,
             NgaySinh: convertISODateToFormattedDate(row.ngaySinh),
             NgayTao: convertISODateToFormattedDate(row.ngayTao),
+            trangThai_fm: row.trangThai == 0 ? t('Chưa duyệt') : row.trangThai == 1 ? t('Đã duyệt') : '',
             ...row
           }));
           // Lưu trữ dữ liệu gốc vào state
@@ -251,7 +293,7 @@ const ChinhSuaVBCC = () => {
           form={form}
           openPopup={openSubPopup}
           type="subpopup"
-          maxWidth={'md'}
+          maxWidth={form === 'duyet' ? 'sm' : 'md'}
           bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
         >
           {form === 'edit' ? (
@@ -260,6 +302,8 @@ const ChinhSuaVBCC = () => {
             <DetailHistory />
           ) : form === 'caplai' ? (
             <InLaiVBCC />
+          ) : form === 'duyet' ? (
+            <Duyet />
           ) : (
             ''
           )}

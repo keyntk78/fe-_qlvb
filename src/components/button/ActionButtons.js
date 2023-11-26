@@ -32,7 +32,8 @@ import {
   IconFileImport,
   IconDownload,
   IconFileReport,
-  IconRefresh
+  IconRefresh,
+  IconCheck
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { useTranslation } from 'react-i18next';
@@ -482,6 +483,30 @@ const ActionButtons = ({
             color: 'success',
             onClick: () => {
               handleClick(params);
+            }
+          }
+        ];
+      case 'duyetchinhsua':
+        return [
+          {
+            title: 'Duyệt chỉnh sửa',
+            icon: <IconCheck size={'20px'} />,
+            color: 'success',
+            onClick: () => {
+              handleClick(params);
+              onClose();
+            }
+          }
+        ];
+      case 'duyetcaplai':
+        return [
+          {
+            title: 'Duyệt cấp lại',
+            icon: <IconCheck size={'20px'} />,
+            color: 'success',
+            onClick: () => {
+              handleClick(params);
+              onClose();
             }
           }
         ];
