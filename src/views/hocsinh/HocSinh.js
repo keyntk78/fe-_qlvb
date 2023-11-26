@@ -700,22 +700,25 @@ export default function HocSinh() {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item container mb={1} spacing={1} alignItems="center">
+        <Grid item container spacing={1} alignItems="center">
           {!isMd ? (
             <>
               <Grid item xs={12} sm={12} md={12} lg={6}>
                 <Grid item container spacing={1}>
-                  <Grid item xs={6} md={4} lg={4}>
+                  <Grid item xs={6} md={4} lg={3}>
+                    <Typography variant="h5">{t('Số lượng học sinh')}</Typography>
+                  </Grid>
+                  <Grid item xs={6} md={4} lg={2.6}>
                     <Typography variant="h5">
-                      {t('Số lượng học sinh')}: {data?.totalRow || 0}
+                      {t('Tổng')}: {data?.totalRow || 0}
                     </Typography>
                   </Grid>
-                  <Grid item xs={6} md={4} lg={4}>
+                  <Grid item xs={6} md={4} lg={3}>
                     <Typography variant="h5">
                       {t('Chưa duyệt')}: {data?.soHocSinhChuaDuyet || 0}
                     </Typography>
                   </Grid>
-                  <Grid item xs={6} md={4} lg={4}>
+                  <Grid item xs={6} md={4} lg={3}>
                     <Typography variant="h5">
                       {t('Đã duyệt')}: {data?.soHocSinhDaDuyet || 0}
                     </Typography>
@@ -793,17 +796,20 @@ export default function HocSinh() {
         {isMd ? (
           <>
             <Grid item container spacing={1}>
-              <Grid item xs={6} md={4} lg={4}>
+              <Grid item xs={6} md={4} lg={3}>
+                <Typography variant="h5">{t('Số lượng học sinh')}</Typography>
+              </Grid>
+              <Grid item xs={6} md={4} lg={3}>
                 <Typography variant="h5">
-                  {t('Số lượng học sinh')}: {data?.totalRow || 0}
+                  {t('Tổng')}: {data?.totalRow || 0}
                 </Typography>
               </Grid>
-              <Grid item xs={6} md={4} lg={4}>
+              <Grid item xs={6} md={4} lg={3}>
                 <Typography variant="h5">
                   {t('Chưa duyệt')}: {data?.soHocSinhChuaDuyetDuyet || 0}
                 </Typography>
               </Grid>
-              <Grid item xs={6} md={4} lg={4}>
+              <Grid item xs={6} md={4} lg={3}>
                 <Typography variant="h5">
                   {t('Đã duyệt')}: {data?.soHocSinhDaDuyet || 0}
                 </Typography>
@@ -814,19 +820,37 @@ export default function HocSinh() {
           ''
         )}
         <Grid item container spacing={1} mb={1}>
-          <Grid item xs={6} md={4} lg={2}>
+          <Grid item xs={6} md={4} lg={1.5}>
+            <Typography variant="h5">{t('Xếp loại')}</Typography>
+          </Grid>
+          <Grid item xs={6} md={4} lg={1.3}>
             <Typography variant="h5">
               {t('Giỏi')}: {data?.tongGioi || 0}
             </Typography>
           </Grid>
-          <Grid item xs={6} md={4} lg={2}>
+          <Grid item xs={6} md={4} lg={1.5}>
             <Typography variant="h5">
               {t('Khá')}: {data?.tongKha || 0}
             </Typography>
           </Grid>
-          <Grid item xs={6} md={4} lg={2}>
+          <Grid item xs={6} md={4} lg={1.5}>
             <Typography variant="h5">
               {t('Trung bình')}: {data?.tongTB || 0}
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid item container spacing={1} mb={1}>
+          <Grid item xs={6} md={4} lg={1.5}>
+            <Typography variant="h5">{t('Kết quả')}</Typography>
+          </Grid>
+          <Grid item xs={6} md={4} lg={1.3}>
+            <Typography variant="h5">
+              {t('Đạt')}: {data?.tongDat || 0}
+            </Typography>
+          </Grid>
+          <Grid item xs={6} md={4} lg={1.5}>
+            <Typography variant="h5">
+              {t('Chưa đạt')}: {data?.tongChuaDat || 0}
             </Typography>
           </Grid>
         </Grid>

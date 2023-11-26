@@ -653,37 +653,58 @@ export default function HocSinh() {
             </>
           )}
         </Grid>
-        <Grid item container spacing={1} mt={1}>
-          <Grid item xs={4} md={3} lg={2}>
+        <Grid item container spacing={1} my={1}>
+          <Grid item xs={6} md={4} lg={1.5}>
+            <Typography variant="h5">{t('Số lượng học sinh')}</Typography>
+          </Grid>
+          <Grid item xs={6} md={4} lg={1.3}>
             <Typography variant="h5">
-              {t('Số lượng học sinh')}: {data?.totalRow || 0}
+              {t('Tổng')}: {data?.totalRow || 0}
             </Typography>
           </Grid>
-          <Grid item xs={4} md={3} lg={2}>
+          <Grid item xs={6} md={4} lg={1.5}>
             <Typography variant="h5">
               {t('Chưa duyệt')}: {data?.soHocSinhChuaDuyetDuyet || 0}
             </Typography>
           </Grid>
-          <Grid item xs={4} md={3} lg={2}>
+          <Grid item xs={6} md={4} lg={1.5}>
             <Typography variant="h5">
               {t('Đã duyệt')}: {data?.soHocSinhDaDuyet || 0}
             </Typography>
           </Grid>
         </Grid>
         <Grid item container spacing={1} mb={1}>
-          <Grid item xs={4} md={3} lg={2}>
+          <Grid item xs={6} md={4} lg={1.5}>
+            <Typography variant="h5">{t('Xếp loại')}</Typography>
+          </Grid>
+          <Grid item xs={6} md={4} lg={1.3}>
             <Typography variant="h5">
               {t('Giỏi')}: {data?.tongGioi || 0}
             </Typography>
           </Grid>
-          <Grid item xs={4} md={3} lg={2}>
+          <Grid item xs={6} md={4} lg={1.5}>
             <Typography variant="h5">
               {t('Khá')}: {data?.tongKha || 0}
             </Typography>
           </Grid>
-          <Grid item xs={4} md={3} lg={2}>
+          <Grid item xs={6} md={4} lg={1.5}>
             <Typography variant="h5">
               {t('Trung bình')}: {data?.tongTB || 0}
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid item container spacing={1} mb={1}>
+          <Grid item xs={6} md={4} lg={1.5}>
+            <Typography variant="h5">{t('Kết quả')}</Typography>
+          </Grid>
+          <Grid item xs={6} md={4} lg={1.3}>
+            <Typography variant="h5">
+              {t('Đạt')}: {data?.tongDat || 0}
+            </Typography>
+          </Grid>
+          <Grid item xs={6} md={4} lg={1.5}>
+            <Typography variant="h5">
+              {t('Chưa đạt')}: {data?.tongChuaDat || 0}
             </Typography>
           </Grid>
         </Grid>
