@@ -1,5 +1,4 @@
 import { Button, FormControl, FormControlLabel, Grid, Radio, RadioGroup, useMediaQuery } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import FormControlComponent from 'components/form/FormControlComponent ';
 import InputForm from 'components/form/InputForm';
 import InputForm1 from 'components/form/InputForm1';
@@ -11,20 +10,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openPopupSelector, reloadDataSelector, showAlertSelector } from 'store/selectors';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import Importfile from 'components/form/ImportFile';
-import { showAlert } from 'store/actions';
+import { setOpenPopup, showAlert } from 'store/actions';
 import { convertJsonToFormData } from 'utils/convertJsonToFormData';
 import { IconDownload } from '@tabler/icons';
 import FileMau_YCCBS from '../FileMau/MauDonYCCapBanSao.docx';
 import useDonyeucauValidationSchema from 'components/validations/donyeucauValidation';
 import { Container, useTheme } from '@mui/system';
-import { IconArrowLeft, IconSend } from '@tabler/icons';
+import { IconSend } from '@tabler/icons';
 import { createDonyeucau, getAllDanToc, getAllNam, getAllTruong, getPhong } from 'services/congthongtinService';
 import Alert from 'components/controls/alert';
 import BackToTop from 'components/scroll/BackToTop';
+import Popup from 'components/controls/popup';
+import ThongBaoDonyeuCau from './ThongbaoDonYeuCau';
 
 const CreateDonyeucau = () => {
   const theme = useTheme();
-  const navigate = useNavigate();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [donvitruong, setDonvi] = useState([]);
   const [namthi, setNamthi] = useState([]);
@@ -33,6 +33,9 @@ const CreateDonyeucau = () => {
   const reloadData = useSelector(reloadDataSelector);
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const [title, setTitle] = useState('');
+  const [form, setForm] = useState('');
+  const [thongBao, setThongBao] = useState('');
   const showAlertLogin = useSelector(showAlertSelector);
 
   const hocLucOptions = [
@@ -96,14 +99,18 @@ const CreateDonyeucau = () => {
       try {
         const formData = await convertJsonToFormData(values);
         const addDonyeucau = await createDonyeucau(formData);
-
+        console.log(addDonyeucau);
         if (addDonyeucau.isSuccess == false) {
           dispatch(showAlert(new Date().getTime().toString(), 'error', addDonyeucau.message.toString()));
         } else {
           formik.resetForm();
           formik.values.FileDonYeuCau = '';
           formik.values.FileHinhAnhCCCD = '';
-          dispatch(showAlert(new Date().getTime().toString(), 'success', addDonyeucau.message.toString()));
+          setTitle(addDonyeucau.message.toString());
+          setForm('notify');
+          dispatch(setOpenPopup(true));
+          setThongBao(addDonyeucau);
+          // dispatch(showAlert(new Date().getTime().toString(), 'success', addDonyeucau.message.toString()));
         }
       } catch (error) {
         console.error('Error updating donyeucau:', error);
@@ -472,17 +479,17 @@ const CreateDonyeucau = () => {
                   <IconSend /> {t('button.senddon')}
                 </Button>
               </Grid>
-              <Grid item>
-                <Button color="error" variant="contained" size="medium" onClick={() => navigate(-1)}>
-                  <IconArrowLeft /> {t('button.back')}
-                </Button>
-              </Grid>
             </Grid>
           </form>
         </Container>
         <BackToTop />
       </div>
       {showAlertLogin && <Alert />}
+      {form !== '' && (
+        <Popup title={title} form={form} openPopup={openPopup} bgcolor={'#2196F3'} maxWidth={'sm'}>
+          {form === 'notify' ? <ThongBaoDonyeuCau thongbao={thongBao} /> : ''}
+        </Popup>
+      )}
     </div>
   );
 };
