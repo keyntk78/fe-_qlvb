@@ -8,7 +8,11 @@ import { IconChevronsLeft, IconChevronsRight } from '@tabler/icons';
 
 const XuLyDuLieuIn = ({ studentDataList, positionConfig, componentRef }) => {
   const phoigoc = useSelector(selectedPhoigocSelector);
+  console.log(phoigoc);
   const Image = config.urlFile + 'PhoiGoc/' + phoigoc.anhPhoi;
+  const chieuNgang = phoigoc ? phoigoc.chieuNgang : 19;
+  const chieuDoc = phoigoc ? phoigoc.chieuDoc : 13;
+
   return (
     <div>
       <Carousel
@@ -32,8 +36,10 @@ const XuLyDuLieuIn = ({ studentDataList, positionConfig, componentRef }) => {
             style={{
               border: '1px solid #333',
               backgroundImage: `url(${Image})`,
-              width: '19cm',
-              height: '13cm',
+              // width: chieuNgang + 'cm',
+              // height: chieuDoc + 'cm',
+              width: chieuNgang + 'cm',
+              height: chieuDoc + 'cm',
               position: 'relative',
               backgroundSize: 'cover',
               marginTop: '15px',
@@ -67,8 +73,10 @@ const XuLyDuLieuIn = ({ studentDataList, positionConfig, componentRef }) => {
             style={{
               border: '1px solid #333',
               backgroundImage: `url(${Image})`,
-              width: '19cm',
-              height: '13cm',
+              // width: '19cm',
+              // height: '13cm',
+              width: chieuNgang + 'cm',
+              height: chieuDoc + 'cm',
               position: 'relative',
               backgroundSize: 'cover',
               marginBottom: '5px',

@@ -17,6 +17,8 @@ const XemTruoc = () => {
   const openSubPopup = useSelector(openSubPopupSelector);
   const dispatch = useDispatch();
   const Image = config.urlFile + 'PhoiGoc/' + phoigoc.anhPhoi;
+  const chieuNgang = phoigoc ? phoigoc.chieuNgang : 19;
+  const chieuDoc = phoigoc ? phoigoc.chieuDoc : 13;
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -70,8 +72,10 @@ const XemTruoc = () => {
         <div
           style={{
             backgroundImage: `url(${Image})`,
-            width: '19cm',
-            height: '13cm',
+            // width: '19cm',
+            // height: '13cm',
+            width: chieuNgang + 'cm',
+            height: chieuDoc + 'cm',
             position: 'relative',
             backgroundSize: 'cover'
           }}

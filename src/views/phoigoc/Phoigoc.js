@@ -69,7 +69,7 @@ const Phoigoc = () => {
     dispatch(setOpenPopup(true));
   };
   const handleDetailPhoi = (phoigoc) => {
-    setTitle(t('phoivanbang.title.detailhuyphoi'));
+    setTitle(t('Xem chi tiết'));
     setForm('detail');
     dispatch(selectedPhoigoc(phoigoc));
     dispatch(setOpenPopup(true));
@@ -104,6 +104,10 @@ const Phoigoc = () => {
     {
       type: 'config',
       handleClick: handleConfig
+    },
+    {
+      type: 'detail',
+      handleGetbyId: handleDetailPhoi
     },
     {
       type: 'edit',
@@ -145,6 +149,10 @@ const Phoigoc = () => {
   ];
   const buttonConfigurations2 = [
     {
+      type: 'detail',
+      handleGetbyId: handleDetailPhoi
+    },
+    {
       type: 'edit',
       handleEdit: handleEditPhoi
     },
@@ -164,6 +172,10 @@ const Phoigoc = () => {
       handleClick: handleConfig
     },
     {
+      type: 'detail',
+      handleGetbyId: handleDetailPhoi
+    },
+    {
       type: 'edit',
       handleEdit: handleEditPhoi
     },
@@ -181,6 +193,10 @@ const Phoigoc = () => {
     }
   ];
   const buttonConfigurations4 = [
+    {
+      type: 'detail',
+      handleGetbyId: handleDetailPhoi
+    },
     {
       type: 'edit',
       handleEdit: handleEditPhoi

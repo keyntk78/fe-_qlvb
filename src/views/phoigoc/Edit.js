@@ -171,8 +171,8 @@ const Edit = () => {
               </FormControlComponent>
             </Grid>
             <Grid item xs={6}>
-              <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} isRequire label={t('Chiều dọc phôi')}>
-                <InputForm formik={formik} name="ChieuDoc" type="number" placeholder={t('Chiều ngang phôi')} />
+              <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} isRequire label={t('Chiều dọc')}>
+                <InputForm formik={formik} name="ChieuDoc" type="number" placeholder={t('Chiều dọc')} />
               </FormControlComponent>
             </Grid>
           </Grid>
@@ -201,7 +201,7 @@ const Edit = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <InputForm1 formik={formik} name="MoTa" label={t('Mô tả')} isMulltiline minRows={3} maxRows={10} />
+            <InputForm1 formik={formik} name="MoTa" label={t('Mô tả')} isMulltiline minRows={3} maxRows={10} placeholder={'Mô tả'} />
           </Grid>
           <InputForm1
             formik={formik}

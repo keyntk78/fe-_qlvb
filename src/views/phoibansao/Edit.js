@@ -1,5 +1,5 @@
 import { React } from 'react';
-import { FormControl, Grid, useMediaQuery } from '@mui/material';
+import { Checkbox, FormControl, FormControlLabel, Grid, useMediaQuery } from '@mui/material';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
@@ -73,6 +73,10 @@ const EditAction = () => {
           TenPhoi: dataPhoisao.tenPhoi || '',
           SoLuongPhoi: dataPhoisao.soLuongPhoi || 0,
           AnhPhoi: dataPhoisao.anhPhoi || '',
+          TuDongKhoa: dataPhoisao.tuDongKhoa || false,
+          ChieuDoc: dataPhoisao.chieuDoc || '',
+          ChieuNgang: dataPhoisao.chieuNgang || '',
+          MoTa: dataPhoisao.moTa || '',
           lyDo: dataPhoisao.lyDo || '',
           NgayMua: convertFormattedDateToISODate(NgayMua) || '',
           NguoiThucHien: user.username
@@ -130,6 +134,30 @@ const EditAction = () => {
               </FormControlComponent>
             </Grid>
           </Grid>
+          <Grid item container spacing={isXs ? 0 : 1} columnSpacing={isXs ? 1 : 0}>
+            <Grid item xs={6}>
+              <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} isRequire label={t('Chiều ngang')}>
+                <InputForm formik={formik} name="ChieuNgang" type="number" placeholder={t('Chiều ngang')} />
+              </FormControlComponent>
+            </Grid>
+            <Grid item xs={6}>
+              <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} isRequire label={t('Chiều dọc')}>
+                <InputForm formik={formik} name="ChieuDoc" type="number" placeholder={t('Chiều dọc')} />
+              </FormControlComponent>
+            </Grid>
+          </Grid>
+          <Grid item xs={6}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  formik={formik}
+                  checked={formik.values.TuDongKhoa} // Check if the value is 'x'
+                  onChange={(e) => formik.setFieldValue('TuDongKhoa', e.target.checked)}
+                />
+              }
+              label="Khóa di chuyển phôi"
+            />
+          </Grid>
           <Grid item xs={12} sx={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <ImageForm
               formik={formik}
@@ -142,6 +170,10 @@ const EditAction = () => {
               isImagePreview={openPopup}
             />
           </Grid>
+          <Grid item xs={12}>
+            <InputForm1 formik={formik} name="MoTa" label={t('Mô tả')} isMulltiline minRows={3} maxRows={10} placeholder={t('Mô tả')} />
+          </Grid>
+
           <InputForm1
             formik={formik}
             minRows={3}

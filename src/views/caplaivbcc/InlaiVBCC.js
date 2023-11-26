@@ -84,7 +84,8 @@ const InLaiVBCC = () => {
         </Grid>
         <div>
           <DuLieuInTungNguoi
-            anhphoi={duLieuConFig.anhPhoi}
+            // anhphoi={duLieuConFig.anhPhoi}
+            duLieuPhoi={duLieuConFig}
             studentDataList={DataInBang}
             positionConfig={cauHinhViTri}
             componentRef={componentRef}
