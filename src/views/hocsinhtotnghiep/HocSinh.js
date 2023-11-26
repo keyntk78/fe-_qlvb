@@ -322,6 +322,7 @@ export default function HocSinh() {
       params.append('trangThai', pageState.trangThai);
       const response = await getHocSinhByTruong(donvi.id, params);
       const data = response.data;
+
       const hasActiveHocSinh = data && data.hocSinhs.length > 0 && data.hocSinhs.every((hocSinh) => hocSinh.trangThai === 0);
       const hasActiveHocSinh_InGCN = data && data.hocSinhs.length > 0 && data.hocSinhs.every((hocSinh) => hocSinh.trangThai === 2);
       setDisabledInGCN(!hasActiveHocSinh_InGCN);
