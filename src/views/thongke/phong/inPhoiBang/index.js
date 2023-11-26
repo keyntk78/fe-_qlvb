@@ -32,6 +32,10 @@ export default function ThongKeHocSinh() {
   const navigate = useNavigate();
   const [disabledSearch, setDisabledSearch] = useState(true);
   const [disabledExport, setDisabledExport] = useState(true);
+  const loaiPhoiOptions = [
+    { value: true, label: 'Phôi gốc' },
+    { value: false, label: 'Phôi sao' }
+  ];
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -42,6 +46,7 @@ export default function ThongKeHocSinh() {
     pageSize: 10,
     heDaoTao: '',
     namHoc: '',
+    loaiPhoi: true,
     donVi: ''
   });
 
@@ -109,6 +114,7 @@ export default function ThongKeHocSinh() {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
+      params.append('IsPhoiGoc', pageState.loaiPhoi);
       params.append('idNamThi', pageState.namHoc);
       params.append('nguoiThucHien', user.username);
       const response = await GetThongKeInPhoiBang(params);
@@ -140,6 +146,7 @@ export default function ThongKeHocSinh() {
   useEffect(() => {
     const fetchData = async () => {
       const params = await createSearchParams(pageState1);
+      params.append('IsPhoiGoc', pageState.loaiPhoi);
       params.append('idNamThi', pageState.namHoc);
       params.append('nguoiThucHien', user.username);
       const response = await GetThongKeInPhoiBang(params);
@@ -177,7 +184,10 @@ export default function ThongKeHocSinh() {
     const selectedValue = event.target.value;
     setPageState((old) => ({ ...old, namHoc: selectedValue }));
   };
-
+  const handleLoaiPhoiChange = (event) => {
+    const selectedValue = event.target.value;
+    setPageState((old) => ({ ...old, loaiPhoi: selectedValue }));
+  };
   const handleExport = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
@@ -191,6 +201,22 @@ export default function ThongKeHocSinh() {
     <>
       <MainCard title={t('Thống kê in phôi bằng')}>
         <Grid item container spacing={1} mb={2} justifyContent={'center'} alignItems="center">
+          <Grid item lg={2} md={3} sm={3} xs={isXs ? 4 : 2}>
+            <FormControl fullWidth variant="outlined" size="small">
+              <InputLabel>{t('Loại phôi')}</InputLabel>
+              <Select name="id" value={pageState.loaiPhoi} onChange={handleLoaiPhoiChange} label={t('Loại Phôi')}>
+                {loaiPhoiOptions && loaiPhoiOptions.length > 0 ? (
+                  loaiPhoiOptions.map((data) => (
+                    <MenuItem key={data.value} value={data.value}>
+                      {data.label}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value="">No data available</MenuItem>
+                )}
+              </Select>
+            </FormControl>
+          </Grid>
           <Grid item lg={2} md={3} sm={3} xs={isXs ? 4 : 2}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('Năm học')}</InputLabel>

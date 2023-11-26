@@ -234,3 +234,14 @@ export async function GetCauHinhPhoiGocKichThuoc() {
     throw error;
   }
 }
+export async function GetCauHinhPhoiSaoKichThuoc() {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(`Shared/GetCauHinhPhoiBanSaoKichThuoc`, 'GET');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating DanhmucTN:', error);
+    throw error;
+  }
+}

@@ -23,6 +23,8 @@ import Config from './Config';
 import DestroyPhoi from './Destroy';
 import Detail from './Detail';
 import { Chip, Grid } from '@mui/material';
+import QuickSearch from 'components/form/QuickSearch';
+import ActivePhoiSao from './Active';
 
 const PhoiBanSao = () => {
   const { t } = useTranslation();
@@ -34,6 +36,7 @@ const PhoiBanSao = () => {
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
   const [isAccess, setIsAccess] = useState(true);
+  const [search, setSearch] = useState(false);
   const reloadData = useSelector(reloadDataSelector);
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -50,12 +53,12 @@ const PhoiBanSao = () => {
     setForm('add');
     dispatch(setOpenPopup(true));
   };
-  const handleDestroy = (phoisao) => {
-    setTitle(t('phoivanbang.title.destroysao'));
-    setForm('huyphoi');
-    dispatch(selectedPhoisao(phoisao));
-    dispatch(setOpenPopup(true));
-  };
+  // const handleDestroy = (phoisao) => {
+  //   setTitle(t('phoivanbang.title.destroysao'));
+  //   setForm('huyphoi');
+  //   dispatch(selectedPhoisao(phoisao));
+  //   dispatch(setOpenPopup(true));
+  // };
   const handleConfig = (phoisao) => {
     setTitle(t('cauhinhphoivanbang.title'));
     setForm('config');
@@ -69,7 +72,7 @@ const PhoiBanSao = () => {
     dispatch(setOpenPopup(true));
   };
   const handleDetailPhoi = (phoisao) => {
-    setTitle(t('phoivanbang.title.detailhuyphoi'));
+    setTitle(t('Xem chi tiết'));
     setForm('detail');
     dispatch(selectedPhoisao(phoisao));
     dispatch(setOpenPopup(true));
@@ -82,36 +85,98 @@ const PhoiBanSao = () => {
     dispatch(setOpenPopup(true));
   };
 
+  const handleKichHoat = (phoisao) => {
+    setTitle(t('Kích hoạt phôi'));
+    setForm('active');
+    dispatch(selectedPhoisao(phoisao));
+    dispatch(setOpenPopup(true));
+  };
   const buttonConfigurations = [
     {
       type: 'config',
       handleClick: handleConfig
     },
     {
+      type: 'detail',
+      handleGetbyId: handleDetailPhoi
+    },
+    {
       type: 'edit',
       handleEdit: handleEditPhoi
     },
-    {
-      type: 'huyphoi',
-      handleClick: handleDestroy
-    },
+    // {
+    //   type: 'huyphoi',
+    //   handleClick: handleDestroy
+    // },
     {
       type: 'delete',
       handleDelete: handleDeletePhoi
     }
   ];
-
-  const buttonConfigurations1 = [
+  const buttonConfigurations_DaKhoa = [
+    // {
+    //   type: 'config',
+    //   handleClick: handleConfig
+    // },
     {
       type: 'detail',
       handleGetbyId: handleDetailPhoi
     },
     {
+      type: 'edit',
+      handleEdit: handleEditPhoi
+    },
+    // {
+    //   type: 'huyphoi',
+    //   handleClick: handleDestroy
+    // },
+    {
       type: 'delete',
       handleDelete: handleDeletePhoi
     }
   ];
-
+  const buttonConfigurations1 = [
+    { type: 'config', handleClick: handleConfig },
+    // {
+    //   type: 'detail',
+    //   handleGetbyId: handleDetailPhoi
+    // },
+    {
+      type: 'detail',
+      handleGetbyId: handleDetailPhoi
+    },
+    {
+      type: 'edit',
+      handleEdit: handleEditPhoi
+    },
+    {
+      type: 'active',
+      handleActive: handleKichHoat
+    },
+    {
+      type: 'delete',
+      handleDelete: handleDeletePhoi
+    }
+  ];
+  const buttonConfigurations1_DaKhoa = [
+    // { type: 'config', handleClick: handleConfig },
+    {
+      type: 'detail',
+      handleGetbyId: handleDetailPhoi
+    },
+    {
+      type: 'edit',
+      handleEdit: handleEditPhoi
+    },
+    {
+      type: 'active',
+      handleActive: handleKichHoat
+    },
+    {
+      type: 'delete',
+      handleDelete: handleDeletePhoi
+    }
+  ];
   const columns = [
     {
       field: 'idx',
@@ -138,8 +203,8 @@ const PhoiBanSao = () => {
               <Chip
                 // variant='outlined'
                 size="small"
-                label={params.row.tinhTrang === 0 ? 'Hoạt động' : 'Đã hủy phôi'}
-                color={params.row.tinhTrang === 0 ? 'success' : 'error'}
+                label={params.row.tinhTrang === 0 ? 'Hoạt động' : 'Chưa hoạt động'}
+                color={params.row.tinhTrang === 0 ? 'success' : 'primary'}
               />
             </div>
           </Grid>
@@ -165,16 +230,30 @@ const PhoiBanSao = () => {
       sortable: false,
       filterable: false,
       renderCell: (params) =>
-        params.row.tinhTrang == 1 ? (
+        params.row.tinhTrang == 0 ? (
+          params.row.tuDongKhoa ? (
+            <>
+              <Grid container justifyContent="center">
+                <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations_DaKhoa} />
+              </Grid>
+            </>
+          ) : (
+            <>
+              <Grid container justifyContent="center">
+                <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
+              </Grid>
+            </>
+          )
+        ) : params.row.tuDongKhoa ? (
           <>
             <Grid container justifyContent="center">
-              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations1} />
+              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations1_DaKhoa} />
             </Grid>
           </>
         ) : (
           <>
             <Grid container justifyContent="center">
-              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
+              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations1} />
             </Grid>
           </>
         )
@@ -208,11 +287,20 @@ const PhoiBanSao = () => {
       }
     };
     fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
+  }, [search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
 
   return (
     <>
       <MainCard title={t('phoivanbang.title.bansao')} secondary={<AddButton handleClick={handleAddPhoi} />}>
+        <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
+          <Grid item lg={3} md={4} sm={5} xs={7}>
+            <QuickSearch
+              value={pageState.search}
+              onChange={(value) => setPageState((old) => ({ ...old, search: value }))}
+              onSearch={() => setSearch(!search)}
+            />
+          </Grid>
+        </Grid>
         {isAccess ? (
           <DataGrid
             autoHeight
@@ -264,6 +352,8 @@ const PhoiBanSao = () => {
               <Config />
             ) : form === 'detail' ? (
               <Detail />
+            ) : form === 'active' ? (
+              <ActivePhoiSao />
             ) : (
               <Delete />
             )}

@@ -2,9 +2,11 @@ import React from 'react';
 import '../../index.css';
 import config from 'config';
 
-const DatainBang = ({ anhphoi, studentDataList, positionConfig, componentRef }) => {
-  const Image = config.urlFile + 'PhoiGoc/' + anhphoi;
-
+const DatainBang = ({ duLieuPhoi, studentDataList, positionConfig, componentRef }) => {
+  const Image = config.urlFile + 'PhoiGoc/' + duLieuPhoi.anhphoi;
+  const chieuNgang = duLieuPhoi ? duLieuPhoi.chieuNgang : 19;
+  const chieuDoc = duLieuPhoi ? duLieuPhoi.chieuDoc : 13;
+  console.log(duLieuPhoi);
   return (
     <div ref={componentRef} style={{ marginTop: '10px', marginLeft: '60px' }}>
       <div
@@ -12,8 +14,10 @@ const DatainBang = ({ anhphoi, studentDataList, positionConfig, componentRef }) 
         style={{
           border: '1px solid #333',
           backgroundImage: `url(${Image})`,
-          width: '19cm',
-          height: '13cm',
+          // width: '19cm',
+          // height: '13cm',
+          width: chieuNgang + 'cm',
+          height: chieuDoc + 'cm',
           position: 'relative',
           backgroundSize: 'cover',
           marginBottom: '5px'

@@ -132,3 +132,14 @@ export async function getPhoiBanSaoDangSuDung(idTruong) {
     throw error;
   }
 }
+export async function KichHoatPhoiSao(idphoi) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`PhoiBanSao/Active?idPhoiBanSao=${idphoi}`, 'POST');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating User:', error);
+    throw error;
+  }
+}

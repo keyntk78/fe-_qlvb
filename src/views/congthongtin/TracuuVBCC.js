@@ -158,7 +158,7 @@ export default function TracuuVBCC() {
         params.append('HoTen', hoTen);
         params.append('NgaySinh', ngaySinh);
         params.append('SoHieuVanBang', soHieuVanbang);
-        params.append('donViTruongId', selectDonVi);
+        params.append('IdTruong', selectDonVi);
         const response = await getSearchVBCC(selectNamHoc, params);
         const check = handleResponseStatus(response, navigate);
         if (check) {

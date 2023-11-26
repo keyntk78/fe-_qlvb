@@ -8,7 +8,9 @@ export const usePhoibansaoValidationSchema = (isUpdate = false) => {
     MaHeDaoTao: Yup.string().required(t('validation.donvitruong.mahedaotao')),
     TenPhoi: Yup.string().required(t('validation.phoivanbang.tenphoi')),
     SoLuongPhoi: Yup.string().required(t('validation.phoivanbang.soluongphoi')),
-    NgayMua: Yup.string().required(t('validation.phoivanbang.ngaymua'))
+    NgayMua: Yup.string().required(t('validation.phoivanbang.ngaymua')),
+    ChieuNgang: Yup.string().required(t('Chiều ngang phôi không được để trống')),
+    ChieuDoc: Yup.string().required(t('Chiều dọc phôi không được để trống'))
   });
 
   if (!isUpdate) {
