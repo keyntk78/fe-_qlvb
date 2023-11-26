@@ -272,7 +272,6 @@ export default function CapPhatBang() {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
-      params.append('idTruong', donvi != 0 && donvi.laPhong ? pageState.donVi : donvi.id);
       params.append('cccd', pageState.cccd);
       params.append('hoTen', pageState.hoTen);
       params.append('soVaoSoCapBang', pageState.soVaoSoCapBang);
