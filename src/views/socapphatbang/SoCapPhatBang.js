@@ -36,6 +36,7 @@ import BackToTop from 'components/scroll/BackToTop';
 import { styled } from '@mui/system';
 import { useFormik } from 'formik';
 import { generateDocument } from '../sogoc/ExportWord';
+import { generatePDF } from '../socapphatbang/ExportPDF';
 import ExportExcel from '../sogoc/ExportExcel';
 import { getHocSinhTheoSoCapPhatBang } from 'services/socapphatbangService';
 import { getAllKhoathiByDMTN } from 'services/khoathiService';
@@ -141,6 +142,11 @@ export default function SoCapPhatBang() {
     setLoading(false);
   };
 
+  const handleExportPDF = async () => {
+    setLoading(true);
+    await generatePDF(pageState1.data, additionalData, donvi);
+    setLoading(false);
+  };
   const handleChange = (e, value) => {
     e.preventDefault();
     setPageState((old) => ({ ...old, startIndex: value }));
@@ -159,6 +165,10 @@ export default function SoCapPhatBang() {
     {
       type: 'exportWord',
       handleClick: handleExportWord
+    },
+    {
+      type: 'exportPDF',
+      handleClick: handleExportPDF
     }
   ];
   useEffect(() => {
