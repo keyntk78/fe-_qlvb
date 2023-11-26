@@ -158,7 +158,7 @@ export default function TracuuVBCC() {
         params.append('HoTen', hoTen);
         params.append('NgaySinh', ngaySinh);
         params.append('SoHieuVanBang', soHieuVanbang);
-        params.append('donViTruongId', selectDonVi);
+        params.append('IdTruong', selectDonVi);
         const response = await getSearchVBCC(selectNamHoc, params);
         const check = handleResponseStatus(response, navigate);
         if (check) {
@@ -197,10 +197,8 @@ export default function TracuuVBCC() {
     const fetchData = async () => {
       const namhoc = await getAllNam();
       setNamHoc(namhoc.data);
-      setSelectNamHoc(namhoc && namhoc.data.length > 0 ? namhoc.data[0].id : '');
       const donvi = await getAllTruong();
       setDonVi(donvi.data);
-      setSelectDonVi(donvi && donvi.data.length > 0 ? donvi.data[0].id : '');
     };
     fetchData();
   }, []);

@@ -63,9 +63,7 @@ const Add = () => {
       }
     }
   });
-  useEffect(() => {
-    console.log(formik.values);
-  }, [formik]);
+
   useEffect(() => {
     const fetchDataDL = async () => {
       const response = await getAllHedaotao();

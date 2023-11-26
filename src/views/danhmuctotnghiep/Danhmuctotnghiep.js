@@ -293,7 +293,7 @@ const Danhmuctotnghiep = () => {
           <Grid item xs={2} minWidth={120}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel> {t('namthi.title')}</InputLabel>
-              <Select value={selectedNam == '' ? 'all' : selectedNam} onChange={handleChange} label={t('namthi.title')}>
+              <Select value={selectedNam || 'all'} onChange={handleChange} label={t('namthi.title')}>
                 <MenuItem value="all">{'Tất cả'}</MenuItem>
                 {pageState.namThi.map((item) => (
                   <MenuItem key={item.id} value={item.id}>

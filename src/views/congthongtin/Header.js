@@ -43,7 +43,7 @@ export default function Header() {
     { path: '/tracuu-donyeucau', icon: <IconFileCertificate />, text: 'Tra cứu đơn cấp bản sao' },
     batTat === 'true' ? { path: '/dangky-donyeucau', icon: <IconPencil />, text: 'Đăng ký cấp bản sao' } : ''
   ];
-  console.log('â', batTat);
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 85) {

@@ -3,7 +3,6 @@ import { fontNormal, fontBold, fontItalic } from '../../assets/fonts/TimeNewRoma
 import 'jspdf-autotable';
 
 export function generatePDF(hocsinhs, data) {
-  console.log(hocsinhs, data);
   const doc = new jsPDF('landscape', 'mm');
 
   doc.addFileToVFS('Time-New-Roman-Normal.ttf', fontNormal);

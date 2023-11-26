@@ -234,6 +234,18 @@ export default function HocSinh() {
       minWidth: 100
     },
     {
+      field: 'ketQua_fm',
+      headerName: t('Kết quả'),
+      flex: 1,
+      minWidth: 80
+    },
+    {
+      field: 'xepLoai',
+      headerName: t('Xếp loại'),
+      flex: 1,
+      minWidth: 80
+    },
+    {
       field: 'soHieuVanBang',
       headerName: t('hocsinh.field.soHieu'),
       flex: 1.5,
@@ -297,7 +309,7 @@ export default function HocSinh() {
       const params = new URLSearchParams();
       params.append('pageSize', -1);
       const donvi = await GetTruongHasPermision(selectDanhmuc, params);
-      if (donvi && donvi.data && donvi.data.truongs && donvi.data.truongs.length > 0) {
+      if (donvi?.data?.truongs?.length > 0) {
         setDonvis(donvi.data.truongs);
       } else {
         setDonvis([]);
@@ -309,7 +321,7 @@ export default function HocSinh() {
   }, [selectDanhmuc]);
 
   useEffect(() => {
-    if (donvis && donvis.length > 0 && dMTN && dMTN.length > 0) {
+    if (donvis?.length > 0 && dMTN?.length > 0) {
       if (infoMessage) {
         setPageState((old) => ({ ...old, donVi: infoMessage.IdTruong, DMTN: infoMessage.IdDanhMucTotNghiep }));
         setSelectDanhmuc(infoMessage.IdDanhMucTotNghiep);
@@ -365,7 +377,7 @@ export default function HocSinh() {
       params.append('ketQua', pageState.ketQua);
       const response = await getHocSinhs(params);
       const data = response.data;
-      if (data && data.hocSinhs) {
+      if (data?.hocSinhs) {
         const hasActiveHocSinh = data.hocSinhs.length === 0 || data.hocSinhs.some((hocSinh) => hocSinh.trangThai === 2);
         setDisabled(hasActiveHocSinh);
         const hasActiveApprov = data.hocSinhs.length > 0 ? data.hocSinhs.some((hocSinh) => hocSinh.ketQua === 'x') : false;
@@ -376,7 +388,7 @@ export default function HocSinh() {
       }
       const check = handleResponseStatus(response, navigate);
       if (check) {
-        if (data && data.hocSinhs.length > 0) {
+        if (data?.hocSinhs?.length > 0) {
           const dataWithIds = data.hocSinhs.map((row, index) => ({
             idx: pageState.startIndex * pageState.pageSize + index + 1,
             soHieuVanBang: row.soHieuVanBang || 'Chưa cấp',
@@ -391,6 +403,7 @@ export default function HocSinh() {
                 ? t('Đã đưa vào sổ gốc')
                 : '',
             ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
+            ketQua_fm: row.ketQua == 'x' ? t('Đạt') : t('Chưa đạt'),
             ...row
           }));
           dispatch(setReloadData(false));
@@ -539,14 +552,9 @@ export default function HocSinh() {
           <Grid item lg={4} md={4} sm={4} xs={isXs ? 12 : 4}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('danhmuc.title')}</InputLabel>
-              <Select
-                name="id"
-                value={pageState.DMTN === '' ? 'all' : pageState.DMTN}
-                onChange={handleDanhMucChange}
-                label={t('danhmuc.title')}
-              >
+              <Select name="id" value={pageState.DMTN || 'all'} onChange={handleDanhMucChange} label={t('danhmuc.title')}>
                 <MenuItem value="all">Tất cả</MenuItem>
-                {dMTN && dMTN.length > 0 ? (
+                {dMTN?.length > 0 ? (
                   dMTN.map((dmtn) => (
                     <MenuItem key={dmtn.id} value={dmtn.id}>
                       {dmtn.tieuDe}
@@ -561,14 +569,9 @@ export default function HocSinh() {
           <Grid item lg={4} md={4} sm={4} xs={isXs ? 12 : 4}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('donvitruong.title')}</InputLabel>
-              <Select
-                name="truongId"
-                value={pageState.donVi === '' ? 'all' : pageState.donVi}
-                onChange={handleSchoolChange}
-                label={t('donvitruong.title')}
-              >
+              <Select name="truongId" value={pageState.donVi || 'all'} onChange={handleSchoolChange} label={t('donvitruong.title')}>
                 <MenuItem value="all">{t('select.all')}</MenuItem>
-                {donvis && donvis.length > 0 ? (
+                {donvis?.length > 0 ? (
                   donvis.map((donvi) => (
                     <MenuItem key={donvi.idTruong} value={donvi.idTruong}>
                       {donvi.tenTruong}
@@ -583,12 +586,7 @@ export default function HocSinh() {
           <Grid item lg={2} md={2} sm={2} xs={isXs ? 6 : 2}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('status.title')}</InputLabel>
-              <Select
-                name="trangThai"
-                value={pageState.trangThai === '' ? 'all' : pageState.trangThai}
-                onChange={handleTrangThaiChange}
-                label={t('status.title')}
-              >
+              <Select name="trangThai" value={pageState.trangThai || 'all'} onChange={handleTrangThaiChange} label={t('status.title')}>
                 <MenuItem value="all">Tất cả</MenuItem>
                 {trangThaiOptions.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -604,7 +602,7 @@ export default function HocSinh() {
                 <InputLabel>{t('Kết quả tốt nghiệp')}</InputLabel>
                 <Select
                   name="ketQua"
-                  value={pageState.ketQua === '' ? 'all' : pageState.ketQua}
+                  value={pageState.ketQua || 'all'}
                   onChange={handleKetQuaTotNghiepChange}
                   label={t('Kết quả tốt nghiệp')}
                 >
@@ -674,14 +672,9 @@ export default function HocSinh() {
             <Grid item lg={2} md={3} sm={3} xs={isXs ? 6 : 2}>
               <FormControl fullWidth variant="outlined" size="small">
                 <InputLabel>{t('hocsinh.field.nation')}</InputLabel>
-                <Select
-                  name="danToc"
-                  value={pageState.danToc === '' ? 'all' : pageState.danToc}
-                  onChange={handleDanTocChange}
-                  label={t('hocsinh.field.nation')}
-                >
+                <Select name="danToc" value={pageState.danToc || 'all'} onChange={handleDanTocChange} label={t('hocsinh.field.nation')}>
                   <MenuItem value="all">Tất cả</MenuItem>
-                  {danToc && danToc.length > 0 ? (
+                  {danToc?.length > 0 ? (
                     danToc.map((dantoc) => (
                       <MenuItem key={dantoc.id} value={dantoc.ten}>
                         {dantoc.ten}
@@ -714,17 +707,17 @@ export default function HocSinh() {
                 <Grid item container spacing={1}>
                   <Grid item xs={6} md={4} lg={4}>
                     <Typography variant="h5">
-                      {t('Số lượng học sinh')}: {data && data.totalRow ? data.totalRow : 0}
+                      {t('Số lượng học sinh')}: {data?.totalRow || 0}
                     </Typography>
                   </Grid>
                   <Grid item xs={6} md={4} lg={4}>
                     <Typography variant="h5">
-                      {t('Chưa duyệt')}: {data && data.soHocSinhChuaDuyet ? data.soHocSinhChuaDuyet : 0}
+                      {t('Chưa duyệt')}: {data?.soHocSinhChuaDuyet || 0}
                     </Typography>
                   </Grid>
                   <Grid item xs={6} md={4} lg={4}>
                     <Typography variant="h5">
-                      {t('Đã duyệt')}: {data && data.soHocSinhDaDuyet ? data.soHocSinhDaDuyet : 0}
+                      {t('Đã duyệt')}: {data?.soHocSinhDaDuyet || 0}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -802,17 +795,17 @@ export default function HocSinh() {
             <Grid item container spacing={1}>
               <Grid item xs={6} md={4} lg={4}>
                 <Typography variant="h5">
-                  {t('Số lượng học sinh')}: {data && data.totalRow ? data.totalRow : 0}
+                  {t('Số lượng học sinh')}: {data?.totalRow || 0}
                 </Typography>
               </Grid>
               <Grid item xs={6} md={4} lg={4}>
                 <Typography variant="h5">
-                  {t('Chưa duyệt')}: {data && data.soHocSinhChuaDuyetDuyet ? data.soHocSinhChuaDuyetDuyet : 0}
+                  {t('Chưa duyệt')}: {data?.soHocSinhChuaDuyetDuyet || 0}
                 </Typography>
               </Grid>
               <Grid item xs={6} md={4} lg={4}>
                 <Typography variant="h5">
-                  {t('Đã duyệt')}: {data && data.soHocSinhDaDuyet ? data.soHocSinhDaDuyet : 0}
+                  {t('Đã duyệt')}: {data?.soHocSinhDaDuyet || 0}
                 </Typography>
               </Grid>
             </Grid>
@@ -823,17 +816,17 @@ export default function HocSinh() {
         <Grid item container spacing={1} mb={1}>
           <Grid item xs={6} md={4} lg={2}>
             <Typography variant="h5">
-              {t('Giỏi')}: {data && data.tongGioi ? data.tongGioi : 0}
+              {t('Giỏi')}: {data?.tongGioi || 0}
             </Typography>
           </Grid>
           <Grid item xs={6} md={4} lg={2}>
             <Typography variant="h5">
-              {t('Khá')}: {data && data.tongKha ? data.tongKha : 0}
+              {t('Khá')}: {data?.tongKha || 0}
             </Typography>
           </Grid>
           <Grid item xs={6} md={4} lg={2}>
             <Typography variant="h5">
-              {t('Trung bình')}: {data && data.tongTB ? data.tongTB : 0}
+              {t('Trung bình')}: {data?.tongTB || 0}
             </Typography>
           </Grid>
         </Grid>

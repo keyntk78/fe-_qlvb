@@ -416,17 +416,20 @@ export default function CapBangGoc() {
 
   const handleNamHocChange = (event) => {
     const selectedValue = event.target.value;
-    setSelectNamHoc(selectedValue);
+    const namHoc = selectedValue === 'all' ? '' : selectedValue;
+    setSelectNamHoc(namHoc);
   };
 
   const handleHTDTChange = (event) => {
     const selectedValue = event.target.value;
-    setSelectHTDT(selectedValue);
+    const htdt = selectedValue === 'all' ? '' : selectedValue;
+    setSelectHTDT(htdt);
   };
 
   const handleDanhMucChange = (event) => {
     const selectedValue = event.target.value;
-    setPageState((old) => ({ ...old, DMTN: selectedValue }));
+    const danhMuc = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, DMTN: danhMuc }));
   };
   const handleDanTocChange = (event) => {
     const selectedValue = event.target.value;
@@ -435,7 +438,8 @@ export default function CapBangGoc() {
   };
   const handleSchoolChange = (event) => {
     const selectedValue = event.target.value;
-    setPageState((old) => ({ ...old, donVi: selectedValue }));
+    const donVi = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, donVi: donVi }));
   };
 
   const handleTrangThaiChange = (event) => {
@@ -483,7 +487,8 @@ export default function CapBangGoc() {
           <Grid item md={3} sm={3} lg={1.4} xs={isXs ? 5 : 1.5}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('namhoc')}</InputLabel>
-              <Select name="truongId" value={selectNamHoc} onChange={handleNamHocChange} label={t('Năm học')}>
+              <Select name="truongId" value={selectNamHoc || 'all'} onChange={handleNamHocChange} label={t('Năm học')}>
+                <MenuItem value="all">Tất cả</MenuItem>
                 {namHoc && namHoc.length > 0 ? (
                   namHoc.map((data) => (
                     <MenuItem key={data.id} value={data.id}>
@@ -499,7 +504,8 @@ export default function CapBangGoc() {
           <Grid item md={3} sm={3} lg={2} xs={isXs ? 7 : 1.5}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('hinhthucdaotao.title')}</InputLabel>
-              <Select name="truongId" value={selectHTDT} onChange={handleHTDTChange} label={t('hinhthucdaotao.title')}>
+              <Select name="truongId" value={selectHTDT || 'all'} onChange={handleHTDTChange} label={t('hinhthucdaotao.title')}>
+                <MenuItem value="all">Tất cả</MenuItem>
                 {htdt && htdt.length > 0 ? (
                   htdt.map((data) => (
                     <MenuItem key={data.ma} value={data.ma}>
@@ -515,7 +521,8 @@ export default function CapBangGoc() {
           <Grid item md={6} sm={6} lg={3} xs={isXs ? 12 : 3}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('danhmuc.title')}</InputLabel>
-              <Select name="id" value={pageState.DMTN ? pageState.DMTN : ''} onChange={handleDanhMucChange} label={t('danhmuc.title')}>
+              <Select name="id" value={pageState.DMTN || 'all'} onChange={handleDanhMucChange} label={t('danhmuc.title')}>
+                <MenuItem value="all">Tất cả</MenuItem>
                 {dMTN && dMTN.length > 0 ? (
                   dMTN.map((data) => (
                     <MenuItem key={data.id} value={data.id}>
@@ -531,12 +538,8 @@ export default function CapBangGoc() {
           <Grid item md={6} sm={6} lg={3.6} xs={isXs ? 8 : 4}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('donvitruong.title')}</InputLabel>
-              <Select
-                name="truongId"
-                value={pageState.donVi ? pageState.donVi : ''}
-                onChange={handleSchoolChange}
-                label={t('donvitruong.title')}
-              >
+              <Select name="truongId" value={pageState.donVi || 'all'} onChange={handleSchoolChange} label={t('donvitruong.title')}>
+                <MenuItem value="all">Tất cả</MenuItem>
                 {donvis && donvis.length > 0 ? (
                   donvis.map((data) => (
                     <MenuItem key={data.id} value={data.id}>
@@ -552,12 +555,7 @@ export default function CapBangGoc() {
           <Grid item md={6} sm={6} lg={2} xs={isXs ? 4 : 2}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('status.title')}</InputLabel>
-              <Select
-                name="trangThai"
-                value={pageState.trangThai === '' ? 'all' : pageState.trangThai}
-                onChange={handleTrangThaiChange}
-                label={t('status.title')}
-              >
+              <Select name="trangThai" value={pageState.trangThai || 'all'} onChange={handleTrangThaiChange} label={t('status.title')}>
                 <MenuItem value="all">Tất cả</MenuItem>
                 {trangThaiOptions.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -616,12 +614,7 @@ export default function CapBangGoc() {
             <Grid item lg={2} md={4} sm={4} xs={isXs ? 6 : 2}>
               <FormControl fullWidth variant="outlined" size="small">
                 <InputLabel>{t('hocsinh.field.nation')}</InputLabel>
-                <Select
-                  name="danToc"
-                  value={pageState.danToc === '' ? 'all' : pageState.danToc}
-                  onChange={handleDanTocChange}
-                  label={t('hocsinh.field.nation')}
-                >
+                <Select name="danToc" value={pageState.danToc || 'all'} onChange={handleDanTocChange} label={t('hocsinh.field.nation')}>
                   <MenuItem value="all">Tất cả</MenuItem>
                   {danToc && danToc.length > 0 ? (
                     danToc.map((dantoc) => (

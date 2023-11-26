@@ -59,7 +59,6 @@ const InBang = ({ duLieuHocSinhSoGoc }) => {
     };
   });
   const handleExportWord = async () => {
-    console.log(DataInBang);
     dispatch(setLoading(true));
     generateDocument(DataInBang);
     dispatch(setLoading(false));

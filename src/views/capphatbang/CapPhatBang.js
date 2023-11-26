@@ -25,6 +25,7 @@ import PhatBang from './PhatBang';
 import { getSearchHocSinhCapPhatBang } from 'services/capphatbangService';
 import ActionButtons from 'components/button/ActionButtons';
 import { getByIdNamThi } from 'services/sharedService';
+import { GetTruongHasPermision } from 'services/danhmuctotnghiepService';
 
 const trangThaiOptions = [
   // { value: '1', label: 'Chưa duyệt' },
@@ -42,6 +43,7 @@ export default function CapPhatBang() {
   const [dMTN, setDMTN] = useState([]);
   const [namHoc, setNamHoc] = useState([]);
   const [htdt, setHTDT] = useState([]);
+  const [donvis, setDonvis] = useState([]);
   const [search, setSearch] = useState(false);
   const [firstLoad, setFirstLoad] = useState(true);
   const [firstLoad1, setFirstLoad1] = useState(true);
@@ -70,6 +72,7 @@ export default function CapPhatBang() {
     hoTen: '',
     soVaoSoCapBang: '',
     DMTN: '',
+    donvi: '',
     trangThai: '',
     namHoc: '',
     hinhThucDaoDao: ''
@@ -207,6 +210,18 @@ export default function CapPhatBang() {
   }, []);
 
   useEffect(() => {
+    const fetchDataDL = async () => {
+      const params = new URLSearchParams();
+      params.append('pageSize', -1);
+      const donvi = await GetTruongHasPermision(selectDanhmuc, params);
+      setDonvis(donvi?.data?.truongs || []);
+    };
+    if (donvi.laPhong && selectDanhmuc) {
+      fetchDataDL();
+    }
+  }, [donvi, selectDanhmuc]);
+
+  useEffect(() => {
     if (namHoc.length > 0 && htdt.length > 0 && infoMessage) {
       const fetchData = async () => {
         try {
@@ -261,6 +276,7 @@ export default function CapPhatBang() {
       params.append('hoTen', pageState.hoTen);
       params.append('soVaoSoCapBang', pageState.soVaoSoCapBang);
       params.append('idDanhMucTotNghiep', pageState.DMTN);
+      params.append('idTruong', pageState.donvi);
       params.append('trangThai', pageState.trangThai || '');
       const response = await getSearchHocSinhCapPhatBang(donvi.id, params);
       const check = handleResponseStatus(response, navigate);
@@ -301,17 +317,27 @@ export default function CapPhatBang() {
 
   const handleNamHocChange = (event) => {
     const selectedValue = event.target.value;
-    setSelectNamHoc(selectedValue);
+    const namHoc = selectedValue === 'all' ? '' : selectedValue;
+    setSelectNamHoc(namHoc);
   };
 
   const handleHTDTChange = (event) => {
     const selectedValue = event.target.value;
-    setSelectHTDT(selectedValue);
+    const htdt = selectedValue === 'all' ? '' : selectedValue;
+    setSelectHTDT(htdt);
   };
 
   const handleDanhMucChange = (event) => {
     const selectedValue = event.target.value;
-    setPageState((old) => ({ ...old, DMTN: selectedValue }));
+    const danhMuc = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, DMTN: danhMuc }));
+    setSelectDanhmuc(selectedValue);
+  };
+
+  const handleDonViChange = (event) => {
+    const selectedValue = event.target.value;
+    const donvi = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, donvi: donvi }));
   };
 
   const handleTrangThaiChange = (event) => {
@@ -356,7 +382,8 @@ export default function CapPhatBang() {
           <Grid item lg={1.5} md={2} sm={2} xs={isXs ? 5 : 2}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('namhoc')}</InputLabel>
-              <Select name="namhoc" value={selectNamHoc} onChange={handleNamHocChange} label={t('Năm học')}>
+              <Select name="namhoc" value={selectNamHoc || 'all'} onChange={handleNamHocChange} label={t('Năm học')}>
+                <MenuItem value="all">Tất cả</MenuItem>
                 {namHoc && namHoc.length > 0 ? (
                   namHoc.map((data) => (
                     <MenuItem key={data.id} value={data.id}>
@@ -369,10 +396,11 @@ export default function CapPhatBang() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item lg={2.5} md={3} sm={3} xs={isXs ? 7 : 2}>
+          <Grid item lg={2} md={3} sm={3} xs={isXs ? 7 : 2}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('hinhthucdaotao.title')}</InputLabel>
-              <Select name="htdt" value={selectHTDT} onChange={handleHTDTChange} label={t('Hình thức đào tạo')}>
+              <Select name="htdt" value={selectHTDT || 'all'} onChange={handleHTDTChange} label={t('Hình thức đào tạo')}>
+                <MenuItem value="all">Tất cả</MenuItem>
                 {htdt && htdt.length > 0 ? (
                   htdt.map((data) => (
                     <MenuItem key={data.ma} value={data.ma}>
@@ -385,10 +413,11 @@ export default function CapPhatBang() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item lg={5} md={5} sm={5} xs={isXs ? 8 : 4}>
+          <Grid item lg={3.5} md={5} sm={5} xs={isXs ? 8 : 4}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('danhmuc.title')}</InputLabel>
-              <Select name="id" value={pageState.DMTN ? pageState.DMTN : ''} onChange={handleDanhMucChange} label={t('danhmuc.title')}>
+              <Select name="id" value={pageState.DMTN || 'all'} onChange={handleDanhMucChange} label={t('danhmuc.title')}>
+                <MenuItem value="all">Tất cả</MenuItem>
                 {dMTN && dMTN.length > 0 ? (
                   dMTN.map((data) => (
                     <MenuItem key={data.id} value={data.id}>
@@ -401,15 +430,31 @@ export default function CapPhatBang() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item lg={2} md={2} sm={2} xs={isXs ? 4 : 2}>
+          {donvi?.laPhong && (
+            <>
+              <Grid item lg={3.5} md={5} sm={5} xs={isXs ? 8 : 4}>
+                <FormControl fullWidth variant="outlined" size="small">
+                  <InputLabel>{t('donvitruong.title')}</InputLabel>
+                  <Select name="id" value={pageState.donvi || 'all'} onChange={handleDonViChange} label={t('donvitruong.title')}>
+                    <MenuItem value="all">Tất cả</MenuItem>
+                    {donvis && donvis.length > 0 ? (
+                      donvis.map((data) => (
+                        <MenuItem key={data.idTruong} value={data.idTruong}>
+                          {data.tenTruong}
+                        </MenuItem>
+                      ))
+                    ) : (
+                      <MenuItem value="nodata">Không có dữ liệu</MenuItem>
+                    )}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </>
+          )}
+          <Grid item lg={1.5} md={2} sm={2} xs={isXs ? 4 : 2}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('status.title')}</InputLabel>
-              <Select
-                name="trangThai"
-                value={pageState.trangThai === '' ? 'all' : pageState.trangThai}
-                onChange={handleTrangThaiChange}
-                label={t('status.title')}
-              >
+              <Select name="trangThai" value={pageState.trangThai || 'all'} onChange={handleTrangThaiChange} label={t('status.title')}>
                 <MenuItem value="all">Tất cả</MenuItem>
                 {trangThaiOptions.map((option) => (
                   <MenuItem key={option.value} value={option.value}>

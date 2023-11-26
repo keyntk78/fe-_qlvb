@@ -13,7 +13,6 @@ import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { handleAddNumberZeroDayAndMonth } from 'utils/handleAddNumberZeroDayAndMonth';
 
 const ShowVanBang = ({ duLieuHocSinh }) => {
-  console.log(duLieuHocSinh);
   const phoigoc = useSelector(selectedPhoigocSelector);
   const [duLieuConFig, setDuLieuConFig] = useState([]);
   const dispatch = useDispatch();

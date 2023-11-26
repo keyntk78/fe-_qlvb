@@ -19,7 +19,6 @@ function replaceErrors(key, value) {
 }
 
 export function generateDocument(hocsinhs) {
-  console.log(hocsinhs);
   loadFile(FileWordMau_TTInBang, function (error, content) {
     if (error) {
       throw error;

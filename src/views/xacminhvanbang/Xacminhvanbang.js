@@ -23,7 +23,6 @@ import useLocalText from 'utils/localText';
 import i18n from 'i18n';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import MainCard from 'components/cards/MainCard';
-//import { getAllDonvi } from 'services/donvitruongService';
 import BackToTop from 'components/scroll/BackToTop';
 import Popup from 'components/controls/popup';
 import { getAllNamthi } from 'services/namthiService';
@@ -34,7 +33,6 @@ import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import Xacminhtungnguoi from './Xacminhtungnguoi';
 import LichSuXacMinh from './LichSuXacMinh';
 import Xacminhnhieunguoi from './Xacminhnhieunguoi';
-// import { getHocSinhXacMinhVanBang } from 'services/xacminhvanbangService';
 import { getHocSinhXacMinhVanBang } from 'services/tracuuvanbangService';
 
 import { getAllDanToc, getAllTruong, getByIdNamThi } from 'services/sharedService';
@@ -73,7 +71,7 @@ export default function Xacminhvanbang() {
   const infoHocSinh = useSelector(infoHocSinhSelector);
   const user = useSelector(userLoginSelector);
   let existingHocSinhs = [];
-  if (user && user.username) {
+  if (user?.username) {
     existingHocSinhs = JSON.parse(localStorage.getItem(user.username)) || [];
   } else {
     existingHocSinhs = [];
@@ -353,6 +351,7 @@ export default function Xacminhvanbang() {
     };
     fetchDataDL();
   }, []);
+
   useEffect(() => {
     const fetchDataDL = async () => {
       setTimeout(
@@ -361,8 +360,8 @@ export default function Xacminhvanbang() {
             setLoading(true);
             const htdt = await getAllHinhthucdaotao();
             setHTDT(htdt.data);
-            const donvi = await getAllTruong(user ? user.username : '');
-            if (donvi.data && donvi.data.length > 0) {
+            const donvi = await getAllTruong(user?.username || '');
+            if (donvi?.data?.length > 0) {
               setDonvis(donvi.data);
             } else {
               setDonvis([]);
@@ -381,7 +380,7 @@ export default function Xacminhvanbang() {
   }, [user]);
 
   useEffect(() => {
-    if (namHoc.length > 0 && htdt.length > 0 && donvis.length > 0 && infoHocSinh) {
+    if (namHoc?.length > 0 && htdt?.length > 0 && donvis?.length > 0 && infoHocSinh) {
       const fetchData = async () => {
         try {
           const selectDonvi = donvis.find((item) => item.ten === infoHocSinh.tenTruong);
@@ -396,7 +395,7 @@ export default function Xacminhvanbang() {
           setSelectNamHoc(infoHocSinh.idNamThi);
           setSelectHTDT(infoHocSinh.maHinhThucDaoTao);
           const danhmuc = await getByIdNamThi(infoHocSinh.idNamThi, infoHocSinh.maHinhThucDaoTao, user.username);
-          if (danhmuc.data && danhmuc.data.length > 0) {
+          if (danhmuc?.data?.length > 0) {
             const selectDanhmuc = danhmuc.data.find((item) => item.id === infoHocSinh.idDanhMucTotNghiep);
             setDMTN(danhmuc.data);
             setPageState((old) => ({
@@ -421,7 +420,7 @@ export default function Xacminhvanbang() {
   useEffect(() => {
     const fetchDataDL = async () => {
       const danhmuc = await getByIdNamThi(selectNamHoc, selectHTDT, user.username);
-      if (danhmuc.data && danhmuc.data.length > 0) {
+      if (danhmuc?.data?.length > 0) {
         setDMTN(danhmuc.data);
       } else {
         setDMTN([]);
@@ -449,7 +448,7 @@ export default function Xacminhvanbang() {
       const check = handleResponseStatus(response, navigate);
       const data = await response.data;
       if (check) {
-        if (data && data.hocSinhs.length > 0) {
+        if (data?.hocSinhs?.length > 0) {
           const dataWithIds = data.hocSinhs.map((row, index) => ({
             idx: pageState.startIndex * pageState.pageSize + index + 1,
             soHieuVanBang: row.soHieuVanBang ? row.soHieuVanBang : 'Chưa cấp',
@@ -506,7 +505,8 @@ export default function Xacminhvanbang() {
 
   const handleDanhMucChange = (event) => {
     const selectedValue = event.target.value;
-    setPageState((old) => ({ ...old, DMTN: selectedValue }));
+    const danhMuc = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, DMTN: danhMuc }));
   };
   const handleDanTocChange = (event) => {
     const selectedValue = event.target.value;
@@ -547,9 +547,9 @@ export default function Xacminhvanbang() {
           <Grid item md={3} sm={3} lg={1.2} xs={isXs ? 5 : 1.5}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('namhoc')}</InputLabel>
-              <Select name="namHoc" value={selectNamHoc === '' ? 'all' : selectNamHoc} onChange={handleNamHocChange} label={t('Năm học')}>
+              <Select name="namHoc" value={selectNamHoc || 'all'} onChange={handleNamHocChange} label={t('Năm học')}>
                 <MenuItem value="all">Tất cả</MenuItem>
-                {namHoc && namHoc.length > 0 ? (
+                {namHoc?.length > 0 ? (
                   namHoc.map((data) => (
                     <MenuItem key={data.id} value={data.id}>
                       {data.ten}
@@ -564,14 +564,9 @@ export default function Xacminhvanbang() {
           <Grid item md={3.5} sm={3.5} lg={2.5} xs={isXs ? 7 : 2.5}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('hinhthucdaotao.title')}</InputLabel>
-              <Select
-                name="truongId"
-                value={selectHTDT === '' ? 'all' : selectHTDT}
-                onChange={handleHTDTChange}
-                label={t('hinhthucdaotao.title')}
-              >
+              <Select name="truongId" value={selectHTDT || 'all'} onChange={handleHTDTChange} label={t('hinhthucdaotao.title')}>
                 <MenuItem value="all">Tất cả</MenuItem>
-                {htdt && htdt.length > 0 ? (
+                {htdt?.length > 0 ? (
                   htdt.map((data) => (
                     <MenuItem key={data.ma} value={data.ma}>
                       {data.ten}
@@ -586,8 +581,9 @@ export default function Xacminhvanbang() {
           <Grid item md={6} sm={6} lg={3} xs={isXs ? 12 : 3}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('danhmuc.title')}</InputLabel>
-              <Select name="id" value={pageState.DMTN ? pageState.DMTN : ''} onChange={handleDanhMucChange} label={t('danhmuc.title')}>
-                {dMTN && dMTN.length > 0 ? (
+              <Select name="id" value={pageState.DMTN || 'all'} onChange={handleDanhMucChange} label={t('danhmuc.title')}>
+                <MenuItem value="all">Tất cả</MenuItem>
+                {dMTN?.length > 0 ? (
                   dMTN.map((data) => (
                     <MenuItem key={data.id} value={data.id}>
                       {data.tieuDe}
@@ -602,14 +598,9 @@ export default function Xacminhvanbang() {
           <Grid item md={6} sm={6} lg={4} xs={isXs ? 12 : 4}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('donvitruong.title')}</InputLabel>
-              <Select
-                name="truongId"
-                value={pageState.donVi === '' ? 'all' : pageState.donVi}
-                onChange={handleSchoolChange}
-                label={t('donvitruong.title')}
-              >
+              <Select name="truongId" value={pageState.donVi || 'all'} onChange={handleSchoolChange} label={t('donvitruong.title')}>
                 <MenuItem value="all">Tất cả</MenuItem>
-                {donvis && donvis.length > 0 ? (
+                {donvis?.length > 0 ? (
                   donvis.map((data) => (
                     <MenuItem key={data.id} value={data.id}>
                       {data.ten}
@@ -670,14 +661,9 @@ export default function Xacminhvanbang() {
             <Grid item lg={2} md={4} sm={4} xs={isXs ? 6 : 2}>
               <FormControl fullWidth variant="outlined" size="small">
                 <InputLabel>{t('hocsinh.field.nation')}</InputLabel>
-                <Select
-                  name="danToc"
-                  value={pageState.danToc === '' ? 'all' : pageState.danToc}
-                  onChange={handleDanTocChange}
-                  label={t('hocsinh.field.nation')}
-                >
+                <Select name="danToc" value={pageState.danToc || 'all'} onChange={handleDanTocChange} label={t('hocsinh.field.nation')}>
                   <MenuItem value="all">Tất cả</MenuItem>
-                  {danToc && danToc.length > 0 ? (
+                  {danToc?.length > 0 ? (
                     danToc.map((dantoc) => (
                       <MenuItem key={dantoc.id} value={dantoc.ten}>
                         {dantoc.ten}
@@ -705,14 +691,14 @@ export default function Xacminhvanbang() {
         </Grid>
         <Grid item container justifyContent="flex-end" spacing={1} mb={1}>
           <Grid item>
-            {existingHocSinhs.length > 0 && (
+            {existingHocSinhs?.length > 0 && (
               <Button variant="contained" color="error" onClick={handleDeleteDanhSachXacMinh} startIcon={<IconTrash />}>
                 {t('Xóa ' + existingHocSinhs.length + ' học sinh')}
               </Button>
             )}
           </Grid>
           <Grid item>
-            {existingHocSinhs.length > 0 && (
+            {existingHocSinhs?.length > 0 && (
               <ButtonSuccess
                 title={t('xác minh ' + existingHocSinhs.length + ' học sinh')}
                 fullWidth

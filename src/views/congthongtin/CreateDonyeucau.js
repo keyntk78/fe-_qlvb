@@ -99,7 +99,6 @@ const CreateDonyeucau = () => {
       try {
         const formData = await convertJsonToFormData(values);
         const addDonyeucau = await createDonyeucau(formData);
-        console.log(addDonyeucau);
         if (addDonyeucau.isSuccess == false) {
           dispatch(showAlert(new Date().getTime().toString(), 'error', addDonyeucau.message.toString()));
         } else {

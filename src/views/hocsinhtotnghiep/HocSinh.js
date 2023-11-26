@@ -13,6 +13,7 @@ import {
   selectedCCCD,
   selectedDanhmuc,
   selectedHocsinh,
+  setInfoHocSinh,
   setLoading,
   setOpenPopup,
   setReloadData,
@@ -54,7 +55,6 @@ const trangThaiOptions = [
 
 export default function HocSinh() {
   const isXs = useMediaQuery('(max-width:700px)');
-  const isMd = useMediaQuery('(max-width:1200px)');
   const infoMessage = useSelector(selectedInfoMessageSelector);
   const openPopup = useSelector(openPopupSelector);
   const [title, setTitle] = useState('');
@@ -241,6 +241,18 @@ export default function HocSinh() {
       minWidth: 100
     },
     {
+      field: 'ketQua_fm',
+      headerName: t('Kết quả'),
+      flex: 1,
+      minWidth: 80
+    },
+    {
+      field: 'xepLoai',
+      headerName: t('Xếp loại'),
+      flex: 1,
+      minWidth: 80
+    },
+    {
       field: 'soHieuVanBang',
       headerName: t('hocsinh.field.soHieu'),
       flex: 1.5,
@@ -333,6 +345,7 @@ export default function HocSinh() {
                 ? t('status.davaoso')
                 : '',
             ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
+            ketQua_fm: row.ketQua == 'x' ? t('Đạt') : t('Chưa đạt'),
             ...row
           }));
           dispatch(setReloadData(false));
@@ -467,14 +480,9 @@ export default function HocSinh() {
           <Grid item xs={12} sm={6} md={6} lg={5}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('danhmuc.title')}</InputLabel>
-              <Select
-                name="id"
-                value={pageState.DMTN === '' ? 'all' : pageState.DMTN}
-                onChange={handleDanhMucChange}
-                label={t('danhmuc.title')}
-              >
+              <Select name="id" value={pageState.DMTN || 'all'} onChange={handleDanhMucChange} label={t('danhmuc.title')}>
                 <MenuItem value="all">Tất cả</MenuItem>
-                {dMTN && dMTN.length > 0 ? (
+                {dMTN?.length > 0 ? (
                   dMTN.map((dmtn) => (
                     <MenuItem key={dmtn.id} value={dmtn.id}>
                       {dmtn.tieuDe}
@@ -500,12 +508,7 @@ export default function HocSinh() {
           <Grid item xs={6} sm={3} md={3} lg={2}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('status.title')}</InputLabel>
-              <Select
-                name="trangThai"
-                value={pageState.trangThai === '' ? 'all' : pageState.trangThai}
-                onChange={handleTrangThaiChange}
-                label={t('status.title')}
-              >
+              <Select name="trangThai" value={pageState.trangThai || 'all'} onChange={handleTrangThaiChange} label={t('status.title')}>
                 <MenuItem value="all">Tất cả</MenuItem>
                 {trangThaiOptions.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -553,14 +556,9 @@ export default function HocSinh() {
           <Grid item lg={2} md={3} sm={3} xs={isXs ? 6 : 2}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('hocsinh.field.nation')}</InputLabel>
-              <Select
-                name="danToc"
-                value={pageState.danToc === '' ? 'all' : pageState.danToc}
-                onChange={handleDanTocChange}
-                label={t('hocsinh.field.nation')}
-              >
+              <Select name="danToc" value={pageState.danToc || 'all'} onChange={handleDanTocChange} label={t('hocsinh.field.nation')}>
                 <MenuItem value="all">Tất cả</MenuItem>
-                {danToc && danToc.length > 0 ? (
+                {danToc?.length > 0 ? (
                   danToc.map((dantoc) => (
                     <MenuItem key={dantoc.id} value={dantoc.ten}>
                       {dantoc.ten}
@@ -586,146 +584,107 @@ export default function HocSinh() {
             </Button>
           </Grid>
         </Grid>
-        <Grid item container alignItems="center" spacing={1}>
-          {!isMd ? (
+        <Grid item container spacing={1} justifyContent="flex-end">
+          <Grid item>
+            <ButtonSuccess title={t('button.export.excel')} onClick={handleExport} icon={IconFileExport} disabled={!selectedDMTN} />
+          </Grid>
+          {selectedRowData.length !== 0 ? (
             <>
-              <Grid item xs={12} sm={12} md={12} lg={4}>
-                <Grid item container spacing={1}>
-                  <Grid item xs={6} md={4} lg={5}>
-                    <Typography variant="h5">
-                      {t('Số lượng học sinh')}: {data && data.totalRow ? data.totalRow : 0}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={6} md={4} lg={4}>
-                    <Typography variant="h5">
-                      {t('Chưa duyệt')}: {data && data.soHocSinhChuaDuyet ? data.soHocSinhChuaDuyet : 0}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={6} md={4} lg={3}>
-                    <Typography variant="h5">
-                      {t('Đã duyệt')}: {data && data.soHocSinhDaDuyet ? data.soHocSinhDaDuyet : 0}
-                    </Typography>
-                  </Grid>
-                </Grid>
+              <Grid item>
+                <ButtonSuccess
+                  title={t('button.ingcn')}
+                  onClick={handleInGCN}
+                  icon={IconCertificate}
+                  disabled={
+                    selectedRowData.some((row) => row.trangThai === 0 || row.trangThai === 1 || row.trangThai === 3) || !selectedDMTN
+                  }
+                />
+              </Grid>
+              <Grid item>
+                <Button
+                  color="info"
+                  variant="contained"
+                  onClick={handleGuiDuyet}
+                  sx={{ mx: 1 }}
+                  startIcon={<IconSend />}
+                  disabled={selectedRowData.some((row) => row.trangThai !== 0) || !selectedDMTN}
+                >
+                  {t('button.send')}
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleDelete}
+                  startIcon={<IconTrash />}
+                  disabled={selectedRowData.some((row) => row.trangThai !== 0)}
+                >
+                  {t('button.delete')}
+                </Button>
               </Grid>
             </>
           ) : (
-            ''
-          )}
-          <Grid item xs={12} sm={12} md={12} lg={8}>
-            <Grid item container spacing={1} justifyContent="flex-end">
+            <>
               <Grid item>
-                <ButtonSuccess title={t('button.export.excel')} onClick={handleExport} icon={IconFileExport} disabled={!selectedDMTN} />
+                <ButtonSuccess
+                  title={t('button.ingcntatca')}
+                  onClick={handleInGCNAll}
+                  icon={IconCertificate}
+                  disabled={disabledInGCN || !selectedDMTN}
+                />
               </Grid>
-              {selectedRowData.length !== 0 ? (
-                <>
-                  <Grid item>
-                    <ButtonSuccess
-                      title={t('button.ingcn')}
-                      onClick={handleInGCN}
-                      icon={IconCertificate}
-                      disabled={
-                        selectedRowData.some((row) => row.trangThai === 0 || row.trangThai === 1 || row.trangThai === 3) || !selectedDMTN
-                      }
-                    />
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      color="info"
-                      variant="contained"
-                      onClick={handleGuiDuyet}
-                      sx={{ mx: 1 }}
-                      startIcon={<IconSend />}
-                      disabled={selectedRowData.some((row) => row.trangThai !== 0) || !selectedDMTN}
-                    >
-                      {t('button.send')}
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      variant="contained"
-                      color="error"
-                      onClick={handleDelete}
-                      startIcon={<IconTrash />}
-                      disabled={selectedRowData.some((row) => row.trangThai !== 0)}
-                    >
-                      {t('button.delete')}
-                    </Button>
-                  </Grid>
-                </>
-              ) : (
-                <>
-                  <Grid item>
-                    <ButtonSuccess
-                      title={t('button.ingcntatca')}
-                      onClick={handleInGCNAll}
-                      icon={IconCertificate}
-                      disabled={disabledInGCN || !selectedDMTN}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      onClick={handleGuiDuyetAll}
-                      color="info"
-                      variant="contained"
-                      startIcon={<IconSend />}
-                      disabled={disabled || !selectedDMTN}
-                    >
-                      {t('button.sendall')}
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button color="error" variant="contained" onClick={handleDeleteAll} startIcon={<IconTrash />} disabled={disabled}>
-                      {t('button.deleteall')}
-                    </Button>
-                  </Grid>
-                </>
-              )}
-            </Grid>
+              <Grid item>
+                <Button
+                  onClick={handleGuiDuyetAll}
+                  color="info"
+                  variant="contained"
+                  startIcon={<IconSend />}
+                  disabled={disabled || !selectedDMTN}
+                >
+                  {t('button.sendall')}
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button color="error" variant="contained" onClick={handleDeleteAll} startIcon={<IconTrash />} disabled={disabled}>
+                  {t('button.deleteall')}
+                </Button>
+              </Grid>
+            </>
+          )}
+        </Grid>
+        <Grid item container spacing={1} mt={1}>
+          <Grid item xs={4} md={3} lg={2}>
+            <Typography variant="h5">
+              {t('Số lượng học sinh')}: {data?.totalRow || 0}
+            </Typography>
+          </Grid>
+          <Grid item xs={4} md={3} lg={2}>
+            <Typography variant="h5">
+              {t('Chưa duyệt')}: {data?.soHocSinhChuaDuyetDuyet || 0}
+            </Typography>
+          </Grid>
+          <Grid item xs={4} md={3} lg={2}>
+            <Typography variant="h5">
+              {t('Đã duyệt')}: {data?.soHocSinhDaDuyet || 0}
+            </Typography>
           </Grid>
         </Grid>
-        {isMd ? (
-          <>
-            <Grid item container spacing={1} mt={1}>
-              <Grid item xs={5} md={5} lg={5}>
-                <Typography variant="h5">
-                  {t('Số lượng học sinh')}: {data && data.totalRow ? data.totalRow : 0}
-                </Typography>
-              </Grid>
-              <Grid item xs={4} md={4} lg={4}>
-                <Typography variant="h5">
-                  {t('Chưa duyệt')}: {data && data.soHocSinhChuaDuyetDuyet ? data.soHocSinhChuaDuyetDuyet : 0}
-                </Typography>
-              </Grid>
-              <Grid item xs={3} md={3} lg={3}>
-                <Typography variant="h5">
-                  {t('Đã duyệt')}: {data && data.soHocSinhDaDuyet ? data.soHocSinhDaDuyet : 0}
-                </Typography>
-              </Grid>
-            </Grid>
-          </>
-        ) : (
-          ''
-        )}
         <Grid item container spacing={1} mb={1}>
-          <Grid item xs={isMd ? 12 : 4}>
-            <Grid item container spacing={1}>
-              <Grid item xs={5} md={5} lg={5}>
-                <Typography variant="h5">
-                  {t('Giỏi')}: {data && data.tongGioi ? data.tongGioi : 0}
-                </Typography>
-              </Grid>
-              <Grid item xs={4} md={4} lg={4}>
-                <Typography variant="h5">
-                  {t('Khá')}: {data && data.tongKha ? data.tongKha : 0}
-                </Typography>
-              </Grid>
-              <Grid item xs={3} md={3} lg={3}>
-                <Typography variant="h5">
-                  {t('Trung bình')}: {data && data.tongTB ? data.tongTB : 0}
-                </Typography>
-              </Grid>
-            </Grid>
+          <Grid item xs={4} md={3} lg={2}>
+            <Typography variant="h5">
+              {t('Giỏi')}: {data?.tongGioi || 0}
+            </Typography>
+          </Grid>
+          <Grid item xs={4} md={3} lg={2}>
+            <Typography variant="h5">
+              {t('Khá')}: {data?.tongKha || 0}
+            </Typography>
+          </Grid>
+          <Grid item xs={4} md={3} lg={2}>
+            <Typography variant="h5">
+              {t('Trung bình')}: {data?.tongTB || 0}
+            </Typography>
           </Grid>
         </Grid>
         <DataGrid

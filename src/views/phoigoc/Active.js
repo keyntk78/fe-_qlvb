@@ -17,7 +17,6 @@ const ActivePhoiGoc = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const selectedPhoigoc = useSelector(selectedPhoigocSelector);
-  console.log(selectedPhoigoc);
   const navigate = useNavigate();
 
   const handleDeleteClick = async () => {

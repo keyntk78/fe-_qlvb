@@ -21,7 +21,6 @@ const AnhBang = () => {
       setDuLieuConFig(response_cf.data.cauHinhPhoiGocs);
 
       const dataHocsinh = await getHocSinhByCCC(phoigoc.cccd);
-      console.log(dataHocsinh);
       setDuLieuHocsinh(dataHocsinh.data);
     };
     fetchDataDLHS();

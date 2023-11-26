@@ -54,7 +54,6 @@ const InBanSao = () => {
   // Chuyển dữ liệu in thành mảng json.
   const hsSoBanSao_mang = hsSoBanSao_soLuong.map((item) => item.data);
   // Format dữ liệu phù hợp với với Config
-  console.log(hsSoBanSao_mang);
   const DataInBang = hsSoBanSao_mang.map((hsSoBanSao) => {
     return {
       HOTEN: hsSoBanSao.hoTen,
