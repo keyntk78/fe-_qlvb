@@ -169,10 +169,14 @@ const Authentication = ({ user, email, ...others }) => {
                 </Grid>
               </Grid>
               <Grid item xs={12} textAlign={'center'} mt={2}>
-                <Typography variant="body1">Mã xác thực của bạn đã được gửi đến email: {email}</Typography>
-                <Typography variant="body1">Vui lòng nhập mã xác thực của bạn bên dưới để tiến hành truy cập</Typography>
+                <Grid item>
+                  <Typography variant="body1">Mã xác thực của bạn đã được gửi đến email: {email}</Typography>
+                </Grid>
+                <Grid item mt={1}>
+                  <Typography variant="body1">Vui lòng nhập mã xác thực của bạn bên dưới để tiến hành truy cập</Typography>
+                </Grid>
               </Grid>
-              <Grid item xs={8} mt={2}>
+              <Grid item xs={8} mt={3}>
                 <InputFormOutlined
                   name="otp"
                   touched={touched?.otp}

@@ -27,7 +27,7 @@ export function generatePDF(hocsinhs, data, donvi) {
     align: 'center'
   });
   doc.line((width / 4) * 1 - 24, textHeight + 6, (width / 4) * 1 + 24, textHeight + 6);
-  const title = donvi === 1 ? 'SỔ BẢN SAO CẤP BẰNG TỐT NGHIỆP TRUNG HỌC PHỔ THÔNG' : 'SỔ BẢN SAO CẤP BẰNG TỐT NGHIỆP TRUNG HỌC CƠ SỞ';
+  const title = donvi === 1 ? 'SỔ GỐC CẤP BẰNG TỐT NGHIỆP TRUNG HỌC PHỔ THÔNG' : 'SỔ GỐC CẤP BẰNG TỐT NGHIỆP TRUNG HỌC CƠ SỞ';
   doc.text(title, (width / 4) * 3 - 6, textHeight, {
     align: 'center'
   });
@@ -80,29 +80,29 @@ export function generatePDF(hocsinhs, data, donvi) {
     if (donvi === 1) {
       return [
         `${index + 1}`,
-        hocsinh.hoTen_fm,
+        hocsinh.HoTen,
         hocsinh.ngaySinh_fm,
-        hocsinh.noiSinh_fm,
+        hocsinh.NoiSinh,
         hocsinh.gioiTinh_fm,
-        hocsinh.danToc_fm,
-        hocsinh.hoiDong_fm,
-        hocsinh.xepLoai_fm,
-        hocsinh.soHieuVanBang_fm,
-        hocsinh.soVaoSoBanSao_fm,
+        hocsinh.DanToc,
+        hocsinh.HoiDong,
+        hocsinh.XepLoai,
+        hocsinh.SoHieuVanBang,
+        hocsinh.SoVaoSoCapBang,
         '',
         ''
       ];
     } else {
       return [
         `${index + 1}`,
-        hocsinh.hoTen_fm,
+        hocsinh.HoTen,
         hocsinh.ngaySinh_fm,
-        hocsinh.noiSinh_fm,
+        hocsinh.NoiSinh,
         hocsinh.gioiTinh_fm,
-        hocsinh.danToc_fm,
-        hocsinh.xepLoai_fm,
-        hocsinh.soHieuVanBang_fm,
-        hocsinh.soVaoSoBanSao_fm,
+        hocsinh.DanToc,
+        hocsinh.XepLoai,
+        hocsinh.SoHieuVanBang,
+        hocsinh.SoVaoSoCapBang,
         '',
         ''
       ];
@@ -149,5 +149,5 @@ export function generatePDF(hocsinhs, data, donvi) {
     align: 'center'
   });
 
-  doc.save('sobansao.pdf');
+  doc.save('sogoc.pdf');
 }
