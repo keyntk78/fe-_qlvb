@@ -276,9 +276,9 @@ export default function CapPhatBang() {
       params.append('hoTen', pageState.hoTen);
       params.append('soVaoSoCapBang', pageState.soVaoSoCapBang);
       params.append('idDanhMucTotNghiep', pageState.DMTN);
-      params.append('idTruong', pageState.donvi);
+      params.append('idTruong', !donvi.laPhong ? donvi.id : pageState.donvi);
       params.append('trangThai', pageState.trangThai || '');
-      const response = await getSearchHocSinhCapPhatBang(donvi.id, params);
+      const response = await getSearchHocSinhCapPhatBang(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;
@@ -351,7 +351,8 @@ export default function CapPhatBang() {
       const updatedPageState = { ...pageState, pageSize: -1 };
       const params = await createSearchParams(updatedPageState);
       params.append('idDanhMucTotNghiep', selectDanhmuc);
-      const response = await getSearchHocSinhCapPhatBang(donvi.id, params);
+      params.append('idTruong', !donvi.laPhong ? donvi.id : pageState.donvi);
+      const response = await getSearchHocSinhCapPhatBang(params);
       const hocSinhs = response.data.hocSinhs;
       let chuaCapCount = 0;
       let daCapCount = 0;
