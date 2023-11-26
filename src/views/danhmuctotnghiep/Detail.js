@@ -113,17 +113,17 @@ const Detail = () => {
           </Grid>
           <Grid item container xs={12} spacing={1}>
             <Grid item xs={isXs ? 12 : 3}>
-              <FormControlComponent xsLabel={0} xsForm={12} label={t('danhmuctotnghiep.title.sotruongdagui')}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('Số trường đã gửi')}>
                 <InputForm formik={formik} name="SoTruongDaGui" type="text" isDisabled />
               </FormControlComponent>
             </Grid>
             <Grid item xs={isXs ? 12 : 3}>
-              <FormControlComponent xsLabel={0} xsForm={12} label={t('danhmuctotnghiep.title.sotruong')}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('Tổng số trường')}>
                 <InputForm formik={formik} name="SoTruong" type="text" isDisabled />
               </FormControlComponent>
             </Grid>
             <Grid item xs={isXs ? 12 : 3}>
-              <FormControlComponent xsLabel={0} xsForm={12} label={t('danhmuctotnghiep.title.sotruongdaduyet')}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('Số trường đã duyệt ')}>
                 <InputForm formik={formik} name="SoTruongDaDuyet" type="text" isDisabled />
               </FormControlComponent>
             </Grid>
