@@ -86,7 +86,7 @@ const Edit = () => {
           SoBatDau: dataPhoigoc.soBatDau || '',
           SoLuongPhoi: dataPhoigoc.soLuongPhoi || 0,
           AnhPhoi: dataPhoigoc.anhPhoi || '',
-          TuDongKhoa: dataPhoigoc.tuDongKhoa || '',
+          TuDongKhoa: dataPhoigoc.tuDongKhoa || false,
           ChieuDoc: dataPhoigoc.chieuDoc || '',
           ChieuNgang: dataPhoigoc.chieuNgang || '',
           MoTa: dataPhoigoc.moTa || '',
@@ -115,7 +115,6 @@ const Edit = () => {
     };
     fetchDataDL();
   }, []);
-
   return (
     <form onSubmit={formik.handleSubmit}>
       <Grid container spacing={1} my={isXs ? 0 : 2}>
@@ -181,6 +180,7 @@ const Edit = () => {
             <FormControlLabel
               control={
                 <Checkbox
+                  formik={formik}
                   checked={formik.values.TuDongKhoa} // Check if the value is 'x'
                   onChange={(e) => formik.setFieldValue('TuDongKhoa', e.target.checked)}
                 />
