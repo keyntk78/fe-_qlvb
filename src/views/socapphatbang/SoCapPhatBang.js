@@ -166,6 +166,8 @@ export default function SoCapPhatBang() {
       const danhmuc = await getAllDanhmucTN(user ? user.username : '');
       if (danhmuc.data && danhmuc.data.length > 0) {
         setDMTN(danhmuc.data);
+        setPageState((old) => ({ ...old, DMTN: danhmuc.data[0].id }));
+        setSelectDanhmuc(danhmuc.data[0].id);
       } else {
         setDMTN([]);
         setPageState((old) => ({ ...old, DMTN: '' }));
@@ -184,6 +186,7 @@ export default function SoCapPhatBang() {
         const donvi = await GetTruongHasPermision(selectDanhmuc, params);
         if (donvi && donvi.data && donvi.data.truongs && donvi.data.truongs.length > 0) {
           setDonvis(donvi.data.truongs);
+          setPageState((old) => ({ ...old, DonVi: donvi.data.truongs[0].idTruong }));
         } else {
           setDonvis([]);
         }
@@ -362,6 +365,7 @@ export default function SoCapPhatBang() {
       const response = await getAllKhoathiByDMTN(selectDanhmuc);
       if (response.data && response.data.length > 0) {
         setKhoaThis(response.data);
+        setPageState((old) => ({ ...old, khoaThi: response.data[0].id }));
       } else {
         setKhoaThis([]);
       }
@@ -423,7 +427,6 @@ export default function SoCapPhatBang() {
                 onChange={handleDanhMucChange}
                 label={t('danhmuc.title')}
               >
-                <MenuItem value="all">Tất cả</MenuItem>
                 {dMTN && dMTN.length > 0 ? (
                   dMTN.map((dmtn) => (
                     <MenuItem key={dmtn.id} value={dmtn.id}>
@@ -446,7 +449,6 @@ export default function SoCapPhatBang() {
                   onChange={handleSchoolChange}
                   label={t('donvitruong.title')}
                 >
-                  <MenuItem value="all">{t('select.all')}</MenuItem>
                   {donvis && donvis.length > 0 ? (
                     donvis.map((donvi) => (
                       <MenuItem key={donvi.idTruong} value={donvi.idTruong}>
@@ -471,7 +473,6 @@ export default function SoCapPhatBang() {
                 value={pageState.khoaThi === '' ? 'all' : pageState.khoaThi}
                 onChange={handleKhoaThiChange}
               >
-                <MenuItem value="all">{t('select.all')}</MenuItem>
                 {khoaThis && khoaThis.length > 0 ? (
                   khoaThis.map((data) => (
                     <MenuItem key={data.id} value={data.id}>
