@@ -72,7 +72,7 @@ export function generatePDF(data, paperSize, donvi) {
       align: 'center'
     });
     doc.setFont('Time-New-Roman-Italic', 'italic');
-    doc.text('(Họ, tên, chữ ký và đóng dấu)', (width / 4) * 3 + 5, textHeight * 8 + 10, {
+    doc.text('(Họ, tên, chữ ký và đóng dấu)', (width / 4) * 3 + 5, textHeight * 8 + 5, {
       align: 'center'
     });
     doc.setFont('Time-New-Roman-Normal', 'normal');

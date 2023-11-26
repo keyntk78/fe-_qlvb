@@ -59,7 +59,7 @@ export function generatePDF(hocsinhs, data, donvi) {
           'Xếp loại tốt nghiệp',
           'Số hiệu văn bằng',
           'Số vào sổ',
-          'Chữ ký người nhận bản sao',
+          'Chữ ký người nhận',
           'Ghi chú'
         ]
       : [
@@ -72,7 +72,7 @@ export function generatePDF(hocsinhs, data, donvi) {
           'Xếp loại tốt nghiệp',
           'Số hiệu văn bằng',
           'Số vào sổ',
-          'Chữ ký người nhận bản sao',
+          'Chữ ký người nhận',
           'Ghi chú'
         ];
 
