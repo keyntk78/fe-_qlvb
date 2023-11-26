@@ -191,7 +191,6 @@ const ChinhSuaVBCC = () => {
       const params = await createSearchParams(pageState);
       const response = await getSearchLichSuChinhSuaVanBang(selectHocsinh.cccd, params);
       const data = await response.data;
-      console.log(data);
       setHasPermission(data.isPermission);
       const check = handleResponseStatus(response, navigate);
       if (check) {
