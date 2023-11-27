@@ -35,7 +35,8 @@ import {
   IconFileReport,
   IconAddressBook,
   IconRefresh,
-  IconPhotoCancel
+  IconPhotoCancel,
+  IconPencilPlus
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { setOpenPopup, setOpenProfile, setOpenSubPopup, setOpenSubSubPopup } from '../../store/actions';
@@ -90,6 +91,8 @@ export default function Popup(props) {
                   <IconBellPlus sx={{ order: 2 }} />
                 ) : form === 'edit' ? (
                   <IconEdit sx={{ order: 2 }} />
+                ) : form === 'editsohieu' ? (
+                  <IconPencilPlus sx={{ order: 2 }} />
                 ) : form === 'permission' ? (
                   <IconList sx={{ order: 2 }} />
                 ) : form === 'action' ? (

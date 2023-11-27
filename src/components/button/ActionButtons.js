@@ -34,7 +34,8 @@ import {
   IconFileReport,
   IconRefresh,
   IconCheck,
-  IconPhotoCancel
+  IconPhotoCancel,
+  IconPencilPlus
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { useTranslation } from 'react-i18next';
@@ -134,6 +135,20 @@ const ActionButtons = ({
           {
             title: 'button.title.edit',
             icon: <IconEdit size={'20px'} />,
+            color: 'info',
+            onClick: () => {
+              handleEdit(params);
+              if (onClose) {
+                onClose();
+              }
+            }
+          }
+        ];
+      case 'editsohieu':
+        return [
+          {
+            title: 'Chỉnh sửa số hiệu',
+            icon: <IconPencilPlus size={'20px'} />,
             color: 'info',
             onClick: () => {
               handleEdit(params);
