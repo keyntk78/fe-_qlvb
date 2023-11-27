@@ -44,3 +44,14 @@ export async function HuyPhatBang(id, nguoiThucHien) {
     throw error;
   }
 }
+export async function ImportDanhSachBangDaPhat(data) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`CapPhatBang/ImportCapPhatBang`, 'POST', data);
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating history access:', error);
+    throw error;
+  }
+}

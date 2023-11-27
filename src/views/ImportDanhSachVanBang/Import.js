@@ -296,7 +296,7 @@ function Import() {
               </label>
             </Grid>
           </Grid>
-          <Grid item xs={isXs ? 12 : 2} textAlign={isXs ? 'left' : ''}>
+          <Grid item xs={isXs ? 12 : 2} style={{ display: 'flex', justifyContent: 'flex-end' }}>
             {' '}
             {selectedFileName && <span>{selectedFileName}</span>}
           </Grid>

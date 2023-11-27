@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { IconSearch } from '@tabler/icons';
+import { IconFileImport, IconSearch } from '@tabler/icons';
 import { Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography, useMediaQuery } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -26,7 +26,9 @@ import { getSearchHocSinhCapPhatBang } from 'services/capphatbangService';
 import { getByIdNamThi } from 'services/sharedService';
 import { GetTruongHasPermision } from 'services/danhmuctotnghiepService';
 import HuyNhanBang from './HuyNhanBang';
-
+import FileMau from '../FileMau/FileImportVanBang.xlsx';
+import Import from './ImportDSDaPhat';
+import GroupButtons from 'components/button/GroupButton';
 const trangThaiOptions = [
   { value: '5', label: 'Chưa phát' },
   { value: '6', label: 'Đã phát' }
@@ -394,9 +396,36 @@ export default function CapPhatBang() {
     }
   }, [reloadData, search, loadData]);
 
+  const handleImport = () => {
+    setTitle(t('Import Danh Sách bằng đã phát'));
+    setForm('import');
+    dispatch(setOpenPopup(true));
+  };
+  const handleDowloadTemplate = async () => {
+    window.location.href = FileMau;
+  };
+  const themTuTep = [
+    {
+      type: 'importFile',
+      handleClick: handleImport
+    },
+    {
+      type: 'dowloadTemplate',
+      handleClick: handleDowloadTemplate
+    }
+  ];
   return (
     <>
-      <MainCard title={t('Cấp phát bằng')}>
+      <MainCard
+        title={t('Cấp phát bằng')}
+        secondary={
+          <Grid container justifyContent="flex-end" spacing={1}>
+            <Grid item>
+              <GroupButtons buttonConfigurations={themTuTep} themtep icon={IconFileImport} title={t('button.import')} />
+            </Grid>
+          </Grid>
+        }
+      >
         <Grid item container mb={1} spacing={1} justifyContent={'center'}>
           <Grid item lg={1.5} md={2} sm={2} xs={isXs ? 5 : 2}>
             <FormControl fullWidth variant="outlined" size="small">
@@ -590,6 +619,8 @@ export default function CapPhatBang() {
             <PhatBang />
           ) : form === 'huynhanbang' ? (
             <HuyNhanBang />
+          ) : form === 'import' ? (
+            <Import />
           ) : (
             ''
           )}

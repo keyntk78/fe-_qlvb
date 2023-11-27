@@ -40,8 +40,8 @@ import { generatePDF } from '../socapphatbang/ExportPDF';
 import ExportExcel from '../sogoc/ExportExcel';
 import { getHocSinhTheoSoCapPhatBang } from 'services/socapphatbangService';
 import { getAllKhoathiByDMTN } from 'services/khoathiService';
-import GroupButtons from 'components/button/GroupButton';
 import { GetTruongHasPermision } from 'services/danhmuctotnghiepService';
+import GroupButtons from 'components/button/GroupButton';
 
 export default function SoCapPhatBang() {
   const isXs = useMediaQuery('(max-width:600px)');
@@ -51,7 +51,6 @@ export default function SoCapPhatBang() {
   const donvi = useSelector(donviSelector);
   const [khoaThis, setKhoaThis] = useState([]);
   const [selectKhoaThi, setSelectKhoaThi] = useState([]);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [dMTN, setDMTN] = useState([]);
@@ -64,7 +63,6 @@ export default function SoCapPhatBang() {
   const infoHocSinh = useSelector(infoHocSinhSelector);
   const infoMessage = useSelector(selectedInfoMessageSelector);
   const user = useSelector(userLoginSelector);
-
   const TableCell2 = styled(TableCell)(
     () => `
       border: 1px solid #ddd;
@@ -430,6 +428,7 @@ export default function SoCapPhatBang() {
   };
 
   // const count = pageState.total ? Math.floor(parseInt(pageState.total) / parseInt(pageState.pageSize)) + 1 : 0;
+  //Import sổ cấp bằng cũ
 
   return (
     <>
