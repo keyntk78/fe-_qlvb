@@ -1,29 +1,34 @@
 import { Card, FormControl, Grid, InputLabel, MenuItem, Paper, Select, Typography, useMediaQuery } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-// import { getAllHedaotao } from 'services/hedaotaoService';
 import SkeletonTotalCard from 'components/cards/Skeleton/TotalCard';
 import { getAllNamthi } from 'services/namthiService';
-import { GetThongKeTongQuatByPhong } from 'services/thongkeService';
+import { GetThongKeTongQuatByPhongGD } from 'services/thongkeService';
 import { IconAlbum, IconBuildingCommunity, IconFileDescription, IconUserExclamation } from '@tabler/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectedNamthi, setLoading } from 'store/actions';
+import { selectedNamthi, setLoading, setOpenSubSubPopup } from 'store/actions';
 import { useNavigate } from 'react-router';
-import { userLoginSelector } from 'store/selectors';
+import { listDanhMucSelector, openSubSubPopupSelector, userLoginSelector } from 'store/selectors';
 import config from 'config';
+import ThongkeDonViGuiDuyet from './ThongKeDonViGuiDuyet';
+import Popup from 'components/controls/popup';
 
 const ThongKePhong = () => {
   const isMd = useMediaQuery('(max-width:1220px)');
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const [heDaoTao, setHeDaoTao] = useState([]);
   const [namHoc, setNamHoc] = useState([]);
-  // const [selectHeDaoTao, setSelectHeDaoTao] = useState('');
   const [selectNamHoc, setSelectNamHoc] = useState('');
+  const listDanhMuc = useSelector(listDanhMucSelector);
+  const [selectDanhMuc, setSelectDanhMuc] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [firstLoad, setFirstLoad] = useState(true);
   const currentYear = new Date().getFullYear();
+  const openSubSubPopup = useSelector(openSubSubPopupSelector);
+  const [title, setTitle] = useState('');
+  const [form, setForm] = useState('');
+  const [data, setData] = useState([]);
   const [thongKeTongQuat, setThongKeTongQuat] = useState({
     phoi: 0,
     donViTong: 0,
@@ -58,14 +63,9 @@ const ThongKePhong = () => {
     const fetchDataDL = async () => {
       setTimeout(async () => {
         try {
-          // const hedaotao = await getAllHedaotao();
-          // setHeDaoTao(hedaotao.data);
           const namhoc = await getAllNamthi();
           setNamHoc(namhoc.data);
-          // if (hedaotao && hedaotao.data.length > 0) {
-          //   setSelectHeDaoTao(hedaotao.data[0].ma);
-          // }
-          if (namhoc && namhoc.data.length > 0) {
+          if (namhoc?.data?.length > 0) {
             const matchingYear = namhoc.data.find((year) => year.ten === currentYear.toString());
             if (matchingYear) {
               setSelectNamHoc(matchingYear.id);
@@ -83,17 +83,38 @@ const ThongKePhong = () => {
   }, []);
 
   useEffect(() => {
+    const namhoc = namHoc.find((year) => year.id === selectNamHoc);
+    if (listDanhMuc?.length > 0 && namhoc) {
+      const matchingYear = listDanhMuc.find((year) => year.namThi === namhoc.ten);
+      if (matchingYear) {
+        const dataDM = listDanhMuc.filter((year) => year.namThi === matchingYear.namThi);
+        setData(dataDM);
+        setSelectDanhMuc(dataDM[0].id);
+      } else {
+        setData([]);
+        setSelectDanhMuc('');
+      }
+    }
+  }, [listDanhMuc, selectNamHoc]);
+
+  useEffect(() => {
     const fetchData = async () => {
       if (!firstLoad) {
         dispatch(setLoading(true));
       }
+
       const params = new URLSearchParams();
-      params.append('idNamThi', selectNamHoc);
+      if (selectDanhMuc) {
+        params.append('idDanhMucTotnghiep', selectDanhMuc);
+      } else {
+        params.append('idDanhMucTotnghiep', '');
+      }
       params.append('nguoiThucHien', user ? user.username : '');
+
       setTimeout(
         async () => {
           try {
-            const response = await GetThongKeTongQuatByPhong(params);
+            const response = await GetThongKeTongQuatByPhongGD(params);
             const data = response.data;
             setThongKeTongQuat((old) => ({
               ...old,
@@ -114,13 +135,11 @@ const ThongKePhong = () => {
         firstLoad ? 2000 : 0
       );
     };
-    if (selectNamHoc) {
-      fetchData();
-    }
-  }, [selectNamHoc]);
+
+    fetchData();
+  }, [selectDanhMuc]);
 
   useEffect(() => {
-    // if (selectHeDaoTao && selectNamHoc) dispatch(selectedHedaotao(selectHeDaoTao));
     dispatch(selectedNamthi(selectNamHoc));
   }, [selectNamHoc]);
 
@@ -129,13 +148,20 @@ const ThongKePhong = () => {
     setSelectNamHoc(selectValue);
   };
 
-  // const handleHeDaoTaoChange = (event) => {
-  //   const selectValue = event.target.value;
-  //   setSelectHeDaoTao(selectValue);
-  // };
+  const handleDanhMucChange = (event) => {
+    const selectValue = event.target.value;
+    const danhmuc = selectValue === 'nodata' ? '' : selectValue;
+    setSelectDanhMuc(danhmuc);
+  };
 
   const handleClick = (nav) => {
     navigate(nav);
+  };
+
+  const handleDonViClick = () => {
+    setTitle(t('Đơn vị gửi duyệt'));
+    setForm('show');
+    dispatch(setOpenSubSubPopup(true));
   };
 
   return (
@@ -168,19 +194,14 @@ const ThongKePhong = () => {
                 </Select>
               </FormControl>
             </Grid>
-            {/* <Grid item>
+            <Grid item xs={2.5}>
               <FormControl fullWidth variant="outlined" size="small">
-                <InputLabel>{t('Hệ đào tạo')}</InputLabel>
-                <Select
-                  value={selectHeDaoTao ? selectHeDaoTao : ''}
-                  onChange={handleHeDaoTaoChange}
-                  label={t('Hệ đào tạo')}
-                  style={{ width: '180px' }}
-                >
-                  {heDaoTao && heDaoTao.length > 0 ? (
-                    heDaoTao.map((data) => (
-                      <MenuItem key={data.ma} value={data.ma}>
-                        {data.ten}
+                <InputLabel>{t('Danh mục tốt nghiệp')}</InputLabel>
+                <Select value={selectDanhMuc || 'nodata'} onChange={handleDanhMucChange} label={t('Danh mục tốt nghiệp')}>
+                  {data && data.length > 0 ? (
+                    data.map((data) => (
+                      <MenuItem key={data.id} value={data.id}>
+                        {data.tieuDe}
                       </MenuItem>
                     ))
                   ) : (
@@ -188,7 +209,7 @@ const ThongKePhong = () => {
                   )}
                 </Select>
               </FormControl>
-            </Grid> */}
+            </Grid>
           </Grid>
           <Grid container justifyContent={'center'}>
             <Grid item xs={11.4} container spacing={1}>
@@ -205,7 +226,8 @@ const ThongKePhong = () => {
                   color: '#1E88E5',
                   icon: IconBuildingCommunity,
                   count: `${thongKeTongQuat.donViDaGui}/${thongKeTongQuat.donViTong}`,
-                  nav: config.defaultPath + '/quanlyhocsinh'
+                  nav: config.defaultPath + '/quanlyhocsinh',
+                  onClick: true
                 },
                 {
                   title: t('donyeucau'),
@@ -226,7 +248,7 @@ const ThongKePhong = () => {
                   <Paper variant="outlined" sx={styles.paper}>
                     <Typography
                       variant="h4"
-                      onClick={() => handleClick(item.nav)}
+                      onClick={() => (item.onClick ? handleDonViClick() : handleClick(item.nav))}
                       component="div"
                       sx={{
                         color: '#6C737F',
@@ -250,6 +272,18 @@ const ThongKePhong = () => {
             </Grid>
           </Grid>
         </Card>
+      )}
+      {form !== '' && (
+        <Popup
+          title={title}
+          form={form}
+          openPopup={openSubSubPopup}
+          type="subsubpopup"
+          maxWidth={'md'}
+          bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
+        >
+          {form === 'show' ? <ThongkeDonViGuiDuyet danhMuc={selectDanhMuc} /> : ''}
+        </Popup>
       )}
     </>
   );

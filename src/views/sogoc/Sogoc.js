@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IconBook, IconFileExport, IconFileImport, IconSearch } from '@tabler/icons';
+import { IconBook, IconFileExport, IconFileImport, IconPaperclip, IconSearch } from '@tabler/icons';
 import {
   Button,
   Divider,
@@ -39,7 +39,7 @@ import { styled } from '@mui/system';
 import AnimateButton from 'components/extended/AnimateButton';
 import { useFormik } from 'formik';
 import { generateDocument } from './ExportWord';
-import { getHocSinhBySoGoc } from 'services/sogocService';
+import { getHocSinhBySoGoc, getAllTruongSoGoc } from 'services/sogocService';
 import ExportExcel from './ExportExcel';
 import { getAllTruong } from 'services/sharedService';
 import Popup from 'components/controls/popup';
@@ -48,7 +48,8 @@ import { getAllKhoathiByDMTN } from 'services/khoathiService';
 import PhuLucSoGoc from 'views/phulucsogoc/PhuLucSoGoc';
 import Import from 'views/ImportDanhSachVanBang/Import';
 import GroupButtons from 'components/button/GroupButton';
-import { generatePDF } from './ExportPDF';
+import { generatePDF, generatePDFAll } from './ExportPDF';
+import AnhSoGoc from './AnhSoGoc';
 
 export default function SoGoc() {
   const isXs = useMediaQuery('(max-width:600px)');
@@ -98,6 +99,7 @@ export default function SoGoc() {
     pageSize: 25,
     DMTN: '',
     donVi: '',
+    donViOld: '',
     khoaThi: '',
     hoTen: '',
     soVaoSoGoc: ''
@@ -132,6 +134,12 @@ export default function SoGoc() {
     setSelectKhoaThi(selectedKhoaThiInfo.id);
   };
 
+  const handleDetail = () => {
+    setTitle(t('Đính kèm ảnh sổ gốc'));
+    setForm('dinhkem');
+    dispatch(setOpenPopup(true));
+  };
+
   const handleExport = async () => {
     dispatch(setLoading(true));
     await ExportExcel(formik, pageState1, selectDanhmuc, selectDonvi, selectKhoaThi, donvi, 'sogoc');
@@ -159,6 +167,15 @@ export default function SoGoc() {
     dispatch(setLoading(false));
   };
 
+  const handleExportPDFAll = async () => {
+    dispatch(setLoading(true));
+    const truongs = await getAllTruongSoGoc(selectDanhmuc, selectKhoaThi);
+    if (truongs.data.length > 0) {
+      generatePDFAll(truongs.data, donvi);
+    }
+    dispatch(setLoading(false));
+  };
+
   const handleChange = (e, value) => {
     e.preventDefault();
     setPageState((old) => ({ ...old, startIndex: value }));
@@ -181,6 +198,17 @@ export default function SoGoc() {
     {
       type: 'exportPDF',
       handleClick: handleExportPDF
+    }
+  ];
+
+  const xuatTepAll = [
+    {
+      type: 'exportExcel',
+      handleClick: handleExport
+    },
+    {
+      type: 'exportPDF',
+      handleClick: handleExportPDFAll
     }
   ];
 
@@ -565,7 +593,7 @@ export default function SoGoc() {
             <TextField
               fullWidth
               id="outlined-basic"
-              label={t('Sổ cấp sổ gốc')}
+              label={t('Số vào sổ gốc')}
               variant="outlined"
               size="small"
               onChange={(e) => setPageState((old) => ({ ...old, soVaoSoGoc: e.target.value }))}
@@ -590,6 +618,24 @@ export default function SoGoc() {
           <Grid item>
             <GroupButtons buttonConfigurations={xuatTep} color="info" icon={IconFileExport} title={t('button.export')} />
           </Grid>
+          <Grid item>
+            <GroupButtons buttonConfigurations={xuatTepAll} color="info" icon={IconFileExport} title={t('Xuất tệp tất cả trường')} />
+          </Grid>
+          {pageState.DMTN && pageState.donVi && (
+            <Grid item>
+              <Button
+                variant="contained"
+                title={t('Đính kèm ảnh sổ gốc')}
+                fullWidth
+                onClick={handleDetail}
+                color="info"
+                startIcon={<IconPaperclip />}
+                disabled={disable}
+              >
+                {t('Đính kèm ảnh sổ gốc')}
+              </Button>
+            </Grid>
+          )}
         </Grid>
         {pageState.data.length > 0 ? (
           <>
@@ -789,6 +835,7 @@ export default function SoGoc() {
         >
           {form === 'phuluc' ? <PhuLucSoGoc /> : ''}
           {form === 'import' ? <Import /> : ''}
+          {form === 'dinhkem' ? <AnhSoGoc pageState={pageState} /> : ''}
         </Popup>
       )}
       <BackToTop />

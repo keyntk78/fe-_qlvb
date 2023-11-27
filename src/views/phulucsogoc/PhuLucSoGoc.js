@@ -389,7 +389,7 @@ export default function PhuLucSoGoc() {
             </Grid>
           </Grid>
         </Grid>
-        <Grid container xs={12} justifyContent={'center'} textAlign={'center'} mt={5} mb={3}>
+        <Grid container justifyContent={'center'} textAlign={'center'} mt={5} mb={3}>
           <Typography variant="h4" fontSize={18} textAlign={'center'}>
             PHỤ LỤC SỔ GỐC CẤP VĂN BẰNG, CHỨNG CHỈ
           </Typography>

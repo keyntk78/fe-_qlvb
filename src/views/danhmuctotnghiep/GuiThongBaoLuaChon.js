@@ -4,7 +4,7 @@ import NoButton from 'components/button/NoButton';
 import YesButton from 'components/button/YesButton';
 import MuiTypography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
-import { openSubSubPopupSelector } from 'store/selectors';
+import { openSubSubPopupSelector, selectedDanhmuctotnghiepSelector } from 'store/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -16,10 +16,12 @@ function GuiThongBaoLuaChon({ dataIdTruong }) {
   const { t } = useTranslation();
   const openSubSubPopup = useSelector(openSubSubPopupSelector);
   const [notifyReason, setNotifyReason] = useState('');
+  const danhmucTN = useSelector(selectedDanhmuctotnghiepSelector);
   const data = [...dataIdTruong].join(',');
   const hanldeGuiThongBao = async () => {
     try {
-      const response = await GuiThongBaoTungNguoi(notifyReason, data);
+      const messageToSend = `${notifyReason}. Hạn nộp: ${convertISODateTimeToFormattedDateTime(danhmucTN?.ngayGuiDanhSach)}`;
+      const response = await GuiThongBaoTungNguoi(messageToSend, data);
       if (response.isSuccess == false) {
         dispatch(showAlert(new Date().getTime().toString(), 'error', response.message.toString()));
       } else {

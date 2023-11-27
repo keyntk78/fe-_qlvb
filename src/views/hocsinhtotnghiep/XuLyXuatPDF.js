@@ -2,7 +2,7 @@ import jsPDF from 'jspdf';
 import { fontNormal, fontBold, fontItalic } from '../../assets/fonts/TimeNewRomanFont';
 
 export function generatePDF(data, paperSize, donvi) {
-  const doc = new jsPDF('p', 'mm', paperSize);
+  const doc = new jsPDF(paperSize === 'A4' ? 'p' : 'l', 'mm', paperSize);
 
   doc.addFileToVFS('Time-New-Roman-Normal.ttf', fontNormal);
   doc.addFileToVFS('Time-New-Roman-Bold.ttf', fontBold);
@@ -22,6 +22,7 @@ export function generatePDF(data, paperSize, donvi) {
     if (index > 0) {
       doc.addPage();
     }
+    doc.setFontSize(12);
     doc.setFont('Time-New-Roman-Bold', 'bold');
     doc.text([`${donvi === 1 ? 'SỞ' : 'PHÒNG'} GD&ĐT ${item.diaPhuong}`, `TRƯỜNG ${item.tenTruong}`, ``], (width / 4) * 1 + 6, textHeight, {
       align: 'center'
@@ -33,6 +34,8 @@ export function generatePDF(data, paperSize, donvi) {
 
     doc.line((width / 4) * 1 - 24, textHeight * 2 - 10, (width / 4) * 1 + 36, textHeight * 2 - 10);
     doc.line((width / 4) * 3 - 36, textHeight * 2 - 10, (width / 4) * 3 + 24, textHeight * 2 - 10);
+
+    doc.setFontSize(13);
 
     const title = `GIẤY CHỨNG NHẬN TỐT NGHIỆP TRUNG HỌC ${donvi === 1 ? 'PHỔ THÔNG' : 'CƠ SỞ'}`;
     doc.text(title, (width / 2) * 1, textHeight * 2 + 10, {

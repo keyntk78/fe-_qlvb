@@ -27,7 +27,8 @@ export function generatePDF(hocsinhs, data, donvi) {
     align: 'center'
   });
   doc.line((width / 4) * 1 - 24, textHeight + 6, (width / 4) * 1 + 24, textHeight + 6);
-  const title = donvi === 1 ? 'SỔ GỐC CẤP BẰNG TỐT NGHIỆP TRUNG HỌC PHỔ THÔNG' : 'SỔ GỐC CẤP BẰNG TỐT NGHIỆP TRUNG HỌC CƠ SỞ';
+  const title =
+    donvi === 1 ? 'SỔ CẤP PHÁT BẰNG CẤP BẰNG TỐT NGHIỆP TRUNG HỌC PHỔ THÔNG' : 'SỔ CẤP PHÁT BẰNG CẤP BẰNG TỐT NGHIỆP TRUNG HỌC CƠ SỞ';
   doc.text(title, (width / 4) * 3 - 6, textHeight, {
     align: 'center'
   });
@@ -149,5 +150,5 @@ export function generatePDF(hocsinhs, data, donvi) {
     align: 'center'
   });
 
-  doc.save('sogoc.pdf');
+  doc.save('socaphatbang.pdf');
 }

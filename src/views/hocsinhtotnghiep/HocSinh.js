@@ -32,7 +32,7 @@ import { useNavigate } from 'react-router-dom';
 import GuiDuyetAll from './GuiDuyetAll';
 import DeleteAll from './DeleteAll';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
-import { IconCertificate, IconFileExport, IconFileImport, IconPlus, IconSearch, IconSend, IconTrash } from '@tabler/icons';
+import { IconCertificate, IconFileExport, IconFileImport, IconPlus, IconSearch, IconSend, IconTrash, IconList } from '@tabler/icons';
 import Detail from './Detail';
 import { getAllDanToc, getAllDanhmucTN, getCauHinhTuDongXepLoai } from 'services/sharedService';
 import BackToTop from 'components/scroll/BackToTop';
@@ -45,12 +45,14 @@ import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import GroupButtons from 'components/button/GroupButton';
 import ExportHocSinh from 'views/hocsinh/ExportHocSinh';
+import SapXepSTTHocSinh from '../hocsinh/SapXepSTTHocSinh';
 
 const trangThaiOptions = [
   { value: '0', label: 'Chưa gửi duyệt' },
   { value: '1', label: 'Đang chờ duyệt' },
   { value: '2', label: 'Đã duyệt' },
-  { value: '3', label: 'Đã đưa vào sổ gốc' }
+  { value: '3', label: 'Đã đưa vào sổ gốc' },
+  { value: '4', label: 'Đã in bằng' }
 ];
 
 export default function HocSinh() {
@@ -80,6 +82,8 @@ export default function HocSinh() {
   const [loadData, setLoadData] = useState(false);
   const user = useSelector(userLoginSelector);
   const [configAuto, setConfigAuto] = useState(false);
+  const [selectTrangThai, setSelectTrangThai] = useState('');
+
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -166,9 +170,16 @@ export default function HocSinh() {
   const handleSearch = () => {
     setSearch(!search);
     setSelectedDMTN(pageState.DMTN);
+    setSelectTrangThai(pageState.trangThai);
     const danhmucSelect = pageState.DMTN;
     const selectedDanhmucInfo = dMTN.find((dmtn) => dmtn.id === danhmucSelect);
     dispatch(selectedDanhmuc(selectedDanhmucInfo));
+  };
+
+  const arrangeStudents = async () => {
+    setTitle(t('Sắp xếp học sinh'));
+    setForm('arrange');
+    dispatch(setOpenPopup(true));
   };
 
   const buttonConfigurations = [
@@ -209,11 +220,13 @@ export default function HocSinh() {
                 label={params.row.trangThai_fm}
                 color={
                   params.row.trangThai_fm === t('status.unsend')
-                    ? 'info'
+                    ? 'warning'
                     : params.row.trangThai_fm === t('Đang chờ duyệt')
                     ? 'primary'
                     : params.row.trangThai_fm === t('status.approved')
                     ? 'success'
+                    : params.row.trangThai_fm === t('Đã in bằng')
+                    ? 'info'
                     : 'secondary'
                 }
               />
@@ -344,6 +357,8 @@ export default function HocSinh() {
                 ? t('status.approved')
                 : row.trangThai == 3
                 ? t('status.davaoso')
+                : row.trangThai == 4
+                ? t('Đã in bằng')
                 : '',
             ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
             ketQua_fm: row.ketQua == 'x' ? t('Đạt') : t('Không đạt'),
@@ -589,6 +604,14 @@ export default function HocSinh() {
           <Grid item>
             <ButtonSuccess title={t('button.export.excel')} onClick={handleExport} icon={IconFileExport} disabled={!selectedDMTN} />
           </Grid>
+          <Grid item>
+            <ButtonSuccess
+              title={t('Sắp xếp học sinh')}
+              onClick={arrangeStudents}
+              icon={IconList}
+              disabled={!selectedDMTN || !donvi.id || selectTrangThai !== '0'}
+            />
+          </Grid>
           {selectedRowData.length !== 0 ? (
             <>
               <Grid item>
@@ -755,7 +778,7 @@ export default function HocSinh() {
           title={title}
           form={form}
           openPopup={openPopup}
-          maxWidth={form === 'detail' || form === 'edit' || form === 'add' ? 'md' : 'sm'}
+          maxWidth={form === 'detail' || form === 'edit' || form === 'add' || form === 'arrange' ? 'md' : 'sm'}
           bgcolor={form === 'delete' || form === 'deleteall' ? '#F44336' : '#2196F3'}
         >
           {form === 'gui' ? (
@@ -776,6 +799,8 @@ export default function HocSinh() {
             <InGCN />
           ) : form === 'ingcnall' ? (
             <InGCNAll />
+          ) : form === 'arrange' ? (
+            <SapXepSTTHocSinh danhMuc={selectedDMTN} donvi={donvi.id} />
           ) : form === 'add' ? (
             <Add />
           ) : (

@@ -267,6 +267,12 @@ export default function Xacminhvanbang() {
       minWidth: 100
     },
     {
+      field: 'ketQua_fm',
+      headerName: t('Kết quả'),
+      flex: 1.2,
+      minWidth: 100
+    },
+    {
       field: 'soHieuVanBang',
       headerName: t('hocsinh.field.soHieu'),
       flex: 1.5,
@@ -287,46 +293,49 @@ export default function Xacminhvanbang() {
       align: 'right',
       renderCell: (params) => (
         <>
-          {params.row.trangThai !== -1 ? (
-            <Grid container spacing={1}>
-              <Grid item>
-                <ActionButtons type="detail" handleGetbyId={handleDetail} params={params.row} />
-              </Grid>
-              <Grid item>
-                <CombinedActionButtons
-                  params={params.row}
-                  buttonConfigurations={xacminhvb}
-                  icon={IconChecks}
-                  title={t('button.title.xacminh')}
-                  color="success"
-                />
-              </Grid>
-              <Grid item>
-                <CombinedActionButtons
-                  params={params.row}
-                  buttonConfigurations={chinhsuavb}
-                  icon={IconEdit}
-                  title={t('button.title.chinhsua.huybo')}
-                  color="orange"
-                />
-              </Grid>
+          <Grid container spacing={1}>
+            <Grid item>
+              <ActionButtons type="detail" handleGetbyId={handleDetail} params={params.row} />
             </Grid>
-          ) : (
-            <Grid container spacing={1}>
-              <Grid item>
-                <ActionButtons type="detail" handleGetbyId={handleDetail} params={params.row} />
-              </Grid>
-              <Grid item>
-                <CombinedActionButtons
-                  params={params.row}
-                  buttonConfigurations={historyXMHB}
-                  icon={IconHistory}
-                  title={t('Xem lịch sử')}
-                  color="secondary"
-                />
-              </Grid>
-            </Grid>
-          )}
+            {params.row.ketQua == 'x' ? (
+              <>
+                {params.row.trangThai !== -1 ? (
+                  <>
+                    <Grid item>
+                      <CombinedActionButtons
+                        params={params.row}
+                        buttonConfigurations={xacminhvb}
+                        icon={IconChecks}
+                        title={t('button.title.xacminh')}
+                        color="success"
+                      />
+                    </Grid>
+                    <Grid item>
+                      <CombinedActionButtons
+                        params={params.row}
+                        buttonConfigurations={chinhsuavb}
+                        icon={IconEdit}
+                        title={t('button.title.chinhsua.huybo')}
+                        color="orange"
+                      />
+                    </Grid>
+                  </>
+                ) : (
+                  <Grid item>
+                    <CombinedActionButtons
+                      params={params.row}
+                      buttonConfigurations={historyXMHB}
+                      icon={IconHistory}
+                      title={t('Xem lịch sử')}
+                      color="#20B2AA"
+                    />
+                  </Grid>
+                )}
+              </>
+            ) : (
+              ''
+            )}
+          </Grid>
         </>
       )
     }
@@ -457,6 +466,7 @@ export default function Xacminhvanbang() {
             soVaoSoCapBang: row.soVaoSoCapBang || 'Chưa cấp',
             gioiTinh_fm: row.gioiTinh ? t('gender.male') : t('gender.female'),
             ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
+            ketQua_fm: row.ketQua == 'x' ? t('Đạt') : t('Không đạt'),
             ...row
           }));
           dispatch(setReloadData(false));

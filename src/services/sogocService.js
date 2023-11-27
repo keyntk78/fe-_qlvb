@@ -107,6 +107,18 @@ export async function getHocSinhBySoGoc(params) {
   }
 }
 
+export async function getAllTruongSoGoc(idDM, idKT) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`SoGoc/ExportAllSoGoc?IdDanhMucTotNghiep=${idDM}&IdKhoaThi=${idKT}`, 'GET');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating Monthi:', error);
+    throw error;
+  }
+}
+
 export async function chuyenDoiSoGoc(params) {
   try {
     store.dispatch(setLoading(true));
@@ -125,6 +137,40 @@ export async function getLichSuChuyenDoiSoGoc(params) {
     return response;
   } catch (error) {
     console.error('Error creating history access:', error);
+    throw error;
+  }
+}
+
+export async function upLoadAnhSoGoc(data) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`SoGoc/UpLoadAnhSoGoc`, 'POST', data);
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function getAnhSoGoc(params) {
+  try {
+    const response = await sendRequest(`SoGoc/GetAnhSoGoc?${params}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function deleteAnhSoGoc(id) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`SoGoc/DeleteAnhSoGoc?idAnhSoGoc=${id}`, 'DELETE');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error(error);
     throw error;
   }
 }

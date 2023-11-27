@@ -25,7 +25,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { donviSelector, infoHocSinhSelector, reloadDataSelector, selectedInfoMessageSelector, userLoginSelector } from 'store/selectors';
-import { selectedDanhmuc, selectedDonvitruong, setLoading, setReloadData } from 'store/actions';
+import { selectedDanhmuc, selectedDonvitruong, setInfoHocSinh, setLoading, setReloadData } from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import { createSearchParams } from 'utils/createSearchParams';
 import { handleResponseStatus } from 'utils/handleResponseStatus';

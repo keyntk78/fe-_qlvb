@@ -457,7 +457,7 @@ const Detail = ({ type }) => {
             </FormControlComponent>
           </Grid>
           <Grid item xs={isXs ? 6 : 4}>
-            <FormControlComponent xsLabel={0} xsForm={12} label={t('xếp loại tốt nghiệp')}>
+            <FormControlComponent xsLabel={0} xsForm={12} label={t('Xếp loại tốt nghiệp')}>
               <FormControl fullWidth variant="outlined">
                 <SelectForm
                   formik={formik}

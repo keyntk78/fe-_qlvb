@@ -13,6 +13,16 @@ export async function getLoaiDonVi() {
   }
 }
 
+export async function getListLop(truongId, danhmuctotnghiepId) {
+  try {
+    const response = await sendRequest(`Shared/GetListLop?idTruong=${truongId}&idDanhMucTotNghiep=${danhmuctotnghiepId}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating role:', error);
+    throw error;
+  }
+}
+
 export async function getAllTruong(username) {
   try {
     const response = await sendRequest(`Shared/GetAllTruong?username=${username}`, 'GET');

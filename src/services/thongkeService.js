@@ -317,3 +317,13 @@ export async function GetThongKeHocSinh3DanhMucGanNhat(user) {
     throw error;
   }
 }
+
+export async function GetThongKeTongQuatByPhongGD(params) {
+  try {
+    const response = await axiosClient(`TrangChu/GetThongKeTongQuatByPhongGD?${params}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating thong ke:', error);
+    throw error;
+  }
+}
