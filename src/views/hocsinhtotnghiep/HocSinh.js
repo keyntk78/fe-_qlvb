@@ -51,7 +51,8 @@ const trangThaiOptions = [
   { value: '0', label: 'Chưa gửi duyệt' },
   { value: '1', label: 'Đang chờ duyệt' },
   { value: '2', label: 'Đã duyệt' },
-  { value: '3', label: 'Đã đưa vào sổ gốc' }
+  { value: '3', label: 'Đã đưa vào sổ gốc' },
+  { value: '4', label: 'Đã in bằng' }
 ];
 
 export default function HocSinh() {
@@ -219,11 +220,13 @@ export default function HocSinh() {
                 label={params.row.trangThai_fm}
                 color={
                   params.row.trangThai_fm === t('status.unsend')
-                    ? 'info'
+                    ? 'warning'
                     : params.row.trangThai_fm === t('Đang chờ duyệt')
                     ? 'primary'
                     : params.row.trangThai_fm === t('status.approved')
                     ? 'success'
+                    : params.row.trangThai_fm === t('Đã in bằng')
+                    ? 'info'
                     : 'secondary'
                 }
               />
@@ -354,6 +357,8 @@ export default function HocSinh() {
                 ? t('status.approved')
                 : row.trangThai == 3
                 ? t('status.davaoso')
+                : row.trangThai == 4
+                ? t('Đã in bằng')
                 : '',
             ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
             ketQua_fm: row.ketQua == 'x' ? t('Đạt') : t('Không đạt'),
