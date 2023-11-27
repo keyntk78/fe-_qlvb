@@ -66,7 +66,8 @@ export const initialState = {
   infoHocSinh: null,
   report: [],
   up_vbcc: '',
-  listDanhMuc: []
+  listDanhMuc: [],
+  selectedValue: ''
 };
 
 // ==============================|| CUSTOMIZATION REDUCER ||============================== //
@@ -144,6 +145,11 @@ const customizationReducer = (state = initialState, action) => {
       return {
         ...state,
         selectedInfoMessage: action.selectedInfoMessage
+      };
+    case actionTypes.SELECTED_VALUE:
+      return {
+        ...state,
+        selectedValue: action.selectedValue
       };
     case actionTypes.ADD_USER:
       return {

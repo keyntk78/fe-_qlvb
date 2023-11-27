@@ -16,7 +16,7 @@ const DeleteForm = ({ lable, handleClick, content, type, soluong, lyDo }) => {
       </Grid>
       <Grid item container xs={12} justifyContent={'center'}>
         <MuiTypography variant="h4" gutterBottom>
-          {`${t('form.delete.warning1')} ${lable} [${content}]?`}
+          {content ? `${t('form.delete.warning1')} ${lable} [${content}]?` : `${t('form.delete.warning1')} ${lable}?`}
         </MuiTypography>
       </Grid>
       <Grid item container xs={12} mt={1} justifyContent={'center'}>

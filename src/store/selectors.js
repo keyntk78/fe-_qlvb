@@ -60,3 +60,4 @@ export const pageSizeSelector = (state) => state.customization.pageSize;
 export const infoHocSinhSelector = (state) => state.customization.infoHocSinh;
 export const upDateVBCCSelector = (state) => state.customization.up_vbcc;
 export const listDanhMucSelector = (state) => state.customization.listDanhMuc;
+export const selectedValueSelector = (state) => state.customization.selectedValue;

@@ -35,7 +35,8 @@ import {
   IconFileReport,
   IconAddressBook,
   IconRefresh,
-  IconPhotoCancel
+  IconPhotoCancel,
+  IconPaperclip
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { setOpenPopup, setOpenProfile, setOpenSubPopup, setOpenSubSubPopup } from '../../store/actions';
@@ -178,6 +179,8 @@ export default function Popup(props) {
                   <IconPhotoCancel sx={{ order: 2 }} />
                 ) : form === 'instruct' ? (
                   <IconAddressBook sx={{ order: 2 }} />
+                ) : form === 'dinhkem' ? (
+                  <IconPaperclip sx={{ order: 2 }} />
                 ) : Icon ? (
                   <Icon sx={{ order: 2 }} />
                 ) : (
