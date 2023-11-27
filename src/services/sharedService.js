@@ -13,6 +13,16 @@ export async function getLoaiDonVi() {
   }
 }
 
+export async function getListLop(truongId, danhmuctotnghiepId) {
+  try {
+    const response = await sendRequest(`Shared/GetListLop?idTruong=${truongId}&idDanhMucTotNghiep=${danhmuctotnghiepId}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating role:', error);
+    throw error;
+  }
+}
+
 export async function getAllTruong(username) {
   try {
     const response = await sendRequest(`Shared/GetAllTruong?username=${username}`, 'GET');
@@ -253,6 +263,18 @@ export async function GetCauHinhLaySoNgayCapBanSao() {
     return response;
   } catch (error) {
     console.error('Error creating DanhmucTN:', error);
+    throw error;
+  }
+}
+
+export async function TuyChonSoVaoSo() {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(`Shared/TuyChonSoVaoSo`, 'GET');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating TuyChonSoVaoSo:', error);
     throw error;
   }
 }

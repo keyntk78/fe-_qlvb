@@ -13,6 +13,8 @@ import { useFormik } from 'formik';
 import config from 'config';
 import ImageForm from 'components/form/ImageForm';
 import { convertJsonToFormData } from 'utils/convertJsonToFormData';
+//import { convertFormattedDateToISODate } from 'utils/formatDate';
+//import { convertDateTimeToDate } from 'utils/formatDate';
 //import { getAllConfigs } from 'services/configService';
 // import { getAllConfigs } from 'services/configService';
 
@@ -25,6 +27,12 @@ const Config = () => {
   // const configDonviValidationSchema = useConfigDonviValidationSchema();
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  // Hàm chuyển đổi chuỗi ngày thành đối tượng Date
+  // const parseDateString = (dateString) => {
+  //   const parts = dateString.split('-');
+  //   return new Date(parts[2], parts[1] - 1, parts[0]);
+  // };
+
   const formik = useFormik({
     initialValues: {
       MaCoQuanCapBang: '',
@@ -39,7 +47,9 @@ const Config = () => {
       SoBatDau: '',
       HieuTruong: '',
       TenDiaPhuong: '',
-      NgayBanHanh: ''
+      NgayBanHanh: '',
+      DinhDangSoCapLai: '',
+      DinhDangSoSoGoc: ''
     },
     onSubmit: async (values) => {
       try {
@@ -61,7 +71,9 @@ const Config = () => {
           FileImage: values.FileImage,
           HieuTruong: values.HieuTruong,
           TenDiaPhuong: values.TenDiaPhuong,
-          NgayBanHanh: values.NgayBanHanh
+          NgayBanHanh: values.NgayBanHanh,
+          DinhDangSoCapLai: values.DinhDangSoCapLai,
+          DinhDangSoSoGoc: values.DinhDangSoSoGoc
         };
 
         const formData1 = await convertJsonToFormData(formDataDonviQL);
@@ -100,7 +112,9 @@ const Config = () => {
         SoBatDau: datadonvi.soBatDau || '',
         HieuTruong: datadonvi.hieuTruong || '',
         TenDiaPhuong: datadonvi.tenDiaPhuong || '',
-        NgayBanHanh: datadonvi.ngayBanHanh || ''
+        NgayBanHanh: datadonvi.ngayBanHanh || '',
+        DinhDangSoCapLai: datadonvi.dinhDangSoCapLai || '',
+        DinhDangSoSoGoc: datadonvi.dinhDangSoSoGoc || ''
       });
       //}
       if (datadonvi) {
@@ -115,7 +129,7 @@ const Config = () => {
     };
     fetchData();
   }, [donvi.id, reloadData, openPopup]);
-
+  console.log(formik.values);
   return (
     <form onSubmit={formik.handleSubmit}>
       <Grid container spacing={2} my={1}>
@@ -185,6 +199,9 @@ const Config = () => {
           </Grid>
         ) : (
           <Grid item lg={8} md={8} sm={8} xs={12} container spacing={1}>
+            <div style={{ borderBottom: '2px solid black', fontWeight: 'bold', fontSize: '17px', height: '40px' }}>
+              <p>{t('Cấu hình chung')}</p>
+            </div>
             <Grid item container spacing={2}>
               <Grid item xs={isXs ? 12 : 6}>
                 <FormControlComponent xsLabel={0} xsForm={12} label={t('Tên hiệu trưởng')}>
@@ -200,12 +217,22 @@ const Config = () => {
             <Grid item container spacing={2}>
               <Grid item xs={isXs ? 12 : 6}>
                 <FormControlComponent xsLabel={0} xsForm={12} label={t('Ngày ban hành')}>
-                  <InputForm
-                    formik={formik}
-                    name="NgayBanHanh"
-                    type="date"
-                    value={formik.values.ngayBanHanh ? new Date(formik.values.ngayBanHanh).toISOString().slice(0, 10) : ''}
-                  />
+                  <InputForm formik={formik} name="NgayBanHanh" type="date" value={formik.values.NgayBanHanh} />
+                </FormControlComponent>
+              </Grid>
+            </Grid>
+            <div style={{ borderBottom: '2px solid black', fontWeight: 'bold', fontSize: '17px', height: '40px' }}>
+              <p>{t('Cấu hình số vào sổ')}</p>
+            </div>
+            <Grid item container spacing={2}>
+              <Grid item xs={isXs ? 12 : 6}>
+                <FormControlComponent xsLabel={0} xsForm={12} label={t('Định dạng Số vào sổ gốc')}>
+                  <InputForm formik={formik} name="DinhDangSoSoGoc" type="text" placeholder={t('Định dạng Số vào sổ gốc')} />
+                </FormControlComponent>
+              </Grid>
+              <Grid item xs={isXs ? 12 : 6}>
+                <FormControlComponent xsLabel={0} xsForm={12} label={t('Định dạng số cấp lại')}>
+                  <InputForm formik={formik} name="DinhDangSoCapLai" type="text" placeholder={t('Định dạng Số vào sổ gốc')} />
                 </FormControlComponent>
               </Grid>
             </Grid>

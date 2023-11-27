@@ -20,6 +20,7 @@ import InputForm1 from 'components/form/InputForm1';
 import InputForm from 'components/form/InputForm';
 import { getAllHinhthucdaotao } from 'services/hinhthucdaotaoService';
 import SelectForm from 'components/form/SelectForm';
+import { TuyChonSoVaoSo } from 'services/sharedService';
 //import { getAllHeDaoTao } from 'services/sharedService';
 
 const Add = () => {
@@ -34,7 +35,8 @@ const Add = () => {
     isLoading: false,
     namThi: [],
     hinhthucdaotao: [],
-    hedaotao: []
+    hedaotao: [],
+    tuychonVaoso: []
   });
   const formik = useFormik({
     initialValues: {
@@ -46,6 +48,8 @@ const Add = () => {
       GhiChu: '',
       NgayCapBang: '',
       SoQuyetDinh: '',
+      NgayGuiDanhSach: '',
+      TuyChonSoVaoSo: '',
       nguoithuchien: user.username
     },
     validationSchema: danhmuctnValidationSchema,
@@ -75,6 +79,11 @@ const Add = () => {
     const idHinhThucDaoTao = event.target.value;
     formik.setFieldValue('IdHinhThucDaoTao', idHinhThucDaoTao);
   };
+
+  const handleChangeTuyChonVaoSo = async (event) => {
+    const tuyChonSoVaoSo = event.target.value;
+    formik.setFieldValue('TuyChonSoVaoSo', tuyChonSoVaoSo);
+  };
   // const handleChangeHDT = async (event) => {
   //   const maHeDaoTao = event.target.value;
   //   formik.setFieldValue('MaHeDaoTao', maHeDaoTao);
@@ -96,6 +105,7 @@ const Add = () => {
         idIndex: index + 1,
         ...row
       }));
+
       //hinhthucdaotao
       const hinhThucdaotao = await getAllHinhthucdaotao();
       const datahinhThucdaotao = await hinhThucdaotao.data;
@@ -104,6 +114,9 @@ const Add = () => {
         ...row
       }));
 
+      //tùy chọn số vào sổ
+      const tuyChonSoVaoSo = await TuyChonSoVaoSo();
+      const dataTuyChonSoVaoSo = tuyChonSoVaoSo.data;
       //hedaotao
       // const hedaotao = await getAllHeDaoTao();
       // const datahedaotao = await hedaotao.data;
@@ -119,7 +132,8 @@ const Add = () => {
         ...old,
         isLoading: false,
         namThi: dataWithnt,
-        hinhthucdaotao: dataWithhtdt
+        hinhthucdaotao: dataWithhtdt,
+        tuychonVaoso: dataTuyChonSoVaoSo
         //hedaotao: dataWithhdt
       }));
     };
@@ -168,6 +182,27 @@ const Add = () => {
             <Grid item xs={isXs ? 6.5 : 4}>
               <FormControlComponent xsLabel={0} xsForm={12} isRequire label={t('danhmuctotnghiep.title.ngay')}>
                 <InputForm formik={formik} name="NgayCapBang" type="date" />
+              </FormControlComponent>
+            </Grid>
+          </Grid>
+          <Grid item xs={12} container spacing={1}>
+            <Grid item xs={isXs ? 12 : 6.5}>
+              <FormControlComponent xsLabel={0} xsForm={12} isRequire label={t('Tùy chọn số vào sổ')}>
+                <SelectForm
+                  formik={formik}
+                  fullWidth
+                  keyProp="id"
+                  valueProp="name"
+                  item={pageState.tuychonVaoso}
+                  name="TuyChonSoVaoSo"
+                  value={formik.values.TuyChonSoVaoSo}
+                  onChange={handleChangeTuyChonVaoSo}
+                />
+              </FormControlComponent>
+            </Grid>
+            <Grid item xs={isXs ? 12 : 5.5}>
+              <FormControlComponent xsLabel={0} xsForm={12} isRequire label={t('Thời hạn gửi học sinh')}>
+                <InputForm formik={formik} name="NgayGuiDanhSach" type="datetime-local" />
               </FormControlComponent>
             </Grid>
           </Grid>
