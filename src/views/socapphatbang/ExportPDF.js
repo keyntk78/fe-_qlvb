@@ -150,5 +150,5 @@ export function generatePDF(hocsinhs, data, donvi) {
     align: 'center'
   });
 
-  doc.save('sogoc.pdf');
+  doc.save('socaphatbang.pdf');
 }

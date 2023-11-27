@@ -39,7 +39,7 @@ import { styled } from '@mui/system';
 import AnimateButton from 'components/extended/AnimateButton';
 import { useFormik } from 'formik';
 import { generateDocument } from './ExportWord';
-import { getHocSinhBySoGoc } from 'services/sogocService';
+import { getHocSinhBySoGoc, getAllTruongSoGoc } from 'services/sogocService';
 import ExportExcel from './ExportExcel';
 import { getAllTruong } from 'services/sharedService';
 import Popup from 'components/controls/popup';
@@ -48,7 +48,7 @@ import { getAllKhoathiByDMTN } from 'services/khoathiService';
 import PhuLucSoGoc from 'views/phulucsogoc/PhuLucSoGoc';
 import Import from 'views/ImportDanhSachVanBang/Import';
 import GroupButtons from 'components/button/GroupButton';
-import { generatePDF } from './ExportPDF';
+import { generatePDF, generatePDFAll } from './ExportPDF';
 import AnhSoGoc from './AnhSoGoc';
 
 export default function SoGoc() {
@@ -167,6 +167,15 @@ export default function SoGoc() {
     dispatch(setLoading(false));
   };
 
+  const handleExportPDFAll = async () => {
+    dispatch(setLoading(true));
+    const truongs = await getAllTruongSoGoc(selectDanhmuc, selectKhoaThi);
+    if (truongs.data.length > 0) {
+      generatePDFAll(truongs.data, donvi);
+    }
+    dispatch(setLoading(false));
+  };
+
   const handleChange = (e, value) => {
     e.preventDefault();
     setPageState((old) => ({ ...old, startIndex: value }));
@@ -189,6 +198,17 @@ export default function SoGoc() {
     {
       type: 'exportPDF',
       handleClick: handleExportPDF
+    }
+  ];
+
+  const xuatTepAll = [
+    {
+      type: 'exportExcel',
+      handleClick: handleExport
+    },
+    {
+      type: 'exportPDF',
+      handleClick: handleExportPDFAll
     }
   ];
 
@@ -597,6 +617,9 @@ export default function SoGoc() {
           </Grid>
           <Grid item>
             <GroupButtons buttonConfigurations={xuatTep} color="info" icon={IconFileExport} title={t('button.export')} />
+          </Grid>
+          <Grid item>
+            <GroupButtons buttonConfigurations={xuatTepAll} color="info" icon={IconFileExport} title={t('Xuất tệp tất cả trường')} />
           </Grid>
           {pageState.DMTN && pageState.donVi && (
             <Grid item>

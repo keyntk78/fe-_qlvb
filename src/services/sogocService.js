@@ -107,6 +107,18 @@ export async function getHocSinhBySoGoc(params) {
   }
 }
 
+export async function getAllTruongSoGoc(idDM, idKT) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`SoGoc/ExportAllSoGoc?IdDanhMucTotNghiep=${idDM}&IdKhoaThi=${idKT}`, 'GET');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating Monthi:', error);
+    throw error;
+  }
+}
+
 export async function chuyenDoiSoGoc(params) {
   try {
     store.dispatch(setLoading(true));

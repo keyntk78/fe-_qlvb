@@ -11,7 +11,9 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Button
+  Button,
+  Box,
+  CircularProgress
 } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
@@ -77,6 +79,7 @@ const SapXepSTTHocSinh = ({ danhMuc, donvi }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const donVi = useSelector(donviSelector);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (lops.length === 0) {
@@ -104,8 +107,8 @@ const SapXepSTTHocSinh = ({ danhMuc, donvi }) => {
   };
 
   const fetchHocSinhOfLop = async (value) => {
-    console.log(value, lopSelected);
     if (value || lopSelected) {
+      setIsLoading(true);
       const newValue = value ? value : lopSelected;
       const hocsinhs = await (donVi.laPhong
         ? getHocSinhByLopOfPhong(donvi, danhMuc, newValue)
@@ -113,6 +116,7 @@ const SapXepSTTHocSinh = ({ danhMuc, donvi }) => {
       if ((hocsinhs !== null) & (hocsinhs.data.length > 0)) {
         setItems(hocsinhs.data);
       }
+      setIsLoading(false);
     }
   };
   const sensors = useSensors(
@@ -156,7 +160,7 @@ const SapXepSTTHocSinh = ({ danhMuc, donvi }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Grid item xs={12} container spacing={2} justifyContent={'center'} padding={1} paddingTop={2}>
+      <Grid item xs={12} container spacing={2} justifyContent={'center'} paddingTop={3}>
         <Grid item lg={4} md={4} sm={4}>
           <FormControl fullWidth variant="outlined" size="small">
             <InputLabel>{t('Lớp')}</InputLabel>
@@ -179,7 +183,7 @@ const SapXepSTTHocSinh = ({ danhMuc, donvi }) => {
           </Button>
         </Grid>
       </Grid>
-      <Grid container padding={1} paddingTop={3}>
+      <Grid container padding={1} paddingTop={3} justifyContent="center">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
@@ -187,46 +191,52 @@ const SapXepSTTHocSinh = ({ danhMuc, donvi }) => {
           modifiers={[restrictToVerticalAxis, restrictToFirstScrollableAncestor]}
         >
           <SortableContext items={items} strategy={verticalListSortingStrategy}>
-            <TableContainer component={Paper} sx={{ border: 1, borderColor: 'grey.300', borderRadius: 1 }}>
-              <Table aria-label="sticky table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="left" padding="normal" size="small"></TableCell>
-                    <TableCell align="left" padding="normal" size="small">
-                      {t('hocsinh.field.fullname')}
-                    </TableCell>
-                    <TableCell align="left" padding="normal" size="small">
-                      {t('hocsinh.field.cccd')}
-                    </TableCell>
-                    <TableCell align="left" padding="normal" size="small">
-                      {t('hocsinh.field.gender')}
-                    </TableCell>
-                    <TableCell align="left" padding="normal" size="small">
-                      {t('hocsinh.field.bdate')}
-                    </TableCell>
-                    <TableCell align="left" padding="normal" size="small">
-                      {t('Kết quả')}
-                    </TableCell>
-                    <TableCell align="left" padding="normal" size="small">
-                      {t('Xếp loại')}
-                    </TableCell>
-                    <TableCell align="left" padding="normal" size="small">
-                      {t('STT')}
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {items.map((item) => (
-                    <SortableItem item={item} key={item.id} />
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            {isLoading ? (
+              <Box sx={{ height: 250, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <TableContainer component={Paper} sx={{ border: 1, borderColor: 'grey.300', borderRadius: 1, maxHeight: 250 }}>
+                <Table stickyHeader aria-label="sticky table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="left" padding="normal" size="small"></TableCell>
+                      <TableCell align="left" padding="normal" size="small">
+                        {t('hocsinh.field.fullname')}
+                      </TableCell>
+                      <TableCell align="left" padding="normal" size="small">
+                        {t('hocsinh.field.cccd')}
+                      </TableCell>
+                      <TableCell align="left" padding="normal" size="small">
+                        {t('hocsinh.field.gender')}
+                      </TableCell>
+                      <TableCell align="left" padding="normal" size="small">
+                        {t('hocsinh.field.bdate')}
+                      </TableCell>
+                      <TableCell align="left" padding="normal" size="small">
+                        {t('Kết quả')}
+                      </TableCell>
+                      <TableCell align="left" padding="normal" size="small">
+                        {t('Xếp loại')}
+                      </TableCell>
+                      <TableCell align="left" padding="normal" size="small">
+                        {t('STT')}
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {items.map((item) => (
+                      <SortableItem item={item} key={item.id} />
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
           </SortableContext>
         </DndContext>
-        <Grid item xs={12} container spacing={2} justifyContent="flex-end">
-          <FormGroupButton />
-        </Grid>
+      </Grid>
+      <Grid item xs={12} container spacing={2} justifyContent="flex-end">
+        <FormGroupButton />
       </Grid>
     </form>
   );
