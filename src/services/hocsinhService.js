@@ -12,6 +12,21 @@ export async function getHocSinhs(params) {
     throw error;
   }
 }
+
+export async function getHocSinhByLop(idTruong, idDanhMucTotNghiep, maLop) {
+  try {
+    const response = await sendRequest(
+      `HocSinhPhong/GetListHocSinhByLop?idTruong=${idTruong}&idDanhMucTotNghiep=${idDanhMucTotNghiep}&maLop=${maLop}`,
+      'GET',
+      null
+    );
+    return response;
+  } catch (error) {
+    console.error('Error creating User:', error);
+    throw error;
+  }
+}
+
 export async function getHocSinhByCCCD(cccd) {
   try {
     store.dispatch(setLoading(true));
@@ -190,6 +205,18 @@ export async function getThongkeByPhong(donvi, DMTN) {
     return response;
   } catch (error) {
     console.error('Error creating hoc sinh:', error);
+    throw error;
+  }
+}
+
+export async function arrangeHocSinh(hocSinhs) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(`HocSinhPhong/UpdateSoThuTu`, 'POST', hocSinhs);
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error arrange hoc sinh:', error);
     throw error;
   }
 }

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { IconArrowBack, IconCircleCheck, IconFileExport, IconFileImport, IconPlus, IconSearch } from '@tabler/icons';
+import { IconArrowBack, IconCircleCheck, IconFileExport, IconFileImport, IconPlus, IconSearch, IconList } from '@tabler/icons';
 import { Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography, useMediaQuery } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -39,7 +39,7 @@ import Popup from 'components/controls/popup';
 import FileExcel from '../FileMau/FileMauTuDong.xlsx';
 import FileExcel_thucong from '../FileMau/FileMauKhongTuDong.xlsx';
 import { getAllDanToc, getCauHinhTuDongXepLoai } from 'services/sharedService';
-
+import SapXepSTTHocSinh from './SapXepSTTHocSinh';
 import DuyetAll from './DuyetAll';
 import { getAllDanhmucTN } from 'services/sharedService';
 import BackToTop from 'components/scroll/BackToTop';
@@ -80,6 +80,7 @@ export default function HocSinh() {
   const localeText = useLocalText();
   const navigate = useNavigate();
   const [selectDonvi, setSelectDonvi] = useState('');
+  const [selectTrangThai, setSelectTrangThai] = useState('');
   const [selectDanhmuc, setSelectDanhmuc] = useState('');
   const [tenDMTN, setSelectTenDMTN] = useState('');
   const [selectedRowData, setSelectedRowData] = useState([]);
@@ -164,6 +165,7 @@ export default function HocSinh() {
     setSearch(!search);
     setSelectDanhmuc(pageState.DMTN);
     setSelectDonvi(pageState.donVi);
+    setSelectTrangThai(pageState.trangThai);
     const danhmucSelect = pageState.DMTN;
     const selectedDanhmucInfo = dMTN.find((dmtn) => dmtn.id === danhmucSelect);
     dispatch(selectedDanhmuc(selectedDanhmucInfo));
@@ -182,6 +184,8 @@ export default function HocSinh() {
       handleEdit: handleEdit
     }
   ];
+
+  console.log(pageState.trangThai);
 
   const columns = [
     {
@@ -476,6 +480,12 @@ export default function HocSinh() {
     dispatch(setLoading(false));
   };
 
+  const arrangeStudents = async () => {
+    setTitle(t('Sắp xếp học sinh'));
+    setForm('arrange');
+    dispatch(setOpenPopup(true));
+  };
+
   const handleDanhMucChange = (event) => {
     const selectedValue = event.target.value;
     const selectedCategory = dMTN.find((dmtn) => dmtn.id === selectedValue);
@@ -703,7 +713,7 @@ export default function HocSinh() {
         <Grid item container spacing={1} alignItems="center">
           {!isMd ? (
             <>
-              <Grid item xs={12} sm={12} md={12} lg={6}>
+              <Grid item xs={12} sm={12} md={12} lg={5}>
                 <Grid item container spacing={1}>
                   <Grid item xs={6} md={4} lg={3}>
                     <Typography variant="h5">{t('Số lượng học sinh')}</Typography>
@@ -729,7 +739,7 @@ export default function HocSinh() {
           ) : (
             ''
           )}
-          <Grid item xs={12} sm={12} md={12} lg={6}>
+          <Grid item xs={12} sm={12} md={12} lg={7}>
             <Grid item container spacing={1} justifyContent="flex-end">
               <Grid item>
                 <ButtonSuccess
@@ -737,6 +747,14 @@ export default function HocSinh() {
                   onClick={handleExport}
                   icon={IconFileExport}
                   disabled={!selectDanhmuc || !selectDonvi}
+                />
+              </Grid>
+              <Grid item>
+                <ButtonSuccess
+                  title={t('Sắp xếp học sinh')}
+                  onClick={arrangeStudents}
+                  icon={IconList}
+                  disabled={!selectDanhmuc || !selectDonvi || selectTrangThai !== '1'}
                 />
               </Grid>
               {selectedRowData.length !== 0 ? (
@@ -819,7 +837,7 @@ export default function HocSinh() {
         ) : (
           ''
         )}
-        <Grid item container spacing={1} mb={1}>
+        <Grid item container spacing={1} mb={1} lg={10}>
           <Grid item xs={6} md={4} lg={1.5}>
             <Typography variant="h5">{t('Xếp loại')}</Typography>
           </Grid>
@@ -839,7 +857,7 @@ export default function HocSinh() {
             </Typography>
           </Grid>
         </Grid>
-        <Grid item container spacing={1} mb={1}>
+        <Grid item container spacing={1} mb={1} lg={10}>
           <Grid item xs={6} md={4} lg={1.5}>
             <Typography variant="h5">{t('Kết quả')}</Typography>
           </Grid>
@@ -912,6 +930,8 @@ export default function HocSinh() {
             <TraLai />
           ) : form === 'tralailuachon' ? (
             <TraLaiLuaChon dataCCCD={dataCCCD} />
+          ) : form === 'arrange' ? (
+            <SapXepSTTHocSinh danhMuc={selectDanhmuc} donvi={selectDonvi} />
           ) : form === 'add' ? (
             <Add />
           ) : (
