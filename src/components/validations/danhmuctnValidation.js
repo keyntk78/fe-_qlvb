@@ -9,7 +9,9 @@ export const useDanhmucTNValidationSchema = () => {
     IdNamThi: Yup.string().required(t('validation.danhmuctotnghiep.nam')),
     TieuDe: Yup.string().required(t('validation.danhmuctotnghiep.tieude')),
     NgayCapBang: Yup.string().required(t('validation.danhmuctotnghiep.ngay')),
-    SoQuyetDinh: Yup.string().required(t('validation.danhmuctotnghiep.soquyetdinh'))
+    SoQuyetDinh: Yup.string().required(t('validation.danhmuctotnghiep.soquyetdinh')),
+    TuyChonSoVaoSo: Yup.string().required(t('validation.danhmuctotnghiep.tuychonvaoso')),
+    NgayGuiDanhSach: Yup.string().required(t('validation.danhmuctotnghiep.ngayguidanhsach'))
     //MaHeDaoTao: Yup.string().required(t('Hệ đào tạo không được để trống'))
   });
 

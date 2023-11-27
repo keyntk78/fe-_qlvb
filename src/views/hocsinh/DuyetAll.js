@@ -32,7 +32,7 @@ function DuyetAll() {
 
   const hanldeGuiduyetAll = async () => {
     try {
-      const response = await approveAllHocSinh(donvi.id, danhmuc.id);
+      const response = await approveAllHocSinh(donvi.idTruong, danhmuc.id);
       if (response.isSuccess == false) {
         dispatch(showAlert(new Date().getTime().toString(), 'error', response.message.toString()));
       } else {

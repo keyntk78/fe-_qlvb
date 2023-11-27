@@ -32,7 +32,7 @@ function TraLai() {
 
   const hanldeTraLai = async () => {
     try {
-      const response = await giveBackAllHocSinh(donvi.id, danhmuc.id);
+      const response = await giveBackAllHocSinh(donvi.idTruong, danhmuc.id);
       if (response.isSuccess == false) {
         dispatch(showAlert(new Date().getTime().toString(), 'error', response.message.toString()));
       } else {

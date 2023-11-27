@@ -240,8 +240,8 @@ export default function HocSinh() {
     {
       field: 'ketQua_fm',
       headerName: t('Kết quả'),
-      flex: 1,
-      minWidth: 80
+      flex: 1.2,
+      minWidth: 100
     },
     {
       field: 'xepLoai',
@@ -407,7 +407,7 @@ export default function HocSinh() {
                 ? t('Đã đưa vào sổ gốc')
                 : '',
             ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
-            ketQua_fm: row.ketQua == 'x' ? t('Đạt') : t('Chưa đạt'),
+            ketQua_fm: row.ketQua == 'x' ? t('Đạt') : t('Không đạt'),
             ...row
           }));
           dispatch(setReloadData(false));
@@ -868,7 +868,7 @@ export default function HocSinh() {
           </Grid>
           <Grid item xs={6} md={4} lg={1.5}>
             <Typography variant="h5">
-              {t('Chưa đạt')}: {data?.tongChuaDat || 0}
+              {t('Không đạt')}: {data?.tongKhongDat || 0}
             </Typography>
           </Grid>
         </Grid>

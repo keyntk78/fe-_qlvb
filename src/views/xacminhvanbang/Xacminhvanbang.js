@@ -376,7 +376,9 @@ export default function Xacminhvanbang() {
         firstLoad3 ? 2500 : 0
       );
     };
-    fetchDataDL();
+    if (user) {
+      fetchDataDL();
+    }
   }, [user]);
 
   useEffect(() => {

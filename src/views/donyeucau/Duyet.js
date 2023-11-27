@@ -40,12 +40,7 @@ const Duyet = () => {
       setDonYeuCau(DataDonyeucau);
       const response_cauhinhsongay = await GetCauHinhLaySoNgayCapBanSao();
       const songayConfig = response_cauhinhsongay.data.configValue;
-      //const songayConfig = '4';
-      // setNgayNhan(format(new Date(), 'yyyy-MM-dd') + songayConfig);
-      //setCauHinhNgay(songayConfig.configValue);
-      // Lấy ngày hiện tại
       const currentDate = new Date();
-
       // Cộng thêm số ngày từ config (đã đảm bảo songayConfig là một số)
       const ngayNhanDate = new Date(currentDate.getTime() + songayConfig * 24 * 60 * 60 * 1000);
 

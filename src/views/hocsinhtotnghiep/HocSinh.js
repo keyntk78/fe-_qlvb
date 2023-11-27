@@ -243,8 +243,8 @@ export default function HocSinh() {
     {
       field: 'ketQua_fm',
       headerName: t('Kết quả'),
-      flex: 1,
-      minWidth: 80
+      flex: 1.2,
+      minWidth: 100
     },
     {
       field: 'xepLoai',
@@ -322,6 +322,7 @@ export default function HocSinh() {
       params.append('trangThai', pageState.trangThai);
       const response = await getHocSinhByTruong(donvi.id, params);
       const data = response.data;
+
       const hasActiveHocSinh = data && data.hocSinhs.length > 0 && data.hocSinhs.every((hocSinh) => hocSinh.trangThai === 0);
       const hasActiveHocSinh_InGCN = data && data.hocSinhs.length > 0 && data.hocSinhs.every((hocSinh) => hocSinh.trangThai === 2);
       setDisabledInGCN(!hasActiveHocSinh_InGCN);
@@ -345,7 +346,7 @@ export default function HocSinh() {
                 ? t('status.davaoso')
                 : '',
             ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
-            ketQua_fm: row.ketQua == 'x' ? t('Đạt') : row.ketQua == 'o' ? t('Chưa đạt') : '',
+            ketQua_fm: row.ketQua == 'x' ? t('Đạt') : t('Không đạt'),
             ...row
           }));
           dispatch(setReloadData(false));
@@ -704,7 +705,7 @@ export default function HocSinh() {
           </Grid>
           <Grid item xs={6} md={4} lg={1.5}>
             <Typography variant="h5">
-              {t('Chưa đạt')}: {data?.tongChuaDat || 0}
+              {t('Không đạt')}: {data?.tongKhongDat || 0}
             </Typography>
           </Grid>
         </Grid>

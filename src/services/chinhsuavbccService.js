@@ -48,3 +48,15 @@ export async function getByCCCD(cccd) {
     throw error;
   }
 }
+
+export async function duyetChinhSuaVBCC(params) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`ChinhSuaVanBang/Approved?${params}`, 'GET');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating hocsinh:', error);
+    throw error;
+  }
+}
