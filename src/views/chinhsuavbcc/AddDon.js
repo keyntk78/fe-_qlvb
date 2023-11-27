@@ -204,13 +204,13 @@ const AddDonChinhSua = ({ thaotac }) => {
         <Divider />
       </Grid>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={4} md={4}>
+        <Grid item xs={12} sm={4} md={5}>
           <InputForm1 isRequired xs={12} label={'Họ tên'} name="HoTen" formik={formik} />
         </Grid>
         <Grid item xs={12} sm={4} md={4}>
           <InputForm1 isRequired xs={12} label={'CCCD'} name="CCCD" formik={formik} />
         </Grid>
-        <Grid item xs={12} sm={2.5} md={2.5}>
+        <Grid item xs={12} sm={3} md={3}>
           <InputForm1
             xs={12}
             isRequired
@@ -223,24 +223,10 @@ const AddDonChinhSua = ({ thaotac }) => {
         </Grid>
       </Grid>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={4} md={4}>
-          <FormControlComponent isRequire label={t('user.label.gender')}>
-            <RadioGroup
-              style={{ display: 'flex', justifyContent: 'flex-start' }}
-              row
-              name="GioiTinh"
-              value={formik.values.GioiTinh}
-              onChange={formik.handleChange}
-            >
-              <FormControlLabel value={true} control={<Radio />} label={t('gender.male')} />
-              <FormControlLabel value={false} control={<Radio />} label={t('gender.female')} />
-            </RadioGroup>
-          </FormControlComponent>
-        </Grid>
-        <Grid item xs={12} sm={4} md={4}>
+        <Grid item xs={12} sm={4} md={5}>
           <InputForm1 isRequired xs={12} label={'Nơi sinh'} name="NoiSinh" formik={formik} />
         </Grid>
-        <Grid item xs={12} sm={2.5} md={2.5}>
+        <Grid item xs={12} sm={4} md={4}>
           <FormControlComponent xsForm={12} isRequire label={t('dantoc')}>
             <FormControl fullWidth variant="outlined">
               <SelectForm
@@ -253,6 +239,20 @@ const AddDonChinhSua = ({ thaotac }) => {
                 onChange={handleDanTocChange}
               />
             </FormControl>
+          </FormControlComponent>
+        </Grid>
+        <Grid item xs={12} sm={3} md={3}>
+          <FormControlComponent isRequire label={t('user.label.gender')}>
+            <RadioGroup
+              style={{ display: 'flex', justifyContent: 'flex-start' }}
+              row
+              name="GioiTinh"
+              value={formik.values.GioiTinh}
+              onChange={formik.handleChange}
+            >
+              <FormControlLabel value={true} control={<Radio />} label={t('gender.male')} />
+              <FormControlLabel value={false} control={<Radio />} label={t('gender.female')} />
+            </RadioGroup>
           </FormControlComponent>
         </Grid>
       </Grid>
@@ -268,13 +268,13 @@ const AddDonChinhSua = ({ thaotac }) => {
         <Divider />
       </Grid>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={4} md={4}>
+        <Grid item xs={12} sm={5} md={5}>
           <InputForm1 isRequired xs={12} label={'Số cấp bằng'} name="SoVaoSoCapBang" formik={formik} />
         </Grid>
         <Grid item xs={12} sm={4} md={4}>
           <InputForm1 isRequired xs={12} label={'Số hiệu văn bằng'} name="SoHieuVanbang" formik={formik} />
         </Grid>
-        <Grid item xs={12} sm={2.5} md={2.5}>
+        <Grid item xs={12} sm={3} md={3}>
           <InputForm1
             xs={12}
             isRequired
@@ -287,6 +287,9 @@ const AddDonChinhSua = ({ thaotac }) => {
         </Grid>
       </Grid>
       <Grid container spacing={2}>
+        <Grid item xs={12} sm={5} md={5}>
+          <InputForm1 isRequired xs={12} label={'Hội đồng thi'} name="HoiDongThi" formik={formik} />
+        </Grid>
         <Grid item xs={12} sm={4} md={4}>
           <FormControlComponent xsForm={12} isRequire label={t('Hình thức đào tạo')}>
             <FormControl fullWidth variant="outlined">
@@ -302,10 +305,7 @@ const AddDonChinhSua = ({ thaotac }) => {
             </FormControl>
           </FormControlComponent>{' '}
         </Grid>
-        <Grid item xs={12} sm={4} md={4}>
-          <InputForm1 isRequired xs={12} label={'Hội đồng thi'} name="HoiDongThi" formik={formik} />
-        </Grid>
-        <Grid item xs={12} sm={2.5} md={2.5}>
+        <Grid item xs={12} sm={3} md={3}>
           <FormControlComponent xsLabel={0} xsForm={12} label={t('xeploai')} isRequire>
             <FormControl fullWidth variant="outlined">
               <SelectForm

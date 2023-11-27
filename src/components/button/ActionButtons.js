@@ -32,7 +32,9 @@ import {
   IconFileImport,
   IconDownload,
   IconFileReport,
-  IconRefresh
+  IconRefresh,
+  IconCheck,
+  IconPhotoCancel
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { useTranslation } from 'react-i18next';
@@ -485,6 +487,30 @@ const ActionButtons = ({
             }
           }
         ];
+      case 'duyetchinhsua':
+        return [
+          {
+            title: 'Duyệt chỉnh sửa',
+            icon: <IconCheck size={'20px'} />,
+            color: 'success',
+            onClick: () => {
+              handleClick(params);
+              onClose();
+            }
+          }
+        ];
+      case 'duyetcaplai':
+        return [
+          {
+            title: 'Duyệt cấp lại',
+            icon: <IconCheck size={'20px'} />,
+            color: 'success',
+            onClick: () => {
+              handleClick(params);
+              onClose();
+            }
+          }
+        ];
       case 'show':
         return [
           {
@@ -593,7 +619,18 @@ const ActionButtons = ({
             }
           }
         ];
-
+      case 'huyphatbang':
+        return [
+          {
+            title: 'Hủy Nhận bằng',
+            icon: <IconPhotoCancel color="red" size={'20px'} />,
+            color: 'error',
+            onClick: () => {
+              handleClick(params);
+              onClose();
+            }
+          }
+        ];
       case 'hide':
         return [
           {

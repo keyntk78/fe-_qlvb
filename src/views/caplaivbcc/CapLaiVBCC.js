@@ -13,7 +13,7 @@ import i18n from 'i18n';
 import React from 'react';
 import AddDonChinhSua from '../chinhsuavbcc/AddDon';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
-import { Button, Grid, Tooltip } from '@mui/material';
+import { Button, Chip, Grid, Tooltip, Typography } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
 import Popup from 'components/controls/popup';
 import DetailHistory from '../chinhsuavbcc/Detail';
@@ -22,6 +22,8 @@ import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import InLaiVBCC from './InlaiVBCC';
 import { IconEdit } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
+import Duyet from './Duyet';
+import ActionButtons from 'components/button/ActionButtons';
 //import config from 'config';
 const CapLaiVBCC = () => {
   const language = i18n.language;
@@ -36,7 +38,7 @@ const CapLaiVBCC = () => {
   const [search, setSearch] = useState(false);
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
-  // const [data, setData] = useState([]);
+  const [hasPermission, setHasPermission] = useState(false);
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -52,9 +54,17 @@ const CapLaiVBCC = () => {
     dispatch(upDateVBCC(hocsinh));
     dispatch(setOpenSubPopup(true));
   };
+
   const handleCapLai = (hocsinh) => {
     setTitle(t('Cấp lại văn bằng chứng chỉ'));
     setForm('caplai');
+    dispatch(upDateVBCC(hocsinh));
+    dispatch(setOpenSubPopup(true));
+  };
+
+  const handleDuyet = (hocsinh) => {
+    setTitle(t('Duyệt cấp lại VBCC'));
+    setForm('duyet');
     dispatch(upDateVBCC(hocsinh));
     dispatch(setOpenSubPopup(true));
   };
@@ -64,6 +74,7 @@ const CapLaiVBCC = () => {
     setForm('edit');
     dispatch(setOpenSubPopup(true));
   };
+
   const columns = [
     {
       field: 'idx',
@@ -76,7 +87,19 @@ const CapLaiVBCC = () => {
       flex: 1,
       field: 'hoTen',
       headerName: t('Họ tên'),
-      minWidth: 180
+      minWidth: 180,
+      renderCell: (params) => (
+        <>
+          <Grid container>
+            <Grid item xs={12}>
+              <Typography variant="body1">{params.value}</Typography>
+            </Grid>
+            <Grid item xs={12} mt={0.2}>
+              <Chip size="small" label={params.row.trangThai_fm} color={params.row.trangThai_fm === 'Chưa duyệt' ? 'info' : 'success'} />
+            </Grid>
+          </Grid>
+        </>
+      )
     },
     {
       flex: 0.6,
@@ -123,12 +146,20 @@ const CapLaiVBCC = () => {
       renderCell: (params) => (
         <>
           <Grid container justifyContent="center">
-            <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
+            {!hasPermission ? (
+              <ActionButtons type="detail" handleGetbyId={handleDetail} params={params.row} />
+            ) : hasPermission && params.row.trangThai == 0 ? (
+              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations1} />
+            ) : (
+              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
+            )}
           </Grid>
         </>
       )
     }
   ];
+
+  console.log(hasPermission);
 
   const buttonConfigurations = [
     {
@@ -140,12 +171,26 @@ const CapLaiVBCC = () => {
       handleClick: handleCapLai
     }
   ];
+
+  const buttonConfigurations1 = [
+    {
+      type: 'detail',
+      handleGetbyId: handleDetail
+    },
+    {
+      type: 'duyetcaplai',
+      handleClick: handleDuyet
+    }
+  ];
+
   useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
       const response = await getSearchCapLaiVanBang(selectHocsinh.cccd, params);
       const data = await response.data;
+      console.log(data);
+      setHasPermission(data.isPermission);
       const check = handleResponseStatus(response, navigate);
       if (check) {
         if (data && data.lichSus.length > 0) {
@@ -153,7 +198,7 @@ const CapLaiVBCC = () => {
             idx: index + 1,
             NgaySinh: convertISODateToFormattedDate(row.ngaySinh),
             NgayTao: convertISODateToFormattedDate(row.ngayTao),
-
+            trangThai_fm: row.trangThai == 0 ? t('Chưa duyệt') : row.trangThai == 1 ? t('Đã duyệt') : '',
             ...row
           }));
           // Lưu trữ dữ liệu gốc vào state
@@ -246,7 +291,7 @@ const CapLaiVBCC = () => {
           form={form}
           openPopup={openSubPopup}
           type="subpopup"
-          maxWidth={'md'}
+          maxWidth={form === 'duyet' ? 'sm' : 'md'}
           bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
         >
           {form === 'edit' ? (
@@ -255,6 +300,8 @@ const CapLaiVBCC = () => {
             <DetailHistory />
           ) : form === 'caplai' ? (
             <InLaiVBCC />
+          ) : form === 'duyet' ? (
+            <Duyet />
           ) : (
             ''
           )}

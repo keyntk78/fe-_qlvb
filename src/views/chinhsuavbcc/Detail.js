@@ -141,13 +141,13 @@ const DetailHistory = () => {
         <Divider />
       </Grid>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={4} md={4}>
+        <Grid item xs={12} sm={5} md={5}>
           <InputForm1 isDisabled xs={12} label={'Họ tên'} name="HoTen" formik={formik} />
         </Grid>
         <Grid item xs={12} sm={4} md={4}>
           <InputForm1 isDisabled xs={12} label={'CCCD'} name="CCCD" formik={formik} />
         </Grid>
-        <Grid item xs={12} sm={2.5} md={2.5}>
+        <Grid item xs={12} sm={3} md={3}>
           <InputForm1
             isDisabled
             xs={12}
@@ -160,7 +160,17 @@ const DetailHistory = () => {
         </Grid>
       </Grid>
       <Grid container spacing={2}>
+        <Grid item xs={12} sm={5} md={5}>
+          <InputForm1 isDisabled xs={12} label={'Nơi sinh'} name="NoiSinh" formik={formik} />
+        </Grid>
         <Grid item xs={12} sm={4} md={4}>
+          <FormControlComponent xsForm={12} label={t('dantoc')}>
+            <FormControl fullWidth variant="outlined">
+              <SelectForm disabled formik={formik} keyProp="ten" valueProp="ten" item={danToc} name="DanToc" value={formik.values.DanToc} />
+            </FormControl>
+          </FormControlComponent>
+        </Grid>
+        <Grid item xs={12} sm={3} md={3}>
           <FormControlComponent xsLabel={0} xsForm={12} label={t('user.label.gender')}>
             <FormControl fullWidth variant="outlined">
               <RadioGroup name="GioiTinh" value={formik.values.GioiTinh ? 'true' : 'false'} onBlur={formik.handleBlur}>
@@ -169,16 +179,6 @@ const DetailHistory = () => {
                   <FormControlLabel disabled size="small" value="false" control={<Radio size="small" />} label={t('gender.female')} />
                 </Grid>
               </RadioGroup>
-            </FormControl>
-          </FormControlComponent>
-        </Grid>
-        <Grid item xs={12} sm={4} md={4}>
-          <InputForm1 isDisabled xs={12} label={'Nơi sinh'} name="NoiSinh" formik={formik} />
-        </Grid>
-        <Grid item xs={12} sm={2.5} md={2.5}>
-          <FormControlComponent xsForm={12} label={t('dantoc')}>
-            <FormControl fullWidth variant="outlined">
-              <SelectForm disabled formik={formik} keyProp="ten" valueProp="ten" item={danToc} name="DanToc" value={formik.values.DanToc} />
             </FormControl>
           </FormControlComponent>
         </Grid>
@@ -195,13 +195,13 @@ const DetailHistory = () => {
         <Divider />
       </Grid>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={4} md={4}>
+        <Grid item xs={12} sm={5} md={5}>
           <InputForm1 isDisabled xs={12} label={'Số cấp bằng'} name="SoVaoSoCapBang" formik={formik} />
         </Grid>
         <Grid item xs={12} sm={4} md={4}>
           <InputForm1 isDisabled xs={12} label={'Số hiệu văn bằng'} name="SoHieuVanbang" formik={formik} />
         </Grid>
-        <Grid item xs={12} sm={2.5} md={2.5}>
+        <Grid item xs={12} sm={3} md={3}>
           <InputForm1
             isDisabled
             xs={12}
@@ -214,6 +214,9 @@ const DetailHistory = () => {
         </Grid>
       </Grid>
       <Grid container spacing={2}>
+        <Grid item xs={12} sm={5} md={5}>
+          <InputForm1 isDisabled xs={12} label={'Hội đồng thi'} name="HoiDong" formik={formik} />
+        </Grid>
         <Grid item xs={12} sm={4} md={4}>
           <FormControlComponent xsForm={12} label={t('Hình thức đào tạo')}>
             <FormControl fullWidth variant="outlined">
@@ -229,10 +232,7 @@ const DetailHistory = () => {
             </FormControl>
           </FormControlComponent>{' '}
         </Grid>
-        <Grid item xs={12} sm={4} md={4}>
-          <InputForm1 isDisabled xs={12} label={'Hội đồng thi'} name="HoiDong" formik={formik} />
-        </Grid>
-        <Grid item xs={12} sm={2.5} md={2.5}>
+        <Grid item xs={12} sm={3} md={3}>
           <InputForm1 isDisabled xs={12} label={'Xếp loại'} name="XepLoai" formik={formik} />
         </Grid>
       </Grid>
