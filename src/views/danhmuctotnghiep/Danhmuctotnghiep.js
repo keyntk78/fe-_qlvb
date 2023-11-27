@@ -358,7 +358,7 @@ const Danhmuctotnghiep = () => {
           form={form}
           openPopup={openPopup}
           bgcolor={form === 'delete' || form === 'deActive' ? '#F44336' : '#2196F3'}
-          maxWidth={form == 'permission' || form == 'notify' ? 'md' : 'sm'}
+          maxWidth={form == 'permission' || form == 'notify' || form == 'detail' ? 'md' : 'sm'}
         >
           {form === 'add' ? (
             <Add />

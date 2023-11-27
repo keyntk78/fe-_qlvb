@@ -65,14 +65,8 @@ export default function ThongkeDonViGuiDuyet({ danhMuc }) {
     {
       field: 'soDaGui',
       headerName: t('Số lượng đã gửi'),
-      minWidth: 80,
+      minWidth: 120,
       flex: 1
-    },
-    {
-      field: 'soChuaGui',
-      headerName: t('Số lượng chưa gửi'),
-      minWidth: 100,
-      flex: 1.3
     }
   ];
 
@@ -80,7 +74,11 @@ export default function ThongkeDonViGuiDuyet({ danhMuc }) {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
-      params.append('idDanhMucTotNghiep', danhMuc);
+      if (danhMuc) {
+        params.append('idDanhMucTotnghiep', danhMuc);
+      } else {
+        params.append('idDanhMucTotnghiep', '');
+      }
       const response = await thongKeGetTruongHasPermision(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -101,9 +99,7 @@ export default function ThongkeDonViGuiDuyet({ danhMuc }) {
         setIsAccess(false);
       }
     };
-    if (danhMuc) {
-      fetchData();
-    }
+    fetchData();
   }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, danhMuc, reloadData]);
 
   return (
@@ -142,7 +138,7 @@ export default function ThongkeDonViGuiDuyet({ danhMuc }) {
       </Grid>
       <Grid item xs={12} container spacing={1} justifyContent="flex-end" mt={1}>
         <Grid item>
-          <ExitButton />
+          <ExitButton type="subsubpopup" />
         </Grid>
       </Grid>
       <BackToTop />

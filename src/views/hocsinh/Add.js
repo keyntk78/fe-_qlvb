@@ -449,7 +449,7 @@ const AddHocSinh = () => {
               </FormControlComponent>
             </Grid>
             <Grid item xs={isXs ? 6 : 4}>
-              <FormControlComponent xsLabel={0} xsForm={12} label={t('kết quả tốt nghiệp')} isRequire>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('Kết quả tốt nghiệp')} isRequire>
                 <FormControl fullWidth variant="outlined">
                   <SelectForm
                     formik={formik}
@@ -464,7 +464,7 @@ const AddHocSinh = () => {
               </FormControlComponent>
             </Grid>
             <Grid item xs={isXs ? 6 : 4}>
-              <FormControlComponent xsLabel={0} xsForm={12} label={t('xếp loại tốt nghiệp')} isRequire>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('Xếp loại tốt nghiệp')} isRequire>
                 <FormControl fullWidth variant="outlined">
                   <SelectForm
                     formik={formik}
@@ -498,7 +498,7 @@ const AddHocSinh = () => {
               </FormControlComponent>
             </Grid>
             <Grid item xs={isXs ? 6 : 4}>
-              <FormControlComponent xsLabel={0} xsForm={12} label={t('kết quả tốt nghiệp')}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('Kết quả tốt nghiệp')}>
                 <FormControl fullWidth variant="outlined">
                   <SelectForm
                     formik={formik}
@@ -514,7 +514,7 @@ const AddHocSinh = () => {
               </FormControlComponent>
             </Grid>
             <Grid item xs={isXs ? 6 : 4}>
-              <FormControlComponent xsLabel={0} xsForm={12} label={t('xếp loại tốt nghiệp')}>
+              <FormControlComponent xsLabel={0} xsForm={12} label={t('Xếp loại tốt nghiệp')}>
                 <FormControl fullWidth variant="outlined">
                   <SelectForm
                     formik={formik}

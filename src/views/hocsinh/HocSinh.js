@@ -176,8 +176,6 @@ export default function HocSinh() {
     }
   ];
 
-  console.log(pageState.trangThai);
-
   const columns = [
     {
       field: 'idx',

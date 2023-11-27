@@ -33,6 +33,7 @@ import XacNhanIn from './XacNhanIn';
 import config from 'config';
 import ThongKeSoLuongNguoiHoc from './SoLuongHocSinh';
 import { getAllDanhmucTN } from 'services/sharedService';
+import Detail from 'views/hocsinh/Detail';
 
 // import { Component } from 'react';
 
@@ -94,6 +95,13 @@ const TrangChu = () => {
     setTitle(t('Thông tin văn bằng'));
     setForm('showvanbang');
     setHsSoGoc(hocsinh);
+    dispatch(setOpenPopup(true));
+  };
+
+  const handleDetail = (hocsinh) => {
+    setTitle(t('hocsinh.title.info'));
+    setForm('detail');
+    dispatch(selectedHocsinh(hocsinh));
     dispatch(setOpenPopup(true));
   };
 
@@ -180,6 +188,12 @@ const TrangChu = () => {
       minWidth: 95
     },
     {
+      field: 'ketQua_fm',
+      headerName: t('Kết quả'),
+      flex: 1.2,
+      minWidth: 100
+    },
+    {
       field: 'soHieuVanBang',
       headerName: t('hocsinh.field.soHieu'),
       flex: 1.5,
@@ -206,31 +220,39 @@ const TrangChu = () => {
       renderCell: (params) => (
         <>
           <Grid container>
-            <Grid item>
-              <ActionButtons type="showvanbang" handleClick={handleShowVanBang} params={params.row} />
-            </Grid>
-            {params.row.donYeuCauCapBanSao != null ? (
-              <Grid item ml={1}>
-                <CombinedActionButtons
-                  params={params.row}
-                  buttonConfigurations={capbangsao}
-                  icon={IconCertificate}
-                  title={'Cấp bằng bản sao'}
-                  color="success"
-                />
-              </Grid>
+            {params.row.ketQua === 'x' ? (
+              <>
+                <Grid item>
+                  <ActionButtons type="showvanbang" handleClick={handleShowVanBang} params={params.row} />
+                </Grid>
+                {params.row.donYeuCauCapBanSao != null ? (
+                  <Grid item ml={1}>
+                    <CombinedActionButtons
+                      params={params.row}
+                      buttonConfigurations={capbangsao}
+                      icon={IconCertificate}
+                      title={'Cấp bằng bản sao'}
+                      color="success"
+                    />
+                  </Grid>
+                ) : (
+                  ''
+                )}
+                <Grid item ml={1}>
+                  <CombinedActionButtons
+                    params={params.row}
+                    buttonConfigurations={chinhsuavb}
+                    icon={IconEdit}
+                    title={t('button.title.chinhsua.huybo')}
+                    color="orange"
+                  />
+                </Grid>
+              </>
             ) : (
-              ''
+              <>
+                <ActionButtons type="detail" handleGetbyId={handleDetail} params={params.row} />
+              </>
             )}
-            <Grid item ml={1}>
-              <CombinedActionButtons
-                params={params.row}
-                buttonConfigurations={chinhsuavb}
-                icon={IconEdit}
-                title={t('button.title.chinhsua.huybo')}
-                color="orange"
-              />
-            </Grid>
           </Grid>
         </>
       )
@@ -258,6 +280,7 @@ const TrangChu = () => {
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;
+        console.log(data);
         if (response.data && response.data.hocSinhs.length > 0) {
           const trangThaiMapping = {
             1: t('Chưa duyệt'),
@@ -274,6 +297,7 @@ const TrangChu = () => {
             gioiTinh_fm: row.gioiTinh ? t('gender.male') : t('gender.female'),
             trangThai_fm: trangThaiMapping[row.trangThai] || 'Không xác định',
             ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
+            ketQua_fm: row.ketQua == 'x' ? t('Đạt') : t('Không đạt'),
             ...row
           }));
           dispatch(setReloadData(false));
@@ -428,6 +452,8 @@ const TrangChu = () => {
                 <ChinhSuaVBCC />
               ) : form == 'thuhoi' ? (
                 <Thuhoihuybo />
+              ) : form == 'detail' ? (
+                <Detail />
               ) : (
                 ''
               )}
