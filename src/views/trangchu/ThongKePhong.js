@@ -7,23 +7,28 @@ import { getAllNamthi } from 'services/namthiService';
 import { GetThongKeTongQuatByPhong } from 'services/thongkeService';
 import { IconAlbum, IconBuildingCommunity, IconFileDescription, IconUserExclamation } from '@tabler/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectedNamthi, setLoading } from 'store/actions';
+import { selectedNamthi, setLoading, setOpenPopup } from 'store/actions';
 import { useNavigate } from 'react-router';
-import { userLoginSelector } from 'store/selectors';
+import { listDanhMucSelector, openPopupSelector, userLoginSelector } from 'store/selectors';
 import config from 'config';
+import ThongkeDonViGuiDuyet from './ThongKeDonViGuiDuyet';
+import Popup from 'components/controls/popup';
 
 const ThongKePhong = () => {
   const isMd = useMediaQuery('(max-width:1220px)');
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const [heDaoTao, setHeDaoTao] = useState([]);
   const [namHoc, setNamHoc] = useState([]);
-  // const [selectHeDaoTao, setSelectHeDaoTao] = useState('');
   const [selectNamHoc, setSelectNamHoc] = useState('');
+  const listDanhMuc = useSelector(listDanhMucSelector);
+  const [selectDanhMuc, setSelectDanhMuc] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [firstLoad, setFirstLoad] = useState(true);
   const currentYear = new Date().getFullYear();
+  const openPopup = useSelector(openPopupSelector);
+  const [title, setTitle] = useState('');
+  const [form, setForm] = useState('');
   const [thongKeTongQuat, setThongKeTongQuat] = useState({
     phoi: 0,
     donViTong: 0,
@@ -55,16 +60,22 @@ const ThongKePhong = () => {
   };
 
   useEffect(() => {
+    if (listDanhMuc && listDanhMuc.length > 0) {
+      const matchingYear = listDanhMuc.find((year) => year.namThi === currentYear.toString());
+      if (matchingYear) {
+        setSelectDanhMuc(matchingYear.id);
+      } else {
+        setSelectDanhMuc(listDanhMuc[0].id);
+      }
+    }
+  }, [listDanhMuc, currentYear]);
+
+  useEffect(() => {
     const fetchDataDL = async () => {
       setTimeout(async () => {
         try {
-          // const hedaotao = await getAllHedaotao();
-          // setHeDaoTao(hedaotao.data);
           const namhoc = await getAllNamthi();
           setNamHoc(namhoc.data);
-          // if (hedaotao && hedaotao.data.length > 0) {
-          //   setSelectHeDaoTao(hedaotao.data[0].ma);
-          // }
           if (namhoc && namhoc.data.length > 0) {
             const matchingYear = namhoc.data.find((year) => year.ten === currentYear.toString());
             if (matchingYear) {
@@ -120,7 +131,6 @@ const ThongKePhong = () => {
   }, [selectNamHoc]);
 
   useEffect(() => {
-    // if (selectHeDaoTao && selectNamHoc) dispatch(selectedHedaotao(selectHeDaoTao));
     dispatch(selectedNamthi(selectNamHoc));
   }, [selectNamHoc]);
 
@@ -129,13 +139,19 @@ const ThongKePhong = () => {
     setSelectNamHoc(selectValue);
   };
 
-  // const handleHeDaoTaoChange = (event) => {
-  //   const selectValue = event.target.value;
-  //   setSelectHeDaoTao(selectValue);
-  // };
+  const handleDanhMucChange = (event) => {
+    const selectValue = event.target.value;
+    setSelectDanhMuc(selectValue);
+  };
 
   const handleClick = (nav) => {
     navigate(nav);
+  };
+
+  const handleDonViClick = () => {
+    setTitle(t('Đơn vị gửi duyệt'));
+    setForm('show');
+    dispatch(setOpenPopup(true));
   };
 
   return (
@@ -168,19 +184,14 @@ const ThongKePhong = () => {
                 </Select>
               </FormControl>
             </Grid>
-            {/* <Grid item>
+            <Grid item xs={2.5}>
               <FormControl fullWidth variant="outlined" size="small">
-                <InputLabel>{t('Hệ đào tạo')}</InputLabel>
-                <Select
-                  value={selectHeDaoTao ? selectHeDaoTao : ''}
-                  onChange={handleHeDaoTaoChange}
-                  label={t('Hệ đào tạo')}
-                  style={{ width: '180px' }}
-                >
-                  {heDaoTao && heDaoTao.length > 0 ? (
-                    heDaoTao.map((data) => (
-                      <MenuItem key={data.ma} value={data.ma}>
-                        {data.ten}
+                <InputLabel>{t('Danh mục tốt nghiệp')}</InputLabel>
+                <Select value={selectDanhMuc ? selectDanhMuc : ''} onChange={handleDanhMucChange} label={t('Danh mục tốt nghiệp')}>
+                  {listDanhMuc?.length > 0 ? (
+                    listDanhMuc.map((data) => (
+                      <MenuItem key={data.id} value={data.id}>
+                        {data.tieuDe}
                       </MenuItem>
                     ))
                   ) : (
@@ -188,7 +199,7 @@ const ThongKePhong = () => {
                   )}
                 </Select>
               </FormControl>
-            </Grid> */}
+            </Grid>
           </Grid>
           <Grid container justifyContent={'center'}>
             <Grid item xs={11.4} container spacing={1}>
@@ -205,7 +216,8 @@ const ThongKePhong = () => {
                   color: '#1E88E5',
                   icon: IconBuildingCommunity,
                   count: `${thongKeTongQuat.donViDaGui}/${thongKeTongQuat.donViTong}`,
-                  nav: config.defaultPath + '/quanlyhocsinh'
+                  nav: config.defaultPath + '/quanlyhocsinh',
+                  onClick: true
                 },
                 {
                   title: t('donyeucau'),
@@ -226,7 +238,7 @@ const ThongKePhong = () => {
                   <Paper variant="outlined" sx={styles.paper}>
                     <Typography
                       variant="h4"
-                      onClick={() => handleClick(item.nav)}
+                      onClick={() => (item.onClick ? handleDonViClick() : handleClick(item.nav))}
                       component="div"
                       sx={{
                         color: '#6C737F',
@@ -250,6 +262,11 @@ const ThongKePhong = () => {
             </Grid>
           </Grid>
         </Card>
+      )}
+      {form !== '' && (
+        <Popup title={title} form={form} openPopup={openPopup} maxWidth={'md'} bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}>
+          {form === 'show' ? <ThongkeDonViGuiDuyet danhMuc={selectDanhMuc} /> : ''}
+        </Popup>
       )}
     </>
   );
