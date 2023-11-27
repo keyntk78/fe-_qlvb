@@ -20,12 +20,15 @@ import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, us
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { restrictToVerticalAxis, restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers';
 import FormGroupButton from 'components/button/FormGroupButton';
 import { getListLop } from 'services/sharedService';
-import { getHocSinhByLop, arrangeHocSinh } from 'services/hocsinhService';
+import { getHocSinhByLopOfPhong, arrangeHocSinhPhong } from 'services/hocsinhService';
+import { getHocSinhByLopOfTruong, arrangeHocSinhTruong } from 'services/nguoihoctotnghiepService';
 import { setOpenPopup, setReloadData, showAlert } from 'store/actions';
+import { donviSelector } from 'store/selectors';
 
 const SortableItem = (props) => {
   const { item } = props;
@@ -72,9 +75,10 @@ const SapXepSTTHocSinh = ({ danhMuc, donvi }) => {
   const [lops, setLops] = useState([]);
   const [lopSelected, setLopSelected] = useState('');
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const donVi = useSelector(donviSelector);
 
   useEffect(() => {
-    console.log(lops.length, danhMuc, donvi);
     if (lops.length === 0) {
       fetchDataLop();
     }
@@ -87,16 +91,28 @@ const SapXepSTTHocSinh = ({ danhMuc, donvi }) => {
 
   const fetchDataLop = async () => {
     const lops = await getListLop(donvi, danhMuc);
-    setLops(lops.data);
-    setLopSelected(lops.data[0].ma);
-    fetchHocSinhOfLop(lops.data[0].ma);
+    console.log(lops);
+    if (lops !== null && lops.data.length > 0) {
+      setLops(lops.data);
+      setLopSelected(lops.data[0].ma);
+      await fetchHocSinhOfLop(lops.data[0].ma);
+    }
+  };
+
+  const handleSearch = async () => {
+    await fetchHocSinhOfLop();
   };
 
   const fetchHocSinhOfLop = async (value) => {
+    console.log(value, lopSelected);
     if (value || lopSelected) {
-      const lopParam = value ? value : lopSelected;
-      const hocsinhs = await getHocSinhByLop(donvi, danhMuc, lopParam);
-      setItems(hocsinhs.data);
+      const newValue = value ? value : lopSelected;
+      const hocsinhs = await (donVi.laPhong
+        ? getHocSinhByLopOfPhong(donvi, danhMuc, newValue)
+        : getHocSinhByLopOfTruong(donvi, danhMuc, newValue));
+      if ((hocsinhs !== null) & (hocsinhs.data.length > 0)) {
+        setItems(hocsinhs.data);
+      }
     }
   };
   const sensors = useSensors(
@@ -123,13 +139,14 @@ const SapXepSTTHocSinh = ({ danhMuc, donvi }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const thayDoiSTTHocSinh = await arrangeHocSinh(items);
+      const thayDoiSTTHocSinh = await (donVi.laPhong ? arrangeHocSinhPhong(items) : arrangeHocSinhTruong(items));
       if (thayDoiSTTHocSinh.isSuccess == false) {
         dispatch(showAlert(new Date().getTime().toString(), 'error', thayDoiSTTHocSinh.message.toString()));
       } else {
         dispatch(setOpenPopup(false));
         dispatch(setReloadData(true));
         dispatch(showAlert(new Date().getTime().toString(), 'success', thayDoiSTTHocSinh.message.toString()));
+        await fetchHocSinhOfLop();
       }
     } catch (error) {
       console.error(error);
@@ -157,14 +174,7 @@ const SapXepSTTHocSinh = ({ danhMuc, donvi }) => {
           </FormControl>
         </Grid>
         <Grid item lg={2} md={2} sm={2}>
-          <Button
-            variant="contained"
-            title={t('button.search')}
-            fullWidth
-            onClick={fetchHocSinhOfLop}
-            color="info"
-            startIcon={<IconSearch />}
-          >
+          <Button variant="contained" title={t('button.search')} fullWidth onClick={handleSearch} color="info" startIcon={<IconSearch />}>
             {t('button.search')}
           </Button>
         </Grid>

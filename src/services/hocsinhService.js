@@ -13,7 +13,7 @@ export async function getHocSinhs(params) {
   }
 }
 
-export async function getHocSinhByLop(idTruong, idDanhMucTotNghiep, maLop) {
+export async function getHocSinhByLopOfPhong(idTruong, idDanhMucTotNghiep, maLop) {
   try {
     const response = await sendRequest(
       `HocSinhPhong/GetListHocSinhByLop?idTruong=${idTruong}&idDanhMucTotNghiep=${idDanhMucTotNghiep}&maLop=${maLop}`,
@@ -209,7 +209,7 @@ export async function getThongkeByPhong(donvi, DMTN) {
   }
 }
 
-export async function arrangeHocSinh(hocSinhs) {
+export async function arrangeHocSinhPhong(hocSinhs) {
   try {
     store.dispatch(setLoading(true));
     const response = await sendRequest(`HocSinhPhong/UpdateSoThuTu`, 'POST', hocSinhs);

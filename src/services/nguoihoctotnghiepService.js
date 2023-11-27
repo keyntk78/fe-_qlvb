@@ -25,6 +25,20 @@ export async function getHocSinhByCCCD(cccd) {
   }
 }
 
+export async function getHocSinhByLopOfTruong(idTruong, idDanhMucTotNghiep, maLop) {
+  try {
+    const response = await sendRequest(
+      `HocSinhTruong/GetListHocSinhByLop?idTruong=${idTruong}&idDanhMucTotNghiep=${idDanhMucTotNghiep}&maLop=${maLop}`,
+      'GET',
+      null
+    );
+    return response;
+  } catch (error) {
+    console.error('Error creating User:', error);
+    throw error;
+  }
+}
+
 export async function createHocSinh(data) {
   try {
     store.dispatch(setLoading(true));
@@ -182,6 +196,18 @@ export async function getThongKeByTruong(idTruong, idDanhMucTotNghiep) {
     return response;
   } catch (error) {
     console.error('Error creating history access:', error);
+    throw error;
+  }
+}
+
+export async function arrangeHocSinhTruong(hocSinhs) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(`HocSinhTruong/UpdateSoThuTu`, 'POST', hocSinhs);
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error arrange hoc sinh:', error);
     throw error;
   }
 }
