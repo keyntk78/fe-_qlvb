@@ -2,7 +2,7 @@ import jsPDF from 'jspdf';
 import { fontNormal, fontBold, fontItalic } from '../../assets/fonts/TimeNewRomanFont';
 
 export function generatePDF(data, paperSize, donvi) {
-  const doc = new jsPDF('p', 'mm', paperSize);
+  const doc = new jsPDF(paperSize === 'a4' ? 'p' : 'l', 'mm', paperSize);
 
   doc.addFileToVFS('Time-New-Roman-Normal.ttf', fontNormal);
   doc.addFileToVFS('Time-New-Roman-Bold.ttf', fontBold);
