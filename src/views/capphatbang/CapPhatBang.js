@@ -23,9 +23,9 @@ import { getAllNamthi } from 'services/namthiService';
 import { getAllHinhthucdaotao } from 'services/hinhthucdaotaoService';
 import PhatBang from './PhatBang';
 import { getSearchHocSinhCapPhatBang } from 'services/capphatbangService';
-import ActionButtons from 'components/button/ActionButtons';
 import { getByIdNamThi } from 'services/sharedService';
 import { GetTruongHasPermision } from 'services/danhmuctotnghiepService';
+import HuyNhanBang from './HuyNhanBang';
 
 const trangThaiOptions = [
   { value: '5', label: 'Chưa phát' },
@@ -107,6 +107,13 @@ export default function CapPhatBang() {
     dispatch(setOpenPopup(true));
   };
 
+  const handleHuyPhatBang = (hocsinh) => {
+    setTitle(t('Hủy nhận bằng'));
+    setForm('huynhanbang');
+    dispatch(selectedHocsinh(hocsinh));
+    dispatch(setOpenPopup(true));
+  };
+
   const buttonConfigurations = [
     {
       type: 'detail',
@@ -115,6 +122,17 @@ export default function CapPhatBang() {
     {
       type: 'phatbang',
       handleClick: handlePhatBang
+    }
+  ];
+
+  const buttonConfigurations2 = [
+    {
+      type: 'detail',
+      handleGetbyId: handleDetailPhatBang
+    },
+    {
+      type: 'huyphatbang',
+      handleClick: handleHuyPhatBang
     }
   ];
   const columns = [
@@ -189,7 +207,7 @@ export default function CapPhatBang() {
         <>
           <Grid container justifyContent="center">
             {params.row.trangThai == 6 ? (
-              <ActionButtons type="detail" handleGetbyId={handleDetailPhatBang} params={params.row} />
+              <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations2} />
             ) : (
               <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
             )}
@@ -557,13 +575,21 @@ export default function CapPhatBang() {
         />
       </MainCard>
       {form !== '' && (
-        <Popup title={title} form={form} openPopup={openPopup} maxWidth={'md'} bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}>
+        <Popup
+          title={title}
+          form={form}
+          openPopup={openPopup}
+          maxWidth={form === 'huynhanbang' ? 'sm' : 'md'}
+          bgcolor={form === 'huynhanbang' ? '#F44336' : '#2196F3'}
+        >
           {form === 'detail' ? (
             <Detail type={'truong'} />
           ) : form === 'detailPhatBang' ? (
             <DetailPhatBang />
           ) : form === 'phatbang' ? (
             <PhatBang />
+          ) : form === 'huynhanbang' ? (
+            <HuyNhanBang />
           ) : (
             ''
           )}

@@ -33,7 +33,8 @@ import {
   IconDownload,
   IconFileReport,
   IconRefresh,
-  IconCheck
+  IconCheck,
+  IconPhotoCancel
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { useTranslation } from 'react-i18next';
@@ -618,7 +619,18 @@ const ActionButtons = ({
             }
           }
         ];
-
+      case 'huyphatbang':
+        return [
+          {
+            title: 'Hủy Nhận bằng',
+            icon: <IconPhotoCancel color="red" size={'20px'} />,
+            color: 'error',
+            onClick: () => {
+              handleClick(params);
+              onClose();
+            }
+          }
+        ];
       case 'hide':
         return [
           {

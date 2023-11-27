@@ -32,3 +32,15 @@ export async function getByCCCD(cccd) {
     throw error;
   }
 }
+
+export async function HuyPhatBang(id, nguoiThucHien) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`CapPhatBang/HuyPhatBang?id=${id}&nguoiThucHien=${nguoiThucHien}`, 'PUT');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error CapPhatBang:', error);
+    throw error;
+  }
+}
