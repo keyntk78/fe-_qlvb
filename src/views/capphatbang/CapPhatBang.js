@@ -29,9 +29,12 @@ import HuyNhanBang from './HuyNhanBang';
 import FileMau from '../FileMau/FileImportVanBang.xlsx';
 import Import from './ImportDSDaPhat';
 import GroupButtons from 'components/button/GroupButton';
+import ActionButtons from 'components/button/ActionButtons';
+
 const trangThaiOptions = [
   { value: '5', label: 'Chưa phát' },
-  { value: '6', label: 'Đã phát' }
+  { value: '6', label: 'Đã phát' },
+  { value: '-1', label: 'Thu hồi/hủy bỏ' }
 ];
 
 export default function CapPhatBang() {
@@ -162,7 +165,7 @@ export default function CapPhatBang() {
                 // variant='outlined'
                 size="small"
                 label={params.row.trangThai_fm}
-                color={params.row.trangThai_fm === 'Chưa phát' ? 'info' : 'success'}
+                color={params.row.trangThai_fm === 'Chưa phát' ? 'info' : params.row.trangThai_fm === 'Đã phát' ? 'success' : 'error'}
               />
             </Grid>
           </Grid>
@@ -210,8 +213,10 @@ export default function CapPhatBang() {
           <Grid container justifyContent="center">
             {params.row.trangThai == 6 ? (
               <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations2} />
-            ) : (
+            ) : params.row.trangThai == 5 ? (
               <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
+            ) : (
+              <ActionButtons type="detail" handleGetbyId={handleDetail} params={params.row} />
             )}
           </Grid>
         </>
@@ -307,7 +312,8 @@ export default function CapPhatBang() {
           soHieuVanBang: row.soHieuVanBang ? row.soHieuVanBang : 'Chưa cấp',
           soVaoSoCapBang: row.soVaoSoCapBang || 'Chưa cấp',
           gioiTinh_fm: row.gioiTinh ? t('gender.male') : t('gender.female'),
-          trangThai_fm: row.trangThai == 5 ? t('Chưa phát') : row.trangThai == 6 ? t('Đã phát') : '',
+          trangThai_fm:
+            row.trangThai == 5 ? t('Chưa phát') : row.trangThai == 6 ? t('Đã phát') : row.trangThai == -1 ? t('Thu hồi/hủy bỏ') : '',
           ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
           ...row
         }));
