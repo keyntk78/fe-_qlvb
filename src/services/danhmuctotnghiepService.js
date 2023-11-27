@@ -167,3 +167,13 @@ export async function createDanhMucTotNghiepViaTruong(data) {
     throw error;
   }
 }
+
+export async function thongKeGetTruongHasPermision(params) {
+  try {
+    const response = await sendRequest(`DanhMucTotNghiep/ThongKeGetTruongHasPermision?&${params}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating history access:', error);
+    throw error;
+  }
+}

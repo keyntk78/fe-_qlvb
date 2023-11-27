@@ -140,3 +140,37 @@ export async function getLichSuChuyenDoiSoGoc(params) {
     throw error;
   }
 }
+
+export async function upLoadAnhSoGoc(data) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`SoGoc/UpLoadAnhSoGoc`, 'POST', data);
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function getAnhSoGoc(params) {
+  try {
+    const response = await sendRequest(`SoGoc/GetAnhSoGoc?${params}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function deleteAnhSoGoc(id) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`SoGoc/DeleteAnhSoGoc?idAnhSoGoc=${id}`, 'DELETE');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

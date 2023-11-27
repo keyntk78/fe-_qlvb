@@ -37,7 +37,7 @@ function Duyet({ dataCCCD }) {
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <Grid xs={12} mt={2}>
+      <Grid item xs={12} mt={2}>
         <IconCircleCheck size={100} color="#2196F3" />
       </Grid>
       <MuiTypography variant="h4" gutterBottom m={1}>

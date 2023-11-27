@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { GuiThongBaoAll } from 'services/danhmuctotnghiepService';
 import { setOpenSubSubPopup, setReloadData, showAlert } from 'store/actions';
+import { convertISODateTimeToFormattedDateTime } from 'utils/formatDate';
 
 function GuiThongBaoTatCa({ soluong }) {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ function GuiThongBaoTatCa({ soluong }) {
   const { t } = useTranslation();
   const openSubSubPopup = useSelector(openSubSubPopupSelector);
   const [notifyReason, setNotifyReason] = useState('');
+
   useEffect(() => {
     if (openSubSubPopup) {
       setNotifyReason('');
@@ -25,7 +27,8 @@ function GuiThongBaoTatCa({ soluong }) {
 
   const hanldeGuiThongBaoAll = async () => {
     try {
-      const response = await GuiThongBaoAll(notifyReason, danhmucTN.id);
+      const messageToSend = `${notifyReason}. Hạn nộp: ${convertISODateTimeToFormattedDateTime(danhmucTN?.ngayGuiDanhSach)}`;
+      const response = await GuiThongBaoAll(messageToSend, danhmucTN.id);
       if (response.isSuccess == false) {
         dispatch(showAlert(new Date().getTime().toString(), 'error', response.message.toString()));
       } else {

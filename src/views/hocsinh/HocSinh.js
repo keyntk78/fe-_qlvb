@@ -5,18 +5,11 @@ import { Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select, TextFiel
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  infoHocSinhSelector,
-  openPopupSelector,
-  reloadDataSelector,
-  selectedInfoMessageSelector,
-  userLoginSelector
-} from 'store/selectors';
+import { openPopupSelector, reloadDataSelector, selectedInfoMessageSelector, userLoginSelector } from 'store/selectors';
 import {
   selectedDanhmuc,
   selectedDonvitruong,
   selectedHocsinh,
-  setInfoHocSinh,
   setLoading,
   setOpenPopup,
   setReloadData,
@@ -85,11 +78,9 @@ export default function HocSinh() {
   const [tenDMTN, setSelectTenDMTN] = useState('');
   const [selectedRowData, setSelectedRowData] = useState([]);
   const [disabled, setDisabled] = useState(false);
-  const [disabled1, setDisabled1] = useState(false);
   const [disabledApprov, setDisabledApprov] = useState(false);
   const [loadData, setLoadData] = useState(false);
   const [configAuto, setConfigAuto] = useState(false);
-  const infoHocSinh = useSelector(infoHocSinhSelector);
   const user = useSelector(userLoginSelector);
   const [firstLoad3, setFirstLoad3] = useState(true);
   const [data, setData] = useState([]);
@@ -302,7 +293,7 @@ export default function HocSinh() {
             setLoading(false);
           }
         },
-        firstLoad3 ? 1000 : 0
+        firstLoad3 ? 0 : 0
       );
     };
     fetchDataDL();
@@ -325,47 +316,23 @@ export default function HocSinh() {
   }, [selectDanhmuc]);
 
   useEffect(() => {
-    if (donvis?.length > 0 && dMTN?.length > 0) {
-      if (infoMessage) {
-        setPageState((old) => ({ ...old, donVi: infoMessage.IdTruong, DMTN: infoMessage.IdDanhMucTotNghiep }));
-        setSelectDanhmuc(infoMessage.IdDanhMucTotNghiep);
-        setSelectDonvi(infoMessage.IdTruong);
-        const selectedDonviInfo = donvis.find((donvi) => donvi.id === infoMessage.IdTruong);
-        const selectedDanhmucInfo = dMTN.find((dmtn) => dmtn.id === infoMessage.IdDanhMucTotNghiep);
-        dispatch(selectedDanhmuc(selectedDanhmucInfo));
-        dispatch(selectedDonvitruong(selectedDonviInfo));
-        setLoadData(true);
-      }
+    if (dMTN?.length > 0 && infoMessage) {
+      setPageState((old) => ({ ...old, DMTN: infoMessage.IdDanhMucTotNghiep }));
+      setSelectDanhmuc(infoMessage.IdDanhMucTotNghiep);
+      const selectedDanhmucInfo = dMTN.find((dmtn) => dmtn.id === infoMessage.IdDanhMucTotNghiep);
+      dispatch(selectedDanhmuc(selectedDanhmucInfo));
     }
-  }, [infoMessage, donvis, dMTN]);
+  }, [infoMessage, dMTN]);
 
   useEffect(() => {
-    if (dMTN.length > 0 && donvis.length > 0 && infoHocSinh) {
-      const fetchData = async () => {
-        try {
-          const selectDonvi = donvis.find((item) => item.ten === infoHocSinh.tenTruong);
-          dispatch(selectedDonvitruong(selectDonvi));
-          setPageState((old) => ({
-            ...old,
-            cccd: infoHocSinh.cccd,
-            hoTen: infoHocSinh.hoTen,
-            trangThai: infoHocSinh.trangThai,
-            DMTN: infoHocSinh.idDanhMucTotNghiep,
-            donVi: selectDonvi.id
-          }));
-          setSelectDanhmuc(infoHocSinh.idDanhMucTotNghiep);
-          setSelectDonvi(selectDonvi.id);
-          const selectDanhmuc = dMTN.find((item) => item.id === infoHocSinh.idDanhMucTotNghiep);
-          dispatch(selectedDanhmuc(selectDanhmuc));
-          setLoadData(true);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      setDisabled1(true);
-      fetchData();
+    if (infoMessage && selectDanhmuc && donvis?.length > 0) {
+      setPageState((old) => ({ ...old, donVi: infoMessage.IdTruong }));
+      setSelectDonvi(infoMessage.IdTruong);
+      const selectedDonviInfo = donvis.find((donvi) => donvi.idTruong === infoMessage.IdTruong);
+      dispatch(selectedDonvitruong(selectedDonviInfo));
+      setLoadData(true);
     }
-  }, [infoHocSinh, dMTN, donvis]);
+  }, [infoMessage, selectDanhmuc, donvis]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -434,7 +401,6 @@ export default function HocSinh() {
         fetchData();
         setLoadData(false);
         dispatch(setSelectedInfoMessage(''));
-        dispatch(setInfoHocSinh(null));
       } else {
         fetchData();
       }
@@ -454,7 +420,6 @@ export default function HocSinh() {
         fetchData();
         setLoadData(false);
         dispatch(setSelectedInfoMessage(''));
-        dispatch(setInfoHocSinh(null));
       } else {
         fetchData();
       }
@@ -793,7 +758,7 @@ export default function HocSinh() {
                       onClick={handleTraLai}
                       variant="contained"
                       startIcon={<IconArrowBack />}
-                      disabled={!selectDanhmuc || !selectDonvi || disabled || disabled1}
+                      disabled={!selectDanhmuc || !selectDonvi || disabled}
                     >
                       {t('trả lại tất cả')}
                     </Button>
@@ -803,7 +768,7 @@ export default function HocSinh() {
                       title={t('button.duyetall')}
                       onClick={handleDuyetAll}
                       icon={IconCircleCheck}
-                      disabled={!selectDanhmuc || !selectDonvi || disabled || disabled1 || disabledApprov}
+                      disabled={!selectDanhmuc || !selectDonvi || disabled || disabledApprov}
                     />
                   </Grid>
                 </>
