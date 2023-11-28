@@ -26,7 +26,7 @@ import { getSearchHocSinhCapPhatBang } from 'services/capphatbangService';
 import { getByIdNamThi } from 'services/sharedService';
 import { GetTruongHasPermision } from 'services/danhmuctotnghiepService';
 import HuyNhanBang from './HuyNhanBang';
-import FileMau from '../FileMau/FileImportVanBang.xlsx';
+import FileMau from '../FileMau/FileMauImportDSBangDaPhat.xlsx';
 import Import from './ImportDSDaPhat';
 import GroupButtons from 'components/button/GroupButton';
 const trangThaiOptions = [
