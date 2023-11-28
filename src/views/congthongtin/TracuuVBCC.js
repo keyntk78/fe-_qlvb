@@ -150,7 +150,7 @@ export default function TracuuVBCC() {
       setError('Vui lòng kiểm tra Recapcha');
     } else {
       setError('');
-      if (isChecked === true && namHoc && hoTen && ngaySinh) {
+      if (isChecked === true && namHoc && hoTen && ngaySinh && selectDonVi) {
         setShowmain(true);
         setPageState((old) => ({ ...old, isLoading: true }));
         const params = await createSearchParams(pageState);
@@ -192,11 +192,13 @@ export default function TracuuVBCC() {
     setCCCD('');
     setNgaySinh('');
     setSoHieuVanbang('');
+    setSelectDonVi('');
   };
   useEffect(() => {
     const fetchData = async () => {
       const namhoc = await getAllNam();
       setNamHoc(namhoc.data);
+      setSelectNamHoc(namhoc.data?.length > 0 ? namhoc.data[0].id : '');
       const donvi = await getAllTruong();
       setDonVi(donvi.data);
     };
@@ -249,8 +251,8 @@ export default function TracuuVBCC() {
               </Grid>
               <Grid item xs={12} sm={6} md={6} lg={6}>
                 <FormControl fullWidth variant="outlined" size="small">
-                  <InputLabel>{t('Đơn vị trường')}</InputLabel>
-                  <Select value={selectDonVi} onChange={handleDonViChange} label={t('Đơn vị trường')}>
+                  <InputLabel>{t('Đơn vị trường *')}</InputLabel>
+                  <Select value={selectDonVi} onChange={handleDonViChange} label={t('Đơn vị trường *')}>
                     {donVi && donVi.length > 0 ? (
                       donVi.map((data) => (
                         <MenuItem key={data.id} value={data.id}>
