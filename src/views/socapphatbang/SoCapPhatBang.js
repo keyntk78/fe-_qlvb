@@ -58,6 +58,7 @@ export default function SoCapPhatBang() {
   const [donvis, setDonvis] = useState([]);
   const [selectDonvi, setSelectDonvi] = useState('');
   const [selectTenDonVi, setSelectTenDonvi] = useState('');
+  const [selectTenTruong, setSelectTenTruong] = useState('');
   const [firstLoad, setFirstLoad] = useState(true);
   const [loadData, setLoadData] = useState(false);
   const infoHocSinh = useSelector(infoHocSinhSelector);
@@ -275,9 +276,9 @@ export default function SoCapPhatBang() {
       params.append('HoTen', pageState.hoTen);
       params.append('SoVaoSoCapBang', pageState.soVaoSoCapBang);
 
-      console.log(pageState, donvi.id);
       const response = await getHocSinhTheoSoCapPhatBang(params);
       const data = response.data;
+      setSelectTenTruong(data.Truong.Ten);
       formik.setValues({
         UyBanNhanDan: data.CauHinh.TenUyBanNhanDan || '',
         CoQuanCapBang: data.CauHinh.TenCoQuanCapBang || '',
@@ -348,6 +349,7 @@ export default function SoCapPhatBang() {
           xepLoai: row.XepLoai,
           soHieuVanBang: row.SoHieuVanBang,
           soVaoSoCapBang: row.SoVaoSoCapBang,
+          tenTruong: response.data.Truong.Ten,
           ...row
         }));
         dispatch(setReloadData(false));
@@ -620,7 +622,7 @@ export default function SoCapPhatBang() {
                 Quyết định công nhận tốt nghiệp số {formik.values.QuyetDinh || '{Số quyết định}'}
               </Typography>
               <Typography variant="body1" fontSize={14}>
-                Học sinh trường: {donvi ? donvi.ten : '{Tên trường}'}
+                Học sinh trường: {selectTenTruong ? selectTenTruong : '{Tên trường}'}
               </Typography>
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={5} flexDirection={'column'}>
