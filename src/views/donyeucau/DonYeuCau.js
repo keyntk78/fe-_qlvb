@@ -304,7 +304,7 @@ export default function DonYeuCau() {
               value={pageState.cccd}
             />
           </Grid>
-          <Grid item lg={2} md={2.5} sm={3.5} xs={5}>
+          {/* <Grid item lg={2} md={2.5} sm={3.5} xs={5}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('status.title')}</InputLabel>
               <Select
@@ -314,6 +314,24 @@ export default function DonYeuCau() {
                 label={t('status.title')}
               >
                 <MenuItem value="all">Tất cả</MenuItem>
+                {trangThaiOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid> */}
+          <Grid item lg={2} md={2.5} sm={3.5} xs={5}>
+            <FormControl fullWidth variant="outlined" size="small">
+              <InputLabel>{t('status.title')}</InputLabel>
+              <Select
+                name="trangThai"
+                value={pageState.trangThai ? pageState.trangThai : 0}
+                onChange={handleTrangThaiChange}
+                label={t('status.title')}
+              >
+                {/* <MenuItem value="all">Tất cả</MenuItem> */}
                 {trangThaiOptions.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
                     {option.label}
