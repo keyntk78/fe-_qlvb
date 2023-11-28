@@ -203,10 +203,6 @@ export default function SoGoc() {
 
   const xuatTepAll = [
     {
-      type: 'exportExcel',
-      handleClick: handleExport
-    },
-    {
       type: 'exportPDF',
       handleClick: handleExportPDFAll
     }
