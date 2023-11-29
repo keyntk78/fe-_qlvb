@@ -31,7 +31,7 @@ const DatainBang = ({ duLieuPhoi, studentDataList, positionConfig, componentRef 
               top: `${positionConfig[field].top}px`,
               left: `${positionConfig[field].left}px`,
               fontWeight: `${positionConfig[field].fontWeight}`,
-              fontSize: `${positionConfig[field].fontSize}`,
+              fontSize: `${positionConfig[field].fontSize}px`,
               fontFamily: `${positionConfig[field].fontFamily}`,
               color: `${positionConfig[field].color}`
             }}

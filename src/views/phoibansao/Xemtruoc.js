@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { FormControlLabel, Grid, Switch } from '@mui/material';
 import FormGroupButton from 'components/button/FormGroupButton';
 import config from 'config';
 import { useState } from 'react';
@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { GetConfigPhoi, createConfigPhoi } from 'services/phoisaoService';
 import { setOpenSubPopup, setReloadData, showAlert } from 'store/actions';
 import { openSubPopupSelector, reloadDataSelector, selectedPhoisaoSelector, userLoginSelector } from 'store/selectors';
-
 const XemTruoc = () => {
   const reloadData = useSelector(reloadDataSelector);
   const phoiBanSao = useSelector(selectedPhoisaoSelector);
@@ -20,7 +19,24 @@ const XemTruoc = () => {
   const chieuNgang = phoiBanSao ? phoiBanSao.chieuNgang : 19;
   const chieuDoc = phoiBanSao ? phoiBanSao.chieuDoc : 13;
   const [data, setData] = useState([]);
-
+  const [loading, setLoading] = useState(true);
+  const dataMapping = {
+    hoten: 'Nguyễn Văn A',
+    ngaythangnamsinh: '03-12-2001',
+    noisinh: 'Đồng Tháp',
+    gioitinh: 'Nam',
+    dantoc: 'kinh',
+    hocsinhtruong: 'THCS Tràm Chim',
+    namtotnghiep: '2023',
+    xeploaitotnghiep: 'Giỏi',
+    hinhthucdaotao: 'Chính Quy',
+    ngaycap: '17',
+    thangcap: '08',
+    namcap: '2023',
+    noicap: 'Tam Nông',
+    truongphongdgdt: 'Lê Phước Hậu',
+    sao_sovaosobansao: 'BS-00011/2023-TC'
+  };
   useEffect(() => {
     const fetchData = async () => {
       const response = await GetConfigPhoi(phoiBanSao.id);
@@ -62,6 +78,16 @@ const XemTruoc = () => {
   };
   return (
     <form onSubmit={handleConfigPosition}>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <FormControlLabel
+          sx={{
+            display: 'block'
+          }}
+          onChange={() => setLoading(!loading)}
+          control={<Switch checked={loading} name="loading" color="primary" />}
+          label="Xem dữ liệu mẫu"
+        />
+      </div>
       <div style={{ width: '19.5cm', overflow: 'auto', border: '5px outset gray', marginTop: '10px', marginLeft: '60px' }}>
         <div
           style={{
@@ -96,13 +122,15 @@ const XemTruoc = () => {
                 }}
               >
                 <p className="handle" style={{ cursor: 'grab' }}>
-                  {item.maTruongDuLieu.toLowerCase() === 'ngaycap'
-                    ? 'DD'
-                    : item.maTruongDuLieu.toLowerCase() === 'thangcap'
-                    ? 'MM'
-                    : item.maTruongDuLieu.toLowerCase() === 'namcap'
-                    ? 'YYYY'
-                    : item.maTruongDuLieu}
+                  {loading === false
+                    ? item.maTruongDuLieu.toLowerCase() === 'ngaycap'
+                      ? 'DD'
+                      : item.maTruongDuLieu.toLowerCase() === 'thangcap'
+                      ? 'MM'
+                      : item.maTruongDuLieu.toLowerCase() === 'namcap'
+                      ? 'YYYY'
+                      : item.maTruongDuLieu
+                    : dataMapping[item.maTruongDuLieu.toLowerCase()] || ''}
                 </p>
               </div>
             </Draggable>

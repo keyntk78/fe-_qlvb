@@ -22,9 +22,10 @@ import MainCard from 'components/cards/MainCard';
 import Config from './Config';
 import DestroyPhoi from './Destroy';
 import Detail from './Detail';
-import { Chip, Grid } from '@mui/material';
+import { Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select } from '@mui/material';
 import QuickSearch from 'components/form/QuickSearch';
 import ActivePhoiSao from './Active';
+import { IconSearch } from '@tabler/icons';
 
 const PhoiBanSao = () => {
   const { t } = useTranslation();
@@ -37,7 +38,12 @@ const PhoiBanSao = () => {
   const [form, setForm] = useState('');
   const [isAccess, setIsAccess] = useState(true);
   const [search, setSearch] = useState(false);
+  const [quickSearch, setQuickSearch] = useState(false);
   const reloadData = useSelector(reloadDataSelector);
+  const tinhTrangOptions = [
+    { value: '-1', label: 'Chưa hoạt động' },
+    { value: '0', label: 'Hoạt động' }
+  ];
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -45,7 +51,8 @@ const PhoiBanSao = () => {
     order: 0,
     orderDir: 'ASC',
     startIndex: 0,
-    pageSize: 10
+    pageSize: 10,
+    TinhTrang: ''
   });
 
   const handleAddPhoi = () => {
@@ -90,6 +97,14 @@ const PhoiBanSao = () => {
     setForm('active');
     dispatch(selectedPhoisao(phoisao));
     dispatch(setOpenPopup(true));
+  };
+  const handleTrangThaiChange = (event) => {
+    const selectedValue = event.target.value;
+    const trangThai = selectedValue === 'all' ? '' : selectedValue;
+    setPageState((old) => ({ ...old, TinhTrang: trangThai }));
+  };
+  const handleSearch = () => {
+    setSearch(!search);
   };
   const buttonConfigurations = [
     {
@@ -263,6 +278,7 @@ const PhoiBanSao = () => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState, navigate);
+      params.append('TinhTrang', pageState.TinhTrang);
       const response = await getSearchPhoisao(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -287,17 +303,37 @@ const PhoiBanSao = () => {
       }
     };
     fetchData();
-  }, [search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData]);
+  }, [search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, quickSearch]);
 
   return (
     <>
       <MainCard title={t('phoivanbang.title.bansao')} secondary={<AddButton handleClick={handleAddPhoi} />}>
+        <Grid container spacing={2} justifyContent={'center'} alignItems={'center'} my={1}>
+          <Grid item xs={2.5} minWidth={120}>
+            <FormControl fullWidth variant="outlined" size="small">
+              <InputLabel>{t('Tình trạng phôi')}</InputLabel>
+              <Select name="TinhTrang" value={pageState.TinhTrang || 'all'} onChange={handleTrangThaiChange} label={t('Tình trạng phôi')}>
+                <MenuItem value="all">Tất cả</MenuItem>
+                {tinhTrangOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item md={4} sm={4} lg={2} xs={6}>
+            <Button variant="contained" title={t('button.search')} fullWidth onClick={handleSearch} color="info" startIcon={<IconSearch />}>
+              {t('button.search')}
+            </Button>
+          </Grid>
+        </Grid>
         <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
           <Grid item lg={3} md={4} sm={5} xs={7}>
             <QuickSearch
               value={pageState.search}
               onChange={(value) => setPageState((old) => ({ ...old, search: value }))}
-              onSearch={() => setSearch(!search)}
+              onSearch={() => setQuickSearch(!quickSearch)}
             />
           </Grid>
         </Grid>
