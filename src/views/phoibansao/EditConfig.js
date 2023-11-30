@@ -1,5 +1,5 @@
 import { React, useState } from 'react';
-import { Grid, MenuItem, Select, useMediaQuery } from '@mui/material';
+import { Grid, MenuItem, Select, useMediaQuery, Checkbox } from '@mui/material';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
@@ -40,7 +40,8 @@ const EditConfig = () => {
       DinhDangKieuChu: '',
       ViTriTren: 0,
       ViTriTrai: 0,
-      MauChu: ''
+      MauChu: '',
+      HienThi: false
     },
     validationSchema: configPhoiValidationSchema,
     onSubmit: async (values) => {
@@ -75,7 +76,8 @@ const EditConfig = () => {
           CoChu: configPhoisaoByIdData.coChu || '',
           DinhDangKieuChu: configPhoisaoByIdData.dinhDangKieuChu || '',
           ViTriTren: configPhoisaoByIdData.viTriTren || 0,
-          ViTriTrai: configPhoisaoByIdData.viTriTrai || 0
+          ViTriTrai: configPhoisaoByIdData.viTriTrai || 0,
+          HienThi: configPhoisaoByIdData.hienThi || false
         });
       }
       if (configPhoisaoByIdData.mauChu !== '') {
@@ -161,6 +163,17 @@ const EditConfig = () => {
           <Grid item xs={6}>
             <FormControlComponent xsLabel={isXs ? 0 : 6} xsForm={isXs ? 12 : 6} isRequire label={t('config.field.vitritrai')}>
               <InputForm formik={formik} name="ViTriTrai" type="number" />
+            </FormControlComponent>
+          </Grid>
+        </Grid>
+        <Grid xs={12} item container columnSpacing={isXs ? 1 : 0}>
+          <Grid item xs={6}>
+            <FormControlComponent xsLabel={isXs ? 0 : 6} xsForm={isXs ? 12 : 6} isRequire label={t('Hiển thị trên phôi')}>
+              <Checkbox
+                checked={formik.values.HienThi} // Check if the value is 'x'
+                onChange={(e) => formik.setFieldValue('HienThi', e.target.checked)}
+                sx={{ padding: '8px 0' }}
+              />
             </FormControlComponent>
           </Grid>
         </Grid>

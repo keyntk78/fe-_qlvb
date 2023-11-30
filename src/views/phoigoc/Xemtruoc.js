@@ -10,7 +10,26 @@ import { GetConfigPhoi, createConfigPhoi } from 'services/phoigocService';
 import { setOpenSubPopup, setReloadData, showAlert } from 'store/actions';
 import { openSubPopupSelector, reloadDataSelector, selectedPhoigocSelector, userLoginSelector } from 'store/selectors';
 
-const XemTruoc = () => {
+const dataMapping = {
+  hoten: 'Nguyễn Văn A',
+  ngaythangnamsinh: '03-12-2001',
+  noisinh: 'Đồng Tháp',
+  gioitinh: 'Nam',
+  dantoc: 'kinh',
+  hocsinhtruong: 'THCS Tràm Chim',
+  namtotnghiep: '2023',
+  xeploaitotnghiep: 'Giỏi',
+  hinhthucdaotao: 'Chính Quy',
+  ngaycap: '17',
+  thangcap: '08',
+  namcap: '2023',
+  noicap: 'Tam Nông',
+  truongphongdgdt: 'Lê Phước Hậu',
+  goc_sohieuvanbang: 'A00018',
+  goc_sovaosocap: '2023/TC/00010'
+};
+
+const XemTruoc = ({ isSample = false }) => {
   const reloadData = useSelector(reloadDataSelector);
   const phoigoc = useSelector(selectedPhoigocSelector);
   const user = useSelector(userLoginSelector);
@@ -25,7 +44,8 @@ const XemTruoc = () => {
     const fetchData = async () => {
       const response = await GetConfigPhoi(phoigoc.id);
 
-      setData(response.data);
+      const { data } = response;
+      setData(data);
     };
     if (openSubPopup || reloadData) {
       fetchData();
@@ -50,12 +70,28 @@ const XemTruoc = () => {
   };
 
   const itemRefs = useRef([]); // Sử dụng ref cho việc lưu trữ giá trị của từng item
-  const newData = data.map((item) => ({ ...item }));
 
-  useEffect(() => {
-    // Gán giá trị cho itemRefs khi component được render
-    itemRefs.current = [...data];
-  }, [data]);
+  const showData = (data) => {
+    const dataLowerCase = data.toLowerCase();
+
+    if (isSample && data) {
+      return dataMapping[dataLowerCase];
+    }
+
+    if (dataLowerCase === 'ngaycap') {
+      return 'DD';
+    }
+
+    if (dataLowerCase === 'thangcap') {
+      return 'MM';
+    }
+
+    if (dataLowerCase === 'namcap') {
+      return 'YYYY';
+    }
+
+    return data;
+  };
 
   const handleDrag = (index) => (e, ui) => {
     const { x, y } = ui;
@@ -80,39 +116,43 @@ const XemTruoc = () => {
             backgroundSize: 'cover'
           }}
         >
-          {data.map((item, index) => (
-            <Draggable
-              bounds="parent"
-              key={item.maTruongDuLieu}
-              handle=".handle"
-              defaultPosition={{ x: 0, y: 0 }}
-              onDrag={handleDrag(index)}
-            >
-              <div
-                className="draggable-item"
-                style={{
-                  fontWeight: item.dinhDangKieuChu,
-                  fontStyle: item.dinhDangKieuChu,
-                  fontSize: item.coChu + 'px',
-                  fontFamily: item.kieuChu,
-                  color: item.mauChu,
-                  position: 'absolute',
-                  top: item.viTriTren,
-                  left: item.viTriTrai
-                }}
+          {data.map((item, index) => {
+            console.log(item.transform);
+            return (
+              <Draggable
+                bounds="parent"
+                key={item.maTruongDuLieu}
+                handle=".handle"
+                defaultPosition={{ x: 0, y: 0 }}
+                onDrag={handleDrag(index)}
               >
-                <p className="handle" style={{ cursor: 'grab' }}>
-                  {item.maTruongDuLieu.toLowerCase() === 'ngaycap'
-                    ? 'DD'
-                    : item.maTruongDuLieu.toLowerCase() === 'thangcap'
-                    ? 'MM'
-                    : item.maTruongDuLieu.toLowerCase() === 'namcap'
-                    ? 'YYYY'
-                    : item.maTruongDuLieu}
-                </p>
-              </div>
-            </Draggable>
-          ))}
+                <div
+                  className="draggable-item"
+                  id={item.id}
+                  style={{
+                    fontWeight: item.dinhDangKieuChu,
+                    fontStyle: item.dinhDangKieuChu,
+                    fontSize: item.coChu + 'px',
+                    fontFamily: item.kieuChu,
+                    color: item.mauChu,
+                    position: 'absolute',
+                    top: item.viTriTren,
+                    left: item.viTriTrai,
+                    display: item.hienThi ? 'block' : 'none'
+                  }}
+                >
+                  <p
+                    className="handle"
+                    style={{
+                      cursor: 'grab'
+                    }}
+                  >
+                    {showData(item.maTruongDuLieu)}
+                  </p>
+                </div>
+              </Draggable>
+            );
+          })}
         </div>
       </div>
       <Grid container>

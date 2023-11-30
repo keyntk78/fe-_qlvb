@@ -35,7 +35,8 @@ const XuLyDuLieuInThu = ({ studentDataList, positionConfig, componentRef }) => {
               fontWeight: `${positionConfig[field].fontWeight}`,
               fontSize: `${positionConfig[field].fontSize}`,
               fontFamily: `${positionConfig[field].fontFamily}`,
-              color: `${positionConfig[field].color}`
+              color: `${positionConfig[field].color}`,
+              display: `${positionConfig[field].display}`
             }}
           >
             {studentDataList[field]}

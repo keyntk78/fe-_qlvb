@@ -10,7 +10,25 @@ import { GetConfigPhoi, createConfigPhoi } from 'services/phoisaoService';
 import { setOpenSubPopup, setReloadData, showAlert } from 'store/actions';
 import { openSubPopupSelector, reloadDataSelector, selectedPhoisaoSelector, userLoginSelector } from 'store/selectors';
 
-const XemTruoc = () => {
+const dataMapping = {
+  hoten: 'Nguyễn Văn A',
+  ngaythangnamsinh: '03-12-2001',
+  noisinh: 'Đồng Tháp',
+  gioitinh: 'Nam',
+  dantoc: 'kinh',
+  hocsinhtruong: 'THCS Tràm Chim',
+  namtotnghiep: '2023',
+  xeploaitotnghiep: 'Giỏi',
+  hinhthucdaotao: 'Chính Quy',
+  ngaycap: '17',
+  thangcap: '08',
+  namcap: '2023',
+  noicap: 'Tam Nông',
+  truongphongdgdt: 'Lê Phước Hậu',
+  sao_sovaosobansao: 'BS-00011/2023-TC'
+};
+
+const XemTruoc = ({ isSample = false }) => {
   const reloadData = useSelector(reloadDataSelector);
   const phoiBanSao = useSelector(selectedPhoisaoSelector);
   const user = useSelector(userLoginSelector);
@@ -60,6 +78,29 @@ const XemTruoc = () => {
     itemRefs.current[index].viTriTren = parseInt(y + newData[index].viTriTren);
     itemRefs.current[index].viTriTrai = parseInt(x + newData[index].viTriTrai);
   };
+
+  const showData = (data) => {
+    const dataLowerCase = data.toLowerCase();
+
+    if (isSample && data) {
+      return dataMapping[dataLowerCase];
+    }
+
+    if (dataLowerCase === 'ngaycap') {
+      return 'DD';
+    }
+
+    if (dataLowerCase === 'thangcap') {
+      return 'MM';
+    }
+
+    if (dataLowerCase === 'namcap') {
+      return 'YYYY';
+    }
+
+    return data;
+  };
+
   return (
     <form onSubmit={handleConfigPosition}>
       <div style={{ width: '19.5cm', overflow: 'auto', border: '5px outset gray', marginTop: '10px', marginLeft: '60px' }}>
@@ -81,6 +122,7 @@ const XemTruoc = () => {
               handle=".handle"
               defaultPosition={{ x: 0, y: 0 }}
               onDrag={handleDrag(index)}
+              disabled={isSample}
             >
               <div
                 className="draggable-item"
@@ -92,17 +134,12 @@ const XemTruoc = () => {
                   color: item.mauChu,
                   position: 'absolute',
                   top: item.viTriTren,
-                  left: item.viTriTrai
+                  left: item.viTriTrai,
+                  display: item.hienThi ? 'block' : 'none'
                 }}
               >
                 <p className="handle" style={{ cursor: 'grab' }}>
-                  {item.maTruongDuLieu.toLowerCase() === 'ngaycap'
-                    ? 'DD'
-                    : item.maTruongDuLieu.toLowerCase() === 'thangcap'
-                    ? 'MM'
-                    : item.maTruongDuLieu.toLowerCase() === 'namcap'
-                    ? 'YYYY'
-                    : item.maTruongDuLieu}
+                  {showData(item.maTruongDuLieu)}
                 </p>
               </div>
             </Draggable>
