@@ -168,7 +168,7 @@ const EditConfig = () => {
         </Grid>
         <Grid xs={12} item container columnSpacing={isXs ? 1 : 0}>
           <Grid item xs={6}>
-            <FormControlComponent xsLabel={isXs ? 0 : 6} xsForm={isXs ? 12 : 6} isRequire label={t('Hiển thị trên phôi')}>
+            <FormControlComponent xsLabel={isXs ? 0 : 6} xsForm={isXs ? 12 : 6} label={t('Hiển thị trên phôi')}>
               <Checkbox
                 checked={formik.values.HienThi} // Check if the value is 'x'
                 onChange={(e) => formik.setFieldValue('HienThi', e.target.checked)}
