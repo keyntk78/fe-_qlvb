@@ -1,4 +1,4 @@
-import { FormControlLabel, Grid, Switch } from '@mui/material';
+import { Grid } from '@mui/material';
 import FormGroupButton from 'components/button/FormGroupButton';
 import config from 'config';
 import { useState } from 'react';
@@ -19,24 +19,6 @@ const XemTruoc = () => {
   const chieuNgang = phoiBanSao ? phoiBanSao.chieuNgang : 19;
   const chieuDoc = phoiBanSao ? phoiBanSao.chieuDoc : 13;
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const dataMapping = {
-    hoten: 'Nguyễn Văn A',
-    ngaythangnamsinh: '03-12-2001',
-    noisinh: 'Đồng Tháp',
-    gioitinh: 'Nam',
-    dantoc: 'kinh',
-    hocsinhtruong: 'THCS Tràm Chim',
-    namtotnghiep: '2023',
-    xeploaitotnghiep: 'Giỏi',
-    hinhthucdaotao: 'Chính Quy',
-    ngaycap: '17',
-    thangcap: '08',
-    namcap: '2023',
-    noicap: 'Tam Nông',
-    truongphongdgdt: 'Lê Phước Hậu',
-    sao_sovaosobansao: 'BS-00011/2023-TC'
-  };
   useEffect(() => {
     const fetchData = async () => {
       const response = await GetConfigPhoi(phoiBanSao.id);
@@ -63,7 +45,7 @@ const XemTruoc = () => {
     }
   };
   const itemRefs = useRef([]); // Sử dụng ref cho việc lưu trữ giá trị của từng item
-  const newData = data.map((item) => ({ ...item }));
+  //const newData = data.map((item) => ({ ...item }));
   useEffect(() => {
     // Gán giá trị cho itemRefs khi component được render
     itemRefs.current = [...data];
@@ -73,21 +55,13 @@ const XemTruoc = () => {
     // console.log(123, 'Element:', itemRefs.current[index].maTruongDuLieu);
     // console.log('Top:', y, 'Left:', x);
     // Cập nhật giá trị trực tiếp thông qua ref
-    itemRefs.current[index].viTriTren = parseInt(y + newData[index].viTriTren);
-    itemRefs.current[index].viTriTrai = parseInt(x + newData[index].viTriTrai);
+    // itemRefs.current[index].viTriTren = parseInt(y + newData[index].viTriTren);
+    // itemRefs.current[index].viTriTrai = parseInt(x + newData[index].viTriTrai);
+    itemRefs.current[index].viTriTren = parseInt(y);
+    itemRefs.current[index].viTriTrai = parseInt(x);
   };
   return (
     <form onSubmit={handleConfigPosition}>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <FormControlLabel
-          sx={{
-            display: 'block'
-          }}
-          onChange={() => setLoading(!loading)}
-          control={<Switch checked={loading} name="loading" color="primary" />}
-          label="Xem dữ liệu mẫu"
-        />
-      </div>
       <div style={{ width: '19.5cm', overflow: 'auto', border: '5px outset gray', marginTop: '10px', marginLeft: '60px' }}>
         <div
           style={{
@@ -105,7 +79,7 @@ const XemTruoc = () => {
               bounds="parent"
               key={item.maTruongDuLieu}
               handle=".handle"
-              defaultPosition={{ x: 0, y: 0 }}
+              defaultPosition={{ x: item.viTriTrai, y: item.viTriTren }}
               onDrag={handleDrag(index)}
             >
               <div
@@ -116,21 +90,19 @@ const XemTruoc = () => {
                   fontSize: item.coChu + 'px',
                   fontFamily: item.kieuChu,
                   color: item.mauChu,
-                  position: 'absolute',
-                  top: item.viTriTren,
-                  left: item.viTriTrai
+                  position: 'absolute'
+                  // top: item.viTriTren,
+                  // left: item.viTriTrai
                 }}
               >
                 <p className="handle" style={{ cursor: 'grab' }}>
-                  {loading === false
-                    ? item.maTruongDuLieu.toLowerCase() === 'ngaycap'
-                      ? 'DD'
-                      : item.maTruongDuLieu.toLowerCase() === 'thangcap'
-                      ? 'MM'
-                      : item.maTruongDuLieu.toLowerCase() === 'namcap'
-                      ? 'YYYY'
-                      : item.maTruongDuLieu
-                    : dataMapping[item.maTruongDuLieu.toLowerCase()] || ''}
+                  {item.maTruongDuLieu.toLowerCase() === 'ngaycap'
+                    ? 'DD'
+                    : item.maTruongDuLieu.toLowerCase() === 'thangcap'
+                    ? 'MM'
+                    : item.maTruongDuLieu.toLowerCase() === 'namcap'
+                    ? 'YYYY'
+                    : item.maTruongDuLieu}
                 </p>
               </div>
             </Draggable>
