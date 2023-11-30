@@ -173,7 +173,7 @@ const Config = () => {
           pagination
           page={pageState.startIndex}
           pageSize={pageState.pageSize}
-          paginationMode="server"
+          // paginationMode="server"
           hideFooterPagination
           onPageChange={(newPage) => {
             setPageState((old) => ({ ...old, startIndex: newPage }));
