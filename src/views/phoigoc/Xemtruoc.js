@@ -52,6 +52,11 @@ const XemTruoc = ({ isSample = false }) => {
     }
   }, [phoigoc, openSubPopup, reloadData]);
 
+  useEffect(() => {
+    // Gán giá trị cho itemRefs khi component được render
+    itemRefs.current = [...data];
+  }, [data]);
+
   const handleConfigPosition = async (e) => {
     e.preventDefault();
     try {
@@ -98,8 +103,8 @@ const XemTruoc = ({ isSample = false }) => {
     // console.log(123, 'Element:', itemRefs.current[index].maTruongDuLieu);
     // console.log('Top:', y, 'Left:', x);
     // Cập nhật giá trị trực tiếp thông qua ref
-    itemRefs.current[index].viTriTren = parseInt(y + newData[index].viTriTren);
-    itemRefs.current[index].viTriTrai = parseInt(x + newData[index].viTriTrai);
+    itemRefs.current[index].viTriTren = parseInt(y);
+    itemRefs.current[index].viTriTrai = parseInt(x);
   };
 
   return (
@@ -116,43 +121,38 @@ const XemTruoc = ({ isSample = false }) => {
             backgroundSize: 'cover'
           }}
         >
-          {data.map((item, index) => {
-            console.log(item.transform);
-            return (
-              <Draggable
-                bounds="parent"
-                key={item.maTruongDuLieu}
-                handle=".handle"
-                defaultPosition={{ x: 0, y: 0 }}
-                onDrag={handleDrag(index)}
+          {data.map((item, index) => (
+            <Draggable
+              bounds="parent"
+              key={item.maTruongDuLieu}
+              handle=".handle"
+              defaultPosition={{ x: item.viTriTrai, y: item.viTriTren }}
+              onDrag={handleDrag(index)}
+            >
+              <div
+                className="draggable-item"
+                id={item.id}
+                style={{
+                  fontWeight: item.dinhDangKieuChu,
+                  fontStyle: item.dinhDangKieuChu,
+                  fontSize: item.coChu + 'px',
+                  fontFamily: item.kieuChu,
+                  color: item.mauChu,
+                  position: 'absolute',
+                  display: item.hienThi ? 'block' : 'none'
+                }}
               >
-                <div
-                  className="draggable-item"
-                  id={item.id}
+                <p
+                  className="handle"
                   style={{
-                    fontWeight: item.dinhDangKieuChu,
-                    fontStyle: item.dinhDangKieuChu,
-                    fontSize: item.coChu + 'px',
-                    fontFamily: item.kieuChu,
-                    color: item.mauChu,
-                    position: 'absolute',
-                    top: item.viTriTren,
-                    left: item.viTriTrai,
-                    display: item.hienThi ? 'block' : 'none'
+                    cursor: 'grab'
                   }}
                 >
-                  <p
-                    className="handle"
-                    style={{
-                      cursor: 'grab'
-                    }}
-                  >
-                    {showData(item.maTruongDuLieu)}
-                  </p>
-                </div>
-              </Draggable>
-            );
-          })}
+                  {showData(item.maTruongDuLieu)}
+                </p>
+              </div>
+            </Draggable>
+          ))}
         </div>
       </div>
       <Grid container>

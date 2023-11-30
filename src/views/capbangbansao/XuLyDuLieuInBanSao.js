@@ -40,7 +40,7 @@ const XuLyDuLieuInBanSao = ({ studentDataList, positionConfig, componentRef }) =
                   left: `${positionConfig[field].left}px`,
                   color: `${positionConfig[field].color}`,
                   fontWeight: `${positionConfig[field].fontWeight}`,
-                  fontSize: `${positionConfig[field].fontSize}`,
+                  fontSize: `${positionConfig[field].fontSize}px`,
                   fontFamily: `${positionConfig[field].fontFamily}`,
                   display: `${positionConfig[field].display}`
                 }}
@@ -75,7 +75,7 @@ const XuLyDuLieuInBanSao = ({ studentDataList, positionConfig, componentRef }) =
               left: `${positionConfig[field].left}px`,
               color: `${positionConfig[field].color}`,
               fontWeight: `${positionConfig[field].fontWeight}`,
-              fontSize: `${positionConfig[field].fontSize}`,
+              fontSize: `${positionConfig[field].fontSize}px`,
               fontFamily: `${positionConfig[field].fontFamily}`,
               display: `${positionConfig[field].display}`
             }}

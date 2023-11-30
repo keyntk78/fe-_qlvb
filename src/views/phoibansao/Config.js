@@ -133,7 +133,7 @@ const Config = () => {
       if (check) {
         const data = await response.data;
         const dataWithIds = data.map((row, index) => ({
-          idx: pageState.startIndex * pageState.pageSize + index + 1,
+          idx: index + 1,
           viTri: row.viTriTren + ' - ' + row.viTriTrai,
           ...row
         }));
