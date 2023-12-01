@@ -1,5 +1,5 @@
 export const handleAddNumberZeroDayAndMonth = (number) => {
-  if (number < 10) {
+  if (number < 3) {
     return '0' + number;
   }
   return number;
