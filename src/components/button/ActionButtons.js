@@ -35,7 +35,8 @@ import {
   IconRefresh,
   IconCheck,
   IconPhotoCancel,
-  IconPencilPlus
+  IconPencilPlus,
+  IconPlaylistX
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { useTranslation } from 'react-i18next';
@@ -543,6 +544,18 @@ const ActionButtons = ({
           {
             title: 'Chỉnh sửa VBCC',
             icon: <IconEdit size={'20px'} />,
+            color: 'success',
+            onClick: () => {
+              handleClick(params);
+              onClose();
+            }
+          }
+        ];
+      case 'phoicabiet':
+        return [
+          {
+            title: 'Phôi cá biệt',
+            icon: <IconPlaylistX size={'20px'} />,
             color: 'success',
             onClick: () => {
               handleClick(params);

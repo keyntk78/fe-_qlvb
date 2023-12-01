@@ -28,6 +28,7 @@ import { IconDownload, IconSearch } from '@tabler/icons';
 import config from 'config';
 import RecoverPhoiGoc from './DeActive';
 import QuickSearch from 'components/form/QuickSearch';
+import PhoiCaBiet from './PhoiCaBiet';
 
 const Phoigoc = () => {
   const { t } = useTranslation();
@@ -73,6 +74,12 @@ const Phoigoc = () => {
   const handleEditPhoi = (phoigoc) => {
     setTitle(t('phoivanbang.title.editgoc'));
     setForm('edit');
+    dispatch(selectedPhoigoc(phoigoc));
+    dispatch(setOpenPopup(true));
+  };
+  const handlePhoiCaBiet = (phoigoc) => {
+    setTitle(t('Phôi cá biệt'));
+    setForm('phoicabiet');
     dispatch(selectedPhoigoc(phoigoc));
     dispatch(setOpenPopup(true));
   };
@@ -130,6 +137,10 @@ const Phoigoc = () => {
       handleEdit: handleEditPhoi
     },
     {
+      type: 'phoicabiet',
+      handleClick: handlePhoiCaBiet
+    },
+    {
       type: 'huyphoi',
       handleClick: handleDestroy
     },
@@ -149,6 +160,10 @@ const Phoigoc = () => {
       handleActive: handlePhucHoi
     },
     {
+      type: 'phoicabiet',
+      handleClick: handlePhoiCaBiet
+    },
+    {
       type: 'delete',
       handleDelete: handleDeletePhoi
     }
@@ -157,6 +172,10 @@ const Phoigoc = () => {
     {
       type: 'detail',
       handleGetbyId: handleDetailPhoi
+    },
+    {
+      type: 'phoicabiet',
+      handleClick: handlePhoiCaBiet
     },
     {
       type: 'delete',
@@ -171,6 +190,10 @@ const Phoigoc = () => {
     {
       type: 'edit',
       handleEdit: handleEditPhoi
+    },
+    {
+      type: 'phoicabiet',
+      handleClick: handlePhoiCaBiet
     },
     {
       type: 'huyphoi',
@@ -200,6 +223,10 @@ const Phoigoc = () => {
       handleActive: handleKichHoat
     },
     {
+      type: 'phoicabiet',
+      handleClick: handlePhoiCaBiet
+    },
+    {
       type: 'huyphoi',
       handleClick: handleDestroy
     },
@@ -221,6 +248,10 @@ const Phoigoc = () => {
     {
       type: 'active',
       handleActive: handleKichHoat
+    },
+    {
+      type: 'phoicabiet',
+      handleClick: handlePhoiCaBiet
     },
     {
       type: 'huyphoi',
@@ -465,7 +496,13 @@ const Phoigoc = () => {
             title={title}
             form={form}
             openPopup={openPopup}
-            maxWidth={form === 'add' || form === 'edit' || form === 'detail' || form === 'huyphoi' ? 'sm' : form === 'config' ? 'xl' : ''}
+            maxWidth={
+              form === 'add' || form === 'edit' || form === 'detail' || form === 'huyphoi'
+                ? 'sm'
+                : form === 'config' || form === 'phoicabiet'
+                ? 'xl'
+                : ''
+            }
             bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
           >
             {form === 'add' ? (
@@ -482,6 +519,8 @@ const Phoigoc = () => {
               <ActivePhoiGoc />
             ) : form === 'recover' ? (
               <RecoverPhoiGoc />
+            ) : form === 'phoicabiet' ? (
+              <PhoiCaBiet />
             ) : (
               <Delete />
             )}
