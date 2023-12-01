@@ -41,13 +41,13 @@ const Config = () => {
   };
 
   const handleView = () => {
-    setTitle(t('phoivanbang.title.xemtruoc'));
+    setTitle(t('Xem cấu hình phôi'));
     setForm('xemtruoc');
     dispatch(setOpenSubPopup(true));
   };
 
   const handleViewSample = () => {
-    setTitle(t('phoivanbang.title.xemtruoc'));
+    setTitle(t('Xem dữ liệu mẫu'));
     setForm('xemtruocsample');
     dispatch(setOpenSubPopup(true));
   };
@@ -157,10 +157,10 @@ const Config = () => {
       {/* <MainCard title={t('cauhinhphoivanbang.titlegoc')} secondary={<BeforeViewButton handleClick={handleView} />}> */}
       <Grid container justifyContent={'flex-end'} my={2}>
         <Grid item mx={2}>
-          <BeforeViewButton handleClick={handleViewSample} title={t('Xem phôi mẫu')} />
+          <BeforeViewButton handleClick={handleViewSample} title={t('Xem dữ liệu mẫu')} />
         </Grid>
         <Grid item>
-          <BeforeViewButton handleClick={handleView} />
+          <BeforeViewButton handleClick={handleView} title={t('Xem cấu hình phôi')} />
         </Grid>
       </Grid>
       {isAccess ? (
