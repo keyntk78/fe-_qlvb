@@ -80,7 +80,8 @@ const InBanSao = () => {
       color: item.mauChu,
       fontWeight: item.dinhDangKieuChu,
       fontSize: item.coChu,
-      fontFamily: item.kieuChu
+      fontFamily: item.kieuChu,
+      display: item.hienThi ? 'block' : 'none'
     };
   }
   const componentRef = useRef();

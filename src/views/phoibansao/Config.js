@@ -15,6 +15,7 @@ import Xemtruoc from './Xemtruoc';
 import BeforeViewButton from 'components/button/BeforeViewButton';
 import ActionButtons from 'components/button/ActionButtons';
 import { Grid } from '@mui/material';
+import { IconCheck, IconX } from '@tabler/icons';
 
 const Config = () => {
   const { t } = useTranslation();
@@ -42,6 +43,12 @@ const Config = () => {
   const handleView = () => {
     setTitle(t('phoivanbang.title.xemtruoc'));
     setForm('xemtruoc');
+    dispatch(setOpenSubPopup(true));
+  };
+
+  const handleViewSample = () => {
+    setTitle(t('phoivanbang.title.xemtruoc'));
+    setForm('xemtruocsample');
     dispatch(setOpenSubPopup(true));
   };
 
@@ -94,6 +101,18 @@ const Config = () => {
       minWidth: 90
     },
     {
+      width: 100,
+      sortable: false,
+      filterable: false,
+      field: 'hienThi',
+      headerName: t('Hiển thị'),
+      renderCell: (params) => (
+        <Grid container justifyContent="center">
+          {params.row.hienThi ? <IconCheck /> : <IconX />}
+        </Grid>
+      )
+    },
+    {
       field: 'actions',
       headerName: t('action'),
       width: 100,
@@ -136,6 +155,9 @@ const Config = () => {
   return (
     <>
       <Grid container justifyContent={'flex-end'} my={2}>
+        <Grid item mx={2}>
+          <BeforeViewButton handleClick={handleViewSample} title={t('Xem phôi mẫu')} />
+        </Grid>
         <Grid item>
           <BeforeViewButton handleClick={handleView} />
         </Grid>
@@ -151,7 +173,7 @@ const Config = () => {
           pagination
           page={pageState.startIndex}
           pageSize={pageState.pageSize}
-          paginationMode="server"
+          // paginationMode="server"
           hideFooterPagination
           onPageChange={(newPage) => {
             setPageState((old) => ({ ...old, startIndex: newPage }));
@@ -184,7 +206,7 @@ const Config = () => {
           bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
           height={form === 'edit' ? 325 : 600}
         >
-          {form === 'edit' ? <Edit /> : form === 'xemtruoc' ? <Xemtruoc /> : ''}
+          {form === 'edit' ? <Edit /> : form === 'xemtruoc' ? <Xemtruoc /> : form === 'xemtruocsample' ? <Xemtruoc isSample /> : ''}
         </Popup>
       )}
     </>

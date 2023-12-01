@@ -58,7 +58,8 @@ const AnhBang = () => {
       fontWeight: item.dinhDangKieuChu,
       fontSize: item.coChu,
       fontFamily: item.kieuChu,
-      color: item.mauChu
+      color: item.mauChu,
+      display: item.hienThi ? 'block' : 'none'
     };
   }
   const componentRef = useRef();
