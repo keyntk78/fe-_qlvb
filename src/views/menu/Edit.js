@@ -1,5 +1,5 @@
 import React from 'react';
-import { Checkbox, FormControlLabel, Grid, useMediaQuery } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, Grid, Input, useMediaQuery } from '@mui/material';
 import { useFormik } from 'formik';
 import { useMenuValidationSchema } from 'components/validations/menuValidation';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,6 +16,9 @@ import SelectListIcon from 'components/form/SelectListIcon';
 import { useTranslation } from 'react-i18next';
 import SelectList from 'components/form/SelectList';
 import FormGroupButton from 'components/button/FormGroupButton';
+import { IconFilePlus } from '@tabler/icons';
+import { convertJsonToFormData } from 'utils/convertJsonToFormData';
+import config from 'config';
 const EditMenu = () => {
   const isXs = useMediaQuery('(max-width:800px)');
   const openPopup = useSelector(openPopupSelector);
@@ -24,6 +27,8 @@ const EditMenu = () => {
   const menuValidationSchema = useMenuValidationSchema();
   const reloadData1 = useSelector(reloadDataSelector);
   const menu1 = useSelector(selectedMenuSelector);
+  const [selectFile, setSelectFile] = useState('');
+  const [selectedFileName, setSelectedFileName] = useState('');
   const [pageState, setPageState] = useState({
     isLoading: false,
     functionaction: [],
@@ -43,7 +48,10 @@ const EditMenu = () => {
     validationSchema: menuValidationSchema,
     onSubmit: async (values) => {
       try {
-        const menuUpdated = await editMenu(values);
+        const data = await convertJsonToFormData(values);
+        data.append('FileHuongDan', selectFile);
+        data.append('PathFileHuongDan', selectedFileName);
+        const menuUpdated = await editMenu(data);
         if (menuUpdated.isSuccess === false) {
           dispatch(showAlert(new Date().getTime().toString(), 'error', menuUpdated.message.toString()));
         } else {
@@ -66,6 +74,8 @@ const EditMenu = () => {
       const menuparent = await getAllMenu();
       const menubyid = await getMenuById(menu1.menuId);
       const datamenubyid = menubyid.data;
+      setSelectedFileName(datamenubyid.urlHuongDan ? datamenubyid.urlHuongDan.split('/').pop() : '');
+      setSelectFile(datamenubyid.urlHuongDan ? config.urlImages + datamenubyid.urlHuongDan : '');
       const dataFaction = await functionaction.data;
       const dataWithIds = dataFaction.map((row, index) => ({
         idindex: index + 1,
@@ -114,6 +124,12 @@ const EditMenu = () => {
     }
   }, [menu1, reloadData1, openPopup]);
 
+  const handleOnchangfile = (e) => {
+    const file = e.target.files[0];
+    setSelectedFileName(file.name);
+    setSelectFile(file);
+    e.target.value = null;
+  };
   return (
     <form onSubmit={formik.handleSubmit}>
       <Grid container>
@@ -178,6 +194,27 @@ const EditMenu = () => {
                 label={t('menu.field.isshow')}
               />
             </Grid>
+          </Grid>
+          <Grid item mt={2} xs={12}>
+            <FormControlComponent xsLabel={isXs ? 0 : 3} xsForm={isXs ? 12 : 9} label={t('File đính kèm')}>
+              <Grid item xs={12} display={'flex'} alignItems={'center'}>
+                <Input
+                  type="file"
+                  inputProps={{ accept: '.doc, .docx, .pdf' }}
+                  style={{ display: 'none' }}
+                  id="fileInput"
+                  onChange={handleOnchangfile}
+                />
+                <label htmlFor="fileInput">
+                  <Button variant="outlined" component="span" color="success" startIcon={<IconFilePlus />}>
+                    {t('button.upload')}
+                  </Button>
+                </label>
+                <Grid item mx={1}>
+                  {selectedFileName && <span>{selectedFileName}</span>}
+                </Grid>
+              </Grid>
+            </FormControlComponent>
           </Grid>
         </Grid>
         <Grid item xs={12} container spacing={2} justifyContent="flex-end">
