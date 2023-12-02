@@ -74,7 +74,7 @@ const SaoLuu = () => {
       headerName: t('Ngày tạo'),
       sortable: false,
       filterable: false,
-      minWidth: 300
+      flex: 1
     },
     {
       field: 'path',
