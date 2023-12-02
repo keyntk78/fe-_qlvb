@@ -4,7 +4,7 @@ import MainCard from 'components/cards/MainCard';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setReloadData, showAlert } from 'store/actions';
-import { reloadDataSelector, selectedPhoigocSelector, userLoginSelector } from 'store/selectors';
+import { openPopupSelector, reloadDataSelector, selectedPhoigocSelector, userLoginSelector } from 'store/selectors';
 import { useNavigate } from 'react-router-dom';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { useTranslation } from 'react-i18next';
@@ -36,6 +36,7 @@ const PhoiCaBiet = () => {
   const selectedPhoigoc = useSelector(selectedPhoigocSelector);
   const [search, setSearch] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState('');
+  const openPopup = useSelector(openPopupSelector);
   const [selectFile, setSelectFile] = useState('');
   const [pageState, setPageState] = useState({
     idphoigoc: selectedPhoigoc.id,
@@ -79,7 +80,13 @@ const PhoiCaBiet = () => {
       }
     }
   });
-
+  useEffect(() => {
+    if (openPopup) {
+      formik.resetForm();
+      setSelectedFileName('');
+      setSelectFile('');
+    }
+  }, [openPopup]);
   const columns = [
     {
       field: 'idx',
@@ -133,7 +140,7 @@ const PhoiCaBiet = () => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
-      params.append('idphoigoc', pageState.idphoigoc);
+      params.append('idphoigoc', selectedPhoigoc.id);
       const response = await getSearchPhoiDaHuyByIdPhoiGoc(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -154,9 +161,11 @@ const PhoiCaBiet = () => {
         }));
       }
     };
-    fetchData();
+    if (openPopup) {
+      fetchData();
+    }
     setSearch(false);
-  }, [pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search]);
+  }, [pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, reloadData, search, openPopup]);
 
   const handleOnchangfile = (e) => {
     const file = e.target.files[0];
