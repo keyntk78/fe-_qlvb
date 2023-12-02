@@ -174,3 +174,49 @@ export async function deleteAnhSoGoc(id) {
     throw error;
   }
 }
+
+export async function getHocSinhBySoGocCuChuaDuyet(params) {
+  try {
+    const response = await sendRequest(`SoGoc/GetHocSinhBySoGocCuChuaDuyet?${params}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating Sogoc:', error);
+    throw error;
+  }
+}
+
+export async function khoaSoGocCu(nguoiThucHien, data) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`SoGoc/KhoaSoGocCu?NguoiThucHien=${nguoiThucHien}`, 'PUT', data);
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function moKhoaSo(nguoiThucHien, data) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`SoGoc/MoKhoaSo?NguoiThucHien=${nguoiThucHien}`, 'PUT', data);
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function duyetSoGocCu(nguoiThucHien, data) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`SoGoc/DuyetSoGocCu?NguoiThucHien=${nguoiThucHien}`, 'PUT', data);
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

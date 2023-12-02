@@ -50,6 +50,7 @@ export const initialState = {
   loading: false,
   disabledButton: false,
   openProfile: false,
+  openInstruct: false,
   showAlert: [],
   alertId: null,
   alertType: '',
@@ -404,6 +405,11 @@ const customizationReducer = (state = initialState, action) => {
       return {
         ...state,
         openProfile: action.openProfile
+      };
+    case actionTypes.INSTRUCT_OPEN:
+      return {
+        ...state,
+        openInstruct: action.openInstruct
       };
     case actionTypes.RELOAD_DATA:
       return {

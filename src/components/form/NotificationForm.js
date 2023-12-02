@@ -23,11 +23,13 @@ const NotificationForm = ({ message, type, success, submessage, url }) => {
         </MuiTypography>
       </Grid>
       <Grid item container spacing={1} direction="row" justifyContent="center" my={2}>
-        <Grid item>
-          <a href={config.urlImages + url} download>
-            <ButtonSuccess title="Tải xuống" icon={IconDownload} />
-          </a>
-        </Grid>
+        {url && (
+          <Grid item>
+            <a href={config.urlImages + url} download>
+              <ButtonSuccess title="Tải xuống" icon={IconDownload} />
+            </a>
+          </Grid>
+        )}
         <Grid item>
           <ResetButton type={type} />
         </Grid>

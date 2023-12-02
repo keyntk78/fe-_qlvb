@@ -178,7 +178,7 @@ const DonVi = () => {
 
   return (
     <>
-      <MainCard title={t('donvitruong.title')} secondary={<AddButton handleClick={handleAddDonvi} />}>
+      <MainCard title={t('donvitruong.title')} instruct secondary={<AddButton handleClick={handleAddDonvi} />}>
         <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
           <Grid item lg={3} md={4} sm={5} xs={7}>
             <QuickSearch

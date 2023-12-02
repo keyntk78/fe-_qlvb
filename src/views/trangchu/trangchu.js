@@ -381,12 +381,12 @@ const TrangChu = () => {
                       value={pageState.hoTen}
                     />
                   </Grid>
-                  <Grid item lg={2} md={4} sm={3} xs={isXs ? 12 : 2} minWidth={130}>
+                  <Grid item width={183}>
                     <Button variant="contained" fullWidth onClick={handleSearch} color="info" startIcon={<IconSearch />}>
                       {t('Tra cứu nhanh')}
                     </Button>
                   </Grid>
-                  <Grid item lg={2.5} md={4} sm={4} xs={isXs ? 12 : 2.5} minWidth={130}>
+                  <Grid item>
                     <Button variant="contained" fullWidth onClick={handleTraCuuNangCao} color="info" startIcon={<IconZoomIn />}>
                       {t('Tra cứu nâng cao')}
                     </Button>

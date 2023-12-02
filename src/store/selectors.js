@@ -10,6 +10,7 @@ export const openPopupSelector = (state) => state.customization.openPopup;
 export const openSubPopupSelector = (state) => state.customization.openSubPopup;
 export const openSubSubPopupSelector = (state) => state.customization.openSubSubPopup;
 export const openProfileSelector = (state) => state.customization.openProfile;
+export const openInstructSelector = (state) => state.customization.openInstruct;
 export const loadingSelector = (state) => state.customization.loading;
 export const disabledButtonSelector = (state) => state.customization.disabledButton;
 export const showAlertSelector = (state) => state.customization.showAlert;

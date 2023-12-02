@@ -49,7 +49,8 @@ const PhatBang = Loadable(lazy(() => import('views/thongke/phong/phatBang/index'
 const InPhoiBang = Loadable(lazy(() => import('views/thongke/phong/inPhoiBang/index')));
 const ImportDanhSachVanBang = Loadable(lazy(() => import('views/ImportDanhSachVanBang/DanhSachImport')));
 const Report = Loadable(lazy(() => import('views/report/Report')));
-const SoGocCu = Loadable(lazy(() => import('views/sogoccu/SoGocCu')));
+const ChuyenDoiSoGocCu = Loadable(lazy(() => import('views/sogoccu/ChuyenDoiSoGocCu')));
+const SoGocCu = Loadable(lazy(() => import('views/sogoccu/SoGocCuIndex')));
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 const PhuLucSoGoc = Loadable(lazy(() => import('views/phulucsogoc/PhuLucSoGoc')));
@@ -76,17 +77,17 @@ const MainRoutes = {
       path: 'role',
       element: <Role />
     },
-    // {
-    //   path: 'vanbang',
-    //   element: <Role />
-    // },
+    {
+      path: 'sogoccu',
+      element: <SoGocCu />
+    },
     {
       path: 'report',
       element: <Report />
     },
     {
       path: 'chuyendoisogoccu',
-      element: <SoGocCu />
+      element: <ChuyenDoiSoGocCu />
     },
     {
       path: 'hinhthucdaotao',

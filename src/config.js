@@ -7,18 +7,17 @@ const config = {
 
   apiUrl: 'http://localhost:5203/api',
   urlFile: 'http://localhost:5203/Resources/',
+  urlImages: 'http://localhost:5203',
 
   // apiUrl: 'https://api.quanlyvanbang.cenit.vn/api',
   // urlFile: 'https://api.quanlyvanbang.cenit.vn/Resources/',
-
-  secretKey: 'mytopsecretkeywithatleast32characterslong',
-
-  // urlImages: 'https://api.quanlyvanbang.cenit.vn'
-  //apiUrl: 'https://api.quanlyvanbang.cenit.vn/api',
-  //urlFile: 'https://api.quanlyvanbang.cenit.vn/Resources/',
-
   //urlImages: 'https://api.quanlyvanbang.cenit.vn'
-  urlImages: 'http://localhost:5203'
+
+  secretKey: 'mytopsecretkeywithatleast32characterslong'
+
+  // urlImages: 'https://api.quanlyvanbang.cenit.vn',
+  // apiUrl: 'https://api.quanlyvanbang.cenit.vn/api',
+  // urlFile: 'https://api.quanlyvanbang.cenit.vn/Resources/'
 };
 
 export default config;
