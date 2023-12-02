@@ -22,7 +22,8 @@ const MenuList = () => {
         title: item.nameMenu.replace(/-/g, ''),
         type: item.levelMenu === 1 ? 'collapse' : 'item',
         url: item.link,
-        icon: item.icon === '' ? item.icon : Icons[item.icon] || item.icon
+        icon: item.icon === '' ? item.icon : Icons[item.icon] || item.icon,
+        urlHuongDan: item.urlHuongDan || ''
       };
 
       const children = createMenu(menuData, item.menuId);

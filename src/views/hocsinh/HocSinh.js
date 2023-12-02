@@ -491,7 +491,6 @@ export default function HocSinh() {
     <>
       <MainCard
         title={t('hocsinh.title.main')}
-        instruct
         secondary={
           isXs ? (
             <Grid item>

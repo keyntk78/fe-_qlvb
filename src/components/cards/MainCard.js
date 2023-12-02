@@ -9,10 +9,12 @@ import { IconQuestionMark } from '@tabler/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { setOpenInstruct } from 'store/actions';
 import Popup from 'components/controls/popup';
-import { openInstructSelector } from 'store/selectors';
+import { openInstructSelector, urlHuongDanSelector } from 'store/selectors';
 import { Document, Page } from 'react-pdf';
 import { useState } from 'react';
 import ExitButton from 'components/button/ExitButton';
+import config from 'config';
+import { useEffect } from 'react';
 
 // constant
 const headerSX = {
@@ -35,7 +37,6 @@ const MainCard = forwardRef(
       shadow,
       sx = {},
       title,
-      instruct,
       ...others
     },
     ref
@@ -43,9 +44,16 @@ const MainCard = forwardRef(
     const theme = useTheme();
     const dispatch = useDispatch();
     const openInstruct = useSelector(openInstructSelector);
+    const urlHuongDan = useSelector(urlHuongDanSelector);
 
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
+    const [url, setUrl] = useState('');
+
+    useEffect(() => {
+      const url = urlHuongDan ? config.urlImages + urlHuongDan : '';
+      setUrl(url);
+    }, [urlHuongDan]);
 
     const onDocumentLoadSuccess = ({ numPages }) => {
       setNumPages(numPages);
@@ -76,7 +84,7 @@ const MainCard = forwardRef(
             </Grid>
             <Grid item sx={{ ml: '-15px' }}>
               {/* button hướng dẫn */}
-              {instruct && (
+              {url && (
                 <>
                   <AnimateButton>
                     <Tooltip title={'Hướng dẫn'} placement="bottom">
@@ -113,20 +121,22 @@ const MainCard = forwardRef(
         </Card>
         <Popup form="instruct" type="instruct" title="Hướng dẫn" openPopup={openInstruct} bgcolor={'#2196F3'} maxWidth={'md'}>
           <Grid container justifyContent="center" textAlign={'center'}>
-            <Grid item>
-              <Document file="/instruct_file/test.pdf" onLoadSuccess={onDocumentLoadSuccess}>
+            <Grid item mt={2}>
+              <Document file={url} onLoadSuccess={onDocumentLoadSuccess}>
                 <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false} />
               </Document>
             </Grid>
             {numPages > 1 && (
-              <Grid item>
-                <Stack spacing={2}>
-                  <Pagination count={numPages} page={pageNumber} onChange={handlePageChange} color="primary" />
-                </Stack>
+              <Grid item xs={12} container justifyContent="center">
+                <Grid item>
+                  <Stack spacing={2}>
+                    <Pagination count={numPages} page={pageNumber} onChange={handlePageChange} color="primary" />
+                  </Stack>
+                </Grid>
               </Grid>
             )}
           </Grid>
-          <Grid item xs={12} container spacing={2} justifyContent="flex-end">
+          <Grid item xs={12} container spacing={2} mt={1} justifyContent="flex-end">
             <Grid item>
               <ExitButton type="instruct" />
             </Grid>
@@ -139,7 +149,6 @@ const MainCard = forwardRef(
 
 MainCard.propTypes = {
   border: PropTypes.bool,
-  instruct: PropTypes.bool,
   boxShadow: PropTypes.bool,
   children: PropTypes.node,
   content: PropTypes.bool,

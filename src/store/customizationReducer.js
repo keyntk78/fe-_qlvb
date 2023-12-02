@@ -68,7 +68,8 @@ export const initialState = {
   report: [],
   up_vbcc: '',
   listDanhMuc: [],
-  selectedValue: ''
+  selectedValue: '',
+  urlHuongDan: ''
 };
 
 // ==============================|| CUSTOMIZATION REDUCER ||============================== //
@@ -345,6 +346,11 @@ const customizationReducer = (state = initialState, action) => {
       return {
         ...state,
         selectedNamthi: action.selectedNamthi
+      };
+    case actionTypes.URL_HUONGDAN:
+      return {
+        ...state,
+        urlHuongDan: action.urlHuongDan
       };
     case actionTypes.SELECTED_KHOATHI:
       return {

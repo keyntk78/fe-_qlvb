@@ -72,6 +72,7 @@ export const INFO_HOCSINH = '@customization/INFO_HOCSINH';
 export const UPDATE_VBCC = '@customization/UPDATE_VBCC';
 export const LIST_DANHMUC = '@customization/LIST_DANHMUC';
 export const SELECTED_VALUE = '@customization/SELECTED_VALUE';
+export const URL_HUONGDAN = '@customization/URL_HUONGDAN';
 
 // actions.js
 export const setUsers = (data) => ({ type: SET_USERS, users: data });
@@ -125,6 +126,7 @@ export const listDanhMuc = (data) => ({ type: LIST_DANHMUC, listDanhMuc: data })
 export const setCapBangInfor = (infor) => ({ type: CAPBANG_INFOR, capBangInfor: infor });
 export const setCapBangBanSao = (infor) => ({ type: CAPBANG_BANSAO, capBangBansao: infor });
 export const setSelectedValue = (value) => ({ type: SELECTED_VALUE, selectedValue: value });
+export const setUrlHuongDan = (value) => ({ type: URL_HUONGDAN, urlHuongDan: value });
 
 export const selectedConfigPhoiGoc = (configphoigoc) => ({ type: SELECTED_CONFIGPHOIGOC, selectedConfigPhoiGoc: configphoigoc });
 export const selectedConfigPhoiSao = (configphoisao) => ({ type: SELECTED_CONFIGPHOISAO, selectedConfigPhoiSao: configphoisao });

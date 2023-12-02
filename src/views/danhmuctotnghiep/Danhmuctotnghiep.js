@@ -293,12 +293,7 @@ const Danhmuctotnghiep = () => {
 
   return (
     <>
-      <MainCard
-        title={t('danhmuctotnghiep.title')}
-        instruct
-        handleClick={handleClick}
-        secondary={<AddButton handleClick={handleAddDanhmucTN} />}
-      >
+      <MainCard title={t('danhmuctotnghiep.title')} handleClick={handleClick} secondary={<AddButton handleClick={handleAddDanhmucTN} />}>
         <Grid container spacing={2} justifyContent={'center'} alignItems={'center'} my={1}>
           <Grid item xs={2} minWidth={120}>
             <FormControl fullWidth variant="outlined" size="small">
