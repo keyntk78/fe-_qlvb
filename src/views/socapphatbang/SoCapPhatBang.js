@@ -436,7 +436,7 @@ export default function SoCapPhatBang() {
     <>
       <MainCard title={t('socapphatbang.title')}>
         <Grid item container mb={1} spacing={1} mt={1} justifyContent={'center'} alignItems="center">
-          <Grid item lg={4} md={4} sm={4} xs={isXs ? 12 : 4}>
+          <Grid item lg={3} md={3} sm={4} xs={isXs ? 12 : 4}>
             <FormControl fullWidth variant="outlined" size="small">
               <InputLabel>{t('danhmuc.title')}</InputLabel>
               <Select
@@ -458,7 +458,7 @@ export default function SoCapPhatBang() {
             </FormControl>
           </Grid>
           {donvi != 0 && donvi.laPhong && (
-            <Grid item lg={4} md={4} sm={4} xs={isXs ? 12 : 4}>
+            <Grid item lg={3} md={3} sm={4} xs={isXs ? 12 : 4}>
               <FormControl fullWidth variant="outlined" size="small">
                 <InputLabel>{t('donvitruong.title')}</InputLabel>
                 <Select

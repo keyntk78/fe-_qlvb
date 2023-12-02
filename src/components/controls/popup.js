@@ -38,10 +38,12 @@ import {
   IconPhotoCancel,
   IconPencilPlus,
   IconPaperclip,
+  IconLock,
+  IconLockOpen,
   IconPlaylistX
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
-import { setOpenPopup, setOpenProfile, setOpenSubPopup, setOpenSubSubPopup } from '../../store/actions';
+import { setOpenInstruct, setOpenPopup, setOpenProfile, setOpenSubPopup, setOpenSubSubPopup } from '../../store/actions';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -66,6 +68,8 @@ export default function Popup(props) {
       dispatch(setOpenSubSubPopup(false));
     } else if (type === 'profile') {
       dispatch(setOpenProfile(false));
+    } else if (type === 'instruct') {
+      dispatch(setOpenInstruct(false));
     } else {
       dispatch(setOpenPopup(false));
     }
@@ -185,6 +189,10 @@ export default function Popup(props) {
                   <IconAddressBook sx={{ order: 2 }} />
                 ) : form === 'dinhkem' ? (
                   <IconPaperclip sx={{ order: 2 }} />
+                ) : form === 'khoa' ? (
+                  <IconLock sx={{ order: 2 }} />
+                ) : form === 'mokhoa' ? (
+                  <IconLockOpen sx={{ order: 2 }} />
                 ) : Icon ? (
                   <Icon sx={{ order: 2 }} />
                 ) : form === 'phoicabiet' ? (

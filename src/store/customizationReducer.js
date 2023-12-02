@@ -50,6 +50,7 @@ export const initialState = {
   loading: false,
   disabledButton: false,
   openProfile: false,
+  openInstruct: false,
   showAlert: [],
   alertId: null,
   alertType: '',
@@ -67,7 +68,8 @@ export const initialState = {
   report: [],
   up_vbcc: '',
   listDanhMuc: [],
-  selectedValue: ''
+  selectedValue: '',
+  urlHuongDan: ''
 };
 
 // ==============================|| CUSTOMIZATION REDUCER ||============================== //
@@ -345,6 +347,11 @@ const customizationReducer = (state = initialState, action) => {
         ...state,
         selectedNamthi: action.selectedNamthi
       };
+    case actionTypes.URL_HUONGDAN:
+      return {
+        ...state,
+        urlHuongDan: action.urlHuongDan
+      };
     case actionTypes.SELECTED_KHOATHI:
       return {
         ...state,
@@ -404,6 +411,11 @@ const customizationReducer = (state = initialState, action) => {
       return {
         ...state,
         openProfile: action.openProfile
+      };
+    case actionTypes.INSTRUCT_OPEN:
+      return {
+        ...state,
+        openInstruct: action.openInstruct
       };
     case actionTypes.RELOAD_DATA:
       return {

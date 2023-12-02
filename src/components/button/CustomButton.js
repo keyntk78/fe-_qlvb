@@ -5,7 +5,7 @@ import AnimateButton from 'components/extended/AnimateButton';
 const CustomButton = ({ handleClick, icon: Icon, title, label, variant, color }) => {
   return (
     <Grid>
-      <Grid item xs={3}>
+      <Grid item>
         <AnimateButton>
           <Tooltip title={title} placement="bottom">
             <Button color={color} variant={variant} size="medium" onClick={handleClick} startIcon={Icon && <Icon />}>

@@ -249,6 +249,7 @@ const Danhmuctotnghiep = () => {
       total: dataDanhmucTN.totalRow
     }));
   };
+
   useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
@@ -286,9 +287,13 @@ const Danhmuctotnghiep = () => {
     dispatch(setNam(selectedNam));
   };
 
+  const handleClick = () => {
+    dispatch(setOpenPopup(true));
+  };
+
   return (
     <>
-      <MainCard title={t('danhmuctotnghiep.title')} secondary={<AddButton handleClick={handleAddDanhmucTN} />}>
+      <MainCard title={t('danhmuctotnghiep.title')} handleClick={handleClick} secondary={<AddButton handleClick={handleAddDanhmucTN} />}>
         <Grid container spacing={2} justifyContent={'center'} alignItems={'center'} my={1}>
           <Grid item xs={2} minWidth={120}>
             <FormControl fullWidth variant="outlined" size="small">

@@ -22,6 +22,7 @@ export const DISABLED_BUTTON = '@customization/DISABLED_BUTTON';
 export const SUB_POPUP_OPEN = '@customization/SUB_POPUP_OPEN';
 export const SUB_SUB_POPUP_OPEN = '@customization/SUB_SUB_POPUP_OPEN';
 export const PROFILE_OPEN = '@customization/PROFILE_OPEN';
+export const INSTRUCT_OPEN = '@customization/INSTRUCT_OPEN';
 export const SHOW_ALERT = '@customization/SHOW_ALERT';
 export const HIDE_ALERT = '@customization/HIDE_ALERT';
 export const RELOAD_DATA = '@customization/RELOAD_DATA';
@@ -71,6 +72,7 @@ export const INFO_HOCSINH = '@customization/INFO_HOCSINH';
 export const UPDATE_VBCC = '@customization/UPDATE_VBCC';
 export const LIST_DANHMUC = '@customization/LIST_DANHMUC';
 export const SELECTED_VALUE = '@customization/SELECTED_VALUE';
+export const URL_HUONGDAN = '@customization/URL_HUONGDAN';
 
 // actions.js
 export const setUsers = (data) => ({ type: SET_USERS, users: data });
@@ -92,6 +94,7 @@ export const setDisabledButton = (status) => ({ type: DISABLED_BUTTON, disabledB
 export const setOpenSubPopup = (status) => ({ type: SUB_POPUP_OPEN, openSubPopup: status });
 export const setOpenSubSubPopup = (status) => ({ type: SUB_SUB_POPUP_OPEN, openSubSubPopup: status });
 export const setOpenProfile = (status) => ({ type: PROFILE_OPEN, openProfile: status });
+export const setOpenInstruct = (status) => ({ type: INSTRUCT_OPEN, openInstruct: status });
 export const setReloadData = (status) => ({ type: RELOAD_DATA, reloadData: status });
 export const setReloadNotification = (status) => ({ type: RELOAD_NOTIFICATION, reloadNotification: status });
 export const selectedFunction = (functions) => ({ type: SELECTED_FUNCTION, selectedFunction: functions });
@@ -123,6 +126,7 @@ export const listDanhMuc = (data) => ({ type: LIST_DANHMUC, listDanhMuc: data })
 export const setCapBangInfor = (infor) => ({ type: CAPBANG_INFOR, capBangInfor: infor });
 export const setCapBangBanSao = (infor) => ({ type: CAPBANG_BANSAO, capBangBansao: infor });
 export const setSelectedValue = (value) => ({ type: SELECTED_VALUE, selectedValue: value });
+export const setUrlHuongDan = (value) => ({ type: URL_HUONGDAN, urlHuongDan: value });
 
 export const selectedConfigPhoiGoc = (configphoigoc) => ({ type: SELECTED_CONFIGPHOIGOC, selectedConfigPhoiGoc: configphoigoc });
 export const selectedConfigPhoiSao = (configphoisao) => ({ type: SELECTED_CONFIGPHOISAO, selectedConfigPhoiSao: configphoisao });
