@@ -220,3 +220,18 @@ export async function arrangeHocSinhPhong(hocSinhs) {
     throw error;
   }
 }
+
+export async function ModifySoHieu(soHieu, IdHocSinh, nguoiThucHien) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(
+      `HocSinhPhong/ModifySoHieu?SoHieuVB=${soHieu}&IdHocSinh=${IdHocSinh}&NguoiThucHien=${nguoiThucHien}`,
+      'PUT'
+    );
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error modify sohieu hoc sinh:', error);
+    throw error;
+  }
+}
