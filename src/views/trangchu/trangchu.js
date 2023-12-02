@@ -344,7 +344,6 @@ const TrangChu = () => {
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;
-        console.log(data);
         if (response.data && response.data.hocSinhs.length > 0) {
           const trangThaiMapping = {
             1: t('Chưa duyệt'),

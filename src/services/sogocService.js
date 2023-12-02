@@ -220,3 +220,13 @@ export async function duyetSoGocCu(nguoiThucHien, data) {
     throw error;
   }
 }
+
+export async function getLichSuThaoTacSoGoc(params) {
+  try {
+    const response = await axiosClient(`SoGoc/LichSuThaoTacSoGoc?${params}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+}

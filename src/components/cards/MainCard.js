@@ -3,15 +3,16 @@ import { forwardRef } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Card, CardContent, CardHeader, Divider, Grid, IconButton, Tooltip, Typography } from '@mui/material';
+import { Card, CardContent, CardHeader, Divider, Grid, IconButton, Pagination, Stack, Tooltip, Typography } from '@mui/material';
 import AnimateButton from 'components/extended/AnimateButton';
 import { IconQuestionMark } from '@tabler/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { setOpenInstruct } from 'store/actions';
 import Popup from 'components/controls/popup';
 import { openInstructSelector } from 'store/selectors';
-import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
+import { Document, Page } from 'react-pdf';
 import { useState } from 'react';
+import ExitButton from 'components/button/ExitButton';
 
 // constant
 const headerSX = {
@@ -42,11 +43,17 @@ const MainCard = forwardRef(
     const theme = useTheme();
     const dispatch = useDispatch();
     const openInstruct = useSelector(openInstructSelector);
-    const [numPages, setNumPages] = useState(null);
 
-    function onDocumentSuccess({ numPages }) {
+    const [numPages, setNumPages] = useState(null);
+    const [pageNumber, setPageNumber] = useState(1);
+
+    const onDocumentLoadSuccess = ({ numPages }) => {
       setNumPages(numPages);
-    }
+    };
+
+    const handlePageChange = (event, value) => {
+      setPageNumber(value);
+    };
 
     return (
       <>
@@ -105,13 +112,25 @@ const MainCard = forwardRef(
           {!content && children}
         </Card>
         <Popup form="instruct" type="instruct" title="Hướng dẫn" openPopup={openInstruct} bgcolor={'#2196F3'} maxWidth={'md'}>
-          <Document file="/instruct_file/test.pdf" onLoadSuccess={onDocumentSuccess}>
-            {Array(numPages)
-              .fill()
-              .map((_, i) => (
-                <Page key={i} pageNumber={i + 1}></Page>
-              ))}
-          </Document>
+          <Grid container justifyContent="center" textAlign={'center'}>
+            <Grid item>
+              <Document file="/instruct_file/test.pdf" onLoadSuccess={onDocumentLoadSuccess}>
+                <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false} />
+              </Document>
+            </Grid>
+            {numPages > 1 && (
+              <Grid item>
+                <Stack spacing={2}>
+                  <Pagination count={numPages} page={pageNumber} onChange={handlePageChange} color="primary" />
+                </Stack>
+              </Grid>
+            )}
+          </Grid>
+          <Grid item xs={12} container spacing={2} justifyContent="flex-end">
+            <Grid item>
+              <ExitButton type="instruct" />
+            </Grid>
+          </Grid>
         </Popup>
       </>
     );

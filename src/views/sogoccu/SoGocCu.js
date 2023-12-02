@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IconCircleCheck, IconFileImport, IconLock, IconLockOpen, IconSearch } from '@tabler/icons';
+import { IconCircleCheck, IconFileImport, IconHistory, IconLock, IconLockOpen, IconSearch } from '@tabler/icons';
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, useMediaQuery } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -30,6 +30,7 @@ import Khoa from './Khoa';
 import MoKhoa from './MoKhoa';
 import Duyet from './Duyet';
 import ActionButtons from 'components/button/ActionButtons';
+import LichSuThaoTac from './LichSuThaoTac';
 
 export default function SoGocCu() {
   const language = i18n.language;
@@ -50,6 +51,9 @@ export default function SoGocCu() {
   const [form, setForm] = useState('');
   const [khoa, setKhoa] = useState(null);
   const [tinhTrang, setTinhTrang] = useState('');
+  const [selectDanhMuc, setSelectDanhMuc] = useState('');
+  const [selectDonVi, setSelectDonVi] = useState('');
+  const [selectDonViOld, setSelectDonViOld] = useState('');
   const openPopup = useSelector(openPopupSelector);
 
   const [pageState, setPageState] = useState({
@@ -179,6 +183,12 @@ export default function SoGocCu() {
     dispatch(selectedDonvitruong(selectedDonviInfo));
   };
 
+  const handleLichSuThaoTac = () => {
+    setTitle(t('Lịch sử thao tác sổ gốc cũ'));
+    setForm('xemlichsu');
+    dispatch(setOpenPopup(true));
+  };
+
   const handleKhoa = () => {
     setTitle(t('Khóa'));
     setForm('khoa');
@@ -298,16 +308,22 @@ export default function SoGocCu() {
   const handleDanhMucChange = (event) => {
     const selectedValue = event.target.value;
     setPageState((old) => ({ ...old, DMTN: selectedValue }));
+    const danhmuc = dMTN.find((value) => value.id === selectedValue);
+    setSelectDanhMuc(danhmuc);
   };
 
   const handleSchoolChange = (event) => {
     const selectedValue = event.target.value;
     setPageState((old) => ({ ...old, donVi: selectedValue, donViOld: '' }));
+    const donvi = donvis.find((value) => value.id === selectedValue);
+    setSelectDonVi(donvi);
   };
 
   const handleOldSchoolChange = (event) => {
     const selectedValue = event.target.value;
     setPageState((old) => ({ ...old, donViOld: selectedValue }));
+    const donviOld = donvis.find((value) => value.id === selectedValue);
+    setSelectDonViOld(donviOld);
   };
 
   const themTuTep = [
@@ -422,7 +438,22 @@ export default function SoGocCu() {
                 {t('button.search')}
               </Button>
             </Grid>
-            {pageState.DMTN && pageState.donVi && khoa === false ? (
+            {pageState.DMTN && pageState.donVi && (
+              <Grid item>
+                <Button
+                  variant="contained"
+                  title={t('Lịch sử thao tác')}
+                  fullWidth
+                  onClick={handleLichSuThaoTac}
+                  color="secondary"
+                  startIcon={<IconHistory />}
+                  disabled={disable}
+                >
+                  {t('Lịch sử thao tác')}
+                </Button>
+              </Grid>
+            )}
+            {pageState.DMTN && pageState.donVi && khoa === false && (
               <Grid item>
                 <Button
                   variant="contained"
@@ -436,11 +467,9 @@ export default function SoGocCu() {
                   {t('Khóa')}
                 </Button>
               </Grid>
-            ) : (
-              ''
             )}
             {/* Sổ đã khóa, tình trạng chưa duyệt thì hiển thị các button */}
-            {pageState.DMTN && pageState.donVi && khoa && tinhTrang === -1 ? (
+            {pageState.DMTN && pageState.donVi && khoa && tinhTrang === -1 && (
               <>
                 <Grid item>
                   <Button
@@ -459,8 +488,6 @@ export default function SoGocCu() {
                   <ButtonSuccess title={t('Duyệt')} onClick={handleDuyet} icon={IconCircleCheck} />
                 </Grid>
               </>
-            ) : (
-              ''
             )}
           </Grid>
         </Grid>
@@ -507,6 +534,8 @@ export default function SoGocCu() {
             <Detail />
           ) : form === 'import' ? (
             <Import />
+          ) : form === 'xemlichsu' ? (
+            <LichSuThaoTac danhMuc={selectDanhMuc} donvi={selectDonVi} donviOld={selectDonViOld} />
           ) : form === 'khoa' ? (
             <Khoa donviOld={pageState.donViOld || ''} />
           ) : form === 'mokhoa' ? (
