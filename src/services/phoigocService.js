@@ -13,6 +13,16 @@ export async function getSearchPhoigoc(params) {
   }
 }
 
+export async function getSearchPhoiDaHuyByIdPhoiGoc(params) {
+  try {
+    const response = await sendRequest(`PhoiGoc/GetSearchPhoiDaHuyByIdPhoiGoc?${params}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating PhoiDaHuy:', error);
+    throw error;
+  }
+}
+
 export async function getSearchPhoiDaHuy(params) {
   try {
     const response = await sendRequest(`PhoiGoc/GetSearchPhoiDaHuy?${params}`, 'GET');
@@ -66,6 +76,18 @@ export async function createPhoigoc(data) {
     return response;
   } catch (error) {
     console.error('Error creating Phoigoc:', error);
+    throw error;
+  }
+}
+
+export async function createPhoiCaBiet(data) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`PhoiGoc/CreatePhoiCaBiet`, 'PUT', data);
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating Phoicabiet:', error);
     throw error;
   }
 }

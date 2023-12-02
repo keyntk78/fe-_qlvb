@@ -8,6 +8,7 @@ import HocSinhTruong from 'views/hocsinhtotnghiep/HocSinh';
 import CapPhatBang from 'views/capphatbang/CapPhatBang';
 import CapBangSao from 'views/capbangbansao/CapBangSao';
 import Xacminhvanbang from 'views/xacminhvanbang/Xacminhvanbang';
+import SaoLuu from 'views/saoluu/SaoLuu';
 // dashboard routing
 // const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 
@@ -224,6 +225,10 @@ const MainRoutes = {
     {
       path: 'tracuuvanbang',
       element: <Xacminhvanbang />
+    },
+    {
+      path: 'saoluu',
+      element: <SaoLuu />
     },
     {
       path: 'utils',

@@ -1,5 +1,5 @@
 import { Button, Card, Grid, TextField, useMediaQuery } from '@mui/material';
-import { IconCertificate, IconEdit, IconSearch, IconZoomIn } from '@tabler/icons';
+import { IconCertificate, IconEdit, IconSearch, IconZoomIn, IconFileExport } from '@tabler/icons';
 import React from 'react';
 import ThongKeSoBangDaPhatChuaPhat from './SoBangDaPhatChuaPhat';
 import ThongKeSoLuongXepLoai from './SoLuongXepLoai';
@@ -34,6 +34,12 @@ import config from 'config';
 import ThongKeSoLuongNguoiHoc from './SoLuongHocSinh';
 import { getAllDanhmucTN } from 'services/sharedService';
 import Detail from 'views/hocsinh/Detail';
+import { format } from 'date-fns';
+import { GetCauHinhByIdDonVi } from 'services/sharedService';
+import { generateDocument } from '../capbangbansao/ExportWord';
+import { getSearchDonYeuCauDaDuyet } from 'services/capbangbansaoService';
+import { formatDate } from 'utils/formatDate';
+import { setLoading } from 'store/actions';
 
 // import { Component } from 'react';
 
@@ -78,6 +84,9 @@ const TrangChu = () => {
   const [form, setForm] = useState('');
   const user = useSelector(userLoginSelector);
   const [hsSoGoc, setHsSoGoc] = useState([]);
+  const [firstLoad, setFirstLoad] = useState(true);
+  const [dataExport, setDataExport] = useState([]);
+  const [dataConfig, setDataConfig] = useState([]);
 
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -264,10 +273,65 @@ const TrangChu = () => {
       const response = await getAllDanhmucTN(user ? user.username : '');
       dispatch(listDanhMuc(response.data));
     };
+
+    const fetchData = async () => {
+      const params = new URLSearchParams();
+      params.append('Order', 1);
+      params.append('OrderDir', 'ASC');
+      params.append('StartIndex', '0');
+      params.append('PageSize', 1000);
+      params.append('NgayDuyet', format(new Date(), 'yyyy-MM-dd'));
+      params.append('NguoiThucHien', user.username ? user.username : '');
+      params.append('TrangThai', pageState.trangThai || '');
+      const response = await getSearchDonYeuCauDaDuyet(params);
+      const response1 = await GetCauHinhByIdDonVi(user.username ? user.username : '');
+      setDataExport(response.data.donYeuCaus);
+      setDataConfig(response1.data);
+    };
+
+    fetchData();
+
+    if (!firstLoad) {
+      fetchData();
+    } else {
+      setFirstLoad(false);
+    }
     if (donvi != 0) {
       fetchDataDL();
     }
   }, [donvi, user]);
+
+  const handleExportWord = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    generateDocument(SoBanSao_word, SoBanSao_cf, true);
+    setLoading(false);
+  };
+
+  const SoBanSao_word =
+    dataExport &&
+    dataExport.map((data, index) => ({
+      idx: index + 1,
+      hoTen_fm: data.hocSinh.hoTen,
+      ngaySinh_fm: convertISODateToFormattedDate(data.hocSinh.ngaySinh),
+      noiSinh_fm: data.hocSinh.noiSinh,
+      gioiTinh_fm: data.hocSinh.gioiTinh ? 'Nam' : 'Nữ',
+      danToc_fm: data.hocSinh.danToc,
+      xepLoai_fm: data.hocSinh.xepLoai,
+      soHieuVanBang_fm: data.hocSinh.soHieuVanBang,
+      soVaoSoBanSao_fm: data.soVaoSoBanSao
+    }));
+
+  const SoBanSao_cf = {
+    uyBanNhanDan: (dataConfig.tenUyBanNhanDan && dataConfig.tenUyBanNhanDan.toUpperCase()) || '',
+    coQuanCapBang: (dataConfig.tenCoQuanCapBang && dataConfig.tenCoQuanCapBang.toUpperCase()) || '',
+    diaPhuong: dataConfig.tenDiaPhuongCapBang || '',
+    ngayCap: formatDate(format(new Date(), 'yyyy-MM-dd')),
+    nguoiKy: dataConfig.hoTenNguoiKySoGoc || '',
+    nam: new Date(format(new Date(), 'yyyy-MM-dd')).getFullYear(),
+    ngay: new Date(format(new Date(), 'yyyy-MM-dd')).getDate(),
+    thang: new Date(format(new Date(), 'yyyy-MM-dd')).getMonth() + 1
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -357,7 +421,22 @@ const TrangChu = () => {
         <>
           {donvi.laPhong && (
             <Grid mb={2}>
-              <MainCard title={t('Tra cứu nhanh')}>
+              <MainCard
+                title={t('Tra cứu nhanh')}
+                secondary={
+                  <Grid item>
+                    <Button
+                      onClick={handleExportWord}
+                      color="info"
+                      variant="contained"
+                      startIcon={<IconFileExport />}
+                      disabled={dataExport && dataExport.length == 0}
+                    >
+                      {t('Xuất sổ bản sao')}
+                    </Button>
+                  </Grid>
+                }
+              >
                 <Grid item container spacing={1} mb={2} justifyContent={'center'} alignItems={'center'}>
                   <Grid item lg={2} md={3} sm={3} xs={isXs ? 4 : 2}>
                     <TextField

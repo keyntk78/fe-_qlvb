@@ -39,7 +39,8 @@ import {
   IconPencilPlus,
   IconPaperclip,
   IconLock,
-  IconLockOpen
+  IconLockOpen,
+  IconPlaylistX
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { setOpenInstruct, setOpenPopup, setOpenProfile, setOpenSubPopup, setOpenSubSubPopup } from '../../store/actions';
@@ -194,6 +195,8 @@ export default function Popup(props) {
                   <IconLockOpen sx={{ order: 2 }} />
                 ) : Icon ? (
                   <Icon sx={{ order: 2 }} />
+                ) : form === 'phoicabiet' ? (
+                  <IconPlaylistX sx={{ order: 2 }} />
                 ) : (
                   ''
                 )}
