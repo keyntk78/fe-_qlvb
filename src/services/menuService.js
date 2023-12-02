@@ -1,6 +1,7 @@
 import { sendRequest } from 'utils/apiUtils';
 import { setLoading } from 'store/actions';
 import { store } from '../store/index';
+import { axiosClient } from './axiosClient';
 
 export async function getAllMenu(params) {
   try {
@@ -24,10 +25,21 @@ export async function getMenuById(id) {
   }
 }
 
+// export async function createMenu(data) {
+//   try {
+//     store.dispatch(setLoading(true));
+//     const response = await sendRequest('Menu/Create', 'POST', data);
+//     store.dispatch(setLoading(false));
+//     return response;
+//   } catch (error) {
+//     console.error('Error creating Menu:', error);
+//     throw error;
+//   }
+// }
 export async function createMenu(data) {
   try {
     store.dispatch(setLoading(true));
-    const response = await sendRequest('Menu/Create', 'POST', data);
+    const response = await axiosClient('Menu/Create', 'POST', data);
     store.dispatch(setLoading(false));
     return response;
   } catch (error) {
@@ -38,7 +50,7 @@ export async function createMenu(data) {
 export async function editMenu(data) {
   try {
     store.dispatch(setLoading(true));
-    const response = await sendRequest(`Menu/Update`, 'PUT', data);
+    const response = await axiosClient(`Menu/Update`, 'PUT', data);
     store.dispatch(setLoading(false));
     return response;
   } catch (error) {

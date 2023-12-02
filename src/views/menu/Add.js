@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { Grid, FormControlLabel, useMediaQuery } from '@mui/material';
+import { Grid, FormControlLabel, useMediaQuery, Input, Button } from '@mui/material';
 import { getAllMenu, createMenu } from 'services/menuService';
 import { getAllFunctionAction } from 'services/functionActionService';
 import { useTranslation } from 'react-i18next';
@@ -17,6 +17,9 @@ import SelectListIcon from 'components/form/SelectListIcon';
 import SelectList from 'components/form/SelectList';
 import FormControlComponent from 'components/form/FormControlComponent ';
 import FormGroupButton from 'components/button/FormGroupButton';
+import { IconFilePlus } from '@tabler/icons';
+import { convertJsonToFormData } from 'utils/convertJsonToFormData';
+
 const AddMenu = () => {
   const isXs = useMediaQuery('(max-width:800px)');
   const { t } = useTranslation();
@@ -24,6 +27,8 @@ const AddMenu = () => {
   const menuValidationSchema = useMenuValidationSchema(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [selectFile, setSelectFile] = useState('');
+  const [selectedFileName, setSelectedFileName] = useState('');
   const [pageState, setPageState] = useState({
     isLoading: false,
     functionaction: [],
@@ -44,7 +49,10 @@ const AddMenu = () => {
     validationSchema: menuValidationSchema,
     onSubmit: async (values) => {
       try {
-        const addmenu = await createMenu(values);
+        const data = await convertJsonToFormData(values);
+        data.append('FileHuongDan', selectFile);
+        data.append('PathFileHuongDan', selectedFileName);
+        const addmenu = await createMenu(data);
         if (addmenu.isSuccess == false) {
           dispatch(showAlert(new Date().getTime().toString(), 'error', addmenu.message.toString()));
         } else {
@@ -109,9 +117,16 @@ const AddMenu = () => {
   useEffect(() => {
     if (openPopup) {
       formik.resetForm();
+      setSelectedFileName('');
+      setSelectFile('');
     }
   }, [openPopup]);
-
+  const handleOnchangfile = (e) => {
+    const file = e.target.files[0];
+    setSelectedFileName(file.name);
+    setSelectFile(file);
+    e.target.value = null;
+  };
   return (
     <form onSubmit={formik.handleSubmit}>
       <Grid container>
@@ -176,6 +191,27 @@ const AddMenu = () => {
                 label={t('menu.field.isshow')}
               />
             </Grid>
+          </Grid>
+          <Grid item xs={12} container>
+            <FormControlComponent xsLabel={isXs ? 0 : 3} xsForm={isXs ? 12 : 9} label={t('File đính kèm')}>
+              <Grid item xs={12} display={'flex'} alignItems={'center'}>
+                <Input
+                  type="file"
+                  inputProps={{ accept: '.doc, .docx, .pdf' }}
+                  style={{ display: 'none' }}
+                  id="fileInput"
+                  onChange={handleOnchangfile}
+                />
+                <label htmlFor="fileInput">
+                  <Button variant="outlined" component="span" color="success" startIcon={<IconFilePlus />}>
+                    {t('button.upload')}
+                  </Button>
+                </label>
+                <Grid item mx={1}>
+                  {selectedFileName && <span>{selectedFileName}</span>}
+                </Grid>
+              </Grid>
+            </FormControlComponent>
           </Grid>
         </Grid>
         <Grid item xs={12} container spacing={2} justifyContent="flex-end">

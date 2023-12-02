@@ -3,8 +3,8 @@ import { useFormik } from 'formik';
 import MainCard from 'components/cards/MainCard';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setReloadData, showAlert } from 'store/actions';
-import { openPopupSelector, reloadDataSelector, selectedPhoigocSelector, userLoginSelector } from 'store/selectors';
+import { setReloadData, setOpenSubPopup } from 'store/actions';
+import { openPopupSelector, reloadDataSelector, selectedPhoigocSelector, openSubPopupSelector } from 'store/selectors';
 import { useNavigate } from 'react-router-dom';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { useTranslation } from 'react-i18next';
@@ -16,17 +16,18 @@ import i18n from 'i18n';
 import React from 'react';
 import { Grid, useMediaQuery, Button, Input } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
-import { getSearchPhoiDaHuyByIdPhoiGoc, createPhoiCaBiet } from 'services/phoigocService';
+import { getSearchPhoiDaHuyByIdPhoiGoc } from 'services/phoigocService';
 import FormControlComponent from 'components/form/FormControlComponent ';
 import InputForm from 'components/form/InputForm';
 import usePhoicabietValidationSchema from 'components/validations/phoicabietValidation';
 import QuickSearch from 'components/form/QuickSearch';
 import config from 'config';
+import XacNhanHuySoHieuPhoi from './XacNhanHuySoHieuPhoi';
+import Popup from 'components/controls/popup';
 
 const PhoiCaBiet = () => {
   const isXs = useMediaQuery('(max-width:600px)');
   const PhoicabietValidationSchema = usePhoicabietValidationSchema();
-  const user = useSelector(userLoginSelector);
   const language = i18n.language;
   const { t } = useTranslation();
   const localeText = useLocalText();
@@ -38,6 +39,10 @@ const PhoiCaBiet = () => {
   const [selectedFileName, setSelectedFileName] = useState('');
   const openPopup = useSelector(openPopupSelector);
   const [selectFile, setSelectFile] = useState('');
+  const openSubPopup = useSelector(openSubPopupSelector);
+  const [title, setTitle] = useState('');
+
+  const [form, setForm] = useState('');
   const [pageState, setPageState] = useState({
     idphoigoc: selectedPhoigoc.id,
     isLoading: false,
@@ -55,29 +60,10 @@ const PhoiCaBiet = () => {
       LyDoHuy: ''
     },
     validationSchema: PhoicabietValidationSchema,
-    onSubmit: async (values) => {
-      try {
-        const form = new FormData();
-        form.append('IdPhoiGoc', values.IdPhoiGoc);
-        form.append('LyDoHuy', values.LyDoHuy);
-        values.soHieus.split(',').forEach((item) => {
-          form.append('ListSoHieu', item);
-        });
-        form.append('FileBienBanHuyPhoi', selectFile);
-        form.append('PathFileBienBanHuyPhoi', selectedFileName);
-        form.append('NguoiThucHien', user.username);
-
-        const PhoiCaBiet = await createPhoiCaBiet(form);
-        if (PhoiCaBiet.isSuccess == false) {
-          dispatch(showAlert(new Date().getTime().toString(), 'error', PhoiCaBiet.message.toString()));
-        } else {
-          dispatch(setReloadData(true));
-          dispatch(showAlert(new Date().getTime().toString(), 'success', PhoiCaBiet.message.toString()));
-        }
-      } catch (error) {
-        console.error('Error updating function:', error);
-        dispatch(showAlert(new Date().getTime().toString(), 'error', error.toString()));
-      }
+    onSubmit: async () => {
+      setTitle(t('Xác nhận thu hồi '));
+      setForm('delete');
+      dispatch(setOpenSubPopup(true));
     }
   });
   useEffect(() => {
@@ -263,6 +249,28 @@ const PhoiCaBiet = () => {
         </MainCard>
       </Grid>
       <BackToTop />
+      {form !== '' && (
+        <Popup
+          title={title}
+          form={form}
+          openPopup={openSubPopup}
+          type="subpopup"
+          maxWidth={'sm'}
+          bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
+        >
+          {form === 'delete' ? (
+            <XacNhanHuySoHieuPhoi
+              formik={formik}
+              selectFile={selectFile}
+              setSelectFile={setSelectFile}
+              selectedFileName={selectedFileName}
+              setSelectedFileName={setSelectedFileName}
+            />
+          ) : (
+            ''
+          )}
+        </Popup>
+      )}
     </>
   );
 };
