@@ -41,7 +41,6 @@ const PhoiCaBiet = () => {
   const [selectFile, setSelectFile] = useState('');
   const openSubPopup = useSelector(openSubPopupSelector);
   const [title, setTitle] = useState('');
-
   const [form, setForm] = useState('');
   const [pageState, setPageState] = useState({
     idphoigoc: selectedPhoigoc.id,

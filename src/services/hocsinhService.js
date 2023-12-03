@@ -235,3 +235,13 @@ export async function ModifySoHieu(soHieu, IdHocSinh, nguoiThucHien) {
     throw error;
   }
 }
+
+export async function getXepLoaiHocSinh(params) {
+  try {
+    const response = await sendRequest(`ThongKe/ThongKeHocSinhTotNghiepTheoNam?${params}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating history access:', error);
+    throw error;
+  }
+}

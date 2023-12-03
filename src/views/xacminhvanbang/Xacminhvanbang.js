@@ -726,7 +726,7 @@ export default function Xacminhvanbang() {
           rows={pageState.data}
           rowCount={pageState.total}
           loading={pageState.isLoading}
-          rowsPerPageOptions={[5, 10, 20]}
+          rowsPerPageOptions={[5, 10, 20, 50, 100]}
           rowHeight={60}
           pagination
           page={pageState.startIndex}

@@ -4,20 +4,19 @@ const config = {
   defaultPath: '/admin',
   fontFamily: `'Roboto', sans-serif`,
   borderRadius: 12,
-
+  //API Local
+  //================
   apiUrl: 'http://localhost:5203/api',
   urlFile: 'http://localhost:5203/Resources/',
   urlImages: 'http://localhost:5203',
-
-  // apiUrl: 'https://api.quanlyvanbang.cenit.vn/api',
-  // urlFile: 'https://api.quanlyvanbang.cenit.vn/Resources/',
-  //urlImages: 'https://api.quanlyvanbang.cenit.vn'
-
-  secretKey: 'mytopsecretkeywithatleast32characterslong'
-
-  // urlImages: 'https://api.quanlyvanbang.cenit.vn',
+  //================
+  //API PUBLIC
+  //================
+  // urlImages: 'https://api.quanlyvanbang.cenit.vn'
   // apiUrl: 'https://api.quanlyvanbang.cenit.vn/api',
   // urlFile: 'https://api.quanlyvanbang.cenit.vn/Resources/'
+  //=================
+  secretKey: 'mytopsecretkeywithatleast32characterslong'
 };
 
 export default config;
