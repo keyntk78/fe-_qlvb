@@ -40,7 +40,9 @@ import {
   IconPaperclip,
   IconLock,
   IconLockOpen,
-  IconPlaylistX
+  IconPlaylistX,
+  IconDownload,
+  IconRotateClockwise
 } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
 import { setOpenInstruct, setOpenPopup, setOpenProfile, setOpenSubPopup, setOpenSubSubPopup } from '../../store/actions';
@@ -155,6 +157,12 @@ export default function Popup(props) {
                   <IconChecks sx={{ order: 2 }} />
                 ) : form === 'xacnhanphatbansao' ? (
                   <IconChecks sx={{ order: 2 }} />
+                ) : form === 'saoluu' ? (
+                  <IconDownload sx={{ order: 2 }} />
+                ) : form === 'khoiphuc' ? (
+                  <IconRotateClockwise sx={{ order: 2 }} />
+                ) : form === 'dongbo' ? (
+                  <IconRefresh sx={{ order: 2 }} />
                 ) : form === 'show' ? (
                   <IconEye sx={{ order: 2 }} />
                 ) : form === 'xemlichsu' ? (

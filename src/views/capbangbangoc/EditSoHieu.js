@@ -7,13 +7,17 @@ import { Grid } from '@mui/material';
 
 import BackToTop from 'components/scroll/BackToTop';
 
-import InputForm1 from 'components/form/InputForm1';
+//import InputForm1 from 'components/form/InputForm1';
 import { useFormik } from 'formik';
 import { ModifySoHieu, getHocSinhByCCCD } from 'services/hocsinhService';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { setOpenSubPopup, setReloadData, showAlert } from 'store/actions';
 import FormGroupButton from 'components/button/FormGroupButton';
+import useThayDoiSoHieuValidationSchema from 'components/validations/chinhsuasohieuValidation';
+//import FormControlComponent from 'components/form/FormControlComponent ';
+//import InputForm from 'components/form/InputForm';
+import InputForm1 from 'components/form/InputForm1';
 
 const EditSoHieu = () => {
   const { t } = useTranslation();
@@ -28,7 +32,7 @@ const EditSoHieu = () => {
       soHieuHienTai: '',
       soHieuMoi: ''
     },
-    //validationSchema: userValidationSchema,
+    validationSchema: useThayDoiSoHieuValidationSchema(),
     onSubmit: async (values) => {
       try {
         const response = await ModifySoHieu(values.soHieuMoi, IdHocSinh, user.username);
@@ -61,27 +65,33 @@ const EditSoHieu = () => {
       fetchData();
     }
   }, [hocSinh, openSubPopup]);
-
+  useEffect(() => {
+    if (openSubPopup) {
+      formik.resetForm();
+    }
+  }, [openSubPopup]);
   return (
     <form onSubmit={formik.handleSubmit}>
       <MainCard title={t('Chỉnh sửa số hiệu văn bằng')}>
-        <Grid item container spacing={1} mb={2} justifyContent={'center'} alignItems={'center'}>
-          <Grid item lg={4} md={6} sm={6} xs={8}>
-            <InputForm1
-              xs={12}
-              label={'Số hiệu hiện tại'}
-              name="soHieuHienTai"
-              formik={formik}
-              placeholder={'Số hiệu hiện tại'}
-              isDisabled
-            />
-          </Grid>
-          <Grid item lg={4} md={6} sm={6} xs={8}>
-            <InputForm1 xs={12} label={'Số hiệu mới'} name="soHieuMoi" formik={formik} placeholder={'Số hiệu mới'} />
+        <Grid item container spacing={1} mb={2}>
+          <Grid item xs={12} container spacing={2} justifyContent={'center'}>
+            <Grid item lg={4} md={6} sm={6} xs={8}>
+              <InputForm1
+                xs={12}
+                label={'Số hiệu hiện tại'}
+                name="soHieuHienTai"
+                formik={formik}
+                placeholder={'Số hiệu hiện tại'}
+                isDisabled
+              />
+            </Grid>
+            <Grid item lg={4} md={6} sm={6} xs={8}>
+              <InputForm1 xs={12} label={'Số hiệu mới'} name="soHieuMoi" formik={formik} placeholder={'Số hiệu mới'} isRequired />
+            </Grid>
           </Grid>
         </Grid>
         <Grid item xs={12} container spacing={2} justifyContent="flex-end">
-          <FormGroupButton />
+          <FormGroupButton type="subpopup" />
         </Grid>
       </MainCard>
       <BackToTop />

@@ -25,3 +25,15 @@ export async function getBackupData() {
     throw error;
   }
 }
+
+export async function SyncCollection() {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest('DongBo/SyncCollection', 'GET');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating role:', error);
+    throw error;
+  }
+}

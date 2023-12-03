@@ -2,7 +2,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setOpenPopup } from 'store/actions';
-import { openPopupSelector } from 'store/selectors';
+import { openPopupSelector, reloadDataSelector } from 'store/selectors';
 import Popup from 'components/controls/popup';
 import { useTranslation } from 'react-i18next';
 import { Button, Grid } from '@mui/material';
@@ -14,6 +14,7 @@ import config from 'config';
 import XacNhanSaoLuu from './XacNhanSaoLuu';
 import { getBackupData } from 'services/saoluuService';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
+import DongBo from './XacNhanDongBo';
 
 const SaoLuu = () => {
   const localeText = useLocalText();
@@ -25,7 +26,7 @@ const SaoLuu = () => {
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
   const openPopup = useSelector(openPopupSelector);
-
+  const reloadData = useSelector(reloadDataSelector);
   useEffect(() => {
     const fectchData = async () => {
       const res = await getBackupData();
@@ -38,9 +39,8 @@ const SaoLuu = () => {
         setData(backupData);
       }
     };
-
     fectchData();
-  }, [openPopup]);
+  }, [reloadData]);
 
   const columns = [
     {
@@ -107,7 +107,11 @@ const SaoLuu = () => {
     dispatch(setOpenPopup(true));
   };
 
-  const handleSynchronized = async () => {};
+  const handleSynchronized = async () => {
+    setTitle(t('Đồng bộ dữ liệu'));
+    setForm('dongbo');
+    dispatch(setOpenPopup(true));
+  };
 
   return (
     <>
@@ -140,13 +144,14 @@ const SaoLuu = () => {
             rows={data}
             localeText={language === 'vi' ? localeText : null}
             disableSelectionOnClick={true}
+            hideFooterPagination
           />
         ) : (
           <h1>{t('not.allow.access')}</h1>
         )}
         {form !== '' && (
           <Popup title={title} form={form} openPopup={openPopup} maxWidth={'sm'} bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}>
-            <XacNhanSaoLuu type={form} />
+            {form === 'dongbo' ? <DongBo /> : <XacNhanSaoLuu type={form} />}
           </Popup>
         )}
       </MainCard>
