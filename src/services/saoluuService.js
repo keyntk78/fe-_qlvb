@@ -26,6 +26,18 @@ export async function getBackupData() {
   }
 }
 
+export async function restoreDate(data) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest('DataBackup/Restore', 'POST', data);
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating role:', error);
+    throw error;
+  }
+}
+
 export async function SyncCollection() {
   try {
     store.dispatch(setLoading(true));
