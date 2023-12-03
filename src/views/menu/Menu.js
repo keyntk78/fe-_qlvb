@@ -21,6 +21,8 @@ import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import BackToTop from 'components/scroll/BackToTop';
 import { Grid } from '@mui/material';
 import QuickSearch from 'components/form/QuickSearch';
+import { IconDownload } from '@tabler/icons';
+import config from 'config';
 
 const Menu = () => {
   const language = i18n.language;
@@ -61,6 +63,22 @@ const Menu = () => {
       field: 'link',
       headerName: t('menu.field.link'),
       flex: 1
+    },
+    {
+      flex: 0.1,
+      field: 'urlHuongDan',
+      headerName: t('file hướng dẫn'),
+      minWidth: 100,
+      align: 'center',
+      renderCell: (params) => {
+        const pathFileHuongDan = config.urlImages + params.row.urlHuongDan;
+
+        return (
+          <a href={pathFileHuongDan} download title="Tải xuống">
+            {params.row.urlHuongDan ? <IconDownload /> : ''}
+          </a>
+        );
+      }
     },
     {
       field: 'actions',

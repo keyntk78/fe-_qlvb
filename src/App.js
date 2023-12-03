@@ -13,12 +13,15 @@ import themes from 'themes';
 import NavigationScroll from 'layout/NavigationScroll';
 import { loadingSelector } from 'store/selectors';
 import Loading from 'components/loading/loading';
+import { pdfjs } from 'react-pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url).toString();
 
 // ==============================|| APP ||============================== //
 
 const App = () => {
   const customization = useSelector((state) => state.customization);
-  const loading = useSelector(loadingSelector)
+  const loading = useSelector(loadingSelector);
 
   return (
     <StyledEngineProvider injectFirst>

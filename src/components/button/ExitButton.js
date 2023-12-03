@@ -3,7 +3,7 @@ import { Grid, Button, Tooltip } from '@mui/material';
 import AnimateButton from 'components/extended/AnimateButton';
 import { useTranslation } from 'react-i18next';
 import { IconX } from '@tabler/icons';
-import { setOpenPopup, setOpenProfile, setOpenSubPopup, setOpenSubSubPopup } from 'store/actions';
+import { setOpenInstruct, setOpenPopup, setOpenProfile, setOpenSubPopup, setOpenSubSubPopup } from 'store/actions';
 import { useDispatch } from 'react-redux';
 
 const ResetButton = ({ type }) => {
@@ -17,6 +17,8 @@ const ResetButton = ({ type }) => {
       dispatch(setOpenSubSubPopup(false));
     } else if (type === 'profile') {
       dispatch(setOpenProfile(false));
+    } else if (type === 'instruct') {
+      dispatch(setOpenInstruct(false));
     } else {
       dispatch(setOpenPopup(false));
     }

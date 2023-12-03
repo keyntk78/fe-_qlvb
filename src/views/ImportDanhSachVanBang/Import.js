@@ -310,18 +310,6 @@ function Import() {
           </Grid>
         </Grid>
       </form>
-      {/* {form !== '' && (
-        <Popup
-          title={title}
-          form={form}
-          openPopup={openSubPopup}
-          type="subpopup"
-          maxWidth={'lg'}
-          bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
-        >
-          {form === 'import' ? <DanhSachImport /> : ''}
-        </Popup>
-      )} */}
       <Popup
         title="Kết quả import"
         type={'subpopup'}

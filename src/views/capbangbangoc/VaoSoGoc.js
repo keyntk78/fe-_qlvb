@@ -1,8 +1,16 @@
 import { DataGrid } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLoading, setOpenPopup, setReloadData, showAlert } from 'store/actions';
-import { openPopupSelector, selectedDanhmucSelector, selectedDonvitruongSelector, userLoginSelector } from 'store/selectors';
+import { selectedHocsinh, setLoading, setOpenPopup, setOpenSubPopup, setReloadData, showAlert } from 'store/actions';
+import {
+  openPopupSelector,
+  openSubPopupSelector,
+  reloadDataSelector,
+  //reloadDataSelector,
+  selectedDanhmucSelector,
+  selectedDonvitruongSelector,
+  userLoginSelector
+} from 'store/selectors';
 import { useTranslation } from 'react-i18next';
 import useLocalText from 'utils/localText';
 import { useNavigate } from 'react-router-dom';
@@ -21,6 +29,9 @@ import { convertJsonToFormData } from 'utils/convertJsonToFormData';
 import ExportSoGoc from './ExportSoGoc';
 import { getPreviewHocSinh, putIntoSoGoc } from 'services/capbangbanchinhService';
 import { GetCauHinhByIdDonVi } from 'services/sharedService';
+import ActionButtons from 'components/button/ActionButtons';
+import Popup from 'components/controls/popup';
+import EditSoHieu from './EditSoHieu';
 const VaoSoGoc = () => {
   const language = i18n.language;
   const navigate = useNavigate();
@@ -32,7 +43,10 @@ const VaoSoGoc = () => {
   const [isAccess, setIsAccess] = useState(true);
   const user = useSelector(userLoginSelector);
   const openPopup = useSelector(openPopupSelector);
-
+  const openSubPopup = useSelector(openSubPopupSelector);
+  const reloadData = useSelector(reloadDataSelector);
+  const [title, setTitle] = useState('');
+  const [form, setForm] = useState('');
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -62,7 +76,12 @@ const VaoSoGoc = () => {
     danToc: '',
     trangThai: 2
   });
-
+  const handleEdit = (hocsinh) => {
+    setTitle(t('Chỉnh sửa số hiệu văn bằng'));
+    setForm('edit');
+    dispatch(selectedHocsinh(hocsinh));
+    dispatch(setOpenSubPopup(true));
+  };
   const columns = [
     {
       field: 'idx',
@@ -119,6 +138,20 @@ const VaoSoGoc = () => {
       headerName: t('hocsinh.field.soCapBang'),
       flex: 2,
       minWidth: 110
+    },
+    {
+      field: 'actions',
+      headerName: t('action'),
+      width: 90,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <>
+          <Grid container justifyContent="center">
+            <ActionButtons type="edit" handleEdit={handleEdit} params={params.row} />
+          </Grid>
+        </>
+      )
     }
   ];
 
@@ -142,7 +175,6 @@ const VaoSoGoc = () => {
             ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
             ...row
           }));
-          dispatch(setReloadData(true));
           setPageState((old) => ({
             ...old,
             isLoading: false,
@@ -155,7 +187,7 @@ const VaoSoGoc = () => {
       }
     };
     fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, donvi, danhmuc]);
+  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, donvi, danhmuc, reloadData]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -185,7 +217,7 @@ const VaoSoGoc = () => {
       }
     };
     fetchData();
-  }, [danhmuc]);
+  }, [danhmuc, reloadData]);
 
   const handleExport = async (e) => {
     e.preventDefault();
@@ -321,6 +353,11 @@ const VaoSoGoc = () => {
           <FormGroupButton />
         </Grid>
       </form>
+      {form !== '' && (
+        <Popup title={title} form={form} type="subpopup" openPopup={openSubPopup} maxWidth={'sm'} bgcolor={'#2196F3'}>
+          {form === 'edit' ? <EditSoHieu /> : ''}
+        </Popup>
+      )}
       <BackToTop />
     </>
   );
