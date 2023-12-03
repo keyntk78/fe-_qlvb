@@ -10,7 +10,7 @@ import YesButton from 'components/button/YesButton';
 import NoButton from 'components/button/NoButton';
 import MuiTypography from '@mui/material/Typography';
 import { userLoginSelector } from 'store/selectors';
-import { backupData, restoreDate } from 'services/saoluuService';
+import { backupData, restoreData } from 'services/saoluuService';
 import useKhoiphucValidationSchema from 'components/validations/khoiPhucValidationSchema';
 
 const XacNhanSaoLuu = ({ type }) => {
@@ -26,7 +26,9 @@ const XacNhanSaoLuu = ({ type }) => {
     validationSchema: KhoiPhucValidationSchema,
     onSubmit: async () => {
       try {
-        const restore = await restoreDate(selectFile);
+        const form = new FormData();
+        form.append('backupFileName', selectFile);
+        const restore = await restoreData(form);
         if (restore.isSuccess == false) {
           dispatch(showAlert(new Date().getTime().toString(), 'error', restore.message.toString()));
         } else {
