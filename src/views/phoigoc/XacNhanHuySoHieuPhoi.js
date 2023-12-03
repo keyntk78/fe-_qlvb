@@ -29,6 +29,7 @@ const XacNhanHuySoHieuPhoi = ({ formik, selectFile, setSelectFile, selectedFileN
 
       const PhoiCaBiet = await createPhoiCaBiet(form);
       if (PhoiCaBiet.isSuccess == false) {
+        dispatch(setOpenSubPopup(false));
         dispatch(showAlert(new Date().getTime().toString(), 'error', PhoiCaBiet.message.toString()));
       } else {
         dispatch(setOpenSubPopup(false));

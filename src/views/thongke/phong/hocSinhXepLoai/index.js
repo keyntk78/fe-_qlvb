@@ -132,7 +132,7 @@ export default function ThongKeHocSinhTheoNam() {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
       params.append('IdNamThi', pageState.namHoc);
-      params.append('IdTruong', donVi.laPhong ? pageState.donVi : donVi.id);
+      params.append('IdTruong', donVi.laPhong ? (pageState.donVi === 'all' ? '' : pageState.donVi) : donVi.id);
       const response = await getXepLoaiHocSinh(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -212,7 +212,7 @@ export default function ThongKeHocSinhTheoNam() {
                   onChange={handleSchoolChange}
                   label={t('donvitruong.title')}
                 >
-                  <MenuItem value={''}>Tất cả</MenuItem>
+                  <MenuItem value={'all'}>Tất cả</MenuItem>
                   {/* <MenuItem value="all">{t('select.all')}</MenuItem> */}
                   {donvis && donvis.length > 0 ? (
                     donvis.map((data) => (
