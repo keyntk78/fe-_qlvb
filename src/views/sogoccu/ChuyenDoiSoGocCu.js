@@ -261,7 +261,7 @@ const ChuyenDoiSoGocCu = () => {
         </Grid>
       </MainCard>
       <Grid mt={2}>
-        <MainCard title={t('Lịch sử chuyển đổi')}>
+        <MainCard title={t('Lịch sử chuyển đổi')} hideInstruct>
           <Grid container justifyContent="center" mb={1} spacing={1} alignItems="center">
             <Grid item xs={2}>
               <FormControl fullWidth variant="outlined">
