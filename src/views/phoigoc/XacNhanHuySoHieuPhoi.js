@@ -36,7 +36,7 @@ const XacNhanHuySoHieuPhoi = ({ formik, selectFile, setSelectFile, selectedFileN
         dispatch(showAlert(new Date().getTime().toString(), 'success', PhoiCaBiet.message.toString()));
         formik.resetForm();
         setSelectFile('');
-        setSelectedFileName(null);
+        setSelectedFileName('');
       }
     } catch (error) {
       console.error('Error updating function:', error);
