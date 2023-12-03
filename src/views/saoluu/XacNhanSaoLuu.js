@@ -9,15 +9,17 @@ import { Grid, Input, Button, Typography } from '@mui/material';
 import YesButton from 'components/button/YesButton';
 import NoButton from 'components/button/NoButton';
 import MuiTypography from '@mui/material/Typography';
-import { userLoginSelector } from 'store/selectors';
+import { openPopupSelector, userLoginSelector } from 'store/selectors';
 import { backupData, restoreData } from 'services/saoluuService';
 import useKhoiphucValidationSchema from 'components/validations/khoiPhucValidationSchema';
+import { useEffect } from 'react';
 
 const XacNhanSaoLuu = ({ type }) => {
   const dispatch = useDispatch();
   const KhoiPhucValidationSchema = useKhoiphucValidationSchema();
   const user = useSelector(userLoginSelector);
   const { t } = useTranslation();
+  const openPopup = useSelector(openPopupSelector);
   const [selectFile, setSelectFile] = useState('');
   const formik = useFormik({
     initialValues: {
@@ -32,8 +34,8 @@ const XacNhanSaoLuu = ({ type }) => {
         if (restore.isSuccess == false) {
           dispatch(showAlert(new Date().getTime().toString(), 'error', restore.message.toString()));
         } else {
-          dispatch(setOpenPopup(false));
           dispatch(setReloadData(true));
+          dispatch(setOpenPopup(false));
           dispatch(showAlert(new Date().getTime().toString(), 'success', restore.message.toString()));
         }
       } catch (error) {
@@ -43,14 +45,21 @@ const XacNhanSaoLuu = ({ type }) => {
     }
   });
 
+  useEffect(() => {
+    if (openPopup) {
+      formik.resetForm();
+      setSelectFile('');
+    }
+  }, [openPopup]);
+
   const handleBackup = async () => {
     try {
       const backup = await backupData(user.username);
       if (backup.isSuccess == false) {
         dispatch(showAlert(new Date().getTime().toString(), 'error', backup.message.toString()));
       } else {
-        dispatch(setOpenPopup(false));
         dispatch(setReloadData(true));
+        dispatch(setOpenPopup(false));
         dispatch(showAlert(new Date().getTime().toString(), 'success', backup.message.toString()));
       }
     } catch (error) {

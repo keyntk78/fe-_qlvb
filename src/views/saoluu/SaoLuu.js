@@ -1,7 +1,7 @@
 import { DataGrid } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setOpenPopup } from 'store/actions';
+import { setOpenPopup, setReloadData } from 'store/actions';
 import { openPopupSelector, reloadDataSelector } from 'store/selectors';
 import Popup from 'components/controls/popup';
 import { useTranslation } from 'react-i18next';
@@ -28,9 +28,9 @@ const SaoLuu = () => {
   const openPopup = useSelector(openPopupSelector);
   const reloadData = useSelector(reloadDataSelector);
   useEffect(() => {
-    const fectchData = async () => {
+    const fetchData = async () => {
       const res = await getBackupData();
-      if (res.isSuccess && res.data.length > 0) {
+      if (res.isSuccess) {
         const backupData = res.data.map((item, i) => ({
           idx: i + 1,
           date: convertISODateToFormattedDate(item.dateCreate),
@@ -39,7 +39,11 @@ const SaoLuu = () => {
         setData(backupData);
       }
     };
-    fectchData();
+
+    if (reloadData) {
+      fetchData();
+      dispatch(setReloadData(false));
+    }
   }, [reloadData]);
 
   const columns = [
@@ -100,6 +104,8 @@ const SaoLuu = () => {
     setForm('saoluu');
     dispatch(setOpenPopup(true));
   };
+
+  console.log(reloadData);
 
   const handleRestore = async () => {
     setTitle(t('Xác nhận khôi phục'));
