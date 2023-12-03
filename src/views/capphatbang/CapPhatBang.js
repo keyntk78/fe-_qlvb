@@ -519,7 +519,7 @@ export default function CapPhatBang() {
             </FormControl>
           </Grid>
           <Grid item container spacing={1} justifyContent={'center'} alignItems="center">
-            <Grid item lg={4} md={5} sm={5} xs={isXs ? 12 : 4}>
+            <Grid item lg={4.5} md={5} sm={5} xs={isXs ? 12 : 4}>
               <TextField
                 fullWidth
                 id="outlined-basic"
@@ -530,7 +530,7 @@ export default function CapPhatBang() {
                 value={pageState.hoTen}
               />
             </Grid>
-            <Grid item lg={2.5} md={2.5} sm={2.5} xs={isXs ? 6 : 2}>
+            <Grid item lg={3} md={4} sm={4} xs={isXs ? 6 : 2}>
               <TextField
                 fullWidth
                 id="outlined-basic"
@@ -541,7 +541,7 @@ export default function CapPhatBang() {
                 value={pageState.cccd}
               />
             </Grid>
-            <Grid item lg={2.5} md={2.5} sm={2.5} xs={isXs ? 6 : 2}>
+            <Grid item lg={2.5} md={3} sm={3} xs={isXs ? 6 : 2}>
               <TextField
                 fullWidth
                 id="outlined-basic"
@@ -552,7 +552,7 @@ export default function CapPhatBang() {
                 value={pageState.soVaoSoCapBang}
               />
             </Grid>
-            <Grid item xs={6} md={2} sm={2} lg={2}>
+            <Grid item xs={6} md={2} sm={2} lg={2} minWidth={150}>
               <Button
                 variant="contained"
                 title={t('button.search')}

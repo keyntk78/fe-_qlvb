@@ -37,6 +37,7 @@ const MainCard = forwardRef(
       shadow,
       sx = {},
       title,
+      hideInstruct = false,
       ...others
     },
     ref
@@ -84,7 +85,7 @@ const MainCard = forwardRef(
             </Grid>
             <Grid item sx={{ ml: '-15px' }}>
               {/* button hướng dẫn */}
-              {url && (
+              {url && !hideInstruct && (
                 <>
                   <AnimateButton>
                     <Tooltip title={'Hướng dẫn'} placement="bottom">
@@ -152,6 +153,7 @@ MainCard.propTypes = {
   boxShadow: PropTypes.bool,
   children: PropTypes.node,
   content: PropTypes.bool,
+  hideInstruct: PropTypes.bool,
   contentClass: PropTypes.string,
   contentSX: PropTypes.object,
   darkTitle: PropTypes.bool,

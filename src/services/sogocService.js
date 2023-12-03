@@ -230,3 +230,15 @@ export async function getLichSuThaoTacSoGoc(params) {
     throw error;
   }
 }
+
+export async function editHocSinhSoGoc(data) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(`SoGoc/Update`, 'PUT', data);
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating Hocsinh:', error);
+    throw error;
+  }
+}

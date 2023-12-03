@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IconCircleCheck, IconFileImport, IconHistory, IconLock, IconLockOpen, IconSearch } from '@tabler/icons';
+import { IconCircleCheck, IconEdit, IconFileImport, IconHistory, IconLock, IconLockOpen, IconSearch } from '@tabler/icons';
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, useMediaQuery } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -23,7 +23,6 @@ import { DataGrid } from '@mui/x-data-grid';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import i18n from 'i18n';
 import useLocalText from 'utils/localText';
-import EditHocSinh from 'views/hocsinh/Edit';
 import Detail from 'views/hocsinh/Detail';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import Khoa from './Khoa';
@@ -31,6 +30,10 @@ import MoKhoa from './MoKhoa';
 import Duyet from './Duyet';
 import ActionButtons from 'components/button/ActionButtons';
 import LichSuThaoTac from './LichSuThaoTac';
+import ChinhSuaVBCC from 'views/chinhsuavbcc/ChinhSuaVBCC';
+import Thuhoihuybo from 'views/thuhoihuybo/Thuhoihuybo';
+import CapLaiVBCC from 'views/caplaivbcc/CapLaiVBCC';
+import Edit from './Edit';
 
 export default function SoGocCu() {
   const language = i18n.language;
@@ -40,6 +43,7 @@ export default function SoGocCu() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const openPopup = useSelector(openPopupSelector);
   const [search, setSearch] = useState(false);
   const reloadData = useSelector(reloadDataSelector);
   const [dMTN, setDMTN] = useState([]);
@@ -54,7 +58,7 @@ export default function SoGocCu() {
   const [selectDanhMuc, setSelectDanhMuc] = useState('');
   const [selectDonVi, setSelectDonVi] = useState('');
   const [selectDonViOld, setSelectDonViOld] = useState('');
-  const openPopup = useSelector(openPopupSelector);
+  const [hasPermission, setHasPermission] = useState(false);
 
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -81,6 +85,51 @@ export default function SoGocCu() {
   const handleEdit = (hocsinh) => {
     setTitle(t('hocsinh.title.edit'));
     setForm('edit');
+    dispatch(selectedHocsinh(hocsinh));
+    dispatch(setOpenPopup(true));
+  };
+
+  const handleLichSuThaoTac = () => {
+    setTitle(t('Lịch sử thao tác sổ gốc cũ'));
+    setForm('xemlichsu');
+    dispatch(setOpenPopup(true));
+  };
+
+  const handleKhoa = () => {
+    setTitle(t('Khóa'));
+    setForm('khoa');
+    dispatch(setOpenPopup(true));
+  };
+
+  const handleMoKhoa = () => {
+    setTitle(t('Mỏ khóa'));
+    setForm('mokhoa');
+    dispatch(setOpenPopup(true));
+  };
+
+  const handleDuyet = () => {
+    setTitle(t('Duyệt'));
+    setForm('duyet');
+    dispatch(setOpenPopup(true));
+  };
+
+  const handleChinhSuaVBCC = (hocsinh) => {
+    setTitle(t('Chỉnh sửa văn bằng chứng chỉ'));
+    setForm('chinhsuavbcc');
+    dispatch(selectedHocsinh(hocsinh));
+    dispatch(setOpenPopup(true));
+  };
+
+  const handleCapLaiVBCC = (hocsinh) => {
+    setTitle(t('Cấp lại văn bằng'));
+    setForm('caplaivbcc');
+    dispatch(selectedHocsinh(hocsinh));
+    dispatch(setOpenPopup(true));
+  };
+
+  const handleThuHoiHuyBo = (hocsinh) => {
+    setTitle(t('Thu hồi hủy bỏ văn bằng chứng chỉ'));
+    setForm('thuhoi');
     dispatch(selectedHocsinh(hocsinh));
     dispatch(setOpenPopup(true));
   };
@@ -161,9 +210,24 @@ export default function SoGocCu() {
       filterable: false,
       renderCell: (params) => (
         <>
-          <Grid container justifyContent="center">
+          <Grid container justifyContent="center" spacing={1}>
             {khoa ? (
-              <ActionButtons type="detail" handleGetbyId={handleDetail} params={params.row} />
+              <>
+                <Grid item>
+                  <ActionButtons type="detail" handleGetbyId={handleDetail} params={params.row} />
+                </Grid>
+                {tinhTrang === 0 && (
+                  <Grid item>
+                    <CombinedActionButtons
+                      params={params.row}
+                      buttonConfigurations={chinhsuavb}
+                      icon={IconEdit}
+                      title={t('button.title.chinhsua.huybo')}
+                      color="orange"
+                    />
+                  </Grid>
+                )}
+              </>
             ) : (
               <CombinedActionButtons params={params.row} buttonConfigurations={buttonConfigurations} />
             )}
@@ -181,30 +245,6 @@ export default function SoGocCu() {
     const donviSelect = pageState.donVi;
     const selectedDonviInfo = donvis.find((donvi) => donvi.id === donviSelect);
     dispatch(selectedDonvitruong(selectedDonviInfo));
-  };
-
-  const handleLichSuThaoTac = () => {
-    setTitle(t('Lịch sử thao tác sổ gốc cũ'));
-    setForm('xemlichsu');
-    dispatch(setOpenPopup(true));
-  };
-
-  const handleKhoa = () => {
-    setTitle(t('Khóa'));
-    setForm('khoa');
-    dispatch(setOpenPopup(true));
-  };
-
-  const handleMoKhoa = () => {
-    setTitle(t('Mỏ khóa'));
-    setForm('mokhoa');
-    dispatch(setOpenPopup(true));
-  };
-
-  const handleDuyet = () => {
-    setTitle(t('Duyệt'));
-    setForm('duyet');
-    dispatch(setOpenPopup(true));
   };
 
   const handleDowloadTemplate = async () => {
@@ -270,11 +310,16 @@ export default function SoGocCu() {
       params.append('SoVaoSoGoc', pageState.soVaoSoGoc);
       params.append('NguoiThucHien', user.username);
       const response = await getHocSinhBySoGocCuChuaDuyet(params);
+      if (response?.data) {
+        setHasPermission(response.data.isPermission);
+      }
       const check = handleResponseStatus(response, navigate);
       if (check) {
-        const data = await response.data;
-        setKhoa(data?.khoa || null);
-        setTinhTrang(data?.tinhTrang || '');
+        const data = await response?.data?.data;
+        if (data) {
+          setKhoa(data.khoa);
+          setTinhTrang(data.tinhTrang);
+        }
         if (data?.hocSinhs?.length > 0) {
           const dataWithIds = data.hocSinhs.map((row, index) => ({
             idx: pageState.startIndex * pageState.pageSize + index + 1,
@@ -334,6 +379,21 @@ export default function SoGocCu() {
     {
       type: 'dowloadTemplate',
       handleClick: handleDowloadTemplate
+    }
+  ];
+
+  const chinhsuavb = [
+    {
+      type: 'chinhsuavbcc',
+      handleClick: handleChinhSuaVBCC
+    },
+    {
+      type: 'caplaivbcc',
+      handleClick: handleCapLaiVBCC
+    },
+    {
+      type: 'thuhoi',
+      handleClick: handleThuHoiHuyBo
     }
   ];
 
@@ -438,21 +498,6 @@ export default function SoGocCu() {
                 {t('button.search')}
               </Button>
             </Grid>
-            {pageState.DMTN && pageState.donVi && (
-              <Grid item>
-                <Button
-                  variant="contained"
-                  title={t('Lịch sử thao tác')}
-                  fullWidth
-                  onClick={handleLichSuThaoTac}
-                  color="secondary"
-                  startIcon={<IconHistory />}
-                  disabled={disable}
-                >
-                  {t('Lịch sử thao tác')}
-                </Button>
-              </Grid>
-            )}
             {pageState.DMTN && pageState.donVi && khoa === false && (
               <Grid item>
                 <Button
@@ -484,10 +529,27 @@ export default function SoGocCu() {
                     {t('Mở khóa')}
                   </Button>
                 </Grid>
-                <Grid item>
-                  <ButtonSuccess title={t('Duyệt')} onClick={handleDuyet} icon={IconCircleCheck} />
-                </Grid>
+                {hasPermission && (
+                  <Grid item>
+                    <ButtonSuccess title={t('Duyệt')} onClick={handleDuyet} icon={IconCircleCheck} />
+                  </Grid>
+                )}
               </>
+            )}
+            {pageState.DMTN && pageState.donVi && (
+              <Grid item>
+                <Button
+                  variant="contained"
+                  title={t('Lịch sử thao tác')}
+                  fullWidth
+                  onClick={handleLichSuThaoTac}
+                  color="secondary"
+                  startIcon={<IconHistory />}
+                  disabled={disable}
+                >
+                  {t('Lịch sử thao tác')}
+                </Button>
+              </Grid>
             )}
           </Grid>
         </Grid>
@@ -527,7 +589,9 @@ export default function SoGocCu() {
           title={title}
           form={form}
           openPopup={openPopup}
-          maxWidth={form === 'khoa' || form === 'mokhoa' || form === 'duyet' ? 'sm' : 'md'}
+          maxWidth={
+            form === 'khoa' || form === 'mokhoa' || form === 'duyet' ? 'sm' : form === 'chinhsuavbcc' || form === 'caplaivbcc' ? 'lg' : 'md'
+          }
           bgcolor={form === 'delete' || form === 'khoa' ? '#F44336' : '#2196F3'}
         >
           {form === 'detail' ? (
@@ -543,7 +607,13 @@ export default function SoGocCu() {
           ) : form === 'duyet' ? (
             <Duyet donviOld={pageState.donViOld || ''} />
           ) : form === 'edit' ? (
-            <EditHocSinh />
+            <Edit />
+          ) : form == 'chinhsuavbcc' ? (
+            <ChinhSuaVBCC />
+          ) : form == 'thuhoi' ? (
+            <Thuhoihuybo />
+          ) : form == 'caplaivbcc' ? (
+            <CapLaiVBCC />
           ) : (
             ''
           )}
