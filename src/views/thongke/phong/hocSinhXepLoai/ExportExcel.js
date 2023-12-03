@@ -1,7 +1,6 @@
 import ExcelJS from 'exceljs';
 
 const ExportExcel = async (namHoc, data) => {
-  console.log(data);
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet('Thống kê học sinh tốt nghiệp');
 
@@ -11,43 +10,38 @@ const ExportExcel = async (namHoc, data) => {
   title.font = { bold: true, size: 15 };
   worksheet.mergeCells('A1:H1');
 
-  const dataIndex = 1;
+  const time = worksheet.getCell('A2');
+  time.value = `Năm học: ${namHoc}`;
+  worksheet.mergeCells('A2:B2');
+
+  const cell = worksheet.getCell('A3');
+  cell.value = '';
+
+  // Adding the header row with bold formatting
+  const headerRow = worksheet.addRow([
+    'STT',
+    'Tên trường',
+    'Học sinh giỏi',
+    'Học sinh khá',
+    'Học sinh trung bình',
+    'Học sinh đẫ tốt nghiệp',
+    'Học sinh không đạt tố nghiệp'
+  ]);
+  headerRow.eachCell((cell) => {
+    // cell.font = { bold: true };
+    cell.alignment = { vertical: 'middle', horizontal: 'center' };
+    cell.alignment.wrapText = true;
+    cell.border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' }
+    };
+  });
+
   // Adding data rows
   data && data.length
     ? data.forEach((item, index) => {
-        const time = worksheet.getCell(`A${dataIndex + 1}`);
-        time.value = `Năm học: ${namHoc}`;
-        worksheet.mergeCells(`A${dataIndex + 1}:B${dataIndex + 1}`);
-
-        const truong = worksheet.getCell(`A${dataIndex + 2}`);
-        truong.value = `Trường: ${item.tenTruong}`;
-        worksheet.mergeCells(`A${dataIndex + 2}:B${dataIndex + 2}`);
-
-        const cell = worksheet.getCell(`A${dataIndex + 3}`);
-        cell.value = '';
-
-        // Adding the header row with bold formatting
-        const headerRow = worksheet.addRow([
-          'STT',
-          'Tên trường',
-          'Học sinh giỏi',
-          'Học sinh khá',
-          'Học sinh trung bình',
-          'Học sinh đã tốt nghiệp',
-          'Học sinh không đạt tốt nghiệp'
-        ]);
-        headerRow.eachCell((cell) => {
-          // cell.font = { bold: true };
-          cell.alignment = { vertical: 'middle', horizontal: 'center' };
-          cell.alignment.wrapText = true;
-          cell.border = {
-            top: { style: 'thin' },
-            left: { style: 'thin' },
-            bottom: { style: 'thin' },
-            right: { style: 'thin' }
-          };
-        });
-
         const dataRow = worksheet.addRow([
           index + 1,
           item.tenTruong,
@@ -67,7 +61,6 @@ const ExportExcel = async (namHoc, data) => {
         });
         dataRow.getCell(1).alignment = { horizontal: 'center' };
         // dataRow.getCell(3).alignment = { horizontal: 'center' };
-        dataIndex;
       })
     : '';
 
