@@ -10,7 +10,7 @@ import YesButton from 'components/button/YesButton';
 import NoButton from 'components/button/NoButton';
 import MuiTypography from '@mui/material/Typography';
 import { userLoginSelector } from 'store/selectors';
-import { backupData } from 'services/saoluuService';
+import { backupData, restoreData } from 'services/saoluuService';
 import useKhoiphucValidationSchema from 'components/validations/khoiPhucValidationSchema';
 
 const XacNhanSaoLuu = ({ type }) => {
@@ -24,8 +24,22 @@ const XacNhanSaoLuu = ({ type }) => {
       selectedFileName: ''
     },
     validationSchema: KhoiPhucValidationSchema,
-    onSubmit: async (values) => {
-      console.log(selectFile, values.selectedFileName);
+    onSubmit: async () => {
+      try {
+        const form = new FormData();
+        form.append('backupFileName', selectFile);
+        const restore = await restoreData(form);
+        if (restore.isSuccess == false) {
+          dispatch(showAlert(new Date().getTime().toString(), 'error', restore.message.toString()));
+        } else {
+          dispatch(setOpenPopup(false));
+          dispatch(setReloadData(true));
+          dispatch(showAlert(new Date().getTime().toString(), 'success', restore.message.toString()));
+        }
+      } catch (error) {
+        console.error('error' + error);
+        dispatch(showAlert(new Date().getTime().toString(), 'error', error.toString()));
+      }
     }
   });
 
@@ -86,7 +100,7 @@ const XacNhanSaoLuu = ({ type }) => {
       )}
       <Grid container spacing={1} direction="row" justifyContent="center" my={1}>
         <Grid item>
-          <YesButton color="primary" handleClick={type === 'saoluu' ? handleBackup : formik.handleSubmit} />
+          <YesButton color={type === 'saoluu' ? 'primary' : 'error'} handleClick={type === 'saoluu' ? handleBackup : formik.handleSubmit} />
         </Grid>
         <Grid item>
           <NoButton />
