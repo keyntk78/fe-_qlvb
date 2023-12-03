@@ -233,7 +233,7 @@ const MainRoutes = {
       element: <Xacminhvanbang />
     },
     {
-      path: 'saoluu',
+      path: 'dulieu',
       element: <SaoLuu />
     },
     {
