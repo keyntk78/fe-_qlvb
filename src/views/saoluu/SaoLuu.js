@@ -40,10 +40,8 @@ const SaoLuu = () => {
       }
     };
 
-    if (reloadData) {
-      fetchData();
-      dispatch(setReloadData(false));
-    }
+    fetchData();
+    dispatch(setReloadData(false));
   }, [reloadData]);
 
   const columns = [
