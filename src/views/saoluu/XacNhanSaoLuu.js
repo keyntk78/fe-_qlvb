@@ -58,28 +58,32 @@ const XacNhanSaoLuu = ({ type }) => {
       <MuiTypography variant="h4" gutterBottom m={2}>
         {type === 'saoluu' ? t(`Bạn có muốn sao lưu không?`) : t(`Vui lòng chọn file zip chứa dữ liệu sao lưu`)}
       </MuiTypography>
-      <Grid container spacing={1} direction="row" justifyContent="center" my={2}>
-        <Grid item xs={12} display={'flex'} alignItems={'center'} flexDirection={'column'}>
-          <Input type="file" inputProps={{ accept: '.zip' }} style={{ display: 'none' }} id="fileInput" onChange={handleOnchangfile} />
-          <label htmlFor="fileInput">
-            <Button variant="outlined" component="span" color="success" startIcon={<IconFilePlus />}>
-              {t('button.upload')}
-            </Button>
-          </label>
-          <Grid item mx={1}>
-            {formik.values['selectedFileName'] && <span>{formik.values['selectedFileName']}</span>}
-          </Grid>
-          <Grid item mx={1}>
-            {formik.errors.selectedFileName ? (
-              <Typography variant="h5" color="red" mt={1}>
-                {formik.errors.selectedFileName}
-              </Typography>
-            ) : (
-              ''
-            )}
+      {type !== 'saoluu' ? (
+        <Grid container spacing={1} direction="row" justifyContent="center" my={2}>
+          <Grid item xs={12} display={'flex'} alignItems={'center'} flexDirection={'column'}>
+            <Input type="file" inputProps={{ accept: '.zip' }} style={{ display: 'none' }} id="fileInput" onChange={handleOnchangfile} />
+            <label htmlFor="fileInput">
+              <Button variant="outlined" component="span" color="success" startIcon={<IconFilePlus />}>
+                {t('button.upload')}
+              </Button>
+            </label>
+            <Grid item mx={1}>
+              {formik.values['selectedFileName'] && <span>{formik.values['selectedFileName']}</span>}
+            </Grid>
+            <Grid item mx={1}>
+              {formik.errors.selectedFileName ? (
+                <Typography variant="h5" color="red" mt={1}>
+                  {formik.errors.selectedFileName}
+                </Typography>
+              ) : (
+                ''
+              )}
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      ) : (
+        ''
+      )}
       <Grid container spacing={1} direction="row" justifyContent="center" my={1}>
         <Grid item>
           <YesButton color="primary" handleClick={type === 'saoluu' ? handleBackup : formik.handleSubmit} />

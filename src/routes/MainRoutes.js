@@ -46,6 +46,8 @@ const LoaiTinTuc = Loadable(lazy(() => import('views/loaitintuc/LoaiTinTuc')));
 const TrangChu = Loadable(lazy(() => import('views/trangchu/trangchu')));
 const HocSinhTotNghiep = Loadable(lazy(() => import('views/thongke/phong/hocSinhDoTotNghiep/index')));
 const HocSinhDoTotNghiep = Loadable(lazy(() => import('views/thongke/truong/HocSinhDoTotNghiep/index')));
+const ThongKeHocSinhTheoNam = Loadable(lazy(() => import('views/thongke/phong/hocSinhXepLoai/index')));
+
 const PhatBang = Loadable(lazy(() => import('views/thongke/phong/phatBang/index')));
 const InPhoiBang = Loadable(lazy(() => import('views/thongke/phong/inPhoiBang/index')));
 const ImportDanhSachVanBang = Loadable(lazy(() => import('views/ImportDanhSachVanBang/DanhSachImport')));
@@ -209,6 +211,10 @@ const MainRoutes = {
     {
       path: 'thongkehocsinhdototnghiep',
       element: <HocSinhDoTotNghiep />
+    },
+    {
+      path: 'thongkehocsinhtheonam',
+      element: <ThongKeHocSinhTheoNam />
     },
     {
       path: 'thongkephatbang',
