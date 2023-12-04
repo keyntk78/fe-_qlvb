@@ -33,7 +33,7 @@ export default function DetailDonyeucau() {
   useEffect(() => {
     const fetchData = async () => {
       const datatintuc = await getTinTucById(formData);
-
+      console.log(datatintuc);
       setTinTuc(datatintuc.data);
 
       const tinTucNew = await getLatest4News();
@@ -87,6 +87,9 @@ export default function DetailDonyeucau() {
                     {tinTuc && tinTuc.ngayTao ? ` ${formatDateTinTuc(tinTuc.ngayTao)}` : ''}
                   </Typography>
                 </Typography>
+                <Grid item xs={12} mt={2}>
+                  <Typography variant={isSmallScreen ? 'h5' : 'h4'}>{tinTuc ? tinTuc.moTaNgan : ''}</Typography>
+                </Grid>
                 <Grid item xs={12}>
                   <Typography variant={isSmallScreen ? 'h3' : 'h2'} component="h2" paddingTop={2} sx={{ paddingY: 2, flex: 1 }}>
                     <div
