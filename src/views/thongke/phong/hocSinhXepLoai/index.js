@@ -86,7 +86,7 @@ export default function ThongKeHocSinhTheoNam() {
     },
     {
       field: 'soLuongHocSinhDatTotNghiep',
-      headerName: t('Học sinh đẫ tốt nghiệp'),
+      headerName: t('Học sinh đã tốt nghiệp'),
       minWidth: 180
     },
     {
