@@ -34,7 +34,10 @@ const Add = ({ placeholder }) => {
   const config = useMemo(
     () => ({
       readonly: false,
-      placeholder: placeholder || 'Start typing...'
+      placeholder: placeholder || 'Start typing...',
+      uploader: {
+        insertImageAsBase64URI: true
+      }
     }),
     [placeholder]
   );
@@ -140,16 +143,6 @@ const Add = ({ placeholder }) => {
                   />
                 </FormControl>
               </FormControlComponent>
-              <InputForm1
-                xs={12}
-                formik={formik}
-                name="moTaNgan"
-                label={t('tintuc.field.motangan')}
-                placeholder={t('tintuc.field.motangan')}
-                isMulltiline
-                maxRows={5}
-                isRequired
-              />
             </Grid>
             <Grid item xs={isXs ? 12 : 6} container spacing={1}>
               <Grid item xs={12} mt={'10px'}>
@@ -164,6 +157,19 @@ const Add = ({ placeholder }) => {
                 />
               </Grid>
             </Grid>
+          </Grid>
+          <Grid item xs={12}>
+            <InputForm1
+              xs={12}
+              formik={formik}
+              name="moTaNgan"
+              label={t('tintuc.field.motangan')}
+              placeholder={t('tintuc.field.motangan')}
+              isMulltiline
+              maxRows={5}
+              minRows={3}
+              isRequired
+            />
           </Grid>
           <Grid item xs={12}>
             <FormControlComponent xsLabel={12} xsForm={12} isRequire label={t('tintuc.field.noidung')}>

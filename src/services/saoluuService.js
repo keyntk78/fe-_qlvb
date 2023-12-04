@@ -39,6 +39,18 @@ export async function restoreData(data) {
   }
 }
 
+export async function DeleteDataBackup(id) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`DataBackup/DeleteHistory?id=${id}`, 'DELETE');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating role:', error);
+    throw error;
+  }
+}
+
 export async function SyncCollection(startDate, endDate) {
   try {
     store.dispatch(setLoading(true));

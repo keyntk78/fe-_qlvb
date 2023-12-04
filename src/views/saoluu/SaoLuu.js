@@ -1,7 +1,7 @@
 import { DataGrid } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setOpenPopup, setReloadData } from 'store/actions';
+import { selectedHocsinh, setOpenPopup, setReloadData } from 'store/actions';
 import { openPopupSelector, reloadDataSelector } from 'store/selectors';
 import Popup from 'components/controls/popup';
 import { useTranslation } from 'react-i18next';
@@ -13,8 +13,10 @@ import { IconDownload, IconRotateClockwise, IconRefresh } from '@tabler/icons';
 import config from 'config';
 import XacNhanSaoLuu from './XacNhanSaoLuu';
 import { getBackupData } from 'services/saoluuService';
-import { convertISODateToFormattedDate } from 'utils/formatDate';
+import { convertISODateTimeToFormattedDateTime } from 'utils/formatDate';
 import DongBo from './DongBo';
+import ActionButtons from 'components/button/ActionButtons';
+import DeleteData from './Delete';
 
 const SaoLuu = () => {
   const localeText = useLocalText();
@@ -33,7 +35,7 @@ const SaoLuu = () => {
       if (res.isSuccess) {
         const backupData = res.data.map((item, i) => ({
           idx: i + 1,
-          date: convertISODateToFormattedDate(item.dateCreate),
+          date: convertISODateTimeToFormattedDateTime(item.dateCreate),
           ...item
         }));
         setData(backupData);
@@ -44,6 +46,12 @@ const SaoLuu = () => {
     dispatch(setReloadData(false));
   }, [reloadData]);
 
+  const handleDelete = (hocsinh) => {
+    setTitle(t('Xóa tập tin được chọn'));
+    setForm('delete');
+    dispatch(selectedHocsinh(hocsinh));
+    dispatch(setOpenPopup(true));
+  };
   const columns = [
     {
       field: 'idx',
@@ -85,6 +93,7 @@ const SaoLuu = () => {
       headerName: t('Tải xuống'),
       sortable: false,
       filterable: false,
+      align: 'center',
       renderCell: (params) => {
         const pathFileYeuCau = config.urlImages + params.row.pathFile;
         return (
@@ -94,6 +103,23 @@ const SaoLuu = () => {
         );
       },
       minWidth: 100
+    },
+
+    {
+      field: 'actions',
+      headerName: t('action'),
+      width: 90,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <>
+          <Grid container justifyContent="center" spacing={1}>
+            <Grid item>
+              <ActionButtons type="delete" handleDelete={handleDelete} params={params.row} />
+            </Grid>
+          </Grid>
+        </>
+      )
     }
   ];
 
@@ -118,7 +144,7 @@ const SaoLuu = () => {
   return (
     <>
       <MainCard
-        title={t('Sao lưu - Khôi phục')}
+        title={t('Sao lưu - Khôi phục - Đồng bộ')}
         secondary={
           <Grid container justifyContent="flex-end" spacing={1}>
             <Grid item>
@@ -153,7 +179,7 @@ const SaoLuu = () => {
         )}
         {form !== '' && (
           <Popup title={title} form={form} openPopup={openPopup} maxWidth={'sm'} bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}>
-            {form === 'dongbo' ? <DongBo /> : <XacNhanSaoLuu type={form} />}
+            {form === 'dongbo' ? <DongBo /> : form === 'delete' ? <DeleteData /> : <XacNhanSaoLuu type={form} />}
           </Popup>
         )}
       </MainCard>
