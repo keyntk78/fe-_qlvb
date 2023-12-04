@@ -221,6 +221,7 @@ const LichSuXacMinh = () => {
   return (
     <>
       <MainCard
+        hideInstruct
         sx={{ mt: 2 }}
         title={t(`Lịch sử xác minh [${selectHocsinh.hoTen}]`)}
         secondary={

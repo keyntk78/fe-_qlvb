@@ -240,7 +240,7 @@ const ThongKeSoLuongNguoiHoc = () => {
       {isLoading ? (
         <SkeletonTotalGrowthBarChart />
       ) : (
-        <MainCard>
+        <MainCard hideInstruct>
           <Grid container>
             <Grid item xs={12}>
               <Grid container alignItems="center" justifyContent="space-between">

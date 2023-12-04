@@ -161,7 +161,7 @@ const PhoiCaBiet = () => {
 
   return (
     <>
-      <MainCard title={t('Hủy số hiệu phôi')}>
+      <MainCard hideInstruct title={t('Hủy số hiệu phôi')}>
         <Grid item container spacing={1} mb={2} display={'flex'} alignItems={'center'} justifyContent={'center'}>
           <Grid item container xs={isXs ? 12 : 6}>
             <Grid item xs={12}>
@@ -206,7 +206,7 @@ const PhoiCaBiet = () => {
         </Grid>
       </MainCard>
       <Grid>
-        <MainCard title={t('Danh sách số hiệu phôi đã hủy')}>
+        <MainCard hideInstruct title={t('Danh sách số hiệu phôi đã hủy')}>
           <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
             <Grid item lg={3} md={4} sm={5} xs={7}>
               <QuickSearch

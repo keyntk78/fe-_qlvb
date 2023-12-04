@@ -389,7 +389,7 @@ export default function TracuuDonyeucau() {
             </Grid>
           </Box>
           {showMain && (
-            <MainCard title={t('ketquatimkiem.title')} sx={{ width: '100%', margin: 'auto', marginTop: 3 }}>
+            <MainCard hideInstruct title={t('ketquatimkiem.title')} sx={{ width: '100%', margin: 'auto', marginTop: 3 }}>
               <DataGrid
                 autoHeight
                 columns={columns}

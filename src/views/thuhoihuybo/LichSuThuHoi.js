@@ -108,7 +108,7 @@ const LichSuThuHoi = () => {
 
   return (
     <>
-      <MainCard sx={{ mt: 2 }} title={t(`Lịch sử thu hồi, hủy bỏ [${selectHocsinh.hoTen}]`)}>
+      <MainCard hideInstruct sx={{ mt: 2 }} title={t(`Lịch sử thu hồi, hủy bỏ [${selectHocsinh.hoTen}]`)}>
         {isAccess ? (
           <DataGrid
             autoHeight

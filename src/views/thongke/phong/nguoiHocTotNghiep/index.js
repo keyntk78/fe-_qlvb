@@ -209,7 +209,7 @@ export default function ThongKeHocSinh() {
 
   return (
     <>
-      <MainCard title={t('Thống kê học sinh tốt nghiệp')}>
+      <MainCard hideInstruct title={t('Thống kê học sinh tốt nghiệp')}>
         <Grid item container spacing={1} mb={2} justifyContent={'center'} alignItems="center">
           <Grid item lg={2} md={3} sm={4} xs={isXs ? 4 : 2}>
             <FormControl fullWidth variant="outlined" size="small">

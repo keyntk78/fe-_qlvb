@@ -181,7 +181,7 @@ const ThongKeSoLuongXepLoai = () => {
       {isLoading ? (
         <SkeletonTotalGrowthBarChart />
       ) : (
-        <MainCard>
+        <MainCard hideInstruct>
           <Grid container>
             <Grid item xs={12}>
               <Grid container>

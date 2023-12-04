@@ -31,7 +31,7 @@ import User1 from 'assets/images/users/user-round.svg';
 // assets
 import { IconEdit, IconLogout, IconSettings, IconUser } from '@tabler/icons';
 import { useTranslation } from 'react-i18next';
-import { setDonvi, setOpenProfile, userLogin } from 'store/actions';
+import { setDonvi, setOpenProfile, setUrlHuongDan, userLogin } from 'store/actions';
 import { logout, profile } from 'services/authService';
 import ChangePassword from 'views/pages/authentication/auth/ChangePassword';
 import { openProfileSelector, reloadDataSelector } from 'store/selectors';
@@ -70,6 +70,7 @@ const ProfileSection = () => {
       localStorage.removeItem('deviceToken');
       localStorage.removeItem('donvi');
       localStorage.removeItem('reports');
+      dispatch(setUrlHuongDan(null));
       dispatch(userLogin(null));
       dispatch(setDonvi(0));
       navigate('/login');
@@ -214,7 +215,7 @@ const ProfileSection = () => {
           <Transitions in={open} {...TransitionProps}>
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
-                <MainCard border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[16]}>
+                <MainCard hideInstruct border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[16]}>
                   <Box sx={{ p: 2, pb: 0 }}>
                     <Stack>
                       <Stack direction="row" spacing={0.5} alignItems="center">

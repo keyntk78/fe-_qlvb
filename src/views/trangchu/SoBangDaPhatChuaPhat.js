@@ -126,7 +126,7 @@ const ThongKeSoBangDaPhatChuaPhat = () => {
       {isLoading ? (
         <SkeletonTotalPieChart type={'main'} />
       ) : (
-        <MainCard>
+        <MainCard hideInstruct>
           <Grid container>
             <Grid item xs={12}>
               <Grid container>

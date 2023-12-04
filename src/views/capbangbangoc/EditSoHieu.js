@@ -72,7 +72,7 @@ const EditSoHieu = () => {
   }, [openSubPopup]);
   return (
     <form onSubmit={formik.handleSubmit}>
-      <MainCard title={t('Chỉnh sửa số hiệu văn bằng')}>
+      <MainCard hideInstruct title={t('Chỉnh sửa số hiệu văn bằng')}>
         <Grid item container spacing={1} mb={2}>
           <Grid item xs={12} container spacing={2} justifyContent={'center'}>
             <Grid item lg={4} md={6} sm={6} xs={8}>

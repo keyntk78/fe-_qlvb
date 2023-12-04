@@ -168,7 +168,7 @@ const AnhSoGoc = ({ pageState }) => {
 
   return (
     <>
-      <MainCard title={t('Ảnh sổ gốc')} secondary={<AddButton handleClick={handleAdd} />}>
+      <MainCard hideInstruct title={t('Ảnh sổ gốc')} secondary={<AddButton handleClick={handleAdd} />}>
         <DataGrid
           autoHeight
           rows={data}
