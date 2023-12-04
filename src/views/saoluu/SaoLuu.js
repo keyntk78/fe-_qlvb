@@ -14,7 +14,7 @@ import config from 'config';
 import XacNhanSaoLuu from './XacNhanSaoLuu';
 import { getBackupData } from 'services/saoluuService';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
-import DongBo from './XacNhanDongBo';
+import DongBo from './DongBo';
 
 const SaoLuu = () => {
   const localeText = useLocalText();
@@ -102,8 +102,6 @@ const SaoLuu = () => {
     setForm('saoluu');
     dispatch(setOpenPopup(true));
   };
-
-  console.log(reloadData);
 
   const handleRestore = async () => {
     setTitle(t('Xác nhận khôi phục'));

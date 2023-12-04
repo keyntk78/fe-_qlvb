@@ -39,10 +39,10 @@ export async function restoreData(data) {
   }
 }
 
-export async function SyncCollection() {
+export async function SyncCollection(startDate, endDate) {
   try {
     store.dispatch(setLoading(true));
-    const response = await sendRequest('DongBo/SyncCollection', 'GET');
+    const response = await sendRequest(`DongBo/SyncCollection?tuNgayDoTotNghiep=${startDate}&denNgayDoTotNghiep=${endDate}`, 'GET');
     store.dispatch(setLoading(false));
     return response;
   } catch (error) {
