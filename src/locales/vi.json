@@ -127,7 +127,8 @@
   "validation.danhmuctotnghiep.ngay": "Ngày cấp bằng không được trống",
   "validation.danhmuctotnghiep.soquyetdinh": "Quyết định TN không được trống",
   "validation.danhmuctotnghiep.htdt": "Hình thức đào tạo không được trống",
-  "validation.danhmuctotnghiep.ngayguidanhsach": "Thời hạn gửi học sinh không được để trống",
+  "validation.danhmuctotnghiep.tuychonvaoso": "Tùy chọn số vào sổ không được trống",
+  "validation.danhmuctotnghiep.ngayguidanhsach" : "Thời hạn gửi danh sách không được trống",
 
   "validation.khoathi": "Khóa thi không được trống",
   "validation.khoatn": "Ngày tốt nghiệp không được để trống",

@@ -54,7 +54,7 @@ export async function DeleteDataBackup(id) {
 export async function SyncCollection(startDate, endDate) {
   try {
     store.dispatch(setLoading(true));
-    const response = await sendRequest(`DongBo/SyncCollection?tuNgayDoTotNghiep=${startDate}&denNgayDoTotNghiep=${endDate}`, 'GET');
+    const response = await sendRequest(`DongBo/SyncCollection?tuNgayDotTotNghiep=${startDate}&denNgayDotTotNghiep=${endDate}`, 'GET');
     store.dispatch(setLoading(false));
     return response;
   } catch (error) {
