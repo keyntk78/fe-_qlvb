@@ -15,6 +15,9 @@ import { useState } from 'react';
 import ExitButton from 'components/button/ExitButton';
 import config from 'config';
 import { useEffect } from 'react';
+import { pdfjs } from 'react-pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 // constant
 const headerSX = {

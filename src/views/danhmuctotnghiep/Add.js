@@ -55,8 +55,11 @@ const Add = () => {
     validationSchema: danhmuctnValidationSchema,
     onSubmit: async (values) => {
       try {
-        const formData = await convertJsonToFormData(values);
-
+        const updatedValues = {
+          ...values,
+          TuyChonSoVaoSo: 1
+        };
+        const formData = await convertJsonToFormData(updatedValues);
         const addedDanhmucTN = await createDanhmucTN(formData);
         if (addedDanhmucTN.isSuccess == false) {
           dispatch(showAlert(new Date().getTime().toString(), 'error', addedDanhmucTN.message.toString()));
