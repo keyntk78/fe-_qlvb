@@ -67,31 +67,27 @@ export default function ThongKeHocSinhTheoNam() {
     {
       field: 'tenTruong',
       headerName: t('Tên trường'),
-      minWidth: 200
+      minWidth: 260
     },
     {
       field: 'soLuongHocSinhGioi',
       headerName: t('Học sinh giỏi'),
-      flex: 1,
-      minWidth: 40
+      minWidth: 130
     },
     {
       field: 'soLuongHocSinhKha',
       headerName: t('Học sinh khá'),
-      flex: 1,
-      minWidth: 40
+      minWidth: 130
     },
     {
       field: 'soLuongHocSinhTrungBinh',
       headerName: t('Học sinh trung bình'),
-      flex: 1,
-      minWidth: 40
+      minWidth: 160
     },
     {
       field: 'soLuongHocSinhDatTotNghiep',
       headerName: t('Học sinh đẫ tốt nghiệp'),
-      flex: 1,
-      minWidth: 40
+      minWidth: 180
     },
     {
       field: 'soLuongHocSinhKhongDatTotNghiep',

@@ -24,8 +24,8 @@ const ExportExcel = async (namHoc, data) => {
     'Học sinh giỏi',
     'Học sinh khá',
     'Học sinh trung bình',
-    'Học sinh đẫ tốt nghiệp',
-    'Học sinh không đạt tố nghiệp'
+    'Học sinh đã tốt nghiệp',
+    'Học sinh không đạt tốt nghiệp'
   ]);
   headerRow.eachCell((cell) => {
     // cell.font = { bold: true };
