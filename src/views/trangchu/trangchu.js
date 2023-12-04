@@ -421,6 +421,7 @@ const TrangChu = () => {
           {donvi.laPhong && (
             <Grid mb={2}>
               <MainCard
+                hideInstruct
                 title={t('Tra cứu nhanh')}
                 secondary={
                   <Grid item>
