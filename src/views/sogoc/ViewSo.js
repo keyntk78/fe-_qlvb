@@ -250,6 +250,7 @@ export default function ViewSo() {
   return (
     <>
       <MainCard
+        hideInstruct
         title={t('sogoc.title')}
         secondary={
           isXs ? (

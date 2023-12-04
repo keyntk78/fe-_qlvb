@@ -238,6 +238,7 @@ const LichSuCapBanSao = () => {
   return (
     <>
       <MainCard
+        hideInstruct
         sx={{ mt: 2 }}
         title={t(`Lịch sử cấp bản sao [${selectHocsinh.HoTen}]`)}
         secondary={

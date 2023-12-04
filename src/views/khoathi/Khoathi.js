@@ -142,7 +142,7 @@ const Khoathi = () => {
 
   return (
     <>
-      <MainCard title={t('khoathi.title')} secondary={<AddButton handleClick={handleAddKhoathi} />}>
+      <MainCard hideInstruct title={t('khoathi.title')} secondary={<AddButton handleClick={handleAddKhoathi} />}>
         <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
           <Grid item lg={3} md={4} sm={5} xs={7}>
             <QuickSearch

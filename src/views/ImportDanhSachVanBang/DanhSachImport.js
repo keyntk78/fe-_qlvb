@@ -338,6 +338,7 @@ const DanhSachImport = () => {
         </Grid>
       </Grid>
       <MainCard
+        hideInstruct
         title={t('Danh sách văn bằng import')}
         secondary={
           <Grid item>

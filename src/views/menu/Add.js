@@ -193,11 +193,11 @@ const AddMenu = () => {
             </Grid>
           </Grid>
           <Grid item xs={12} container>
-            <FormControlComponent xsLabel={isXs ? 0 : 3} xsForm={isXs ? 12 : 9} label={t('File đính kèm')}>
+            <FormControlComponent xsLabel={isXs ? 0 : 3} xsForm={isXs ? 12 : 9} label={t('File hướng dẫn')}>
               <Grid item xs={12} display={'flex'} alignItems={'center'}>
                 <Input
                   type="file"
-                  inputProps={{ accept: '.doc, .docx, .pdf' }}
+                  inputProps={{ accept: '.pdf' }}
                   style={{ display: 'none' }}
                   id="fileInput"
                   onChange={handleOnchangfile}

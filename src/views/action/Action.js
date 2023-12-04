@@ -143,7 +143,7 @@ const Action = () => {
 
   return (
     <>
-      <MainCard title={t('action.title')} secondary={<AddButton handleClick={handleAddAction} />} sx={{ my: 1 }}>
+      <MainCard hideInstruct title={t('action.title')} secondary={<AddButton handleClick={handleAddAction} />} sx={{ my: 1 }}>
         <Grid container justifyContent={'flex-end'}>
           <Grid container justifyContent="flex-end" mb={1}>
             <Grid item>

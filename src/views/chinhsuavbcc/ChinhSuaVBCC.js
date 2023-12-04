@@ -238,6 +238,7 @@ const ChinhSuaVBCC = () => {
   return (
     <>
       <MainCard
+        hideInstruct
         sx={{ mt: 2 }}
         title={t(`Lịch sử chỉnh sửa văn bằng chứng chỉ`) + ' [' + selectHocsinh.hoTen + ']'}
         secondary={

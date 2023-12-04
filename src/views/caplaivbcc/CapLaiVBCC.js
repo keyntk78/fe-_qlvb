@@ -237,6 +237,7 @@ const CapLaiVBCC = () => {
   return (
     <>
       <MainCard
+        hideInstruct
         sx={{ mt: 2 }}
         title={t(`Lịch sử Cấp lại văn bằng chứng chỉ`) + ' [' + selectHocsinh.hoTen + ']'}
         secondary={

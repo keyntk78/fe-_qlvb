@@ -229,6 +229,7 @@ const DanhSachImport = ({ selectedValue, selectedName }) => {
         </Grid>
       </Grid>
       <MainCard
+        hideInstruct
         title={t(`Danh sách đã import`)}
         secondary={
           <Grid item>

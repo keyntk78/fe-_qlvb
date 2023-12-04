@@ -204,6 +204,7 @@ const ThongKe = ({ isLoading }) => {
         <SkeletonTotalGrowthBarChart />
       ) : (
         <MainCard
+          hideInstruct
           title={t('Thống kê học sinh đỗ tốt nghiệp')}
           secondary={
             <Grid item>

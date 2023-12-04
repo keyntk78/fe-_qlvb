@@ -2,7 +2,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoading, setReloadData } from 'store/actions';
-import { reloadDataSelector, userLoginSelector } from 'store/selectors';
+import { openPopupSelector, reloadDataSelector, userLoginSelector } from 'store/selectors';
 import { useNavigate } from 'react-router-dom';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +18,7 @@ import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { format, subMonths } from 'date-fns';
 import { getLichSuThaoTacSoGoc } from 'services/sogocService';
+import ExitButton from 'components/button/ExitButton';
 
 const LichSuThaoTac = ({ danhMuc, donvi, donviOld }) => {
   const language = i18n.language;
@@ -28,6 +29,7 @@ const LichSuThaoTac = ({ danhMuc, donvi, donviOld }) => {
   const [isAccess, setIsAccess] = useState(true);
   const reloadData = useSelector(reloadDataSelector);
   const user = useSelector(userLoginSelector);
+  const openPopup = useSelector(openPopupSelector);
 
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -109,7 +111,9 @@ const LichSuThaoTac = ({ danhMuc, donvi, donviOld }) => {
         setIsAccess(false);
       }
     };
-    fetchData();
+    if (openPopup) {
+      fetchData();
+    }
   }, [
     pageState.search,
     pageState.order,
@@ -119,7 +123,8 @@ const LichSuThaoTac = ({ danhMuc, donvi, donviOld }) => {
     reloadData,
     danhMuc,
     donvi,
-    donviOld
+    donviOld,
+    openPopup
   ]);
 
   const handleExport = async (e) => {
@@ -245,6 +250,11 @@ const LichSuThaoTac = ({ danhMuc, donvi, donviOld }) => {
       ) : (
         <h1>{t('not.allow.access')}</h1>
       )}
+      <Grid item xs={12} container spacing={2} mt={0} justifyContent="flex-end">
+        <Grid item>
+          <ExitButton />
+        </Grid>
+      </Grid>
       <BackToTop />
     </>
   );

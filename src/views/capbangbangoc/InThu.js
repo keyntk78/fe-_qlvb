@@ -62,7 +62,7 @@ const InThu = ({ duLieuHocSinh }) => {
 
   return (
     <>
-      <MainCard sx={{ backgroundColor: '#4d3b3b1f' }}>
+      <MainCard hideInstruct sx={{ backgroundColor: '#4d3b3b1f' }}>
         <Grid container spacing={1}>
           <Grid item>
             <ReactToPrint

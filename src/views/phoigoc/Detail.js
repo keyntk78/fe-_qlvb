@@ -150,7 +150,7 @@ const Detail = () => {
               </FormControlComponent>
             </Grid>
             <Grid item xs={6}>
-              <FormControlComponent xsLabel={isXs ? 0 : 4.5} xsForm={isXs ? 12 : 7.5} label={t('phoivanbang.field.soluongphoi')}>
+              <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} label={t('phoivanbang.field.soluongphoi')}>
                 <InputForm formik={formik} name="SoLuongPhoi" type="number" isDisabled placeholder={t('phoivanbang.field.soluongphoi')} />
               </FormControlComponent>
             </Grid>

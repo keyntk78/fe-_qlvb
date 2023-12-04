@@ -203,7 +203,7 @@ const NotificationSection = () => {
           <Transitions position={matchesXs ? 'top' : 'top-right'} in={open} {...TransitionProps}>
             <Paper style={{ minWidth: '300px' }}>
               <ClickAwayListener onClickAway={handleClose}>
-                <MainCard border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[16]}>
+                <MainCard hideInstruct border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[16]}>
                   <Grid container direction="column" spacing={2}>
                     <Grid item xs={12}>
                       <Grid container alignItems="center" justifyContent="space-between" sx={{ pt: 2, px: 2 }}>
