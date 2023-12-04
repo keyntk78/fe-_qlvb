@@ -336,7 +336,7 @@ const TinTuc = () => {
           title={title}
           form={form}
           openPopup={openPopup}
-          maxWidth={form === 'add' || form === 'edit' ? 'xl' : 'sm'}
+          maxWidth={form === 'add' || form === 'edit' ? 'md' : 'sm'}
           bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
         >
           {form === 'add' ? (
