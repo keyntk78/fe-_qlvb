@@ -405,7 +405,8 @@ const Phoigoc = () => {
           id: index + 1,
           idx: pageState.startIndex * pageState.pageSize + index + 1,
           NgayMua: convertISODateToFormattedDate(row.ngayMua),
-          SoKetThuc: row.soHieuPhoi + (+row.soBatDau + row.soLuongPhoi + row.soLuongPhoiDaSuDung),
+          SoKetThuc:
+            row.soHieuPhoi + (+row.soBatDau + row.soLuongPhoi + row.soLuongPhoiDaSuDung).toString().padStart(row.soBatDau.length, '0'),
           SoBatDau: row.soHieuPhoi + row.soBatDau,
           FileBienBanHuyBo: row.bienBanHuyPhoi.fileBienBanHuyPhoi,
           ...row
