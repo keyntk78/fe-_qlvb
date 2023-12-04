@@ -3,7 +3,7 @@ import '../../index.css';
 import config from 'config';
 
 const DatainBang = ({ duLieuPhoi, studentDataList, positionConfig, componentRef }) => {
-  const Image = config.urlFile + 'PhoiGoc/' + duLieuPhoi.anhphoi;
+  const Image = config.urlFile + 'PhoiGoc/' + duLieuPhoi.anhPhoi;
   const chieuNgang = duLieuPhoi ? duLieuPhoi.chieuNgang : 19;
   const chieuDoc = duLieuPhoi ? duLieuPhoi.chieuDoc : 13;
   console.log(duLieuPhoi);
