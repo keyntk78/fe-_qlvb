@@ -76,14 +76,14 @@ function DongBo() {
         <IconRefresh size={100} color="#2196F3" />
       </Grid>
       <MuiTypography variant="h4" gutterBottom m={1}>
-        {`${t('Bạn có chắc chắn đồng bộ dữ liệu ?')}`}
+        {`${t('Vui lòng chọn thời gian để đồng bộ')}`}
       </MuiTypography>
-      <Grid item container spacing={isXs ? 0 : 1} columnSpacing={isXs ? 1 : 0} mt={2} justifyContent={'center'}>
+      <Grid item container spacing={isXs ? 0 : 1} columnSpacing={isXs ? 1 : 0} mt={2} justifyContent={'center'} alignItems={'center'}>
         <Grid item xs={8}>
           <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} label={t('Đồng bộ theo')}>
             <RadioGroup style={{ display: 'flex', justifyContent: 'flex-start' }} row value={option} onChange={handleChange}>
-              <FormControlLabel value={'all'} control={<Radio />} label={t('Tất cả')} />
-              <FormControlLabel value={'part'} control={<Radio />} label={t('Theo đợt')} />
+              <FormControlLabel value={'all'} control={<Radio />} label={t('Tất cả')} sx={{ marginTop: '-1px' }} />
+              <FormControlLabel value={'part'} control={<Radio />} label={t('Theo đợt')} sx={{ marginTop: -'-1px' }} />
             </RadioGroup>
           </FormControlComponent>
         </Grid>
