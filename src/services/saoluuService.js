@@ -38,6 +38,7 @@ export async function restoreData(data) {
     throw error;
   }
 }
+
 export async function DeleteDataBackup(id) {
   try {
     store.dispatch(setLoading(true));
@@ -49,10 +50,11 @@ export async function DeleteDataBackup(id) {
     throw error;
   }
 }
-export async function SyncCollection() {
+
+export async function SyncCollection(startDate, endDate) {
   try {
     store.dispatch(setLoading(true));
-    const response = await sendRequest('DongBo/SyncCollection', 'GET');
+    const response = await sendRequest(`DongBo/SyncCollection?tuNgayDotTotNghiep=${startDate}&denNgayDotTotNghiep=${endDate}`, 'GET');
     store.dispatch(setLoading(false));
     return response;
   } catch (error) {

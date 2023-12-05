@@ -17,6 +17,10 @@ const config = {
   // urlFile: 'https://api.quanlyvanbang.cenit.vn/Resources/'
   //=================
   secretKey: 'mytopsecretkeywithatleast32characterslong'
+  //apiUrl: 'https://api.quanlyvanbang.cenit.vn/api',
+  //urlFile: 'https://api.quanlyvanbang.cenit.vn/Resources/',
+
+  // urlImages: 'https://api.quanlyvanbang.cenit.vn'
 };
 
 export default config;

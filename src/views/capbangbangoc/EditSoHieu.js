@@ -57,7 +57,8 @@ const EditSoHieu = () => {
       setIdHocSinh(datauser.id);
 
       formik.setValues({
-        soHieuHienTai: datauser.soHieuVanBang || ''
+        soHieuHienTai: datauser.soHieuVanBang || '',
+        soHieuMoi: datauser.soHieuMoi || ''
       });
       dispatch(setReloadData(false));
     };
