@@ -5,7 +5,6 @@ import { forwardRef } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Card, CardContent, CardHeader, Divider, Grid, IconButton, Pagination, Stack, Tooltip, Typography } from '@mui/material';
 import AnimateButton from 'components/extended/AnimateButton';
-import { IconQuestionMark } from '@tabler/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { setOpenInstruct } from 'store/actions';
 import Popup from 'components/controls/popup';
@@ -16,6 +15,7 @@ import ExitButton from 'components/button/ExitButton';
 import config from 'config';
 import { useEffect } from 'react';
 import { pdfjs } from 'react-pdf';
+import { PriorityHigh } from '@mui/icons-material';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -101,7 +101,7 @@ const MainCard = forwardRef(
                         onClick={() => dispatch(setOpenInstruct(true))}
                         size="small"
                       >
-                        <IconQuestionMark color="white" size="12" />
+                        <PriorityHigh color="white" sx={{ fontSize: '13px' }} />
                       </IconButton>
                     </Tooltip>
                   </AnimateButton>

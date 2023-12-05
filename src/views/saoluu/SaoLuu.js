@@ -9,7 +9,7 @@ import { Button, Grid } from '@mui/material';
 import i18n from 'i18n';
 import MainCard from 'components/cards/MainCard';
 import useLocalText from 'utils/localText';
-import { IconDownload, IconRotateClockwise, IconRefresh } from '@tabler/icons';
+import { IconDownload, IconRotateClockwise } from '@tabler/icons';
 import config from 'config';
 import XacNhanSaoLuu from './XacNhanSaoLuu';
 import { getBackupData } from 'services/saoluuService';
@@ -135,30 +135,30 @@ const SaoLuu = () => {
     dispatch(setOpenPopup(true));
   };
 
-  const handleSynchronized = async () => {
-    setTitle(t('Đồng bộ dữ liệu'));
-    setForm('dongbo');
-    dispatch(setOpenPopup(true));
-  };
+  // const handleSynchronized = async () => {
+  //   setTitle(t('Đồng bộ dữ liệu'));
+  //   setForm('dongbo');
+  //   dispatch(setOpenPopup(true));
+  // };
 
   return (
     <>
       <MainCard
-        title={t('Sao lưu - Khôi phục - Đồng bộ')}
+        title={t('Sao lưu - Khôi phục')}
         secondary={
           <Grid container justifyContent="flex-end" spacing={1}>
-            <Grid item>
+            {/* <Grid item>
               <Button color="info" variant="contained" startIcon={<IconRefresh />} onClick={handleSynchronized}>
                 {t('Đồng bộ')}
               </Button>
-            </Grid>
+            </Grid> */}
             <Grid item>
               <Button color="info" variant="contained" startIcon={<IconDownload />} onClick={handleBackup}>
                 {t('Sao lưu')}
               </Button>
             </Grid>
             <Grid item>
-              <Button color="info" variant="contained" startIcon={<IconRotateClockwise />} onClick={handleRestore}>
+              <Button color="error" variant="contained" startIcon={<IconRotateClockwise />} onClick={handleRestore}>
                 {t('Khôi phục')}
               </Button>
             </Grid>
