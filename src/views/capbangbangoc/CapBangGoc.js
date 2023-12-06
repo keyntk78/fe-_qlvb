@@ -273,6 +273,7 @@ export default function CapBangGoc() {
     };
     fetchDataDL();
   }, []);
+
   useEffect(() => {
     const fetchDataDL = async () => {
       setTimeout(
@@ -297,7 +298,9 @@ export default function CapBangGoc() {
         firstLoad3 ? 2500 : 0
       );
     };
-    fetchDataDL();
+    if (user) {
+      fetchDataDL();
+    }
   }, [user]);
 
   useEffect(() => {

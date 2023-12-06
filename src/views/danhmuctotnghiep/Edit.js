@@ -61,11 +61,7 @@ const EditDanhmucTN = () => {
     validationSchema: danhmuctnValidationSchema,
     onSubmit: async (values) => {
       try {
-        const updatedValues = {
-          ...values,
-          TuyChonSoVaoSo: 1
-        };
-        const formData = await convertJsonToFormData(updatedValues);
+        const formData = await convertJsonToFormData(values);
 
         const addedDanhmucTN = await editDanhmucTN(formData);
         if (addedDanhmucTN.isSuccess == false) {
