@@ -134,7 +134,7 @@ const Detail = ({ type }) => {
       ketQuaHocTaps: [],
       diemTB: '',
       lanDauTotNghiep: 'x',
-      dienXetTotNghiep: '',
+      dienXTN: '',
       hoiDong: '',
       noiCap: '',
       nguoiKy: '',
@@ -183,7 +183,7 @@ const Detail = ({ type }) => {
         ketQuaHocTaps: datauser.ketQuaHocTaps || [],
         diemTB: datauser.diemTB || '',
         lanDauTotNghiep: datauser.lanDauTotNghiep || '',
-        dienXetTotNghiep: datauser.dienXetTotNghiep || '',
+        dienXTN: datauser.dienXTN || '',
         hoiDong: datauser.hoiDong || '',
         noiCap: datauser.soGoc.diaPhuongCapBang || '',
         nguoiKy: datauser.soGoc.nguoiKyBang || '',
@@ -414,7 +414,7 @@ const Detail = ({ type }) => {
             <InputForm1 formik={formik} xs={12} label={t('Điểm trung bình')} name="diemTB" isRequired isDisabled />
           </Grid>
           <Grid item xs={isXs ? 6 : 3}>
-            <InputForm1 formik={formik} xs={12} label={t('Diện xét tốt nghiệp')} name="dienXetTotNghiep" isDisabled />
+            <InputForm1 formik={formik} xs={12} label={t('Diện xét tốt nghiệp')} name="dienXTN" isDisabled />
           </Grid>
           <Grid item xs={isXs ? 6 : 3} sx={{ display: 'flex', alignItems: 'flex-end' }}>
             <FormControlLabel
