@@ -8,13 +8,13 @@ import { openPopupSelector, reloadDataSelector, selectedPhoigocSelector, openSub
 import { useNavigate } from 'react-router-dom';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { useTranslation } from 'react-i18next';
-import { IconTransferIn, IconFilePlus, IconDownload } from '@tabler/icons';
+import { IconTransferIn, IconFilePlus, IconDownload, IconSearch } from '@tabler/icons';
 import useLocalText from 'utils/localText';
 import { createSearchParams } from 'utils/createSearchParams';
 import { convertISODateTimeToFormattedDateTime } from 'utils/formatDate';
 import i18n from 'i18n';
 import React from 'react';
-import { Grid, useMediaQuery, Button, Input } from '@mui/material';
+import { Grid, useMediaQuery, Button, Input, FormControl, Select, MenuItem, InputLabel } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
 import { getSearchPhoiDaHuyByIdPhoiGoc } from 'services/phoigocService';
 import FormControlComponent from 'components/form/FormControlComponent ';
@@ -24,6 +24,26 @@ import QuickSearch from 'components/form/QuickSearch';
 import config from 'config';
 import XacNhanHuySoHieuPhoi from './XacNhanHuySoHieuPhoi';
 import Popup from 'components/controls/popup';
+import SelectForm from 'components/form/SelectForm';
+
+const lyDoHuyList = [
+  {
+    id: 1,
+    value: 'Chứng chỉ bị hư hỏng'
+  },
+  {
+    id: 2,
+    value: 'Viết sai'
+  },
+  {
+    id: 3,
+    value: 'Chất lượng không đảm bảo'
+  },
+  {
+    id: 4,
+    value: 'Chưa sử dụng do thay đổi mẫu'
+  }
+];
 
 const PhoiCaBiet = () => {
   const isXs = useMediaQuery('(max-width:600px)');
@@ -50,7 +70,9 @@ const PhoiCaBiet = () => {
     order: 1,
     orderDir: 'ASC',
     startIndex: 0,
-    pageSize: 10
+    pageSize: 10,
+    search: '',
+    lyDoHuy: []
   });
   const formik = useFormik({
     initialValues: {
@@ -125,7 +147,9 @@ const PhoiCaBiet = () => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
+      params.append('lydo', pageState.lyDoHuy.join(';'));
       params.append('idphoigoc', selectedPhoigoc.id);
+      console.log(params);
       const response = await getSearchPhoiDaHuyByIdPhoiGoc(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -146,6 +170,22 @@ const PhoiCaBiet = () => {
         }));
       }
     };
+
+    if (!openPopup) {
+      setPageState({
+        idphoigoc: selectedPhoigoc.id,
+        isLoading: false,
+        data: [],
+        total: 0,
+        order: 1,
+        orderDir: 'ASC',
+        startIndex: 0,
+        pageSize: 10,
+        search: '',
+        lyDoHuy: []
+      });
+    }
+
     if (openPopup) {
       fetchData();
     }
@@ -159,6 +199,15 @@ const PhoiCaBiet = () => {
     e.target.value = null;
   };
 
+  const handelSelectBoxChange = (e) => {
+    const { value } = e.target;
+    console.log(value);
+
+    setPageState((prev) => ({
+      ...prev,
+      lyDoHuy: value
+    }));
+  };
   return (
     <>
       <MainCard hideInstruct title={t('Hủy số hiệu phôi')}>
@@ -171,7 +220,17 @@ const PhoiCaBiet = () => {
             </Grid>
             <Grid item mt={2} xs={12}>
               <FormControlComponent xsLabel={isXs ? 0 : 2} xsForm={isXs ? 12 : 10} isRequire label={t('Lý do hủy')}>
-                <InputForm formik={formik} name="LyDoHuy" placeholder={t('Lý do hủy')} />
+                <FormControl fullWidth variant="outlined">
+                  <SelectForm
+                    formik={formik}
+                    keyProp="value"
+                    valueProp="value"
+                    item={lyDoHuyList}
+                    name="LyDoHuy"
+                    value={formik.values.LyDoHuy}
+                    onChange={(e) => formik.setFieldValue('LyDoHuy', e.target.value)}
+                  />
+                </FormControl>
               </FormControlComponent>
             </Grid>
             <Grid item mt={2} xs={12}>
@@ -199,7 +258,7 @@ const PhoiCaBiet = () => {
         </Grid>
         <Grid item container spacing={1} mb={2} justifyContent={'center'} alignItems={'center'}>
           <Grid item lg={2} md={3} sm={3} xs={isXs ? 12 : 6}>
-            <Button variant="contained" fullWidth onClick={formik.handleSubmit} color="info" startIcon={<IconTransferIn />}>
+            <Button variant="contained" fullWidth onClick={formik.handleSubmit} color="error" startIcon={<IconTransferIn />}>
               {t('Hủy số hiệu phôi')}
             </Button>
           </Grid>
@@ -207,7 +266,39 @@ const PhoiCaBiet = () => {
       </MainCard>
       <Grid>
         <MainCard hideInstruct title={t('Danh sách số hiệu phôi đã hủy')}>
-          <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }}>
+          <Grid container spacing={2} justifyContent={'center'} alignItems={'center'} my={1}>
+            <Grid item xs={2.5} minWidth={120}>
+              <FormControl fullWidth variant="outlined" size="small">
+                <InputLabel>{t('Lý do hủy')}</InputLabel>
+                <Select
+                  multiple
+                  value={pageState.lyDoHuy}
+                  onChange={handelSelectBoxChange}
+                  renderValue={(selected) => selected.join('; ')}
+                  label={t('Lý do hủy')}
+                >
+                  {lyDoHuyList.map((lydo) => (
+                    <MenuItem key={lydo.value} value={lydo.value}>
+                      {lydo.value}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item md={4} sm={4} lg={2} xs={6}>
+              <Button
+                variant="contained"
+                title={t('button.search')}
+                fullWidth
+                onClick={() => setSearch(!search)}
+                color="info"
+                startIcon={<IconSearch />}
+              >
+                {t('button.search')}
+              </Button>
+            </Grid>
+          </Grid>
+          <Grid container justifyContent="flex-end" mb={1} sx={{ marginTop: '-15px' }} spacing={1}>
             <Grid item lg={3} md={4} sm={5} xs={7}>
               <QuickSearch
                 value={pageState.search}

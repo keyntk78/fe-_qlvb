@@ -6,7 +6,7 @@ export const usePhoicabietValidationSchema = () => {
 
   let phoicabietValidationSchema = Yup.object({
     soHieus: Yup.string().required(t('Số hiệu không được để trống')),
-    LyDoHuy: Yup.string().required(t('Lý do huy không được để trống'))
+    LyDoHuy: Yup.string().required(t('Lý do hủy không được để trống'))
   });
 
   return phoicabietValidationSchema;

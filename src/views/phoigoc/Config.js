@@ -155,8 +155,8 @@ const Config = () => {
   return (
     <>
       {/* <MainCard title={t('cauhinhphoivanbang.titlegoc')} secondary={<BeforeViewButton handleClick={handleView} />}> */}
-      <Grid container justifyContent={'flex-end'} my={2}>
-        <Grid item mx={2}>
+      <Grid container justifyContent={'flex-end'} my={2} spacing={1}>
+        <Grid item>
           <BeforeViewButton handleClick={handleViewSample} title={t('Xem dữ liệu mẫu')} />
         </Grid>
         <Grid item>

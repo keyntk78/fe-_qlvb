@@ -300,7 +300,13 @@ const Phoigoc = () => {
       flex: 1,
       field: 'soLuongPhoiDaSuDung',
       headerName: t('Đã sử dụng'),
-      minWidth: 100
+      minWidth: 80
+    },
+    {
+      flex: 1,
+      field: 'soLuongPhoiCaBiet',
+      headerName: t('Đã hủy'),
+      minWidth: 80
     },
     {
       flex: 1,
@@ -406,7 +412,8 @@ const Phoigoc = () => {
           idx: pageState.startIndex * pageState.pageSize + index + 1,
           NgayMua: convertISODateToFormattedDate(row.ngayMua),
           SoKetThuc:
-            row.soHieuPhoi + (+row.soBatDau + row.soLuongPhoi + row.soLuongPhoiDaSuDung).toString().padStart(row.soBatDau.length, '0'),
+            row.soHieuPhoi +
+            (row.soLuongPhoi + row.soLuongPhoiDaSuDung + row.soLuongPhoiCaBiet).toString().padStart(row.soBatDau.length, '0'),
           SoBatDau: row.soHieuPhoi + row.soBatDau,
           FileBienBanHuyBo: row.bienBanHuyPhoi.fileBienBanHuyPhoi,
           ...row
