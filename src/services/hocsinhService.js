@@ -221,11 +221,11 @@ export async function arrangeHocSinhPhong(hocSinhs) {
   }
 }
 
-export async function ModifySoHieu(soHieu, IdHocSinh, nguoiThucHien) {
+export async function ModifySoHieu(soHieu, IdHocSinh, IdPhoiGoc, nguoiThucHien) {
   try {
     store.dispatch(setLoading(true));
     const response = await sendRequest(
-      `HocSinhPhong/ModifySoHieu?SoHieuVB=${soHieu}&IdHocSinh=${IdHocSinh}&NguoiThucHien=${nguoiThucHien}`,
+      `HocSinhPhong/ModifySoHieu?SoHieuVB=${soHieu}&IdHocSinh=${IdHocSinh}&IdPhoiGoc=${IdPhoiGoc}&NguoiThucHien=${nguoiThucHien}`,
       'PUT'
     );
     store.dispatch(setLoading(false));

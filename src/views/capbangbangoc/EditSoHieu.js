@@ -23,7 +23,7 @@ const EditSoHieu = () => {
   const { t } = useTranslation();
   const hocSinh = useSelector(selectedHocsinhSelector);
   const user = useSelector(userLoginSelector);
-  const [IdHocSinh, setIdHocSinh] = useState('');
+  const [IdHocSinh, setIdHocSinh] = useState([]);
   const openSubPopup = useSelector(openSubPopupSelector);
   const dispatch = useSelector(useDispatch);
   console.log(hocSinh);
@@ -35,7 +35,7 @@ const EditSoHieu = () => {
     validationSchema: useThayDoiSoHieuValidationSchema(),
     onSubmit: async (values) => {
       try {
-        const response = await ModifySoHieu(values.soHieuMoi, IdHocSinh, user.username);
+        const response = await ModifySoHieu(values.soHieuMoi, IdHocSinh.id, IdHocSinh.idPhoiGoc, user.username);
         if (response.isSuccess == false) {
           dispatch(showAlert(new Date().getTime().toString(), 'error', response.message.toString()));
         } else {
@@ -54,7 +54,7 @@ const EditSoHieu = () => {
       const userbyid = await getHocSinhByCCCD(hocSinh.cccd);
       const datauser = userbyid.data;
       console.log(datauser);
-      setIdHocSinh(datauser.id);
+      setIdHocSinh(datauser);
 
       formik.setValues({
         soHieuHienTai: datauser.soHieuVanBang || '',
