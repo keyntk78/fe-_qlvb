@@ -5,8 +5,6 @@ import { selectedHocsinh, setLoading, setOpenPopup, setOpenSubPopup, setReloadDa
 import {
   openPopupSelector,
   openSubPopupSelector,
-  reloadDataSelector,
-  //reloadDataSelector,
   selectedDanhmucSelector,
   selectedDonvitruongSelector,
   userLoginSelector
@@ -44,7 +42,6 @@ const VaoSoGoc = () => {
   const user = useSelector(userLoginSelector);
   const openPopup = useSelector(openPopupSelector);
   const openSubPopup = useSelector(openSubPopupSelector);
-  const reloadData = useSelector(reloadDataSelector);
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
   const [pageState, setPageState] = useState({
@@ -165,7 +162,7 @@ const VaoSoGoc = () => {
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;
-        if (data && data.hocSinhs.length > 0) {
+        if (data && data?.hocSinhs?.length > 0) {
           const dataWithIds = data.hocSinhs.map((row, index) => ({
             idx: pageState.startIndex * pageState.pageSize + index + 1,
             soHieuVanBang: row.soHieuVanBang ? row.soHieuVanBang : 'Chưa cấp',
@@ -186,7 +183,7 @@ const VaoSoGoc = () => {
       }
     };
     fetchData();
-  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, donvi, danhmuc, reloadData]);
+  }, [pageState.search, pageState.order, pageState.orderDir, pageState.startIndex, pageState.pageSize, donvi, danhmuc]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -197,26 +194,28 @@ const VaoSoGoc = () => {
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;
-        const dataWithIds = data.hocSinhs.map((row, index) => ({
-          idx: pageState.startIndex * pageState.pageSize + index + 1,
-          soHieuVanBang: row.soHieuVanBang ? row.soHieuVanBang : 'Chưa cấp',
-          soVaoSoCapBang: row.soVaoSoCapBang || 'Chưa cấp',
-          gioiTinh_fm: row.gioiTinh ? 'Nam' : 'Nữ',
-          ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
-          ...row
-        }));
-        setPageState1((old) => ({
-          ...old,
-          isLoading: false,
-          data: dataWithIds,
-          total: data.totalRow || 0
-        }));
+        if (data && data?.hocSinhs?.length > 0) {
+          const dataWithIds = data.hocSinhs.map((row, index) => ({
+            idx: pageState.startIndex * pageState.pageSize + index + 1,
+            soHieuVanBang: row.soHieuVanBang ? row.soHieuVanBang : 'Chưa cấp',
+            soVaoSoCapBang: row.soVaoSoCapBang || 'Chưa cấp',
+            gioiTinh_fm: row.gioiTinh ? 'Nam' : 'Nữ',
+            ngaySinh_fm: convertISODateToFormattedDate(row.ngaySinh),
+            ...row
+          }));
+          setPageState1((old) => ({
+            ...old,
+            isLoading: false,
+            data: dataWithIds,
+            total: data.totalRow || 0
+          }));
+        }
       } else {
         setIsAccess(false);
       }
     };
     fetchData();
-  }, [danhmuc, reloadData]);
+  }, [danhmuc]);
 
   const handleExport = async (e) => {
     e.preventDefault();
