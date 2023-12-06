@@ -413,7 +413,9 @@ const Phoigoc = () => {
           NgayMua: convertISODateToFormattedDate(row.ngayMua),
           SoKetThuc:
             row.soHieuPhoi +
-            (row.soLuongPhoi + row.soLuongPhoiDaSuDung + row.soLuongPhoiCaBiet).toString().padStart(row.soBatDau.length, '0'),
+            (+row.soBatDau + row.soLuongPhoi + row.soLuongPhoiDaSuDung + row.soLuongPhoiCaBiet - 1)
+              .toString()
+              .padStart(row.soBatDau.length, '0'),
           SoBatDau: row.soHieuPhoi + row.soBatDau,
           FileBienBanHuyBo: row.bienBanHuyPhoi.fileBienBanHuyPhoi,
           ...row

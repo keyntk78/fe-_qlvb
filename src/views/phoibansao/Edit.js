@@ -40,6 +40,8 @@ const EditAction = () => {
       AnhPhoi: '',
       FileImage: '',
       NgayMua: '',
+      SoHieuPhoi: '',
+      SoBatDau: '',
       lyDo: ''
     },
     validationSchema: PhoiValidationSchema,
@@ -78,6 +80,8 @@ const EditAction = () => {
           ChieuNgang: dataPhoisao.chieuNgang || '',
           MoTa: dataPhoisao.moTa || '',
           lyDo: dataPhoisao.lyDo || '',
+          SoHieuPhoi: dataPhoisao.soHieuPhoi,
+          SoBatDau: dataPhoisao.soBatDau || '',
           NgayMua: convertFormattedDateToISODate(NgayMua) || '',
           NguoiThucHien: user.username
         });
@@ -122,6 +126,18 @@ const EditAction = () => {
           <FormControlComponent xsLabel={isXs ? 0 : 2.5} xsForm={isXs ? 12 : 9.5} isRequire label={t('phoivanbang.field.tenphoi')}>
             <InputForm formik={formik} name="TenPhoi" type="text" placeholder={t('phoivanbang.field.tenphoi')} />
           </FormControlComponent>
+          <Grid item container spacing={isXs ? 0 : 1} columnSpacing={isXs ? 1 : 0}>
+            <Grid item xs={6}>
+              <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} isRequire label={t('phoivanbang.field.tientophoi')}>
+                <InputForm formik={formik} name="SoHieuPhoi" type="text" placeholder={t('phoivanbang.field.tientophoi')} />
+              </FormControlComponent>
+            </Grid>
+            <Grid item xs={6}>
+              <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} isRequire label={t('Số bắt đầu')}>
+                <InputForm formik={formik} name="SoBatDau" type="text" placeholder={t('Số bắt đầu')} />
+              </FormControlComponent>
+            </Grid>
+          </Grid>
           <Grid item container spacing={1}>
             <Grid item xs={6}>
               <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} isRequire label={t('phoivanbang.field.ngaymua')}>

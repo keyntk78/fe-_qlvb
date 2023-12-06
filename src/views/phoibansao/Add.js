@@ -36,6 +36,8 @@ const Add = () => {
       ChieuDoc: 0,
       AnhPhoi: '',
       NgayMua: '',
+      SoHieuPhoi: '',
+      SoBatDau: '',
       TuDongKhoa: false,
       MoTa: '',
       NguoiThucHien: user.username,
@@ -107,6 +109,18 @@ const Add = () => {
           <FormControlComponent xsLabel={isXs ? 0 : 2.5} xsForm={isXs ? 12 : 9.5} isRequire label={t('phoivanbang.field.tenphoi')}>
             <InputForm formik={formik} name="TenPhoi" type="text" placeholder={t('phoivanbang.field.tenphoi')} />
           </FormControlComponent>
+          <Grid item container spacing={isXs ? 0 : 1} columnSpacing={isXs ? 1 : 0}>
+            <Grid item xs={6}>
+              <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} isRequire label={t('phoivanbang.field.tientophoi')}>
+                <InputForm formik={formik} name="SoHieuPhoi" type="text" placeholder={t('phoivanbang.field.tientophoi')} />
+              </FormControlComponent>
+            </Grid>
+            <Grid item xs={6}>
+              <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} isRequire label={t('Số bắt đầu')}>
+                <InputForm formik={formik} name="SoBatDau" type="text" placeholder={t('Số bắt đầu')} />
+              </FormControlComponent>
+            </Grid>
+          </Grid>
           <Grid item container spacing={1}>
             <Grid item xs={6}>
               <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} isRequire label={t('phoivanbang.field.ngaymua')}>
@@ -114,7 +128,7 @@ const Add = () => {
               </FormControlComponent>
             </Grid>
             <Grid item xs={6}>
-              <FormControlComponent xsLabel={isXs ? 0 : 4.5} xsForm={isXs ? 12 : 7.5} isRequire label={t('phoivanbang.field.soluongphoi')}>
+              <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} isRequire label={t('phoivanbang.field.soluongphoi')}>
                 <InputForm formik={formik} name="SoLuongPhoi" type="number" placeholder={t('phoivanbang.field.soluongphoi')} />
               </FormControlComponent>
             </Grid>

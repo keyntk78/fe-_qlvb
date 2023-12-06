@@ -26,6 +26,7 @@ import { Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select } from '@
 import QuickSearch from 'components/form/QuickSearch';
 import ActivePhoiSao from './Active';
 import { IconSearch } from '@tabler/icons';
+import PhoiCaBiet from './PhoiCaBiet';
 
 const PhoiBanSao = () => {
   const { t } = useTranslation();
@@ -98,6 +99,12 @@ const PhoiBanSao = () => {
     dispatch(selectedPhoisao(phoisao));
     dispatch(setOpenPopup(true));
   };
+  const handlePhoiCaBiet = (phoisao) => {
+    setTitle(t('Phôi cá biệt'));
+    setForm('phoicabiet');
+    dispatch(selectedPhoisao(phoisao));
+    dispatch(setOpenPopup(true));
+  };
   const handleTrangThaiChange = (event) => {
     const selectedValue = event.target.value;
     const trangThai = selectedValue === 'all' ? '' : selectedValue;
@@ -119,6 +126,10 @@ const PhoiBanSao = () => {
       type: 'edit',
       handleEdit: handleEditPhoi
     },
+    {
+      type: 'phoicabiet',
+      handleClick: handlePhoiCaBiet
+    },
     // {
     //   type: 'huyphoi',
     //   handleClick: handleDestroy
@@ -137,6 +148,11 @@ const PhoiBanSao = () => {
       type: 'detail',
       handleGetbyId: handleDetailPhoi
     },
+
+    {
+      type: 'phoicabiet',
+      handleClick: handlePhoiCaBiet
+    },
     {
       type: 'edit',
       handleEdit: handleEditPhoi
@@ -152,6 +168,10 @@ const PhoiBanSao = () => {
   ];
   const buttonConfigurations1 = [
     { type: 'config', handleClick: handleConfig },
+    {
+      type: 'phoicabiet',
+      handleClick: handlePhoiCaBiet
+    },
     // {
     //   type: 'detail',
     //   handleGetbyId: handleDetailPhoi
@@ -178,6 +198,10 @@ const PhoiBanSao = () => {
     {
       type: 'detail',
       handleGetbyId: handleDetailPhoi
+    },
+    {
+      type: 'phoicabiet',
+      handleClick: handlePhoiCaBiet
     },
     {
       type: 'edit',
@@ -208,8 +232,44 @@ const PhoiBanSao = () => {
     },
     {
       flex: 1,
+      field: 'SoBatDau',
+      headerName: t('Số hiệu bắt đầu'),
+      minWidth: 80
+    },
+    {
+      flex: 1,
+      field: 'SoKetThuc',
+      headerName: t('Số hiệu kết thúc'),
+      minWidth: 80
+    },
+    {
+      flex: 1,
+      field: 'soLuongPhoi',
+      headerName: t('Số Lượng'),
+      minWidth: 80
+    },
+    {
+      flex: 1,
+      field: 'soLuongPhoiDaSuDung',
+      headerName: t('Đã sử dụng'),
+      minWidth: 80
+    },
+    {
+      flex: 1,
+      field: 'soLuongPhoiCaBiet',
+      headerName: t('Đã hủy'),
+      minWidth: 80
+    },
+    {
+      flex: 1,
+      field: 'NgayMua',
+      headerName: t('phoivanbang.field.ngaymua'),
+      minWidth: 100
+    },
+    {
+      flex: 1,
       field: 'tinhTrang',
-      minWidth: 100,
+      minWidth: 120,
       headerName: t('phoivanbang.field.tinhtrang'),
       renderCell: (params) => (
         <Grid container>
@@ -225,18 +285,6 @@ const PhoiBanSao = () => {
           </Grid>
         </Grid>
       )
-    },
-    {
-      flex: 1,
-      field: 'soLuongPhoi',
-      headerName: t('phoivanbang.field.soluongphoi'),
-      minWidth: 80
-    },
-    {
-      flex: 1,
-      field: 'NgayMua',
-      headerName: t('phoivanbang.field.ngaymua'),
-      minWidth: 100
     },
     {
       field: 'actions',
@@ -287,6 +335,12 @@ const PhoiBanSao = () => {
           id: index + 1,
           idx: pageState.startIndex * pageState.pageSize + index + 1,
           NgayMua: convertISODateToFormattedDate(row.ngayMua),
+          SoKetThuc:
+            row.soHieuPhoi +
+            (+row.soBatDau + row.soLuongPhoi + row.soLuongPhoiDaSuDung + row.soLuongPhoiCaBiet - 1)
+              .toString()
+              .padStart(row.soBatDau.length, '0'),
+          SoBatDau: row.soHieuPhoi + row.soBatDau,
           ...row
         }));
 
@@ -375,7 +429,13 @@ const PhoiBanSao = () => {
             title={title}
             form={form}
             openPopup={openPopup}
-            maxWidth={form === 'add' || form === 'edit' || form === 'huyphoi' || form === 'detail' ? 'sm' : form === 'config' ? 'xl' : ''}
+            maxWidth={
+              form === 'add' || form === 'edit' || form === 'huyphoi' || form === 'detail'
+                ? 'sm'
+                : form === 'config' || form === 'phoicabiet'
+                ? 'xl'
+                : ''
+            }
             bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
           >
             {form === 'add' ? (
@@ -390,6 +450,8 @@ const PhoiBanSao = () => {
               <Detail />
             ) : form === 'active' ? (
               <ActivePhoiSao />
+            ) : form === 'phoicabiet' ? (
+              <PhoiCaBiet />
             ) : (
               <Delete />
             )}
