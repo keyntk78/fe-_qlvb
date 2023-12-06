@@ -29,14 +29,18 @@ import SelectForm from 'components/form/SelectForm';
 const lyDoHuyList = [
   {
     id: 1,
-    value: 'Chứng chỉ bị hư hỏng, viết sai'
+    value: 'Chứng chỉ bị hư hỏng'
   },
   {
     id: 2,
-    value: 'Chất lượng không đảm bảo'
+    value: 'Viết sai'
   },
   {
     id: 3,
+    value: 'Chất lượng không đảm bảo'
+  },
+  {
+    id: 4,
     value: 'Chưa sử dụng do thay đổi mẫu'
   }
 ];
