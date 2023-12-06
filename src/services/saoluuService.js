@@ -51,10 +51,22 @@ export async function DeleteDataBackup(id) {
   }
 }
 
-export async function SyncCollection(startDate, endDate) {
+export async function SyncCollection(params) {
   try {
     store.dispatch(setLoading(true));
-    const response = await sendRequest(`DongBo/SyncCollection?tuNgayDotTotNghiep=${startDate}&denNgayDotTotNghiep=${endDate}`, 'GET');
+    const response = await sendRequest(`DongBo/SyncCollection?${params}`, 'GET');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating role:', error);
+    throw error;
+  }
+}
+
+export async function dongBobyDanhMucTotNghiep(nguoiThucHien, data) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(`DongBo/DongBobyDanhMucTotNghiep?NguoiThucHien=${nguoiThucHien}`, 'PUT', data);
     store.dispatch(setLoading(false));
     return response;
   } catch (error) {
