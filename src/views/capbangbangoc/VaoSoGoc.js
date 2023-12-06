@@ -21,7 +21,7 @@ import BackToTop from 'components/scroll/BackToTop';
 import { Button, Grid, Tooltip } from '@mui/material';
 import { IconDownload } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
-import { convertISODateToFormattedDate } from 'utils/formatDate';
+import { convertDateTimeToDate, convertISODateToFormattedDate } from 'utils/formatDate';
 import FormGroupButton from 'components/button/FormGroupButton';
 import { useFormik } from 'formik';
 import InputForm1 from 'components/form/InputForm1';
@@ -161,7 +161,6 @@ const VaoSoGoc = () => {
       const params = await createSearchParams(pageState);
       params.append('idDanhMucTotNghiep', danhmuc.id);
       params.append('idTruong', donvi.id);
-
       const response = await getPreviewHocSinh(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -238,7 +237,6 @@ const VaoSoGoc = () => {
       NgayCapBang: ''
     },
 
-    // validationSchema: hocSinhValidation,
     onSubmit: async (values) => {
       try {
         const convertValues = await convertJsonToFormData(values);
@@ -261,17 +259,26 @@ const VaoSoGoc = () => {
   });
 
   useEffect(() => {
+    if (danhmuc) {
+      formik.setValues((values) => ({
+        ...values,
+        NgayCapBang: convertDateTimeToDate(danhmuc.ngayCapBang)
+      }));
+    }
+  }, [danhmuc]);
+
+  useEffect(() => {
     const fetchData = async () => {
       const response_cauhinh = await GetCauHinhByIdDonVi(user.username);
       const cauhinh_donvi = response_cauhinh.data;
-      formik.setValues({
+      formik.setValues((values) => ({
+        ...values,
         UyBanNhanDan: cauhinh_donvi.tenUyBanNhanDan || '',
         CoQuanCapBang: cauhinh_donvi.tenCoQuanCapBang || '',
-        ngayQD: '',
         NguoiKyBang: cauhinh_donvi.hoTenNguoiKySoGoc || '',
         DiaPhuongCapBang: cauhinh_donvi.tenDiaPhuongCapBang || '',
         nguoiThucHien: user.username
-      });
+      }));
     };
     if (openPopup) {
       fetchData();
@@ -292,11 +299,14 @@ const VaoSoGoc = () => {
             </AnimateButton>
           </Grid>
           <Grid container spacing={1}>
-            <Grid item xs={12} sm={6} md={6}>
+            <Grid item xs={12} sm={4} md={4}>
               <InputForm1 formik={formik} xs={12} label={'Danh mục tốt nghiệp'} name="dmtn" value={danhmuc.tieuDe} isDisabled />
             </Grid>
-            <Grid item xs={12} sm={6} md={6}>
+            <Grid item xs={12} sm={4} md={4}>
               <InputForm1 formik={formik} xs={12} label={'Đơn vị trường'} name="dvdk" value={donvi.ten} isDisabled />
+            </Grid>
+            <Grid item xs={12} sm={4} md={4}>
+              <InputForm1 formik={formik} xs={12} label={'Cơ quan cấp bằng'} name="CoQuanCapBang" />
             </Grid>
           </Grid>
           <Grid container spacing={1}>
@@ -304,10 +314,10 @@ const VaoSoGoc = () => {
               <InputForm1 formik={formik} xs={12} label={'Ủy ban nhân dân'} name="UyBanNhanDan" />
             </Grid>
             <Grid item xs={6} sm={3} md={3}>
-              <InputForm1 formik={formik} xs={12} label={'Cơ quan cấp bằng'} name="CoQuanCapBang" />
+              <InputForm1 formik={formik} xs={12} label={'Địa phương cấp bằng'} name="DiaPhuongCapBang" />
             </Grid>
             <Grid item xs={6} sm={3} md={3}>
-              <InputForm1 formik={formik} xs={12} label={'Địa phương cấp bằng'} name="DiaPhuongCapBang" />
+              <InputForm1 formik={formik} xs={12} label={'Ngày cấp bằng'} name="NgayCapBang" type="date" />
             </Grid>
             <Grid item xs={6} sm={3} md={3}>
               <InputForm1 formik={formik} xs={12} label={'Người ký'} name="NguoiKyBang" />

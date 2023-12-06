@@ -17,7 +17,7 @@ import { getTop10Message, getUnreadMessagesCount } from 'services/notificationSe
 import { setNotificationCount, setNotifications, setReloadNotification } from 'store/actions';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { donviSelector, pageSizeSelector, reloadNotificationSelector, userLoginSelector } from 'store/selectors';
+import { donviSelector, reloadNotificationSelector, userLoginSelector } from 'store/selectors';
 import CongThongTin from './CongThongTin';
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
@@ -27,24 +27,27 @@ const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
   const user = useSelector(userLoginSelector);
   const reload = useSelector(reloadNotificationSelector);
-  const pageSize = useSelector(pageSizeSelector);
   const donvi = useSelector(donviSelector);
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      if (user) {
-        const message = await getUnreadMessagesCount(user.id);
-        const count = message.data;
-        dispatch(setNotificationCount(count));
-        const response = await getTop10Message(user.id, pageSize);
-        dispatch(setNotifications(response.data));
-      }
+      setTimeout(async () => {
+        try {
+          const message = await getUnreadMessagesCount(user.id);
+          const count = message.data;
+          dispatch(setNotificationCount(count));
+          const response = await getTop10Message(user.id, 10);
+          dispatch(setNotifications(response.data));
+        } catch (error) {
+          console.error(error);
+        }
+      }, 2000);
     };
-    if (user || reload || pageSize) {
+    if (user || reload) {
       fetchDataDL();
       dispatch(setReloadNotification(false));
     }
-  }, [user, reload, pageSize]);
+  }, [user, reload]);
 
   return (
     <>
