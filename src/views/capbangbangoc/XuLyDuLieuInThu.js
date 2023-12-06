@@ -9,6 +9,7 @@ const XuLyDuLieuInThu = ({ studentDataList, positionConfig, componentRef, chieuD
   const Image = config.urlFile + 'PhoiGoc/' + phoigoc.anhPhoi;
   const chieuNgang = chieuRong ? chieuRong : phoigoc ? phoigoc.chieuNgang : 19;
   const chieuDoc = chieuDai ? chieuDai : phoigoc ? phoigoc.chieuDoc : 13;
+
   return (
     <div ref={componentRef} style={{ marginTop: '10px', marginLeft: '60px' }}>
       <div

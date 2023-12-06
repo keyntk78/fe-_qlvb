@@ -45,9 +45,9 @@ const InBang = ({ duLieuHocSinhSoGoc }) => {
     const fetchDataDLHS = async () => {
       if (selectConfig === optionConfg[0].id) {
         const response_cf = await GetAllTruongDuLieuPhoiGoc();
-        setDuLieuConFig(response_cf.data.cauHinh);
-        setChieuDai(response_cf.chieuDai);
-        setChieuRong(response_cf.chieuRong);
+        setDuLieuConFig(response_cf.data.cauHinhPhoiGocs);
+        setChieuDai(response_cf.data.chieuDoc);
+        setChieuRong(response_cf.data.chieuNgang);
       } else {
         const response_cf = await GetConfigPhoi(phoigoc.id);
         setDuLieuConFig(response_cf.data);
@@ -210,7 +210,7 @@ const InBang = ({ duLieuHocSinhSoGoc }) => {
           </Grid>
           <Grid item>
             <FormControl fullWidth variant="outlined">
-              <Select value={selectConfig} onChange={(e) => setSelectConfig(e.target.value)} size="small">
+              <Select value={selectConfig} onChange={(e) => setSelectConfig(e.target.value)} size="small" sx={{ overflow: 'hidden' }}>
                 {optionConfg.map((item) => (
                   <MenuItem key={item.id} value={item.id}>
                     {item.value}

@@ -2,16 +2,18 @@ import React, { useRef } from 'react';
 import ReactToPrint, { useReactToPrint } from 'react-to-print';
 import MainCard from 'components/cards/MainCard';
 import { IconPrinter } from '@tabler/icons';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, FormControl, Select, MenuItem } from '@mui/material';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { donviSelector, upDateVBCCSelector, userLoginSelector } from 'store/selectors';
+import { donviSelector, upDateVBCCSelector, userLoginSelector, openSubPopupSelector } from 'store/selectors';
 import { useState } from 'react';
 import ExitButton from 'components/button/ExitButton';
 import DuLieuInTungNguoi from './DataInBang';
 import { getByIdHistory } from 'services/chinhsuavbccService';
 import { GetPhoiGocDangSuDung } from 'services/sharedService';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
+import optionConfg from 'utils/optionConfig';
+import { GetAllTruongDuLieuPhoiGoc } from 'services/sharedService';
 
 const InLaiVBCC = () => {
   const donvi = useSelector(donviSelector);
@@ -19,16 +21,32 @@ const InLaiVBCC = () => {
   const user = useSelector(userLoginSelector);
   const [duLieuConFig, setDuLieuConFig] = useState([]);
   const [duLieuHocSinh, setDuLieuHocSinh] = useState([]);
+  const [selectConfig, setSelectConfig] = useState(optionConfg[0].id);
+  const openSubPopup = useSelector(openSubPopupSelector);
 
   useEffect(() => {
     const fetchDataDLHS = async () => {
-      const response_cf = await GetPhoiGocDangSuDung(user.username);
-      setDuLieuConFig(response_cf.data);
+      if (selectConfig === optionConfg[0].id) {
+        const response_cf = await GetAllTruongDuLieuPhoiGoc();
+        const response_cfAnh = await GetPhoiGocDangSuDung(user.username);
+        response_cf.data.anhPhoi = response_cfAnh.data.anhPhoi;
+        setDuLieuConFig(response_cf.data);
+      } else {
+        const response_cf = await GetPhoiGocDangSuDung(user.username);
+        setDuLieuConFig(response_cf.data);
+      }
       const dataHocSinh = await getByIdHistory(history.cccd, history.id);
       setDuLieuHocSinh(dataHocSinh.data);
     };
-    fetchDataDLHS();
-  }, []);
+
+    if (!openSubPopup) {
+      setSelectConfig(optionConfg[0].id);
+    }
+    if (openSubPopup) {
+      fetchDataDLHS();
+    }
+    //fetchDataDLHS();
+  }, [selectConfig, openSubPopup]);
   const DataInBang = {
     HOTEN: history.hoTen,
     NOISINH: history.noiSinh, // Assuming you want the second part after the " - "
@@ -81,6 +99,17 @@ const InLaiVBCC = () => {
               )}
               content={() => componentRef.current}
             />
+          </Grid>
+          <Grid item>
+            <FormControl fullWidth variant="outlined">
+              <Select value={selectConfig} onChange={(e) => setSelectConfig(e.target.value)} size="small" sx={{ overflow: 'hidden' }}>
+                {optionConfg.map((item) => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.value}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
         </Grid>
         <div>
