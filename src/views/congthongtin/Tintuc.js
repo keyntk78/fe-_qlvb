@@ -13,6 +13,9 @@ import BackToTop from 'components/scroll/BackToTop';
 import { IconPoint } from '@tabler/icons';
 import { formatDateTinTuc } from 'utils/formatDate';
 import { createSearchParams } from 'utils/createSearchParams';
+import { useDispatch, useSelector } from 'react-redux';
+import { firstLoadSelector } from 'store/selectors';
+import { setFirstLoad } from 'store/actions';
 
 export default function Thongtintintuc() {
   const theme = useTheme();
@@ -25,6 +28,8 @@ export default function Thongtintintuc() {
   const [tinTuc, setTinTuc] = useState([]);
   const urlimg = config.urlFile + 'TinTuc/';
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const firstLoad = useSelector(firstLoadSelector);
   const [pageState, setPageState] = useState({
     total: 0,
     order: 0,
@@ -79,24 +84,31 @@ export default function Thongtintintuc() {
 
   useEffect(() => {
     const fetchData = async () => {
-      setTimeout(async () => {
-        try {
-          const tinTucNew = await getLatest4News();
-          setTinTucNew(tinTucNew.data);
-        } catch (error) {
-          console.error(error);
-        }
-      }, 900);
-      setTimeout(async () => {
-        try {
-          const getAllTintuc = await getAllTinTuc();
-          setTinTucAll(getAllTintuc.data);
-          const loaiTinData = await getAllLoaiTinTuc();
-          setLoaiTin(loaiTinData.data);
-        } catch (error) {
-          console.error(error);
-        }
-      }, 1800);
+      setTimeout(
+        async () => {
+          try {
+            const tinTucNew = await getLatest4News();
+            setTinTucNew(tinTucNew.data);
+          } catch (error) {
+            console.error(error);
+          }
+        },
+        firstLoad ? 900 : 0
+      );
+      setTimeout(
+        async () => {
+          try {
+            const loaiTinData = await getAllLoaiTinTuc();
+            setLoaiTin(loaiTinData.data);
+            const getAllTintuc = await getAllTinTuc();
+            setTinTucAll(getAllTintuc.data);
+            dispatch(setFirstLoad(false));
+          } catch (error) {
+            console.error(error);
+          }
+        },
+        firstLoad ? 1800 : 0
+      );
     };
     fetchData();
   }, []);

@@ -159,8 +159,6 @@ const CapLaiVBCC = () => {
     }
   ];
 
-  console.log(hasPermission);
-
   const buttonConfigurations = [
     {
       type: 'detail',
@@ -189,7 +187,7 @@ const CapLaiVBCC = () => {
       const params = await createSearchParams(pageState);
       const response = await getSearchCapLaiVanBang(selectHocsinh.cccd, params);
       const data = await response.data;
-      console.log(data);
+
       setHasPermission(data.isPermission);
       const check = handleResponseStatus(response, navigate);
       if (check) {

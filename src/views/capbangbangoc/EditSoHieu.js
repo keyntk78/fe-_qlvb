@@ -26,7 +26,7 @@ const EditSoHieu = () => {
   const [IdHocSinh, setIdHocSinh] = useState([]);
   const openSubPopup = useSelector(openSubPopupSelector);
   const dispatch = useSelector(useDispatch);
-  console.log(hocSinh);
+
   const formik = useFormik({
     initialValues: {
       soHieuHienTai: '',
@@ -53,9 +53,7 @@ const EditSoHieu = () => {
     const fetchData = async () => {
       const userbyid = await getHocSinhByCCCD(hocSinh.cccd);
       const datauser = userbyid.data;
-      console.log(datauser);
       setIdHocSinh(datauser);
-
       formik.setValues({
         soHieuHienTai: datauser.soHieuVanBang || '',
         soHieuMoi: datauser.soHieuMoi || ''

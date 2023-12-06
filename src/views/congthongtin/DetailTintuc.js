@@ -33,7 +33,6 @@ export default function DetailDonyeucau() {
   useEffect(() => {
     const fetchData = async () => {
       const datatintuc = await getTinTucById(formData);
-      console.log(datatintuc);
       setTinTuc(datatintuc.data);
 
       const tinTucNew = await getLatest4News();

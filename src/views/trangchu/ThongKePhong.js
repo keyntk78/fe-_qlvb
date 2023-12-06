@@ -6,9 +6,9 @@ import { getAllNamthi } from 'services/namthiService';
 import { GetThongKeTongQuatByPhongGD } from 'services/thongkeService';
 import { IconAlbum, IconBuildingCommunity, IconFileDescription, IconUserExclamation } from '@tabler/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectedNamthi, setLoading, setOpenSubSubPopup } from 'store/actions';
+import { selectedNamthi, setFirstLoad, setOpenSubSubPopup } from 'store/actions';
 import { useNavigate } from 'react-router';
-import { listDanhMucSelector, openSubSubPopupSelector, userLoginSelector } from 'store/selectors';
+import { firstLoadSelector, listDanhMucSelector, openSubSubPopupSelector, userLoginSelector } from 'store/selectors';
 import config from 'config';
 import ThongkeDonViGuiDuyet from './ThongKeDonViGuiDuyet';
 import Popup from 'components/controls/popup';
@@ -23,12 +23,12 @@ const ThongKePhong = () => {
   const listDanhMuc = useSelector(listDanhMucSelector);
   const [selectDanhMuc, setSelectDanhMuc] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [firstLoad, setFirstLoad] = useState(true);
   const currentYear = new Date().getFullYear();
   const openSubSubPopup = useSelector(openSubSubPopupSelector);
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
   const [data, setData] = useState([]);
+  const firstLoad = useSelector(firstLoadSelector);
   const [thongKeTongQuat, setThongKeTongQuat] = useState({
     phoi: 0,
     donViTong: 0,
@@ -61,23 +61,26 @@ const ThongKePhong = () => {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      setTimeout(async () => {
-        try {
-          const namhoc = await getAllNamthi();
-          setNamHoc(namhoc.data);
-          if (namhoc?.data?.length > 0) {
-            const matchingYear = namhoc.data.find((year) => year.ten === currentYear.toString());
-            if (matchingYear) {
-              setSelectNamHoc(matchingYear.id);
-            } else {
-              setSelectNamHoc(namhoc.data[0].id);
+      setTimeout(
+        async () => {
+          try {
+            const namhoc = await getAllNamthi();
+            setNamHoc(namhoc.data);
+            if (namhoc?.data?.length > 0) {
+              const matchingYear = namhoc.data.find((year) => year.ten === currentYear.toString());
+              if (matchingYear) {
+                setSelectNamHoc(matchingYear.id);
+              } else {
+                setSelectNamHoc(namhoc.data[0].id);
+              }
             }
+          } catch (error) {
+            console.error(error);
+            setIsLoading(false);
           }
-        } catch (error) {
-          console.error(error);
-          setLoading(false);
-        }
-      }, 1500);
+        },
+        firstLoad ? 1500 : 0
+      );
     };
     fetchDataDL();
   }, []);
@@ -99,10 +102,6 @@ const ThongKePhong = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!firstLoad) {
-        dispatch(setLoading(true));
-      }
-
       const params = new URLSearchParams();
       if (selectDanhMuc) {
         params.append('idDanhMucTotnghiep', selectDanhMuc);
@@ -125,11 +124,10 @@ const ThongKePhong = () => {
               hocSinhChoDuyet: data && data.SoLuongHocSinhChuaDuyet ? data.SoLuongHocSinhChuaDuyet.SoLuongChuaDuyet : 0
             }));
             setIsLoading(false);
-            dispatch(setLoading(false));
-            setFirstLoad(false);
+            dispatch(setFirstLoad(false));
           } catch (error) {
             console.error(error);
-            setLoading(false);
+            setIsLoading(false);
           }
         },
         firstLoad ? 2000 : 0

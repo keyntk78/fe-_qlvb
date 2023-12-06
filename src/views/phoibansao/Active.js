@@ -17,7 +17,7 @@ const ActivePhoiSao = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const selectedPhoisao = useSelector(selectedPhoisaoSelector);
-  console.log(selectedPhoisao);
+
   const navigate = useNavigate();
 
   const handleDeleteClick = async () => {

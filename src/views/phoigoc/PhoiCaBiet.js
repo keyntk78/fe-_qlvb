@@ -149,7 +149,7 @@ const PhoiCaBiet = () => {
       const params = await createSearchParams(pageState);
       params.append('lydo', pageState.lyDoHuy.join(';'));
       params.append('idphoigoc', selectedPhoigoc.id);
-      console.log(params);
+
       const response = await getSearchPhoiDaHuyByIdPhoiGoc(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -201,8 +201,6 @@ const PhoiCaBiet = () => {
 
   const handelSelectBoxChange = (e) => {
     const { value } = e.target;
-    console.log(value);
-
     setPageState((prev) => ({
       ...prev,
       lyDoHuy: value

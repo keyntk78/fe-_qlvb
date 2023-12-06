@@ -8,7 +8,6 @@ import { IconChevronsLeft, IconChevronsRight } from '@tabler/icons';
 
 const XuLyDuLieuIn = ({ studentDataList, positionConfig, componentRef }) => {
   const phoigoc = useSelector(selectedPhoigocSelector);
-  console.log(phoigoc);
   const Image = config.urlFile + 'PhoiGoc/' + phoigoc.anhPhoi;
   const chieuNgang = phoigoc ? phoigoc.chieuNgang : 19;
   const chieuDoc = phoigoc ? phoigoc.chieuDoc : 13;

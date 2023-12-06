@@ -166,8 +166,6 @@ export default function ThongKeHocSinhTheoNam() {
     setPageState((old) => ({ ...old, namHoc: selectedValue }));
   };
 
-  console.log(pageState);
-
   const handleExport = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));

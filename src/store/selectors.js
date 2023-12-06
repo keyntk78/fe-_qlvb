@@ -63,3 +63,4 @@ export const upDateVBCCSelector = (state) => state.customization.up_vbcc;
 export const listDanhMucSelector = (state) => state.customization.listDanhMuc;
 export const urlHuongDanSelector = (state) => state.customization.urlHuongDan;
 export const selectedValueSelector = (state) => state.customization.selectedValue;
+export const firstLoadSelector = (state) => state.customization.firstLoad;

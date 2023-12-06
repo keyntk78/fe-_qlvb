@@ -6,8 +6,8 @@ import { getAllNamthi } from 'services/namthiService';
 import { GetThongKeTongQuatByTruong } from 'services/thongkeService';
 import { IconCertificate, IconCertificateOff, IconUserCheck, IconUserExclamation, IconUsers } from '@tabler/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { donviSelector, reloadNotificationSelector } from 'store/selectors';
-import { setLoading, setReloadNotification } from 'store/actions';
+import { donviSelector, firstLoadSelector, reloadNotificationSelector } from 'store/selectors';
+import { setFirstLoad, setReloadNotification } from 'store/actions';
 import { useNavigate } from 'react-router';
 import config from 'config';
 
@@ -21,7 +21,7 @@ const ThongKeTruong = () => {
   const [namHoc, setNamHoc] = useState([]);
   const [selectedNamHoc, setSelectedNamHoc] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [firstLoad, setFirstLoad] = useState(true);
+  const firstLoad = useSelector(firstLoadSelector);
   const [thongKeTongQuat, setThongKeTongQuat] = useState({
     tongHocSinh: 0,
     hocSinhDaDuyet: 0,
@@ -57,32 +57,32 @@ const ThongKeTruong = () => {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      setTimeout(async () => {
-        try {
-          const namhoc = await getAllNamthi();
-          setNamHoc(namhoc.data);
-          if (namhoc && namhoc.data.length > 0) {
-            const matchingYear = namhoc.data.find((year) => year.ten === currentYear.toString());
-            if (matchingYear) {
-              setSelectedNamHoc(matchingYear.id);
-            } else {
-              setSelectedNamHoc(namhoc.data[0].id);
+      setTimeout(
+        async () => {
+          try {
+            const namhoc = await getAllNamthi();
+            setNamHoc(namhoc.data);
+            if (namhoc && namhoc.data.length > 0) {
+              const matchingYear = namhoc.data.find((year) => year.ten === currentYear.toString());
+              if (matchingYear) {
+                setSelectedNamHoc(matchingYear.id);
+              } else {
+                setSelectedNamHoc(namhoc.data[0].id);
+              }
             }
+          } catch (error) {
+            console.error(error);
+            setIsLoading(false);
           }
-        } catch (error) {
-          console.error(error);
-          setLoading(false);
-        }
-      }, 1500);
+        },
+        firstLoad ? 1500 : 0
+      );
     };
     fetchDataDL();
   }, []);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!firstLoad) {
-        dispatch(setLoading(true));
-      }
       const params = new URLSearchParams();
       params.append('idNamThi', selectedNamHoc);
       params.append('idTruong', donvi.id);
@@ -101,11 +101,10 @@ const ThongKeTruong = () => {
               bangChuaNhan: data && data.SoHocSinhChuaNhanBang ? data.SoHocSinhChuaNhanBang.TongHocSinh : 0
             }));
             setIsLoading(false);
-            dispatch(setLoading(false));
-            setFirstLoad(false);
+            dispatch(setFirstLoad(false));
           } catch (error) {
             console.error(error);
-            setLoading(false);
+            setIsLoading(false);
           }
         },
         firstLoad ? 2000 : 0
