@@ -3,26 +3,48 @@ import ReactToPrint, { useReactToPrint } from 'react-to-print';
 import DuLieuInThu from './XuLyDuLieuInThu';
 import MainCard from 'components/cards/MainCard';
 import { IconPrinter } from '@tabler/icons';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, Select, MenuItem, FormControl } from '@mui/material';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { selectedPhoigocSelector } from 'store/selectors';
+import { selectedPhoigocSelector, openSubPopupSelector } from 'store/selectors';
 import { useState } from 'react';
 import { GetConfigPhoi } from 'services/phoigocService';
 import ExitButton from 'components/button/ExitButton';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { handleAddNumberZeroDayAndMonth } from 'utils/handleAddNumberZeroDayAndMonth';
+import { GetAllTruongDuLieuPhoiGoc } from 'services/sharedService';
+import optionConfg from 'utils/optionConfig';
 
 const InThu = ({ duLieuHocSinh }) => {
   const phoigoc = useSelector(selectedPhoigocSelector);
   const [duLieuConFig, setDuLieuConFig] = useState([]);
+  const [selectConfig, setSelectConfig] = useState(optionConfg[0].id);
+  const [chieuDai, setChieuDai] = useState(0);
+  const [chieuRong, setChieuRong] = useState(0);
+  const openSubPopup = useSelector(openSubPopupSelector);
+
   useEffect(() => {
     const fetchDataDLHS = async () => {
-      const response_cf = await GetConfigPhoi(phoigoc.id);
-      setDuLieuConFig(response_cf.data);
+      if (selectConfig === optionConfg[0].id) {
+        const response_cf = await GetAllTruongDuLieuPhoiGoc();
+        setDuLieuConFig(response_cf.data.cauHinh);
+        setChieuDai(response_cf.chieuDai);
+        setChieuRong(response_cf.chieuRong);
+      } else {
+        const response_cf = await GetConfigPhoi(phoigoc.id);
+        setDuLieuConFig(response_cf.data);
+        setChieuDai(0);
+        setChieuRong(0);
+      }
     };
-    fetchDataDLHS();
-  }, [phoigoc.id]);
+
+    if (!openSubPopup) {
+      setSelectConfig(optionConfg[0].id);
+    }
+    if (openSubPopup) {
+      fetchDataDLHS();
+    }
+  }, [phoigoc.id, selectConfig, openSubPopup]);
   const DataInBang = {
     HOTEN: duLieuHocSinh.hoTen,
     NOISINH: duLieuHocSinh.noiSinh, // Assuming you want the second part after the " - "
@@ -74,9 +96,26 @@ const InThu = ({ duLieuHocSinh }) => {
               content={() => componentRef.current}
             />
           </Grid>
+          <Grid item>
+            <FormControl fullWidth variant="outlined">
+              <Select value={selectConfig} onChange={(e) => setSelectConfig(e.target.value)} size="small">
+                {optionConfg.map((item) => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.value}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
         </Grid>
         <div>
-          <DuLieuInThu studentDataList={DataInBang} positionConfig={cauHinhViTri} componentRef={componentRef} />
+          <DuLieuInThu
+            studentDataList={DataInBang}
+            positionConfig={cauHinhViTri}
+            componentRef={componentRef}
+            chieuDai={chieuDai}
+            chieuRong={chieuRong}
+          />
         </div>
       </MainCard>
       <Grid container justifyContent="flex-end" mt={1}>

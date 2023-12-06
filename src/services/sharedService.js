@@ -276,3 +276,27 @@ export async function TuyChonSoVaoSo() {
     throw error;
   }
 }
+
+export async function GetAllTruongDuLieuPhoiGoc() {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(`Shared/GetAllTruongDuLieuPhoiGoc`, 'GET');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error getting GetAllTruongDuLieuPhoiGoc:', error);
+    throw error;
+  }
+}
+
+export async function GetAllTruongDuLieuPhoiBanSao() {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await sendRequest(`Shared/GetAllTruongDuLieuPhoiBanSao`, 'GET');
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error getting GetAllTruongDuLieuPhoiBanSao:', error);
+    throw error;
+  }
+}

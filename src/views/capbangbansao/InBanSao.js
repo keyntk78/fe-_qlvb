@@ -3,10 +3,10 @@ import ReactToPrint, { useReactToPrint } from 'react-to-print';
 import DuLieuInThu from './XuLyDuLieuInBanSao';
 import MainCard from 'components/cards/MainCard';
 import { IconPrinter } from '@tabler/icons';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, Select, MenuItem, FormControl } from '@mui/material';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { capBangBansaoSelector, userLoginSelector } from 'store/selectors';
+import { capBangBansaoSelector, userLoginSelector, openPopupSelector } from 'store/selectors';
 import { useState } from 'react';
 import { GetConfigPhoi } from 'services/phoisaoService';
 import ExitButton from 'components/button/ExitButton';
@@ -15,6 +15,8 @@ import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { selectedPhoisao } from 'store/actions';
 import { GetPhoiBanSaoById } from 'services/sharedService';
 import { handleAddNumberZeroDayAndMonth } from 'utils/handleAddNumberZeroDayAndMonth';
+import { GetAllTruongDuLieuPhoiBanSao } from 'services/sharedService';
+import optionConfg from 'utils/optionConfig';
 
 const InBanSao = () => {
   const [hsSoBanSao, setHsSoBanSao] = useState([]);
@@ -23,6 +25,11 @@ const InBanSao = () => {
   const [duLieuConFig, setDuLieuConFig] = useState([]);
   const user = useSelector(userLoginSelector);
   const dispatch = useDispatch();
+  const [chieuDai, setChieuDai] = useState(0);
+  const [chieuRong, setChieuRong] = useState(0);
+  const [selectConfig, setSelectConfig] = useState(optionConfg[0].id);
+  const openPopup = useSelector(openPopupSelector);
+
   useEffect(() => {
     const fetchDataDLHS = async () => {
       const phoidata = await GetPhoiBanSaoById(hocsinhid.idPhoiBanSao);
@@ -33,15 +40,28 @@ const InBanSao = () => {
   }, []);
   useEffect(() => {
     const fetchDataDLHS = async () => {
-      const response_cf = await GetConfigPhoi(phoisao.id);
-      setDuLieuConFig(response_cf.data);
+      if (selectConfig === optionConfg[0].id) {
+        const response_cf = await GetAllTruongDuLieuPhoiBanSao();
+        setDuLieuConFig(response_cf.data.cauHinh);
+        setChieuDai(response_cf.chieuDai);
+        setChieuRong(response_cf.chieuRong);
+      } else {
+        const response_cf = await GetConfigPhoi(phoisao.id);
+        setDuLieuConFig(response_cf.data);
+        setChieuDai(0);
+        setChieuRong(0);
+      }
       const hocSinhSoBanSao = await getHocSinhDaDuaVaoSobanSao(hocsinhid.idHocSinh, hocsinhid.id, user.username);
       setHsSoBanSao(hocSinhSoBanSao.data);
     };
+
+    if (!openPopup) {
+      setSelectConfig(optionConfg[0].id);
+    }
     if (phoisao) {
       fetchDataDLHS();
     }
-  }, [phoisao, hocsinhid.hocSinh.id]);
+  }, [phoisao, hocsinhid.hocSinh.id, openPopup, selectConfig]);
   const soLuongBanSao = hsSoBanSao.soLuongBanSao ? hsSoBanSao.soLuongBanSao : 1;
 
   //Tạo ra dữ liệu in phù hợp với số lượng bản sao yêu cầu
@@ -103,9 +123,26 @@ const InBanSao = () => {
               content={() => componentRef.current}
             />
           </Grid>
+          <Grid item>
+            <FormControl fullWidth variant="outlined">
+              <Select value={selectConfig} onChange={(e) => setSelectConfig(e.target.value)} size="small">
+                {optionConfg.map((item) => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.value}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
         </Grid>
         <div>
-          <DuLieuInThu studentDataList={DataInBang} positionConfig={cauHinhViTri} componentRef={componentRef} />
+          <DuLieuInThu
+            studentDataList={DataInBang}
+            positionConfig={cauHinhViTri}
+            componentRef={componentRef}
+            chieuDai={chieuDai}
+            chieuRong={chieuRong}
+          />
         </div>
       </MainCard>
       <Grid container justifyContent="flex-end" mt={1}>

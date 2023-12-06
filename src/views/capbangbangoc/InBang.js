@@ -3,10 +3,16 @@ import { useReactToPrint } from 'react-to-print';
 import DuLieuIn from './XuLyDuLieuIn';
 import MainCard from 'components/cards/MainCard';
 import { IconFileExport, IconPrinter } from '@tabler/icons';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, FormControl, Select, MenuItem } from '@mui/material';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { disabledButtonSelector, selectedDanhmucSelector, selectedDonvitruongSelector, selectedPhoigocSelector } from 'store/selectors';
+import {
+  disabledButtonSelector,
+  selectedDanhmucSelector,
+  selectedDonvitruongSelector,
+  selectedPhoigocSelector,
+  openSubPopupSelector
+} from 'store/selectors';
 import { useState } from 'react';
 import { GetConfigPhoi } from 'services/phoigocService';
 import * as XLSX from 'xlsx';
@@ -14,11 +20,13 @@ import { setLoading, setReloadData } from 'store/actions';
 import ExitButton from 'components/button/ExitButton';
 // import { CapBang, CapBangTatCa } from 'services/capbangbanchinhService';
 import { CapBang } from 'services/capbangbanchinhService';
+import { GetAllTruongDuLieuPhoiGoc } from 'services/sharedService';
 //import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { handleAddNumberZeroDayAndMonth } from 'utils/handleAddNumberZeroDayAndMonth';
 import GroupButtons from 'components/button/GroupButton';
 import { generateDocument } from './ExportWordTTInBang';
+import optionConfg from 'utils/optionConfig';
 
 const InBang = ({ duLieuHocSinhSoGoc }) => {
   const total = duLieuHocSinhSoGoc.length;
@@ -28,14 +36,33 @@ const InBang = ({ duLieuHocSinhSoGoc }) => {
   const disabledButton = useSelector(disabledButtonSelector);
   const donvi = useSelector(selectedDonvitruongSelector);
   const danhmuc = useSelector(selectedDanhmucSelector);
+  const [selectConfig, setSelectConfig] = useState(optionConfg[0].id);
+  const [chieuDai, setChieuDai] = useState(0);
+  const [chieuRong, setChieuRong] = useState(0);
+  const openSubPopup = useSelector(openSubPopupSelector);
 
   useEffect(() => {
     const fetchDataDLHS = async () => {
-      const response_cf = await GetConfigPhoi(phoigoc.id);
-      setDuLieuConFig(response_cf.data);
+      if (selectConfig === optionConfg[0].id) {
+        const response_cf = await GetAllTruongDuLieuPhoiGoc();
+        setDuLieuConFig(response_cf.data.cauHinh);
+        setChieuDai(response_cf.chieuDai);
+        setChieuRong(response_cf.chieuRong);
+      } else {
+        const response_cf = await GetConfigPhoi(phoigoc.id);
+        setDuLieuConFig(response_cf.data);
+        setChieuDai(0);
+        setChieuRong(0);
+      }
     };
-    fetchDataDLHS();
-  }, [phoigoc.id]);
+
+    if (!openSubPopup) {
+      setSelectConfig(optionConfg[0].id);
+    }
+    if (openSubPopup) {
+      fetchDataDLHS();
+    }
+  }, [phoigoc.id, selectConfig, openSubPopup]);
 
   const DataInBang = duLieuHocSinhSoGoc.map((item, index) => {
     return {
@@ -125,6 +152,7 @@ const InBang = ({ duLieuHocSinhSoGoc }) => {
       handleClick: handleExportWord
     }
   ];
+
   const cauHinhViTri = {};
 
   for (const item of duLieuConFig) {
@@ -180,9 +208,26 @@ const InBang = ({ duLieuHocSinhSoGoc }) => {
           <Grid item>
             <GroupButtons buttonConfigurations={xuatTep} color="info" icon={IconFileExport} title={'Xuất thông tin in bằng'} />
           </Grid>
+          <Grid item>
+            <FormControl fullWidth variant="outlined">
+              <Select value={selectConfig} onChange={(e) => setSelectConfig(e.target.value)} size="small">
+                {optionConfg.map((item) => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.value}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
         </Grid>
         <div>
-          <DuLieuIn studentDataList={DataInBang} positionConfig={cauHinhViTri} componentRef={componentRef} />
+          <DuLieuIn
+            studentDataList={DataInBang}
+            positionConfig={cauHinhViTri}
+            componentRef={componentRef}
+            chieuDai={chieuDai}
+            chieuRong={chieuRong}
+          />
         </div>
       </MainCard>
       <Grid container justifyContent="flex-end" mt={1}>

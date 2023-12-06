@@ -4,11 +4,11 @@ import { selectedPhoisaoSelector } from 'store/selectors';
 import config from 'config';
 import { useSelector } from 'react-redux';
 
-const XuLyDuLieuInBanSao = ({ studentDataList, positionConfig, componentRef }) => {
+const XuLyDuLieuInBanSao = ({ studentDataList, positionConfig, componentRef, chieuDai, chieuRong }) => {
   const phoisao = useSelector(selectedPhoisaoSelector);
   const Image = config.urlFile + 'PhoiBanSao/' + phoisao.anhPhoi;
-  const chieuNgang = phoisao ? phoisao.chieuNgang : 19;
-  const chieuDoc = phoisao ? phoisao.chieuDoc : 13;
+  const chieuNgang = chieuRong ? chieuRong : phoisao ? phoisao.chieuNgang : 19;
+  const chieuDoc = chieuDai ? chieuDai : phoisao ? phoisao.chieuDoc : 13;
 
   return (
     <div>
