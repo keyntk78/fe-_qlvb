@@ -11,9 +11,19 @@ export function generatePDF(data, paperSize, donvi) {
   doc.addFont('Time-New-Roman-Bold.ttf', 'Time-New-Roman-Bold', 'bold');
   doc.addFont('Time-New-Roman-Italic.ttf', 'Time-New-Roman-Italic', 'italic');
   doc.setFont('Time-New-Roman-Normal', 'normal');
-  doc.setFontSize(13);
-  doc.setLineHeightFactor(1.8);
-  const textHeight = 20;
+  let textHeight = 10;
+  let textA5Height = 0;
+  if (paperSize === 'A4') {
+    doc.setFontSize(13);
+    textHeight = 20;
+    doc.setLineHeightFactor(1.8);
+  } else {
+    doc.setFontSize(12);
+    textHeight = 15;
+    textA5Height = 3;
+    doc.setLineHeightFactor(1.5);
+  }
+
   var width = doc.internal.pageSize.getWidth();
   // var height = doc.internal.pageSize.getHeight();
   var minWidth = 30;
@@ -32,8 +42,8 @@ export function generatePDF(data, paperSize, donvi) {
       align: 'center'
     });
 
-    doc.line((width / 4) * 1 - 24, textHeight * 2 - 10, (width / 4) * 1 + 36, textHeight * 2 - 10);
-    doc.line((width / 4) * 3 - 36, textHeight * 2 - 10, (width / 4) * 3 + 24, textHeight * 2 - 10);
+    doc.line((width / 4) * 1 - 24, textHeight * 2 - 8, (width / 4) * 1 + 36, textHeight * 2 - 8);
+    doc.line((width / 4) * 3 - 36, textHeight * 2 - 8, (width / 4) * 3 + 24, textHeight * 2 - 8);
 
     doc.setFontSize(13);
 
@@ -49,13 +59,13 @@ export function generatePDF(data, paperSize, donvi) {
     doc.text(`Chứng nhận: ${item.hoTen}`, minWidth, textHeight * 3 + 10);
     doc.text(`Giới tính: ${item.gioiTinh}`, 120, textHeight * 3 + 10);
 
-    doc.text(`Ngày sinh: ${item.ngaySinh}`, minWidth, textHeight * 4);
+    doc.text(`Ngày sinh: ${item.ngaySinh}`, minWidth, textHeight * 4 + textA5Height);
     doc.text(`Nơi sinh: ${item.noiSinh}`, 100, textHeight * 4);
 
     doc.text(`Lớp: ${item.lop}`, minWidth, textHeight * 4 + 10);
     doc.text(`Trường: ${item.tenTruong}`, 105, textHeight * 4 + 10);
 
-    doc.text(`Hiện cư trú tại: ${item.queQuan}`, minWidth, textHeight * 5);
+    doc.text(`Hiện cư trú tại: ${item.queQuan}`, minWidth, textHeight * 5 + textA5Height);
 
     doc.text(
       `Đã được công nhận tốt nghiệp trung học ${donvi === 1 ? 'phổ thông' : 'cơ sở'} tại Hội đồng xét công nhận tốt nghiệp: ${
@@ -70,16 +80,17 @@ export function generatePDF(data, paperSize, donvi) {
 
     doc.text(`Xếp loại tốt nghiệp: ${item.xepLoaiTotNghiep}`, minWidth, textHeight * 6 + 9);
 
+    const times = paperSize === 'A4' ? 8 : 7;
     doc.setFont('Time-New-Roman-Bold', 'bold');
-    doc.text('HIỆU TRƯỞNG', (width / 4) * 3 + 5, textHeight * 8, {
+    doc.text('HIỆU TRƯỞNG', (width / 4) * 3 + 5, textHeight * times, {
       align: 'center'
     });
     doc.setFont('Time-New-Roman-Italic', 'italic');
-    doc.text('(Họ, tên, chữ ký và đóng dấu)', (width / 4) * 3 + 5, textHeight * 8 + 5, {
+    doc.text('(Họ, tên, chữ ký và đóng dấu)', (width / 4) * 3 + 5, textHeight * times + 5, {
       align: 'center'
     });
     doc.setFont('Time-New-Roman-Normal', 'normal');
-    doc.text(item.hieuTruong, (width / 4) * 3 + 5, textHeight * 10 - 10, {
+    doc.text(item.hieuTruong, (width / 4) * 3 + 5, textHeight * (times + 2) + 10 - textA5Height, {
       align: 'center'
     });
   });
