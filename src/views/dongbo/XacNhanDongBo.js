@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { IconRefresh } from '@tabler/icons';
+import { IconAlertCircle } from '@tabler/icons';
 import { Grid } from '@mui/material';
 import YesButton from 'components/button/YesButton';
 import NoButton from 'components/button/NoButton';
@@ -11,16 +11,18 @@ const XacNhanDongBo = ({ onSubmit }) => {
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <IconRefresh size={100} color="#2196F3" />
+      <Grid item container xs={12} mt={3} mb={2} justifyContent={'center'}>
+        <IconAlertCircle size={100} color="red" />
+      </Grid>
       <MuiTypography variant="h4" gutterBottom m={2}>
-        {t(`Bạn có muốn đồng bộ không?`)}
+        {t(`Xác nhận đồng bộ dữ liệu?`)}
       </MuiTypography>
       <Grid container spacing={1} direction="row" justifyContent="center" my={1}>
         <Grid item>
           <YesButton handleClick={onSubmit} />
         </Grid>
         <Grid item>
-          <NoButton type="subpopup" />
+          <NoButton />
         </Grid>
       </Grid>
     </div>
