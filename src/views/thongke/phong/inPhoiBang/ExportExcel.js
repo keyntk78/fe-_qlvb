@@ -18,7 +18,7 @@ const ExportExcel = async (namHoc, data) => {
   cell.value = '';
 
   // Adding the header row with bold formatting
-  const headerRow = worksheet.addRow(['STT', 'Tên phôi', 'Số lượng chưa in', 'Số lượng đã in']);
+  const headerRow = worksheet.addRow(['STT', 'Tên phôi', 'Số lượng chưa in', 'Số lượng đã in', 'Số lượng phôi cá biệt']);
   headerRow.eachCell((cell) => {
     // cell.font = { bold: true };
     cell.alignment = { vertical: 'middle', horizontal: 'center' };
@@ -34,7 +34,7 @@ const ExportExcel = async (namHoc, data) => {
   // Adding data rows
   data && data.length
     ? data.forEach((item, index) => {
-        const dataRow = worksheet.addRow([index + 1, item.tenPhoi, item.chuaIn, item.daIn]);
+        const dataRow = worksheet.addRow([index + 1, item.tenPhoi, item.chuaIn, item.daIn, item.daHuy]);
         dataRow.eachCell((cell) => {
           cell.border = {
             top: { style: 'thin' },
@@ -46,6 +46,7 @@ const ExportExcel = async (namHoc, data) => {
         dataRow.getCell(1).alignment = { horizontal: 'center' };
         dataRow.getCell(3).alignment = { horizontal: 'center' };
         dataRow.getCell(4).alignment = { horizontal: 'center' };
+        dataRow.getCell(5).alignment = { horizontal: 'center' };
       })
     : '';
 
@@ -54,7 +55,7 @@ const ExportExcel = async (namHoc, data) => {
   worksheet.getColumn(2).width = 40; //ten
   worksheet.getColumn(3).width = 25; //chua in
   worksheet.getColumn(4).width = 25; //da in
-
+  worksheet.getColumn(5).width = 25; //da in
   // Create a blob and initiate download
   const buffer = await workbook.xlsx.writeBuffer();
   const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });

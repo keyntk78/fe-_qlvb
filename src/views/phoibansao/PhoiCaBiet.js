@@ -14,7 +14,7 @@ import { createSearchParams } from 'utils/createSearchParams';
 import { convertISODateTimeToFormattedDateTime } from 'utils/formatDate';
 import i18n from 'i18n';
 import React from 'react';
-import { Grid, useMediaQuery, Button, Input, FormControl, Select, MenuItem, InputLabel } from '@mui/material';
+import { Grid, useMediaQuery, Button, Input, FormControl, Select, MenuItem, InputLabel, Checkbox, ListItemText } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
 import FormControlComponent from 'components/form/FormControlComponent ';
 import InputForm from 'components/form/InputForm';
@@ -210,7 +210,7 @@ const PhoiCaBiet = () => {
   };
   return (
     <>
-      <MainCard hideInstruct title={t('Hủy số hiệu phôi')}>
+      <MainCard hideInstruct title={t('Tạo phôi cá biệt')}>
         <Grid item container spacing={1} mb={2} display={'flex'} alignItems={'center'} justifyContent={'center'}>
           <Grid item container xs={isXs ? 12 : 6}>
             <Grid item xs={12}>
@@ -265,7 +265,7 @@ const PhoiCaBiet = () => {
         </Grid>
       </MainCard>
       <Grid>
-        <MainCard hideInstruct title={t('Danh sách số hiệu phôi đã hủy')}>
+        <MainCard hideInstruct title={t('Danh sách phôi cá biệt')}>
           <Grid container spacing={2} justifyContent={'center'} alignItems={'center'} my={1}>
             <Grid item xs={2.5} minWidth={120}>
               <FormControl fullWidth variant="outlined" size="small">
@@ -279,7 +279,8 @@ const PhoiCaBiet = () => {
                 >
                   {lyDoHuyList.map((lydo) => (
                     <MenuItem key={lydo.value} value={lydo.value}>
-                      {lydo.value}
+                      <Checkbox checked={pageState.lyDoHuy.indexOf(lydo.value) > -1} size="small" />
+                      <ListItemText primary={lydo.value} />
                     </MenuItem>
                   ))}
                 </Select>
