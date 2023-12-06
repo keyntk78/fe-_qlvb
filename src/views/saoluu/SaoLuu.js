@@ -14,7 +14,6 @@ import config from 'config';
 import XacNhanSaoLuu from './XacNhanSaoLuu';
 import { getBackupData } from 'services/saoluuService';
 import { convertISODateTimeToFormattedDateTime } from 'utils/formatDate';
-import DongBo from './DongBo';
 import ActionButtons from 'components/button/ActionButtons';
 import DeleteData from './Delete';
 
@@ -179,7 +178,7 @@ const SaoLuu = () => {
         )}
         {form !== '' && (
           <Popup title={title} form={form} openPopup={openPopup} maxWidth={'sm'} bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}>
-            {form === 'dongbo' ? <DongBo /> : form === 'delete' ? <DeleteData /> : <XacNhanSaoLuu type={form} />}
+            {form === 'delete' ? <DeleteData /> : <XacNhanSaoLuu type={form} />}
           </Popup>
         )}
       </MainCard>

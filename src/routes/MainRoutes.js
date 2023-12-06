@@ -47,13 +47,13 @@ const TrangChu = Loadable(lazy(() => import('views/trangchu/trangchu')));
 const HocSinhTotNghiep = Loadable(lazy(() => import('views/thongke/phong/hocSinhDoTotNghiep/index')));
 const HocSinhDoTotNghiep = Loadable(lazy(() => import('views/thongke/truong/HocSinhDoTotNghiep/index')));
 const ThongKeHocSinhTheoNam = Loadable(lazy(() => import('views/thongke/phong/hocSinhXepLoai/index')));
-
 const PhatBang = Loadable(lazy(() => import('views/thongke/phong/phatBang/index')));
 const InPhoiBang = Loadable(lazy(() => import('views/thongke/phong/inPhoiBang/index')));
 const ImportDanhSachVanBang = Loadable(lazy(() => import('views/ImportDanhSachVanBang/DanhSachImport')));
 const Report = Loadable(lazy(() => import('views/report/Report')));
 const ChuyenDoiSoGocCu = Loadable(lazy(() => import('views/sogoccu/ChuyenDoiSoGocCu')));
 const SoGocCu = Loadable(lazy(() => import('views/sogoccu/SoGocCuIndex')));
+const DongBo = Loadable(lazy(() => import('views/dongbo/DongBo')));
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 const PhuLucSoGoc = Loadable(lazy(() => import('views/phulucsogoc/PhuLucSoGoc')));
@@ -233,8 +233,12 @@ const MainRoutes = {
       element: <Xacminhvanbang />
     },
     {
-      path: 'dulieu',
+      path: 'saoluu',
       element: <SaoLuu />
+    },
+    {
+      path: 'dongbo',
+      element: <DongBo />
     },
     {
       path: 'utils',
