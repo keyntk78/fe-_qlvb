@@ -129,7 +129,7 @@ const Config = () => {
     };
     fetchData();
   }, [donvi.id, reloadData, openPopup]);
-  console.log(formik.values);
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <Grid container spacing={2} my={1}>
@@ -198,7 +198,7 @@ const Config = () => {
             </Grid>
           </Grid>
         ) : (
-          <Grid item lg={8} md={8} sm={8} xs={12} container spacing={1}>
+          <Grid item lg={8} md={8} sm={8} xs={12}>
             <div style={{ borderBottom: '2px solid black', fontWeight: 'bold', fontSize: '17px', height: '40px' }}>
               <p>{t('Cấu hình chung')}</p>
             </div>
@@ -221,7 +221,7 @@ const Config = () => {
                 </FormControlComponent>
               </Grid>
             </Grid>
-            <div style={{ borderBottom: '2px solid black', fontWeight: 'bold', fontSize: '17px', height: '40px' }}>
+            {/* <div style={{ borderBottom: '2px solid black', fontWeight: 'bold', fontSize: '17px', height: '40px' }}>
               <p>{t('Cấu hình số vào sổ')}</p>
             </div>
             <Grid item container spacing={2}>
@@ -235,20 +235,8 @@ const Config = () => {
                   <InputForm formik={formik} name="DinhDangSoCapLai" type="text" placeholder={t('Định dạng Số vào sổ gốc')} />
                 </FormControlComponent>
               </Grid>
-            </Grid>
-            <Grid item container spacing={2}></Grid>
-            <Grid item container spacing={2}></Grid>
-            <Grid item container spacing={2}></Grid>
-            <Grid item container spacing={2}></Grid>
-            <Grid item container spacing={2}></Grid>
-            <Grid item container spacing={2}></Grid>
-            <Grid item container spacing={2}></Grid>
-            <Grid item container spacing={2}></Grid>
-            <Grid item container spacing={2}></Grid>
-            <Grid item container spacing={2}></Grid>
-            <Grid item container spacing={2}></Grid>
-            <Grid item container spacing={2}></Grid>
-            <Grid item container spacing={2}></Grid>
+            </Grid> */}
+            {/* <Grid item container spacing={2}></Grid> */}
           </Grid>
         )}
         <Grid
