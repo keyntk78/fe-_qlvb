@@ -26,7 +26,7 @@ import XacNhanDongBo from './XacNhanDongBo';
 import Popup from 'components/controls/popup';
 import { SyncCollection } from 'services/saoluuService';
 import MainCard from 'components/cards/MainCard';
-import { IconCheck } from '@tabler/icons';
+import { IconRefresh } from '@tabler/icons';
 import CustomButton from 'components/button/CustomButton';
 import { getAllDanhmucTN } from 'services/sharedService';
 import { useEffect } from 'react';
@@ -54,7 +54,7 @@ function DongBo() {
     },
     validationSchema: DongBoValidationSchema,
     onSubmit: async () => {
-      setForm('xacnhandongbo');
+      setForm('delete');
       setTitle(t('Xác nhận đồng bộ'));
       dispatch(setOpenPopup(true));
     }
@@ -185,11 +185,11 @@ function DongBo() {
         )}
         <Grid container spacing={1} direction="row" justifyContent="center" my={2}>
           <Grid item>
-            <CustomButton icon={IconCheck} label="Xác nhận" variant="contained" color="error" handleClick={formik.handleSubmit} />
+            <CustomButton icon={IconRefresh} label="Đồng bộ" variant="contained" color="error" handleClick={formik.handleSubmit} />
           </Grid>
         </Grid>
         {form !== '' && (
-          <Popup title={title} form={form} openPopup={openPopup} maxWidth={'sm'} bgcolor={form === 'xacnhandongbo' ? '#F44336' : '#2196F3'}>
+          <Popup title={title} form={form} openPopup={openPopup} maxWidth={'sm'} bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}>
             <XacNhanDongBo onSubmit={handleSubmit} />
           </Popup>
         )}
