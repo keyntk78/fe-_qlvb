@@ -6,11 +6,11 @@ import { useSelector } from 'react-redux';
 import Carousel from 'nuka-carousel';
 import { IconChevronsLeft, IconChevronsRight } from '@tabler/icons';
 
-const XuLyDuLieuIn = ({ studentDataList, positionConfig, componentRef }) => {
+const XuLyDuLieuIn = ({ studentDataList, positionConfig, componentRef, chieuDai, chieuRong }) => {
   const phoigoc = useSelector(selectedPhoigocSelector);
   const Image = config.urlFile + 'PhoiGoc/' + phoigoc.anhPhoi;
-  const chieuNgang = phoigoc ? phoigoc.chieuNgang : 19;
-  const chieuDoc = phoigoc ? phoigoc.chieuDoc : 13;
+  const chieuNgang = chieuRong ? chieuRong : phoigoc ? phoigoc.chieuNgang : 19;
+  const chieuDoc = chieuDai ? chieuDai : phoigoc ? phoigoc.chieuDoc : 13;
 
   return (
     <div>

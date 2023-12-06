@@ -77,7 +77,7 @@ export default function ThongKeHocSinh() {
     {
       field: 'tenPhoi',
       headerName: t('Tên phôi'),
-      flex: 3,
+      flex: 2,
       minWidth: 180
     },
     {
@@ -89,6 +89,12 @@ export default function ThongKeHocSinh() {
     {
       field: 'daIn',
       headerName: t('Số lượng đã in'),
+      flex: 1,
+      minWidth: 110
+    },
+    {
+      field: 'daHuy',
+      headerName: t('Số lượng phôi cá biệt'),
       flex: 1,
       minWidth: 110
     }

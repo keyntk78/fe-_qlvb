@@ -4,7 +4,7 @@ import MainCard from 'components/cards/MainCard';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setReloadData, setOpenSubPopup } from 'store/actions';
-import { openPopupSelector, reloadDataSelector, selectedPhoigocSelector, openSubPopupSelector } from 'store/selectors';
+import { openPopupSelector, reloadDataSelector, openSubPopupSelector, selectedPhoisaoSelector } from 'store/selectors';
 import { useNavigate } from 'react-router-dom';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,6 @@ import i18n from 'i18n';
 import React from 'react';
 import { Grid, useMediaQuery, Button, Input, FormControl, Select, MenuItem, InputLabel, Checkbox, ListItemText } from '@mui/material';
 import BackToTop from 'components/scroll/BackToTop';
-import { getSearchPhoiDaHuyByIdPhoiGoc } from 'services/phoigocService';
 import FormControlComponent from 'components/form/FormControlComponent ';
 import InputForm from 'components/form/InputForm';
 import usePhoicabietValidationSchema from 'components/validations/phoicabietValidation';
@@ -25,6 +24,7 @@ import config from 'config';
 import XacNhanHuySoHieuPhoi from './XacNhanHuySoHieuPhoi';
 import Popup from 'components/controls/popup';
 import SelectForm from 'components/form/SelectForm';
+import { getSearchPhoiDaHuyByIdPhoiSao } from 'services/phoisaoService';
 
 const lyDoHuyList = [
   {
@@ -54,7 +54,7 @@ const PhoiCaBiet = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const reloadData = useSelector(reloadDataSelector);
-  const selectedPhoigoc = useSelector(selectedPhoigocSelector);
+  const selectedPhoisao = useSelector(selectedPhoisaoSelector);
   const [search, setSearch] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState('');
   const openPopup = useSelector(openPopupSelector);
@@ -63,7 +63,7 @@ const PhoiCaBiet = () => {
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
   const [pageState, setPageState] = useState({
-    idphoigoc: selectedPhoigoc.id,
+    idphoisao: selectedPhoisao.id,
     isLoading: false,
     data: [],
     total: 0,
@@ -76,7 +76,7 @@ const PhoiCaBiet = () => {
   });
   const formik = useFormik({
     initialValues: {
-      IdPhoiGoc: selectedPhoigoc.id,
+      IdPhoiBanSao: selectedPhoisao.id,
       soHieus: '',
       LyDoHuy: ''
     },
@@ -147,10 +147,10 @@ const PhoiCaBiet = () => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const params = await createSearchParams(pageState);
-      params.append('lydo', pageState.lyDoHuy.join(';'));
-      params.append('idphoigoc', selectedPhoigoc.id);
-
-      const response = await getSearchPhoiDaHuyByIdPhoiGoc(params);
+      params.append('LyDo', pageState.lyDoHuy.join(';'));
+      params.append('IdPhoiBanSao', selectedPhoisao.id);
+      console.log(params);
+      const response = await getSearchPhoiDaHuyByIdPhoiSao(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
         const data = await response.data;
@@ -173,7 +173,7 @@ const PhoiCaBiet = () => {
 
     if (!openPopup) {
       setPageState({
-        idphoigoc: selectedPhoigoc.id,
+        idphoisao: selectedPhoisao.id,
         isLoading: false,
         data: [],
         total: 0,
@@ -201,12 +201,13 @@ const PhoiCaBiet = () => {
 
   const handelSelectBoxChange = (e) => {
     const { value } = e.target;
+    console.log(value);
+
     setPageState((prev) => ({
       ...prev,
       lyDoHuy: value
     }));
   };
-
   return (
     <>
       <MainCard hideInstruct title={t('Tạo phôi cá biệt')}>
@@ -258,7 +259,7 @@ const PhoiCaBiet = () => {
         <Grid item container spacing={1} mb={2} justifyContent={'center'} alignItems={'center'}>
           <Grid item lg={2} md={3} sm={3} xs={isXs ? 12 : 6}>
             <Button variant="contained" fullWidth onClick={formik.handleSubmit} color="error" startIcon={<IconTransferIn />}>
-              {t('Tạo phôi cá biệt')}
+              {t('Hủy số hiệu phôi')}
             </Button>
           </Grid>
         </Grid>

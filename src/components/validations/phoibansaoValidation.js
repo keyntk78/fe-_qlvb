@@ -10,7 +10,9 @@ export const usePhoibansaoValidationSchema = (isUpdate = false) => {
     SoLuongPhoi: Yup.string().required(t('validation.phoivanbang.soluongphoi')),
     NgayMua: Yup.string().required(t('validation.phoivanbang.ngaymua')),
     ChieuNgang: Yup.string().required(t('Chiều ngang phôi không được để trống')),
-    ChieuDoc: Yup.string().required(t('Chiều dọc phôi không được để trống'))
+    ChieuDoc: Yup.string().required(t('Chiều dọc phôi không được để trống')),
+    SoHieuPhoi: Yup.string().required(t('Tiền tố phôi không được để trống')),
+    SoBatDau: Yup.string().required(t('Số bắt đầu không được để trống'))
   });
 
   if (!isUpdate) {

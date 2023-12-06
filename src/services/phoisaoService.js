@@ -143,3 +143,23 @@ export async function KichHoatPhoiSao(idphoi) {
     throw error;
   }
 }
+export async function createPhoiCaBiet(data) {
+  try {
+    store.dispatch(setLoading(true));
+    const response = await axiosClient(`PhoiBanSao/CreatePhoiCaBiet`, 'PUT', data);
+    store.dispatch(setLoading(false));
+    return response;
+  } catch (error) {
+    console.error('Error creating Phoicabiet:', error);
+    throw error;
+  }
+}
+export async function getSearchPhoiDaHuyByIdPhoiSao(params) {
+  try {
+    const response = await sendRequest(`PhoiBanSao/GetSearchPhoiDaHuyByIdPhoiBanSao?${params}`, 'GET');
+    return response;
+  } catch (error) {
+    console.error('Error creating PhoiDaHuy:', error);
+    throw error;
+  }
+}

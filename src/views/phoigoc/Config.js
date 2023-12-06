@@ -203,7 +203,7 @@ const Config = () => {
           form={form}
           openPopup={openSubPopup}
           type="subpopup"
-          maxWidth={form === 'edit' ? 'sm' : 'md'}
+          maxWidth={form === 'edit' ? 'sm' : form === 'xemtruoc' ? 'lg' : 'md'}
           bgcolor={form === 'delete' ? '#F44336' : '#2196F3'}
         >
           {form === 'edit' ? <Edit /> : form === 'xemtruoc' ? <Xemtruoc /> : form === 'xemtruocsample' ? <Xemtruoc isSample /> : ''}
