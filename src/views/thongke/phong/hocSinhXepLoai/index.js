@@ -15,9 +15,7 @@ import i18n from 'i18n';
 import { getXepLoaiHocSinh } from 'services/hocsinhService';
 import MainCard from 'components/cards/MainCard';
 import { getAllDonvi } from 'services/donvitruongService';
-import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
-// import { getAllHedaotao } from 'services/hedaotaoService';
 import { getAllNamthi } from 'services/namthiService';
 import ExportExcel from './ExportExcel';
 
@@ -25,7 +23,6 @@ export default function ThongKeHocSinhTheoNam() {
   const isXs = useMediaQuery('(max-width:600px)');
   const language = i18n.language;
   const { t } = useTranslation();
-  // const [heDaoTao, setHeDaoTao] = useState([]);
   const [namHoc, setNamHoc] = useState([]);
   const [donvis, setDonvis] = useState([]);
   const [search, setSearch] = useState(false);
@@ -166,8 +163,6 @@ export default function ThongKeHocSinhTheoNam() {
     setPageState((old) => ({ ...old, namHoc: selectedValue }));
   };
 
-  console.log(pageState);
-
   const handleExport = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
@@ -297,7 +292,6 @@ export default function ThongKeHocSinhTheoNam() {
           disableSelectionOnClick={true}
         />
       </MainCard>
-      <BackToTop />
     </>
   );
 }

@@ -6,7 +6,7 @@ const DatainBang = ({ duLieuPhoi, studentDataList, positionConfig, componentRef 
   const Image = config.urlFile + 'PhoiGoc/' + duLieuPhoi.anhPhoi;
   const chieuNgang = duLieuPhoi ? duLieuPhoi.chieuNgang : 19;
   const chieuDoc = duLieuPhoi ? duLieuPhoi.chieuDoc : 13;
-  console.log(duLieuPhoi);
+
   return (
     <div ref={componentRef} style={{ marginTop: '10px', marginLeft: '60px' }}>
       <div

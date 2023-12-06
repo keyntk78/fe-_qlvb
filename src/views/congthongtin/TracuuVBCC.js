@@ -21,7 +21,6 @@ import ActionButtons from 'components/button/ActionButtons';
 import Popup from 'components/controls/popup';
 import InThu from './AnhBang';
 import { openPopupSelector } from 'store/selectors';
-import BackToTop from 'components/scroll/BackToTop';
 
 export default function TracuuVBCC() {
   const openPopup = useSelector(openPopupSelector);
@@ -414,7 +413,6 @@ export default function TracuuVBCC() {
             {form === 'detail' ? <InThu /> : ''}
           </Popup>
         </Container>
-        <BackToTop />
       </div>
     </div>
   );

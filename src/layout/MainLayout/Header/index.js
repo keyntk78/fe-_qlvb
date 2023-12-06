@@ -36,12 +36,18 @@ const Header = ({ handleLeftDrawerToggle }) => {
           const message = await getUnreadMessagesCount(user.id);
           const count = message.data;
           dispatch(setNotificationCount(count));
+        } catch (error) {
+          console.error(error);
+        }
+      }, 2000);
+      setTimeout(async () => {
+        try {
           const response = await getTop10Message(user.id, 10);
           dispatch(setNotifications(response.data));
         } catch (error) {
           console.error(error);
         }
-      }, 2000);
+      }, 3000);
     };
     if (user || reload) {
       fetchDataDL();

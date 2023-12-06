@@ -35,7 +35,6 @@ import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { IconCertificate, IconFileExport, IconFileImport, IconPlus, IconSearch, IconSend, IconTrash, IconList } from '@tabler/icons';
 import Detail from './Detail';
 import { getAllDanToc, getAllDanhmucTN, getCauHinhTuDongXepLoai } from 'services/sharedService';
-import BackToTop from 'components/scroll/BackToTop';
 import InGCNAll from './InGCNAll';
 import ActionButtons from 'components/button/ActionButtons';
 import Edit from '../hocsinhtotnghiep/Edit';
@@ -808,7 +807,6 @@ export default function HocSinh() {
           )}
         </Popup>
       )}
-      <BackToTop />;
     </>
   );
 }

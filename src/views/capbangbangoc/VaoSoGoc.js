@@ -15,7 +15,6 @@ import { useNavigate } from 'react-router-dom';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { createSearchParams } from 'utils/createSearchParams';
 import i18n from 'i18n';
-import BackToTop from 'components/scroll/BackToTop';
 import { Button, Grid, Tooltip } from '@mui/material';
 import { IconDownload } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
@@ -367,7 +366,6 @@ const VaoSoGoc = () => {
           {form === 'edit' ? <EditSoHieu /> : ''}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

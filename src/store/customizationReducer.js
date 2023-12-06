@@ -69,7 +69,8 @@ export const initialState = {
   up_vbcc: '',
   listDanhMuc: [],
   selectedValue: '',
-  urlHuongDan: ''
+  urlHuongDan: '',
+  firstLoad: true
 };
 
 // ==============================|| CUSTOMIZATION REDUCER ||============================== //
@@ -243,11 +244,15 @@ const customizationReducer = (state = initialState, action) => {
         selectedHinhthucdaotao: action.selectedHinhthucdaotao
       };
     //Config
-
     case actionTypes.SELECTED_CONFIG:
       return {
         ...state,
         selectedConfig: action.selectedConfig
+      };
+    case actionTypes.SET_FIRSTLOAD:
+      return {
+        ...state,
+        firstLoad: action.firstLoad
       };
     case actionTypes.INFO_HOCSINH:
       return {

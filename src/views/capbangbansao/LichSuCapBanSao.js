@@ -15,7 +15,6 @@ import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { Chip, Grid } from '@mui/material';
 import { IconFileExport } from '@tabler/icons';
 import * as XLSX from 'xlsx';
-import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { GetSearchLichSuDonYeuCau } from 'services/capbangbansaoService';
 const LichSuCapBanSao = () => {
@@ -326,7 +325,6 @@ const LichSuCapBanSao = () => {
           <h1>{t('not.allow.access')}</h1>
         )}
       </MainCard>
-      <BackToTop />
     </>
   );
 };

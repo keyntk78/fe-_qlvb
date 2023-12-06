@@ -19,7 +19,6 @@ import { getNamthi } from 'services/namthiService';
 import Khoathi from 'views/khoathi/Khoathi';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import { Grid } from '@mui/material';
-import BackToTop from 'components/scroll/BackToTop';
 import QuickSearch from 'components/form/QuickSearch';
 
 const Namthi = () => {
@@ -197,7 +196,6 @@ const Namthi = () => {
           {form === 'add' ? <Add /> : form === 'edit' ? <Edit /> : form === 'khoathi' ? <Khoathi /> : <Delete />}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

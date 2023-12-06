@@ -12,7 +12,6 @@ import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import MainCard from 'components/cards/MainCard';
 import { getAllDanhmucTN, getTruongCuByTruongMoi } from 'services/sharedService';
-import BackToTop from 'components/scroll/BackToTop';
 import { getHocSinhBySoGocCuChuaDuyet } from 'services/sogocService';
 import { getAllTruong } from 'services/sharedService';
 import Popup from 'components/controls/popup';
@@ -619,7 +618,6 @@ export default function SoGocCu() {
           )}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 }

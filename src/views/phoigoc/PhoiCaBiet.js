@@ -15,7 +15,6 @@ import { convertISODateTimeToFormattedDateTime } from 'utils/formatDate';
 import i18n from 'i18n';
 import React from 'react';
 import { Grid, useMediaQuery, Button, Input, FormControl, Select, MenuItem, InputLabel, Checkbox, ListItemText } from '@mui/material';
-import BackToTop from 'components/scroll/BackToTop';
 import { getSearchPhoiDaHuyByIdPhoiGoc } from 'services/phoigocService';
 import FormControlComponent from 'components/form/FormControlComponent ';
 import InputForm from 'components/form/InputForm';
@@ -149,7 +148,7 @@ const PhoiCaBiet = () => {
       const params = await createSearchParams(pageState);
       params.append('lydo', pageState.lyDoHuy.join(';'));
       params.append('idphoigoc', selectedPhoigoc.id);
-      console.log(params);
+
       const response = await getSearchPhoiDaHuyByIdPhoiGoc(params);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -201,8 +200,6 @@ const PhoiCaBiet = () => {
 
   const handelSelectBoxChange = (e) => {
     const { value } = e.target;
-    console.log(value);
-
     setPageState((prev) => ({
       ...prev,
       lyDoHuy: value
@@ -340,7 +337,6 @@ const PhoiCaBiet = () => {
           />
         </MainCard>
       </Grid>
-      <BackToTop />
       {form !== '' && (
         <Popup
           title={title}

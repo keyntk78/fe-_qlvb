@@ -23,7 +23,6 @@ import i18n from 'i18n';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import Edit from 'views/hocsinh/Edit';
 import MainCard from 'components/cards/MainCard';
-import BackToTop from 'components/scroll/BackToTop';
 import Popup from 'components/controls/popup';
 import { getAllNamthi } from 'services/namthiService';
 import CapBang from './CapBang';
@@ -758,7 +757,6 @@ export default function CapBangGoc() {
           )}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 }

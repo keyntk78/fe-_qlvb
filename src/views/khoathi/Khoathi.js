@@ -18,7 +18,6 @@ import { getKhoathi } from 'services/khoathiService';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import { Grid } from '@mui/material';
-import BackToTop from 'components/scroll/BackToTop';
 import MainCard from 'components/cards/MainCard';
 import QuickSearch from 'components/form/QuickSearch';
 
@@ -198,7 +197,6 @@ const Khoathi = () => {
           {form === 'add' ? <Add /> : form === 'edit' ? <Edit /> : <Delete />}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

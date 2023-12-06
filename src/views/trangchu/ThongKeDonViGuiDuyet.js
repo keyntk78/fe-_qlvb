@@ -10,7 +10,6 @@ import { createSearchParams } from 'utils/createSearchParams';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import useLocalText from 'utils/localText';
 import i18n from 'i18n';
-import BackToTop from 'components/scroll/BackToTop';
 import { thongKeGetTruongHasPermision } from 'services/danhmuctotnghiepService';
 import { setReloadData } from 'store/actions';
 import ExitButton from 'components/button/ExitButton';
@@ -141,7 +140,6 @@ export default function ThongkeDonViGuiDuyet({ danhMuc }) {
           <ExitButton type="subsubpopup" />
         </Grid>
       </Grid>
-      <BackToTop />
     </>
   );
 }

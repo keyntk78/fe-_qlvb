@@ -27,7 +27,6 @@ import i18n from 'i18n';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import ResetPassword from './ResetPassword';
 import { Grid } from '@mui/material';
-import BackToTop from 'components/scroll/BackToTop';
 import PermissionsReport from './PermissionsReport';
 import QuickSearch from 'components/form/QuickSearch';
 
@@ -326,7 +325,6 @@ const User = () => {
           )}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

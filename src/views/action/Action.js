@@ -18,7 +18,6 @@ import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import i18n from 'i18n';
 import AddButton from 'components/button/AddButton';
 import { FormControl, Grid, IconButton, Input, InputAdornment, InputLabel } from '@mui/material';
-import BackToTop from 'components/scroll/BackToTop';
 import { IconSearch } from '@tabler/icons';
 import MainCard from 'components/cards/MainCard';
 
@@ -203,7 +202,6 @@ const Action = () => {
             {form === 'add' ? <Add /> : form === 'edit' ? <Edit /> : <Delete />}
           </Popup>
         )}
-        <BackToTop />
       </MainCard>
     </>
   );

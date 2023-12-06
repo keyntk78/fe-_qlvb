@@ -19,7 +19,6 @@ import { handleResponseStatus } from 'utils/handleResponseStatus';
 import useLocalText from 'utils/localText';
 import i18n from 'i18n';
 import MainCard from 'components/cards/MainCard';
-import BackToTop from 'components/scroll/BackToTop';
 import Popup from 'components/controls/popup';
 import AddDonyeucau from './AddDonyeucau';
 import Detail from './Detail';
@@ -393,7 +392,6 @@ export default function DonYeuCau() {
           {form === 'detail' ? <Detail /> : form === 'add' ? <AddDonyeucau /> : ''}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 }

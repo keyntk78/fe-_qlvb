@@ -35,7 +35,6 @@ import { getAllDanToc, getCauHinhTuDongXepLoai } from 'services/sharedService';
 import SapXepSTTHocSinh from './SapXepSTTHocSinh';
 import DuyetAll from './DuyetAll';
 import { getAllDanhmucTN } from 'services/sharedService';
-import BackToTop from 'components/scroll/BackToTop';
 import Import from './Import';
 import Duyet from './Duyet';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
@@ -902,7 +901,6 @@ export default function HocSinh() {
           )}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 }

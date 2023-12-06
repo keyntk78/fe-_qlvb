@@ -14,7 +14,6 @@ import React from 'react';
 import AddDonChinhSua from '../chinhsuavbcc/AddDon';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { Button, Chip, Grid, Tooltip, Typography } from '@mui/material';
-import BackToTop from 'components/scroll/BackToTop';
 import Popup from 'components/controls/popup';
 import DetailHistory from '../chinhsuavbcc/Detail';
 import { getSearchCapLaiVanBang } from 'services/caplaivbccService';
@@ -159,8 +158,6 @@ const CapLaiVBCC = () => {
     }
   ];
 
-  console.log(hasPermission);
-
   const buttonConfigurations = [
     {
       type: 'detail',
@@ -189,7 +186,7 @@ const CapLaiVBCC = () => {
       const params = await createSearchParams(pageState);
       const response = await getSearchCapLaiVanBang(selectHocsinh.cccd, params);
       const data = await response.data;
-      console.log(data);
+
       setHasPermission(data.isPermission);
       const check = handleResponseStatus(response, navigate);
       if (check) {
@@ -308,7 +305,6 @@ const CapLaiVBCC = () => {
           )}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

@@ -23,7 +23,6 @@ import useLocalText from 'utils/localText';
 import i18n from 'i18n';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import MainCard from 'components/cards/MainCard';
-import BackToTop from 'components/scroll/BackToTop';
 import Popup from 'components/controls/popup';
 import { getAllNamthi } from 'services/namthiService';
 import Detail from './Detail';
@@ -787,7 +786,6 @@ export default function Xacminhvanbang() {
           )}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 }

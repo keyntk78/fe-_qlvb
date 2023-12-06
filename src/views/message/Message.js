@@ -14,7 +14,6 @@ import React from 'react';
 import { convertISODateTimeToFormattedDateTime } from 'utils/formatDate';
 import { Button, FormControl, Grid, TextField } from '@mui/material';
 import { IconFileExport, IconSearch } from '@tabler/icons';
-import BackToTop from 'components/scroll/BackToTop';
 import { GetAllMessagesByUserId } from 'services/notificationService';
 import ActionButtons from 'components/button/ActionButtons';
 import Detail from './Detail';
@@ -332,7 +331,6 @@ const Message = () => {
           {form === 'detail' ? <Detail /> : ''}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

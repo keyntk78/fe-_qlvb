@@ -16,7 +16,6 @@ import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import Add from './Add';
 import Edit from './Edit';
 import Delete from './Delete';
-import BackToTop from 'components/scroll/BackToTop';
 import { getMessageConfigByParams } from 'services/messageConfigService';
 import { Grid } from '@mui/material';
 import QuickSearch from 'components/form/QuickSearch';
@@ -197,7 +196,6 @@ const MessageConfig = () => {
           {form === 'add' ? <Add /> : form === 'edit' ? <Edit /> : form === 'delete' ? <Delete /> : ''}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

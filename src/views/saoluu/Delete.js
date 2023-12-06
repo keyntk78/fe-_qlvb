@@ -14,7 +14,7 @@ const DeleteData = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const selectedHocsinh = useSelector(selectedHocsinhSelector);
-  console.log(selectedHocsinh);
+
   const handleDeleteClick = async () => {
     try {
       const Deleted = await DeleteDataBackup(selectedHocsinh.id);

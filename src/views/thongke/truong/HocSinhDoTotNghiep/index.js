@@ -14,7 +14,6 @@ import useLocalText from 'utils/localText';
 import i18n from 'i18n';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import MainCard from 'components/cards/MainCard';
-import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { getAllNamthi } from 'services/namthiService';
 import ExportExcel from './ExportExcel';
@@ -359,7 +358,6 @@ export default function ThongKeHocSinhTotNghiep() {
           disableSelectionOnClick={true}
         />
       </MainCard>
-      <BackToTop />
     </>
   );
 }

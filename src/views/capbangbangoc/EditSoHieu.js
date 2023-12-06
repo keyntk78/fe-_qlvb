@@ -4,10 +4,6 @@ import { openSubPopupSelector, selectedHocsinhSelector, userLoginSelector } from
 import { useTranslation } from 'react-i18next';
 import React from 'react';
 import { Grid } from '@mui/material';
-
-import BackToTop from 'components/scroll/BackToTop';
-
-//import InputForm1 from 'components/form/InputForm1';
 import { useFormik } from 'formik';
 import { ModifySoHieu, getHocSinhByCCCD } from 'services/hocsinhService';
 import { useEffect } from 'react';
@@ -15,8 +11,6 @@ import { useState } from 'react';
 import { setOpenSubPopup, setReloadData, showAlert } from 'store/actions';
 import FormGroupButton from 'components/button/FormGroupButton';
 import useThayDoiSoHieuValidationSchema from 'components/validations/chinhsuasohieuValidation';
-//import FormControlComponent from 'components/form/FormControlComponent ';
-//import InputForm from 'components/form/InputForm';
 import InputForm1 from 'components/form/InputForm1';
 
 const EditSoHieu = () => {
@@ -26,7 +20,7 @@ const EditSoHieu = () => {
   const [IdHocSinh, setIdHocSinh] = useState([]);
   const openSubPopup = useSelector(openSubPopupSelector);
   const dispatch = useSelector(useDispatch);
-  console.log(hocSinh);
+
   const formik = useFormik({
     initialValues: {
       soHieuHienTai: '',
@@ -53,9 +47,7 @@ const EditSoHieu = () => {
     const fetchData = async () => {
       const userbyid = await getHocSinhByCCCD(hocSinh.cccd);
       const datauser = userbyid.data;
-      console.log(datauser);
       setIdHocSinh(datauser);
-
       formik.setValues({
         soHieuHienTai: datauser.soHieuVanBang || '',
         soHieuMoi: datauser.soHieuMoi || ''
@@ -95,7 +87,6 @@ const EditSoHieu = () => {
           <FormGroupButton type="subpopup" />
         </Grid>
       </MainCard>
-      <BackToTop />
     </form>
   );
 };

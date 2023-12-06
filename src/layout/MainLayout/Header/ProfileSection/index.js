@@ -31,7 +31,7 @@ import User1 from 'assets/images/users/user-round.svg';
 // assets
 import { IconEdit, IconLogout, IconSettings, IconUser } from '@tabler/icons';
 import { useTranslation } from 'react-i18next';
-import { setDonvi, setOpenProfile, setUrlHuongDan, userLogin } from 'store/actions';
+import { setDonvi, setFirstLoad, setNotificationCount, setOpenProfile, setUrlHuongDan, userLogin } from 'store/actions';
 import { logout, profile } from 'services/authService';
 import ChangePassword from 'views/pages/authentication/auth/ChangePassword';
 import { openProfileSelector, reloadDataSelector } from 'store/selectors';
@@ -73,6 +73,8 @@ const ProfileSection = () => {
       dispatch(setUrlHuongDan(null));
       dispatch(userLogin(null));
       dispatch(setDonvi(0));
+      dispatch(setFirstLoad(true));
+      dispatch(setNotificationCount(0));
       navigate('/login');
     } catch (err) {
       console.error(err);

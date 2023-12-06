@@ -32,7 +32,6 @@ import { useNavigate } from 'react-router';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { setReloadData } from 'store/actions';
-import BackToTop from 'components/scroll/BackToTop';
 import FormControlComponent from 'components/form/FormControlComponent ';
 
 export default function TracuuDonyeucau() {
@@ -428,7 +427,6 @@ export default function TracuuDonyeucau() {
             </MainCard>
           )}
         </Container>
-        <BackToTop />
       </div>
       {showAlertLogin && <Alert />}
     </div>

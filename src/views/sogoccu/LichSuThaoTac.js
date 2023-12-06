@@ -14,7 +14,6 @@ import { convertISODateTimeToFormattedDateTime } from 'utils/formatDate';
 import { Grid, Typography } from '@mui/material';
 import { IconFileExport } from '@tabler/icons';
 import ExcelJS from 'exceljs';
-import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { format, subMonths } from 'date-fns';
 import { getLichSuThaoTacSoGoc } from 'services/sogocService';
@@ -255,7 +254,6 @@ const LichSuThaoTac = ({ danhMuc, donvi, donviOld }) => {
           <ExitButton />
         </Grid>
       </Grid>
-      <BackToTop />
     </>
   );
 };

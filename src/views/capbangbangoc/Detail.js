@@ -43,7 +43,6 @@ import InputForm from 'components/form/InputForm';
 import ExitButton from 'components/button/ExitButton';
 import AnimateButton from 'components/extended/AnimateButton';
 import Popup from 'components/controls/popup';
-import BackToTop from 'components/scroll/BackToTop';
 import { getPhoiDangSuDung } from 'services/phoigocService';
 import InThu from './InThu';
 import { getHocSinhDuaVaoSoGoc } from 'services/capbangbanchinhService';
@@ -574,7 +573,6 @@ const Detail = ({ type }) => {
           )}
         </Popup>
       )}
-      <BackToTop />
     </form>
   );
 };

@@ -18,7 +18,6 @@ import i18n from 'i18n';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import { getSearchLoaiTinTuc } from 'services/loaitintucService';
 import { Grid } from '@mui/material';
-import BackToTop from 'components/scroll/BackToTop';
 import QuickSearch from 'components/form/QuickSearch';
 
 const Monthi = () => {
@@ -189,7 +188,6 @@ const Monthi = () => {
           {form === 'add' ? <Add /> : form === 'edit' ? <Edit /> : <Delete />}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

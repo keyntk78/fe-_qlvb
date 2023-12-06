@@ -12,7 +12,6 @@ import { createSearchParams } from 'utils/createSearchParams';
 import i18n from 'i18n';
 import React from 'react';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
-import BackToTop from 'components/scroll/BackToTop';
 import config from 'config';
 import { getHistoryThuHoiHuyBo } from 'services/thuhoihuyboService';
 import { IconDownload } from '@tabler/icons';
@@ -143,7 +142,6 @@ const LichSuThuHoi = () => {
           <h1>{t('not.allow.access')}</h1>
         )}
       </MainCard>
-      <BackToTop />
     </>
   );
 };

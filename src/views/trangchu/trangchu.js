@@ -19,7 +19,6 @@ import i18n from 'i18n';
 import { createSearchParams } from 'utils/createSearchParams';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
-import BackToTop from 'components/scroll/BackToTop';
 import ThongKePhong from './ThongKePhong';
 import ThongKeTruong from './ThongKeTruong';
 import Popup from 'components/controls/popup';
@@ -270,34 +269,37 @@ const TrangChu = () => {
 
   useEffect(() => {
     const fetchDataDL = async () => {
-      const response = await getAllDanhmucTN(user ? user.username : '');
+      const response = await getAllDanhmucTN(user?.username || '');
       dispatch(listDanhMuc(response.data));
     };
 
-    const fetchData = async () => {
-      const params = new URLSearchParams();
-      params.append('Order', 1);
-      params.append('OrderDir', 'ASC');
-      params.append('StartIndex', '0');
-      params.append('PageSize', 1000);
-      params.append('NgayDuyet', format(new Date(), 'yyyy-MM-dd'));
-      params.append('NguoiThucHien', user.username ? user.username : '');
-      params.append('TrangThai', pageState.trangThai || '');
-      const response = await getSearchDonYeuCauDaDuyet(params);
-      const response1 = await GetCauHinhByIdDonVi(user.username ? user.username : '');
-      setDataExport(response.data.donYeuCaus);
-      setDataConfig(response1.data);
-    };
+    if (user) {
+      const fetchData = async () => {
+        const params = new URLSearchParams();
+        params.append('Order', 1);
+        params.append('OrderDir', 'ASC');
+        params.append('StartIndex', '0');
+        params.append('PageSize', 1000);
+        params.append('NgayDuyet', format(new Date(), 'yyyy-MM-dd'));
+        params.append('NguoiThucHien', user?.username || '');
+        params.append('TrangThai', pageState.trangThai || '');
+        const response = await getSearchDonYeuCauDaDuyet(params);
+        const response1 = await GetCauHinhByIdDonVi(user.username || '');
+        setDataExport(response.data.donYeuCaus);
+        setDataConfig(response1.data);
+      };
+      if (donvi.laPhong) {
+        fetchDataDL();
+      }
 
-    fetchData();
-
-    if (!firstLoad) {
-      fetchData();
-    } else {
-      setFirstLoad(false);
-    }
-    if (donvi != 0) {
-      fetchDataDL();
+      if (!firstLoad) {
+        fetchData();
+      } else {
+        setFirstLoad(false);
+      }
+      if (donvi != 0) {
+        fetchDataDL();
+      }
     }
   }, [donvi, user]);
 
@@ -538,7 +540,6 @@ const TrangChu = () => {
               )}
             </Popup>
           )}
-          <BackToTop />
         </>
       )}
     </>

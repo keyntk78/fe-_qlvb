@@ -30,8 +30,6 @@ function TraLai() {
     }
   }, [donvi, danhmuc, openPopup]);
 
-  console.log(donvi);
-
   const hanldeTraLai = async () => {
     try {
       const response = await giveBackAllHocSinh(donvi.idTruong, danhmuc.id);

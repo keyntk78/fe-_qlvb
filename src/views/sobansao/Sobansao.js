@@ -32,7 +32,6 @@ import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { convertISODateToFormattedDate, formatDate } from 'utils/formatDate';
 import MainCard from 'components/cards/MainCard';
 import { getAllDanhmucTN } from 'services/sharedService';
-import BackToTop from 'components/scroll/BackToTop';
 import { styled } from '@mui/system';
 // import AnimateButton from 'components/extended/AnimateButton';
 import { useFormik } from 'formik';
@@ -640,7 +639,6 @@ export default function SoBanSao() {
           </Grid>
         </Grid>
       </MainCard>
-      <BackToTop />
     </>
   );
 }

@@ -15,7 +15,6 @@ import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { Button, FormControl, Grid, TextField } from '@mui/material';
 import { IconDownload, IconFileExport, IconSearch } from '@tabler/icons';
 import * as XLSX from 'xlsx';
-import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { getHistoryXacMinh } from 'services/xacminhvanbangService';
 import ActionButtons from 'components/button/ActionButtons';
@@ -321,7 +320,6 @@ const LichSuXacMinh = () => {
           {form === 'detail' ? <Detaillichsu /> : ''}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

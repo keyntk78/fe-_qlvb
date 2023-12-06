@@ -12,7 +12,6 @@ import i18n from 'i18n';
 import React from 'react';
 import { Grid, Paper, Typography } from '@mui/material';
 import { IconCheck, IconFileExport, IconX } from '@tabler/icons';
-import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import CustomButton from 'components/button/CustomButton';
 import Popup from 'components/controls/popup';
@@ -296,7 +295,6 @@ const DanhSachImport = ({ selectedValue, selectedName }) => {
           )}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

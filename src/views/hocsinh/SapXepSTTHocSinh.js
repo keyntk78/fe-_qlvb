@@ -94,7 +94,6 @@ const SapXepSTTHocSinh = ({ danhMuc, donvi }) => {
 
   const fetchDataLop = async () => {
     const lops = await getListLop(donvi, danhMuc);
-    console.log(lops);
     if (lops !== null && lops.data.length > 0) {
       setLops(lops.data);
       setLopSelected(lops.data[0].ma);

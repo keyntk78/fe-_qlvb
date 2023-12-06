@@ -19,7 +19,6 @@ import { Container, useTheme } from '@mui/system';
 import { IconSend } from '@tabler/icons';
 import { createDonyeucau, getAllDanToc, getAllNam, getAllTruong, getPhong } from 'services/congthongtinService';
 import Alert from 'components/controls/alert';
-import BackToTop from 'components/scroll/BackToTop';
 import Popup from 'components/controls/popup';
 import ThongBaoDonyeuCau from './ThongbaoDonYeuCau';
 
@@ -481,7 +480,6 @@ const CreateDonyeucau = () => {
             </Grid>
           </form>
         </Container>
-        <BackToTop />
       </div>
       {showAlertLogin && <Alert />}
       {form !== '' && (
