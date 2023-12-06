@@ -4,8 +4,6 @@ import {
   Radio,
   RadioGroup,
   FormControlLabel,
-  FormControl,
-  InputLabel,
   Select,
   MenuItem,
   Checkbox,
@@ -19,7 +17,7 @@ import { setOpenPopup, setReloadData, showAlert } from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import FormControlComponent from 'components/form/FormControlComponent ';
 import InputForm from 'components/form/InputForm';
-// import { useDongBoValidationSchema } from 'components/validations/dongBoValidation';
+import { useDongBoValidationSchema } from 'components/validations/dongBoValidation';
 import { useState } from 'react';
 import { openPopupSelector, userLoginSelector } from 'store/selectors';
 import XacNhanDongBo from './XacNhanDongBo';
@@ -37,7 +35,7 @@ function DongBo() {
   const isXs = useMediaQuery('(max-width:600px)');
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  // const DongBoValidationSchema = useDongBoValidationSchema();
+  const DongBoValidationSchema = useDongBoValidationSchema();
   const [option, setOption] = useState('all');
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
@@ -52,7 +50,7 @@ function DongBo() {
       StartDate: '',
       EndDate: ''
     },
-    // validationSchema: DongBoValidationSchema,
+    validationSchema: option === 'part' ? '' : DongBoValidationSchema,
     onSubmit: async () => {
       setForm('delete');
       setTitle(t('Xác nhận đồng bộ'));
@@ -134,7 +132,7 @@ function DongBo() {
       <div style={{ textAlign: 'center' }}>
         <Grid item container spacing={isXs ? 0 : 1} columnSpacing={isXs ? 1 : 0} mt={2} justifyContent={'center'} alignItems={'center'}>
           <Grid item xs={8}>
-            <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} label={t('Đồng bộ theo')}>
+            <FormControlComponent xsLabel={isXs ? 0 : 3} xsForm={isXs ? 12 : 9} label={t('Đồng bộ theo')}>
               <RadioGroup style={{ display: 'flex', justifyContent: 'flex-start' }} row value={option} onChange={handleChange}>
                 <FormControlLabel value={'all'} control={<Radio />} label={t('Tất cả')} sx={{ marginTop: '-1px' }} />
                 <FormControlLabel value={'time'} control={<Radio />} label={t('Theo thời gian')} sx={{ marginTop: -'-1px' }} />
@@ -147,14 +145,14 @@ function DongBo() {
           <>
             <Grid item container spacing={isXs ? 0 : 1} columnSpacing={isXs ? 1 : 0} mt={2} justifyContent={'center'}>
               <Grid item xs={8}>
-                <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} isRequire label={t('Ngày bắt đầu')}>
+                <FormControlComponent xsLabel={isXs ? 0 : 3} xsForm={isXs ? 12 : 5} isRequire label={t('Ngày bắt đầu')}>
                   <InputForm formik={formik} name="StartDate" type="date" placeholder={t('Ngày bắt đầu')} />
                 </FormControlComponent>
               </Grid>
             </Grid>
             <Grid item container spacing={isXs ? 0 : 1} columnSpacing={isXs ? 1 : 0} my={1} justifyContent={'center'}>
               <Grid item xs={8}>
-                <FormControlComponent xsLabel={isXs ? 0 : 5} xsForm={isXs ? 12 : 7} isRequire label={t('Ngày kết thúc')}>
+                <FormControlComponent xsLabel={isXs ? 0 : 3} xsForm={isXs ? 12 : 5} isRequire label={t('Ngày kết thúc')}>
                   <InputForm formik={formik} name="EndDate" type="date" placeholder={t('Ngày kết thúc')} />
                 </FormControlComponent>
               </Grid>
@@ -167,15 +165,16 @@ function DongBo() {
           <>
             <Grid item container spacing={isXs ? 0 : 1} columnSpacing={isXs ? 1 : 0} mt={2} justifyContent={'center'}>
               <Grid item lg={8} md={8} sm={12} xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-multiple-checkbox-label">Danh mục tốt nghiệp</InputLabel>
+                <FormControlComponent xsLabel={isXs ? 0 : 3} xsForm={isXs ? 12 : 8} isRequire label={t('Danh mục tốt nghiệp')}>
                   <Select
+                    sx={{ mt: '-5px' }}
+                    fullWidth
                     labelId="demo-multiple-checkbox-label"
                     id="demo-multiple-checkbox"
                     multiple
                     value={listDanhMuc}
                     onChange={handleDanhMucChange}
-                    input={<OutlinedInput label="Danh mục tốt nghiệp" />}
+                    input={<OutlinedInput />}
                     renderValue={(selected) => (
                       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                         {selected.map((value) => (
@@ -191,7 +190,7 @@ function DongBo() {
                       </MenuItem>
                     ))}
                   </Select>
-                </FormControl>
+                </FormControlComponent>
               </Grid>
             </Grid>
           </>
