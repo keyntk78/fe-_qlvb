@@ -19,7 +19,6 @@ import { createSearchParams } from 'utils/createSearchParams';
 import i18n from 'i18n';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import { Grid } from '@mui/material';
-import BackToTop from 'components/scroll/BackToTop';
 import QuickSearch from 'components/form/QuickSearch';
 
 const DonVi = () => {
@@ -234,7 +233,6 @@ const DonVi = () => {
           {form === 'add' ? <Add /> : form === 'edit' ? <Edit /> : form === 'config' ? <Config /> : <Delete />}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

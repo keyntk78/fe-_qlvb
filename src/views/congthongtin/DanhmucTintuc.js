@@ -9,7 +9,6 @@ import { getAllLoaiTinTuc, getLatest4News, getSearchTinTucByIdLoaiTin } from 'se
 import config from 'config';
 import { IconPoint } from '@tabler/icons';
 import { formatDateTinTuc } from 'utils/formatDate';
-import BackToTop from 'components/scroll/BackToTop';
 
 const styles = `
 .title:hover {
@@ -239,7 +238,6 @@ export default function DanhmucTintuc() {
           </Grid>
         </Grid>
       </Container>
-      <BackToTop />
     </>
   );
 }

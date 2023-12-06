@@ -13,7 +13,6 @@ import { handleResponseStatus } from 'utils/handleResponseStatus';
 import useLocalText from 'utils/localText';
 import i18n from 'i18n';
 import MainCard from 'components/cards/MainCard';
-import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { getAllNamthi } from 'services/namthiService';
 import ExportExcel from './ExportExcel';
@@ -253,7 +252,6 @@ export default function ThongKeHocSinh() {
           disableSelectionOnClick={true}
         />
       </MainCard>
-      <BackToTop />
     </>
   );
 }

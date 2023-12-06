@@ -22,7 +22,6 @@ import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { Button, Grid, Paper, TextField, Typography, useMediaQuery } from '@mui/material';
 import { IconCheck, IconFileExport, IconSearch, IconX } from '@tabler/icons';
 import * as XLSX from 'xlsx';
-import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { ThongKeDanhSachVanBangTmp, getDanhSachVanBangTmp } from 'services/xacminhvanbangService';
 import { useTheme } from '@emotion/react';
@@ -464,7 +463,6 @@ const DanhSachImport = () => {
           {form === 'addlist' ? <DuaVaoBangChinh /> : form === 'delete' ? <XoaKhoiBangTam /> : ''}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IconBook, IconFileExport, IconFileImport, IconPaperclip, IconSearch } from '@tabler/icons';
+import { IconBook, IconFileExport, IconPaperclip, IconSearch } from '@tabler/icons';
 import {
   Button,
   Divider,
@@ -32,9 +32,7 @@ import { createSearchParams } from 'utils/createSearchParams';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { convertISODateToFormattedDate, formatDate } from 'utils/formatDate';
 import MainCard from 'components/cards/MainCard';
-// import { getAllDonvi } from 'services/donvitruongService';
 import { getAllDanhmucTN, getTruongCuByTruongMoi } from 'services/sharedService';
-import BackToTop from 'components/scroll/BackToTop';
 import { styled } from '@mui/system';
 import AnimateButton from 'components/extended/AnimateButton';
 import { useFormik } from 'formik';
@@ -43,7 +41,6 @@ import { getHocSinhBySoGoc, getAllTruongSoGoc } from 'services/sogocService';
 import ExportExcel from './ExportExcel';
 import { getAllTruong } from 'services/sharedService';
 import Popup from 'components/controls/popup';
-import FileMau from '../FileMau/FileImportVanBang.xlsx';
 import { getAllKhoathiByDMTN } from 'services/khoathiService';
 import PhuLucSoGoc from 'views/phulucsogoc/PhuLucSoGoc';
 import Import from 'views/ImportDanhSachVanBang/Import';
@@ -152,9 +149,6 @@ export default function SoGoc() {
     dispatch(setOpenPopup(true));
   };
 
-  const handleDowloadTemplate = async () => {
-    window.location.href = FileMau;
-  };
   const handleExportWord = async () => {
     dispatch(setLoading(true));
     generateDocument(pageState1.data, additionalData, donvi, 'sogoc');
@@ -294,12 +288,6 @@ export default function SoGoc() {
     }
   });
 
-  const handleImport = () => {
-    setTitle(t('Import danh sách văn bằng'));
-    setForm('import');
-    dispatch(setOpenPopup(true));
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
@@ -385,16 +373,6 @@ export default function SoGoc() {
     setPageState((old) => ({ ...old, donViOld: selectedValue }));
   };
 
-  const themTuTep = [
-    {
-      type: 'importFile',
-      handleClick: handleImport
-    },
-    {
-      type: 'dowloadTemplate',
-      handleClick: handleDowloadTemplate
-    }
-  ];
   useEffect(() => {
     const fetchData = async () => {
       const params = await createSearchParams(pageState1);
@@ -478,9 +456,6 @@ export default function SoGoc() {
                   </Tooltip>
                 </AnimateButton>
               </Grid>
-              <Grid item>
-                <GroupButtons buttonConfigurations={themTuTep} themtep icon={IconFileImport} title={t('button.import')} />
-              </Grid>
             </Grid>
           )
         }
@@ -495,9 +470,6 @@ export default function SoGoc() {
                   </Button>
                 </Tooltip>
               </AnimateButton>
-            </Grid>
-            <Grid item>
-              <GroupButtons buttonConfigurations={themTuTep} themtep icon={IconFileImport} title={t('button.import')} />
             </Grid>
           </Grid>
         ) : (
@@ -834,7 +806,6 @@ export default function SoGoc() {
           {form === 'dinhkem' ? <AnhSoGoc pageState={pageState} /> : ''}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 }

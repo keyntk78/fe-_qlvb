@@ -18,7 +18,6 @@ import AddButton from 'components/button/AddButton';
 import { createSearchParams } from 'utils/createSearchParams';
 import i18n from 'i18n';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
-import BackToTop from 'components/scroll/BackToTop';
 import { Grid } from '@mui/material';
 import QuickSearch from 'components/form/QuickSearch';
 
@@ -200,7 +199,6 @@ const Role = () => {
           {form === 'add' ? <Add /> : form === 'edit' ? <Edit /> : form === 'permission' ? <Permission /> : <Delete />}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

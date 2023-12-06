@@ -18,7 +18,6 @@ import i18n from 'i18n';
 import { getHedaotao } from 'services/hedaotaoService';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
 import { Grid } from '@mui/material';
-import BackToTop from 'components/scroll/BackToTop';
 import QuickSearch from 'components/form/QuickSearch';
 
 const Hedaotao = () => {
@@ -186,7 +185,6 @@ const Hedaotao = () => {
           {form === 'add' ? <Add /> : form == 'edit' ? <Edit /> : <Delete />}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

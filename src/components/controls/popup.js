@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogTitle, Slide, IconButton, Tooltip, Grid, Typography, useScrollTrigger, Zoom } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, Slide, IconButton, Tooltip, Grid, Typography } from '@mui/material';
 import { forwardRef } from 'react';
 
 import {
@@ -23,7 +23,6 @@ import {
   IconChecks,
   IconEyeOff,
   IconCertificate,
-  IconCircleChevronUp,
   IconSettings,
   IconUsers,
   IconHistory,
@@ -57,11 +56,6 @@ export default function Popup(props) {
   const { t } = useTranslation();
   const { type, form, title, children, openPopup, maxWidth, bgcolor, height, icon: Icon } = props;
   const dispatch = useDispatch();
-  const trigger = useScrollTrigger({ disableHysteresis: true });
-
-  const handleClick = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   const handleCloseClick = () => {
     if (type === 'subpopup') {
@@ -223,11 +217,6 @@ export default function Popup(props) {
         </DialogTitle>
         <DialogContent style={{ height: `${height}px` }}>{children}</DialogContent>
       </Dialog>
-      <Zoom in={trigger}>
-        <IconButton onClick={handleClick} style={{ position: 'fixed', bottom: 35, right: 15 }}>
-          <IconCircleChevronUp size={40} />
-        </IconButton>
-      </Zoom>
     </div>
   );
 }

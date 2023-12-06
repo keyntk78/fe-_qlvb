@@ -30,7 +30,6 @@ import { createSearchParams } from 'utils/createSearchParams';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import MainCard from 'components/cards/MainCard';
-import BackToTop from 'components/scroll/BackToTop';
 import { styled } from '@mui/system';
 import { generateDocument } from './ExportWord';
 import { generatePDF } from './ExportPDF';
@@ -469,7 +468,6 @@ export default function PhuLucSoGoc() {
           <ResetButton />
         </Grid>
       </Grid>
-      <BackToTop />
     </>
   );
 }

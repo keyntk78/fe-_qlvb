@@ -16,7 +16,6 @@ import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { DataGrid } from '@mui/x-data-grid';
 import ActionButtons from 'components/button/ActionButtons';
 import Popup from 'components/controls/popup';
-import BackToTop from 'components/scroll/BackToTop';
 import DeleteHocSinhDuocChon from './Delete';
 import { AddListLichSuXacMinh, getCauHinhXacMinhVanBang } from 'services/xacminhvanbangService';
 import useXacMinhVanBangValidationSchema from 'components/validations/xacminhvanbangValidation';
@@ -257,7 +256,6 @@ const Xacminhnhieunguoi = () => {
             {form === 'delete' ? <DeleteHocSinhDuocChon /> : ''}
           </Popup>
         )}
-        <BackToTop />
       </Grid>
       <Grid item mt={2}>
         <Divider />

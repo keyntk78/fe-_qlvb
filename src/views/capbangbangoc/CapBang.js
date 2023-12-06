@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectedPhoigoc, setDisabledButton, setOpenSubPopup } from 'store/actions';
 import { openPopupSelector, openSubPopupSelector, selectedDanhmucSelector, selectedDonvitruongSelector } from 'store/selectors';
 import { useTranslation } from 'react-i18next';
-import BackToTop from 'components/scroll/BackToTop';
 import { Button, Divider, Grid, Tooltip, Typography, useMediaQuery } from '@mui/material';
 import { IconFileCertificate } from '@tabler/icons';
 import AnimateButton from 'components/extended/AnimateButton';
@@ -162,7 +161,6 @@ const CapBang = ({ dataCCCD }) => {
           {form === 'inbang' ? <InBang duLieuHocSinhSoGoc={daTaSoGoc} /> : ''}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

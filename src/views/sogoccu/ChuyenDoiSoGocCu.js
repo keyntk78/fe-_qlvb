@@ -14,7 +14,6 @@ import React from 'react';
 import { convertISODateTimeToFormattedDateTime } from 'utils/formatDate';
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { IconAddressBook, IconFileExport, IconSearch, IconTransferIn } from '@tabler/icons';
-import BackToTop from 'components/scroll/BackToTop';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { format, subMonths } from 'date-fns';
 import Popup from 'components/controls/popup';
@@ -356,7 +355,6 @@ const ChuyenDoiSoGocCu = () => {
           )}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

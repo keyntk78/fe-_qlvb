@@ -34,7 +34,6 @@ import { getAllKhoathi } from 'services/khoathiService';
 import InputForm from 'components/form/InputForm';
 import ExitButton from 'components/button/ExitButton';
 import { getAllDanhmucTN } from 'services/sharedService';
-import BackToTop from 'components/scroll/BackToTop';
 import SelectForm from 'components/form/SelectForm';
 import { convertDateTimeToDate } from 'utils/formatDate';
 
@@ -501,7 +500,6 @@ const Detail = () => {
           </Grid>
         </Grid>
       </Grid>
-      <BackToTop />
     </form>
   );
 };

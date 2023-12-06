@@ -19,7 +19,6 @@ import i18n from 'i18n';
 import { createSearchParams } from 'utils/createSearchParams';
 import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
-import BackToTop from 'components/scroll/BackToTop';
 import ThongKePhong from './ThongKePhong';
 import ThongKeTruong from './ThongKeTruong';
 import Popup from 'components/controls/popup';
@@ -541,7 +540,6 @@ const TrangChu = () => {
               )}
             </Popup>
           )}
-          <BackToTop />
         </>
       )}
     </>

@@ -7,7 +7,6 @@ import { Grid, Typography, useMediaQuery } from '@mui/material';
 import config from 'config';
 import { useTranslation } from 'react-i18next';
 import { IconPoint } from '@tabler/icons';
-import BackToTop from 'components/scroll/BackToTop';
 import { formatDateTinTuc } from 'utils/formatDate';
 
 const styles = `
@@ -167,7 +166,6 @@ export default function DetailDonyeucau() {
           </Grid>
         </Grid>
       </Container>
-      <BackToTop />
     </>
   );
 }

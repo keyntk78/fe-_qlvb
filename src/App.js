@@ -13,6 +13,7 @@ import themes from 'themes';
 import NavigationScroll from 'layout/NavigationScroll';
 import { loadingSelector } from 'store/selectors';
 import Loading from 'components/loading/loading';
+import BackToTop from 'components/scroll/BackToTop';
 
 // ==============================|| APP ||============================== //
 
@@ -27,6 +28,7 @@ const App = () => {
         <NavigationScroll>
           <Routes />
           <Loading open={loading} />
+          <BackToTop />
         </NavigationScroll>
       </ThemeProvider>
     </StyledEngineProvider>

@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import { AutoScroll } from '@splidejs/splide-extension-auto-scroll';
 import '@splidejs/splide/dist/css/splide.min.css';
-import BackToTop from 'components/scroll/BackToTop';
 import { IconPoint } from '@tabler/icons';
 import { formatDateTinTuc } from 'utils/formatDate';
 import { createSearchParams } from 'utils/createSearchParams';
@@ -525,7 +524,6 @@ export default function Thongtintintuc() {
           })}
         </Grid>
       </Container>
-      <BackToTop />
       {/* </div> */}
     </>
   );

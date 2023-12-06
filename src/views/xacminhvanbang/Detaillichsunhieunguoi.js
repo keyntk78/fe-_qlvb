@@ -11,7 +11,6 @@ import { setLoading, showAlert } from 'store/actions';
 import ButtonSuccess from 'components/buttoncolor/ButtonSuccess';
 import { DataGrid } from '@mui/x-data-grid';
 import { Language } from '@mui/icons-material';
-import BackToTop from 'components/scroll/BackToTop';
 import useXacMinhVanBangValidationSchema from 'components/validations/xacminhvanbangValidation';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import ExportExcel from './ExportExcel';
@@ -148,7 +147,6 @@ const Detaillichsunhieunguoi = ({ data }) => {
           localeText={Language === 'vi' ? localeText : null}
           disableSelectionOnClick={true}
         />
-        <BackToTop />
       </Grid>
       <Grid item mt={2}>
         <Divider />

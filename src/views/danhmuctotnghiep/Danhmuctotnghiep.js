@@ -28,7 +28,6 @@ import AddButton from 'components/button/AddButton';
 
 import { getSearchDanhmucTN } from 'services/danhmuctotnghiepService';
 import ActionButtons from 'components/button/ActionButtons';
-import BackToTop from 'components/scroll/BackToTop';
 import Permission from './Permission';
 import ThongBao from './ThongBao';
 import QuickSearch from 'components/form/QuickSearch';
@@ -380,7 +379,6 @@ const Danhmuctotnghiep = () => {
           )}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

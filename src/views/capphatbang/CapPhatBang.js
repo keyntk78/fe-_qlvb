@@ -17,7 +17,6 @@ import DetailPhatBang from 'views/capphatbang/Detail';
 import Detail from 'views/hocsinhtotnghiep/Detail';
 import MainCard from 'components/cards/MainCard';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
-import BackToTop from 'components/scroll/BackToTop';
 import Popup from 'components/controls/popup';
 import { getAllNamthi } from 'services/namthiService';
 import { getAllHinhthucdaotao } from 'services/hinhthucdaotaoService';
@@ -632,7 +631,6 @@ export default function CapPhatBang() {
           )}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 }

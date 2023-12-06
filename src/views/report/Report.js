@@ -16,7 +16,6 @@ import AddButton from 'components/button/AddButton';
 import { createSearchParams } from 'utils/createSearchParams';
 import i18n from 'i18n';
 import CombinedActionButtons from 'components/button/CombinedActionButtons';
-import BackToTop from 'components/scroll/BackToTop';
 import { Grid } from '@mui/material';
 import { getAllReportByParams } from 'services/reportService';
 import QuickSearch from 'components/form/QuickSearch';
@@ -187,7 +186,6 @@ const Report = () => {
           {form === 'add' ? <Add /> : form === 'edit' ? <Edit /> : <Delete />}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

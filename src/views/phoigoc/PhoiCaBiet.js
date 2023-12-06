@@ -15,7 +15,6 @@ import { convertISODateTimeToFormattedDateTime } from 'utils/formatDate';
 import i18n from 'i18n';
 import React from 'react';
 import { Grid, useMediaQuery, Button, Input, FormControl, Select, MenuItem, InputLabel, Checkbox, ListItemText } from '@mui/material';
-import BackToTop from 'components/scroll/BackToTop';
 import { getSearchPhoiDaHuyByIdPhoiGoc } from 'services/phoigocService';
 import FormControlComponent from 'components/form/FormControlComponent ';
 import InputForm from 'components/form/InputForm';
@@ -338,7 +337,6 @@ const PhoiCaBiet = () => {
           />
         </MainCard>
       </Grid>
-      <BackToTop />
       {form !== '' && (
         <Popup
           title={title}

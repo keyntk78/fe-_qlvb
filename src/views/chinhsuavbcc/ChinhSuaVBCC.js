@@ -14,7 +14,6 @@ import React from 'react';
 import AddDonChinhSua from './AddDon';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { Button, Chip, Grid, Tooltip, Typography } from '@mui/material';
-import BackToTop from 'components/scroll/BackToTop';
 import { getSearchLichSuChinhSuaVanBang } from 'services/chinhsuavbccService';
 import ActionButtons from 'components/button/ActionButtons';
 import Popup from 'components/controls/popup';
@@ -309,7 +308,6 @@ const ChinhSuaVBCC = () => {
           )}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

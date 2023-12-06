@@ -13,7 +13,6 @@ import SaveButtonTable from 'components/button/SaveButtonTable';
 import ExitButton from 'components/button/ExitButton';
 import React from 'react';
 import { Box } from '@mui/system';
-import BackToTop from 'components/scroll/BackToTop';
 
 const Decentralization = () => {
   const dispatch = useDispatch();
@@ -320,7 +319,6 @@ const Decentralization = () => {
           <ExitButton />
         </Grid>
       </Grid>
-      <BackToTop />
     </>
   );
 };

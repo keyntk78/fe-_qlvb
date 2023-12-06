@@ -22,7 +22,6 @@ import Delete from './Delete';
 import Show from './Show';
 import Hide from './Hide';
 import { Chip, FormControl, Grid, InputLabel, MenuItem, Select, Button } from '@mui/material';
-import BackToTop from 'components/scroll/BackToTop';
 import { IconSearch } from '@tabler/icons';
 import QuickSearch from 'components/form/QuickSearch';
 
@@ -354,7 +353,6 @@ const TinTuc = () => {
           )}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

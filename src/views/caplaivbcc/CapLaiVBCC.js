@@ -14,7 +14,6 @@ import React from 'react';
 import AddDonChinhSua from '../chinhsuavbcc/AddDon';
 import { convertISODateToFormattedDate } from 'utils/formatDate';
 import { Button, Chip, Grid, Tooltip, Typography } from '@mui/material';
-import BackToTop from 'components/scroll/BackToTop';
 import Popup from 'components/controls/popup';
 import DetailHistory from '../chinhsuavbcc/Detail';
 import { getSearchCapLaiVanBang } from 'services/caplaivbccService';
@@ -306,7 +305,6 @@ const CapLaiVBCC = () => {
           )}
         </Popup>
       )}
-      <BackToTop />
     </>
   );
 };

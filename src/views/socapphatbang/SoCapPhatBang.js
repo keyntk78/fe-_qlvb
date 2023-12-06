@@ -32,7 +32,6 @@ import { handleResponseStatus } from 'utils/handleResponseStatus';
 import { convertISODateToFormattedDate, formatDate } from 'utils/formatDate';
 import MainCard from 'components/cards/MainCard';
 import { getAllDanhmucTN } from 'services/sharedService';
-import BackToTop from 'components/scroll/BackToTop';
 import { styled } from '@mui/system';
 import { useFormik } from 'formik';
 import { generateDocument } from '../sogoc/ExportWord';
@@ -715,7 +714,6 @@ export default function SoCapPhatBang() {
           </Grid>
         </Grid>
       </MainCard>
-      <BackToTop />
     </>
   );
 }
