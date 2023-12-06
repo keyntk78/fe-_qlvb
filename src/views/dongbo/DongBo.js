@@ -19,12 +19,12 @@ import { setOpenPopup, setReloadData, showAlert } from 'store/actions';
 import { useTranslation } from 'react-i18next';
 import FormControlComponent from 'components/form/FormControlComponent ';
 import InputForm from 'components/form/InputForm';
-import { useDongBoValidationSchema } from 'components/validations/dongBoValidation';
+// import { useDongBoValidationSchema } from 'components/validations/dongBoValidation';
 import { useState } from 'react';
 import { openPopupSelector, userLoginSelector } from 'store/selectors';
 import XacNhanDongBo from './XacNhanDongBo';
 import Popup from 'components/controls/popup';
-import { SyncCollection } from 'services/saoluuService';
+import { SyncCollection, dongBobyDanhMucTotNghiep } from 'services/saoluuService';
 import MainCard from 'components/cards/MainCard';
 import { IconRefresh } from '@tabler/icons';
 import CustomButton from 'components/button/CustomButton';
@@ -37,7 +37,7 @@ function DongBo() {
   const isXs = useMediaQuery('(max-width:600px)');
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const DongBoValidationSchema = useDongBoValidationSchema();
+  // const DongBoValidationSchema = useDongBoValidationSchema();
   const [option, setOption] = useState('all');
   const [title, setTitle] = useState('');
   const [form, setForm] = useState('');
@@ -52,7 +52,7 @@ function DongBo() {
       StartDate: '',
       EndDate: ''
     },
-    validationSchema: DongBoValidationSchema,
+    // validationSchema: DongBoValidationSchema,
     onSubmit: async () => {
       setForm('delete');
       setTitle(t('Xác nhận đồng bộ'));
@@ -95,17 +95,32 @@ function DongBo() {
 
   const handleSubmit = async () => {
     try {
-      const response = await SyncCollection(formik.values.StartDate, formik.values.EndDate);
-
-      if (response.isSuccess == false) {
-        dispatch(showAlert(new Date().getTime().toString(), 'error', response.message.toString()));
+      if (option === 'part') {
+        const response = await dongBobyDanhMucTotNghiep(user.username, listDanhMuc);
+        if (response.isSuccess == false) {
+          dispatch(showAlert(new Date().getTime().toString(), 'error', response.message.toString()));
+        } else {
+          dispatch(setOpenPopup(false));
+          dispatch(setReloadData(true));
+          dispatch(showAlert(new Date().getTime().toString(), 'success', response.message.toString()));
+          formik.resetForm();
+          setOption('all');
+        }
       } else {
-        dispatch(setOpenPopup(false));
-        dispatch(setOpenPopup(false));
-        dispatch(setReloadData(true));
-        dispatch(showAlert(new Date().getTime().toString(), 'success', response.message.toString()));
-        formik.resetForm();
-        setOption('all');
+        const params = new URLSearchParams();
+        params.append('tuNgayDotTotNghiep', formik.values.StartDate);
+        params.append('denNgayDotTotNghiep', formik.values.EndDate);
+        params.append('NguoiThucHien', user.username);
+        const response = await SyncCollection(params);
+        if (response.isSuccess == false) {
+          dispatch(showAlert(new Date().getTime().toString(), 'error', response.message.toString()));
+        } else {
+          dispatch(setOpenPopup(false));
+          dispatch(setReloadData(true));
+          dispatch(showAlert(new Date().getTime().toString(), 'success', response.message.toString()));
+          formik.resetForm();
+          setOption('all');
+        }
       }
     } catch (error) {
       console.error('error' + error);
