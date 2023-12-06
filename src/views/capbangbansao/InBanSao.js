@@ -42,9 +42,9 @@ const InBanSao = () => {
     const fetchDataDLHS = async () => {
       if (selectConfig === optionConfg[0].id) {
         const response_cf = await GetAllTruongDuLieuPhoiBanSao();
-        setDuLieuConFig(response_cf.data.cauHinh);
-        setChieuDai(response_cf.chieuDai);
-        setChieuRong(response_cf.chieuRong);
+        setDuLieuConFig(response_cf.data.cauHinhPhoiBanSaos);
+        setChieuDai(response_cf.data.chieuDoc);
+        setChieuRong(response_cf.data.chieuNgang);
       } else {
         const response_cf = await GetConfigPhoi(phoisao.id);
         setDuLieuConFig(response_cf.data);
@@ -61,7 +61,7 @@ const InBanSao = () => {
     if (phoisao) {
       fetchDataDLHS();
     }
-  }, [phoisao, hocsinhid.hocSinh.id, openPopup, selectConfig]);
+  }, [phoisao, hocsinhid.idHocSinh, openPopup, selectConfig]);
   const soLuongBanSao = hsSoBanSao.soLuongBanSao ? hsSoBanSao.soLuongBanSao : 1;
 
   //Tạo ra dữ liệu in phù hợp với số lượng bản sao yêu cầu
@@ -125,7 +125,7 @@ const InBanSao = () => {
           </Grid>
           <Grid item>
             <FormControl fullWidth variant="outlined">
-              <Select value={selectConfig} onChange={(e) => setSelectConfig(e.target.value)} size="small">
+              <Select value={selectConfig} onChange={(e) => setSelectConfig(e.target.value)} size="small" sx={{ overflow: 'hidden' }}>
                 {optionConfg.map((item) => (
                   <MenuItem key={item.id} value={item.id}>
                     {item.value}

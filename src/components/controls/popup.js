@@ -137,6 +137,8 @@ export default function Popup(props) {
                   <IconBook sx={{ order: 2 }} />
                 ) : form === 'xemtruoc' ? (
                   <IconEye sx={{ order: 2 }} />
+                ) : form === 'xemtruocsample' ? (
+                  <IconEye sx={{ order: 2 }} />
                 ) : form === 'capbang' ? (
                   <IconFileCertificate sx={{ order: 2 }} />
                 ) : form === 'capbangall' ? (

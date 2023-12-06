@@ -21,7 +21,7 @@ const dataMapping = {
   xeploaitotnghiep: 'Giỏi',
   hinhthucdaotao: 'Chính Quy',
   ngaycap: '17',
-  thangcap: '08',
+  thangcap: '8',
   namcap: '2023',
   noicap: 'Tam Nông',
   truongphongdgdt: 'Lê Phước Hậu',
