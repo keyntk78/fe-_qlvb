@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { FormControl, Grid, MenuItem, Select } from '@mui/material';
 import FormGroupButton from 'components/button/FormGroupButton';
 import config from 'config';
 import { useState } from 'react';
@@ -39,7 +39,12 @@ const XemTruoc = ({ isSample = false }) => {
   const chieuNgang = phoigoc ? phoigoc.chieuNgang : 19;
   const chieuDoc = phoigoc ? phoigoc.chieuDoc : 13;
   const [data, setData] = useState([]);
-
+  const [size, setSize] = useState(1);
+  const sizeOptions = [
+    { value: 1, label: '100%' },
+    { value: 0.75, label: '75%' },
+    { value: 0.5, label: '50%' }
+  ];
   useEffect(() => {
     const fetchData = async () => {
       const response = await GetConfigPhoi(phoigoc.id);
@@ -103,55 +108,100 @@ const XemTruoc = ({ isSample = false }) => {
     // console.log(123, 'Element:', itemRefs.current[index].maTruongDuLieu);
     // console.log('Top:', y, 'Left:', x);
     // Cập nhật giá trị trực tiếp thông qua ref
-    itemRefs.current[index].viTriTren = parseInt(y);
-    itemRefs.current[index].viTriTrai = parseInt(x);
+    if (size === 1) {
+      itemRefs.current[index].viTriTren = parseInt(y);
+      itemRefs.current[index].viTriTrai = parseInt(x);
+    } else {
+      itemRefs.current[index].viTriTren = parseInt(y / size);
+      itemRefs.current[index].viTriTrai = parseInt(x / size);
+    }
+  };
+
+  const x = size;
+  const CustomimeSize = {
+    w: chieuNgang * x,
+    h: chieuDoc * x
+  };
+  const handleSize = (e) => {
+    setSize(e.target.value);
+  };
+  const DraggableItem = ({ item, index, onDrag, size }) => {
+    return (
+      <Draggable
+        bounds="parent"
+        key={item.maTruongDuLieu}
+        handle=".handle"
+        defaultPosition={{ x: item.viTriTrai * size, y: item.viTriTren * size }}
+        onDrag={onDrag(index)}
+        size={size} // Pass the size prop
+        disabled={isSample}
+      >
+        <div
+          className="draggable-item"
+          id={item.id}
+          style={{
+            fontWeight: item.dinhDangKieuChu,
+            fontStyle: item.dinhDangKieuChu,
+            fontSize: item.coChu * size + 'px',
+            fontFamily: item.kieuChu,
+            color: item.mauChu,
+            position: 'absolute',
+            display: item.hienThi ? 'block' : 'none'
+          }}
+        >
+          <p
+            className="handle"
+            style={{
+              cursor: 'grab'
+            }}
+          >
+            {showData(item.maTruongDuLieu)}
+          </p>
+        </div>
+      </Draggable>
+    );
   };
 
   return (
     <form onSubmit={handleConfigPosition}>
-      <div style={{ width: '19.5cm', overflow: 'auto', border: '5px outset gray', marginTop: '10px', marginLeft: '60px' }}>
+      <Grid item container xs={3} mt={1} mb={1}>
+        <FormControl fullWidth variant="outlined">
+          <Select value={size} onChange={handleSize} size="small" sx={{ overflow: 'hidden' }}>
+            {sizeOptions.map((item) => (
+              <MenuItem key={item.value} value={item.value}>
+                {item.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+      <div
+        style={{
+          width: CustomimeSize.w + 0.5 * x + 'cm',
+          overflow: 'auto',
+          border: '5px outset gray',
+          display: 'flex',
+          justifyContent: 'center',
+          margin: '0 auto'
+        }}
+      >
         <div
           style={{
             backgroundImage: `url(${Image})`,
-            // width: '19cm',
-            // height: '13cm',
-            width: chieuNgang + 'cm',
-            height: chieuDoc + 'cm',
+            width: CustomimeSize.w + 'cm',
+            height: CustomimeSize.h + 'cm',
             position: 'relative',
             backgroundSize: 'cover'
           }}
         >
           {data.map((item, index) => (
-            <Draggable
-              bounds="parent"
+            <DraggableItem
               key={item.maTruongDuLieu}
-              handle=".handle"
-              defaultPosition={{ x: item.viTriTrai, y: item.viTriTren }}
-              onDrag={handleDrag(index)}
-            >
-              <div
-                className="draggable-item"
-                id={item.id}
-                style={{
-                  fontWeight: item.dinhDangKieuChu,
-                  fontStyle: item.dinhDangKieuChu,
-                  fontSize: item.coChu + 'px',
-                  fontFamily: item.kieuChu,
-                  color: item.mauChu,
-                  position: 'absolute',
-                  display: item.hienThi ? 'block' : 'none'
-                }}
-              >
-                <p
-                  className="handle"
-                  style={{
-                    cursor: 'grab'
-                  }}
-                >
-                  {showData(item.maTruongDuLieu)}
-                </p>
-              </div>
-            </Draggable>
+              item={item}
+              index={index}
+              onDrag={handleDrag}
+              size={size} // Pass the size prop
+            />
           ))}
         </div>
       </div>
