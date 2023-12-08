@@ -18,14 +18,13 @@ import ActionButtons from 'components/button/ActionButtons';
 import Popup from 'components/controls/popup';
 import InThu from './AnhBang';
 import { openPopupSelector } from 'store/selectors';
-// import BackToTop from 'components/scroll/BackToTop';
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 export default function TracuuVBCC() {
   const openPopup = useSelector(openPopupSelector);
   const { t } = useTranslation();
-  const [isChecked, setIsChecked] = useState(false);
   const [showMain, setShowmain] = useState(false);
   const [successCapcha, setSuccessCapcha] = useState(false);
+  const [userCaptcha, setUserCaptcha] = useState('');
   const theme = useTheme();
   const [namHoc, setNamHoc] = useState([]);
   const [donVi, setDonVi] = useState([]);
@@ -135,11 +134,17 @@ export default function TracuuVBCC() {
   };
 
   const handleSubmit = async () => {
-    if (isChecked === false) {
-      setError('Vui lòng kiểm tra Recapcha');
+    if (validateCaptcha(userCaptcha) === false) {
+      setError('Mã không chính xác, nhập lại mã mới');
+
+      setSuccessCapcha(false);
+      document.getElementById('user_captcha_input').value = '';
+      setUserCaptcha('');
     } else {
+      setSuccessCapcha(true);
       setError('');
-      if (isChecked === true && namHoc && hoTen && ngaySinh && selectDonVi) {
+      document.getElementById('user_captcha_input').setAttribute('readonly', 'true');
+      if (validateCaptcha(userCaptcha) === true && namHoc && hoTen && ngaySinh && selectDonVi) {
         setShowmain(true);
         setPageState((old) => ({ ...old, isLoading: true }));
         const params = await createSearchParams(pageState);
@@ -173,6 +178,17 @@ export default function TracuuVBCC() {
       } else {
         setError('Hãy điền đầy đủ thông tin');
       }
+      setTimeout(() => {
+        try {
+          setSuccessCapcha(false);
+          document.getElementById('user_captcha_input').removeAttribute('readonly');
+          loadCaptchaEnginge(6);
+          document.getElementById('user_captcha_input').value = '';
+          setError('Mã hết thời gian, vui lòng kiểm tra lại');
+        } catch (error) {
+          console.error(error);
+        }
+      }, 60000);
     }
   };
 
@@ -195,34 +211,10 @@ export default function TracuuVBCC() {
     };
     fetchData();
   }, []);
-
-  const doSubmit = () => {
-    let user_captcha = document.getElementById('user_captcha_input').value;
-
-    if (validateCaptcha(user_captcha) === true) {
-      setIsChecked(true);
-      setSuccessCapcha(true);
-      setError('');
-      document.getElementById('user_captcha_input').setAttribute('readonly', 'true');
-      setTimeout(() => {
-        try {
-          setIsChecked(false);
-          setSuccessCapcha(false);
-          document.getElementById('user_captcha_input').removeAttribute('readonly');
-          loadCaptchaEnginge(6);
-          document.getElementById('user_captcha_input').value = '';
-          setError('Mã hết thời gian, vui lòng kiểm tra lại');
-        } catch (error) {
-          console.error(error);
-        }
-      }, 60000);
-    } else {
-      setIsChecked(false);
-      setSuccessCapcha(false);
-      document.getElementById('user_captcha_input').value = '';
-      setError('Mã không chính xác, nhập lại mã mới');
-    }
+  const handleInputChange = (event) => {
+    setUserCaptcha(event.target.value);
   };
+
   return (
     <div>
       <div style={{ backgroundColor: '#F7F7F7', minHeight: `calc(100vh - 285px)` }}>
@@ -359,18 +351,12 @@ export default function TracuuVBCC() {
                       type="text"
                       variant="outlined"
                       size="small"
+                      onChange={handleInputChange}
+                      value={userCaptcha}
                     />
                   </Grid>
 
-                  <Grid item>
-                    {successCapcha ? (
-                      <IconCheck />
-                    ) : (
-                      <Button variant="contained" onClick={() => doSubmit()}>
-                        Kiểm Tra
-                      </Button>
-                    )}
-                  </Grid>
+                  <Grid item>{successCapcha ? <IconCheck /> : ''}</Grid>
                 </Grid>
               </Box>
             </Grid>

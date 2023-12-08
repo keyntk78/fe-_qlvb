@@ -40,7 +40,7 @@ export default function TracuuDonyeucau() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const language = i18n.language;
-  const [isChecked, setIsChecked] = useState(false);
+  const [userCaptcha, setUserCaptcha] = useState('');
   const [showMain, setShowmain] = useState(false);
   const [successCapcha, setSuccessCapcha] = useState(false);
   const theme = useTheme();
@@ -81,7 +81,6 @@ export default function TracuuDonyeucau() {
     setMaDon('');
     document.getElementById('user_captcha_input').value = '';
     setSuccessCapcha(false);
-    setIsChecked(false);
     loadCaptchaEnginge(6);
     setError('');
   };
@@ -147,11 +146,17 @@ export default function TracuuDonyeucau() {
     setSelectNamHoc(selectedValue);
   };
   const handleSubmit = async () => {
-    if (isChecked === false) {
-      setError('Vui lòng kiểm tra Recapcha');
+    if (validateCaptcha(userCaptcha) === false) {
+      setError('Mã không chính xác, nhập lại mã mới');
+
+      setSuccessCapcha(false);
+      document.getElementById('user_captcha_input').value = '';
+      setUserCaptcha('');
     } else {
+      setSuccessCapcha(true);
       setError('');
-      if (isChecked === true && (maDon || (namHoc && hoTen && ngaSinh))) {
+      document.getElementById('user_captcha_input').setAttribute('readonly', 'true');
+      if (validateCaptcha(userCaptcha) === true && (maDon || (namHoc && hoTen && ngaSinh))) {
         setShowmain(true);
         setPageState((old) => ({ ...old, isLoading: true }));
         const params = await createSearchParams(pageState);
@@ -214,33 +219,8 @@ export default function TracuuDonyeucau() {
     fetchData();
   }, []);
 
-  const doSubmit = () => {
-    let user_captcha = document.getElementById('user_captcha_input').value;
-
-    if (validateCaptcha(user_captcha) === true) {
-      setIsChecked(true);
-      setSuccessCapcha(true);
-      setError('');
-      document.getElementById('user_captcha_input').setAttribute('readonly', 'true');
-
-      setTimeout(() => {
-        try {
-          setIsChecked(false);
-          setSuccessCapcha(false);
-          loadCaptchaEnginge(6);
-          document.getElementById('user_captcha_input').value = '';
-          document.getElementById('user_captcha_input').removeAttribute('readonly');
-          setError('Mã hết thời gian, vui lòng kiểm tra lại');
-        } catch (error) {
-          console.error(error);
-        }
-      }, 60000);
-    } else {
-      setIsChecked(false);
-      setSuccessCapcha(false);
-      document.getElementById('user_captcha_input').value = '';
-      setError('Mã không chính xác, nhập lại mã mới');
-    }
+  const handleInputChange = (event) => {
+    setUserCaptcha(event.target.value);
   };
 
   return (
@@ -385,17 +365,11 @@ export default function TracuuDonyeucau() {
                       type="text"
                       variant="outlined"
                       size="small"
+                      onChange={handleInputChange}
+                      value={userCaptcha}
                     />
                   </Grid>
-                  <Grid item>
-                    {successCapcha ? (
-                      <IconCheck />
-                    ) : (
-                      <Button variant="contained" onClick={() => doSubmit()}>
-                        Kiểm Tra
-                      </Button>
-                    )}
-                  </Grid>
+                  <Grid item>{successCapcha ? <IconCheck /> : ''}</Grid>
                 </Grid>
               </Box>
             </Grid>
