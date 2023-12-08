@@ -339,7 +339,7 @@ export default function TracuuVBCC() {
               <Box display="flex" justifyContent="center" alignItems="center">
                 <Grid item container spacing={1} justifyItems={'center'} alignItems={'center'} justifyContent={'center'}>
                   <Grid item>
-                    <LoadCanvasTemplate />
+                    <LoadCanvasTemplate reloadText="Làm mới Captcha" />
                   </Grid>
                   <Grid item>
                     <TextField
