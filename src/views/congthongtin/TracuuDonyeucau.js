@@ -13,13 +13,13 @@ import {
   useMediaQuery
 } from '@mui/material';
 import { Box, Container, useTheme } from '@mui/system';
-import { IconSearch, IconZoomReset } from '@tabler/icons';
+import { IconCheck, IconSearch, IconZoomReset } from '@tabler/icons';
 import { useEffect, useState } from 'react';
 import i18n from 'i18n';
+import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 
 import { useTranslation } from 'react-i18next';
 
-import ReCAPTCHA from 'react-google-recaptcha';
 import MainCard from 'components/cards/MainCard';
 import { DataGrid } from '@mui/x-data-grid';
 import useLocalText from 'utils/localText';
@@ -37,13 +37,12 @@ import FormControlComponent from 'components/form/FormControlComponent ';
 export default function TracuuDonyeucau() {
   const showAlertLogin = useSelector(showAlertSelector);
   const dispatch = useDispatch();
-  // const reloadData = useSelector(reloadDataSelector);
-  // const [search, setSearch] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const language = i18n.language;
   const [isChecked, setIsChecked] = useState(false);
   const [showMain, setShowmain] = useState(false);
+  const [successCapcha, setSuccessCapcha] = useState(false);
   const theme = useTheme();
   const [namHoc, setNamHoc] = useState([]);
   const [hoTen, setHoTen] = useState('');
@@ -65,14 +64,6 @@ export default function TracuuDonyeucau() {
     startIndex: 0,
     pageSize: 25
   });
-  const handleChange = (value) => {
-    if (value) {
-      setIsChecked(true);
-      setError('');
-    } else {
-      setIsChecked(false);
-    }
-  };
 
   const handleChaneMaDon = () => {
     setIsMaDon(!isMaDon);
@@ -88,6 +79,11 @@ export default function TracuuDonyeucau() {
     setCCCD('');
     setNgaySinh('');
     setMaDon('');
+    document.getElementById('user_captcha_input').value = '';
+    setSuccessCapcha(false);
+    setIsChecked(false);
+    loadCaptchaEnginge(6);
+    setError('');
   };
 
   const columns = [
@@ -206,6 +202,8 @@ export default function TracuuDonyeucau() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        loadCaptchaEnginge(6);
+
         const namhoc = await getAllNam();
         setNamHoc(namhoc.data);
         setSelectNamHoc(namhoc.data?.length > 0 ? namhoc.data[0].id : '');
@@ -215,6 +213,36 @@ export default function TracuuDonyeucau() {
     };
     fetchData();
   }, []);
+
+  const doSubmit = () => {
+    let user_captcha = document.getElementById('user_captcha_input').value;
+
+    if (validateCaptcha(user_captcha) === true) {
+      setIsChecked(true);
+      setSuccessCapcha(true);
+      setError('');
+      document.getElementById('user_captcha_input').setAttribute('readonly', 'true');
+
+      setTimeout(() => {
+        try {
+          setIsChecked(false);
+          setSuccessCapcha(false);
+          loadCaptchaEnginge(6);
+          document.getElementById('user_captcha_input').value = '';
+          document.getElementById('user_captcha_input').removeAttribute('readonly');
+          setError('Mã hết thời gian, vui lòng kiểm tra lại');
+        } catch (error) {
+          console.error(error);
+        }
+      }, 60000);
+    } else {
+      setIsChecked(false);
+      setSuccessCapcha(false);
+      document.getElementById('user_captcha_input').value = '';
+      setError('Mã không chính xác, nhập lại mã mới');
+    }
+  };
+
   return (
     <div>
       <div style={{ backgroundColor: '#F7F7F7', minHeight: `calc(100vh - 285px)` }}>
@@ -247,11 +275,13 @@ export default function TracuuDonyeucau() {
                   <FormControl fullWidth variant="outlined">
                     <RadioGroup value={isMaDon} onChange={handleChaneMaDon}>
                       <Grid container item justifyContent={'center'}>
-                        <Grid item>
-                          <FormControlLabel size="small" value="true" control={<Radio size="small" />} label="Tìm theo mã đơn" />
-                        </Grid>
-                        <Grid item>
-                          <FormControlLabel size="small" value="false" control={<Radio size="small" />} label="Tìm theo họ tên" />
+                        <Grid container item>
+                          <Grid item>
+                            <FormControlLabel size="small" value="true" control={<Radio size="small" />} label="Tìm theo mã đơn" />
+                          </Grid>
+                          <Grid item>
+                            <FormControlLabel size="small" value="false" control={<Radio size="small" />} label="Tìm theo họ tên" />
+                          </Grid>
                         </Grid>
                       </Grid>
                     </RadioGroup>
@@ -339,19 +369,35 @@ export default function TracuuDonyeucau() {
                 </>
               )}
             </Grid>
-
             <Grid item container xs={12} justifyContent="center" alignItems="center" mt={2}>
-              <Grid item xs={12} sm={12} md={6} lg={3}>
-                {/* Center the ReCAPTCHA widget vertically and horizontally */}
-                <Box display="flex" justifyContent="center" alignItems="center">
-                  <ReCAPTCHA
-                    sitekey="6Ld5MtInAAAAAN7ECCJyndwfjGaiAaWEX9PUTLlU"
-                    onChange={handleChange}
-                    disabled={!hoTen && !ngaSinh}
-                    size={'normal'}
-                  />
-                </Box>
-              </Grid>
+              <Box display="flex" justifyContent="center" alignItems="center">
+                <Grid item container spacing={1} justifyItems={'center'} alignItems={'center'} justifyContent={'center'}>
+                  <Grid item>
+                    <LoadCanvasTemplate />
+                  </Grid>
+                  <Grid item>
+                    <TextField
+                      fullWidth
+                      required
+                      name="user_captcha_input"
+                      id="user_captcha_input"
+                      label={t('Nhập mã')}
+                      type="text"
+                      variant="outlined"
+                      size="small"
+                    />
+                  </Grid>
+                  <Grid item>
+                    {successCapcha ? (
+                      <IconCheck />
+                    ) : (
+                      <Button variant="contained" onClick={() => doSubmit()}>
+                        Kiểm Tra
+                      </Button>
+                    )}
+                  </Grid>
+                </Grid>
+              </Box>
             </Grid>
             <Grid item container xs={12} justifyContent={'center'} alignContent={'center'} alignItems="center" mt={1} mb={1}>
               <Grid item>
