@@ -281,7 +281,7 @@ export default function Header() {
                   onDrag={() => false}
                 >
                   <SplideSlide style={{ fontSize: isSmallScreen ? '12px' : '', textAlign: isSmallScreen ? 'center' : '' }}>
-                    {t('chaomung') + ' ' + phong}
+                    {(t('chaomung') + ' ' + phong).toUpperCase()}
                   </SplideSlide>
                 </Splide>
               </Box>
