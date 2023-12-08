@@ -229,8 +229,7 @@ export default function TracuuDonyeucau() {
           setSuccessCapcha(false);
           loadCaptchaEnginge(6);
           document.getElementById('user_captcha_input').value = '';
-          document.getElementById('user_captcha_input').setAttribute('readonly', 'false');
-
+          document.getElementById('user_captcha_input').removeAttribute('readonly');
           setError('Mã hết thời gian, vui lòng kiểm tra lại');
         } catch (error) {
           console.error(error);
@@ -241,7 +240,6 @@ export default function TracuuDonyeucau() {
       setSuccessCapcha(false);
       document.getElementById('user_captcha_input').value = '';
       setError('Mã không chính xác, nhập lại mã mới');
-      loadCaptchaEnginge(6);
     }
   };
 

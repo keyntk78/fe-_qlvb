@@ -208,8 +208,7 @@ export default function TracuuVBCC() {
         try {
           setIsChecked(false);
           setSuccessCapcha(false);
-          document.getElementById('user_captcha_input').setAttribute('readonly', 'false');
-
+          document.getElementById('user_captcha_input').removeAttribute('readonly');
           loadCaptchaEnginge(6);
           document.getElementById('user_captcha_input').value = '';
           setError('Mã hết thời gian, vui lòng kiểm tra lại');
@@ -222,7 +221,6 @@ export default function TracuuVBCC() {
       setSuccessCapcha(false);
       document.getElementById('user_captcha_input').value = '';
       setError('Mã không chính xác, nhập lại mã mới');
-      loadCaptchaEnginge(6);
     }
   };
   return (
