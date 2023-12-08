@@ -11,7 +11,7 @@ const XuLyDuLieuInThu = ({ studentDataList, positionConfig, componentRef, chieuD
   const chieuDoc = chieuDai ? chieuDai : phoigoc ? phoigoc.chieuDoc : 13;
 
   return (
-    <div ref={componentRef} style={{ marginTop: '10px', marginLeft: '60px' }}>
+    <div ref={componentRef} style={{ margin: '10px 0px', overflow: 'auto' }}>
       <div
         //className="printpage"
         style={{
@@ -23,7 +23,7 @@ const XuLyDuLieuInThu = ({ studentDataList, positionConfig, componentRef, chieuD
           height: chieuDoc + 'cm',
           position: 'relative',
           backgroundSize: 'cover',
-          marginBottom: '5px'
+          margin: '0 auto'
         }}
       >
         {Object.keys(positionConfig).map((field) => (

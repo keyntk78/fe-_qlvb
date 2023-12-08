@@ -14,58 +14,57 @@ const XuLyDuLieuIn = ({ studentDataList, positionConfig, componentRef, chieuDai,
 
   return (
     <div>
-      <Carousel
-        renderCenterLeftControls={({ previousSlide }) => <IconChevronsLeft onClick={previousSlide} style={{ cursor: 'pointer' }} />}
-        renderCenterRightControls={({ nextSlide }) => (
-          <IconChevronsRight onClick={nextSlide} style={{ marginTop: '10px', cursor: 'pointer' }} />
-        )}
-        renderBottomCenterControls={({ currentSlide, slideCount }) => (
-          <div className="custom-slide-counter">
-            {currentSlide + 1} / {slideCount}
-          </div>
-        )}
-        autoplayInterval={3000}
-        autoplay={true}
-        wrapAround={true}
-      >
-        {studentDataList.map((student, index) => (
-          <div
-            className="printpage"
-            key={index}
-            style={{
-              border: '1px solid #333',
-              backgroundImage: `url(${Image})`,
-              // width: chieuNgang + 'cm',
-              // height: chieuDoc + 'cm',
-              width: chieuNgang + 'cm',
-              height: chieuDoc + 'cm',
-              position: 'relative',
-              backgroundSize: 'cover',
-              marginTop: '15px',
-              marginLeft: '50px'
-            }}
-          >
-            {Object.keys(positionConfig).map((field) => (
-              <p
-                key={field}
-                style={{
-                  position: 'absolute',
-                  top: `${positionConfig[field].top}px`,
-                  left: `${positionConfig[field].left}px`,
-                  fontWeight: `${positionConfig[field].fontWeight}`,
-                  fontSize: `${positionConfig[field].fontSize}px`,
-                  fontFamily: `${positionConfig[field].fontFamily}`,
-                  color: `${positionConfig[field].color}`,
-                  display: `${positionConfig[field].display}`
-                }}
-              >
-                {student[field]}
-              </p>
-            ))}
-          </div>
-        ))}
-      </Carousel>
-      <div ref={componentRef} style={{ marginTop: '10px', marginLeft: '60px' }}>
+      <div style={{ margin: '10px 0px', overflow: 'auto' }}>
+        <Carousel
+          renderCenterLeftControls={({ previousSlide }) => <IconChevronsLeft onClick={previousSlide} style={{ cursor: 'pointer' }} />}
+          renderCenterRightControls={({ nextSlide }) => (
+            <IconChevronsRight onClick={nextSlide} style={{ marginTop: '10px', cursor: 'pointer' }} />
+          )}
+          renderBottomCenterControls={({ currentSlide, slideCount }) => (
+            <div className="custom-slide-counter">
+              {currentSlide + 1} / {slideCount}
+            </div>
+          )}
+          autoplayInterval={3000}
+          autoplay={true}
+          wrapAround={true}
+        >
+          {studentDataList.map((student, index) => (
+            <div
+              className="printpage"
+              key={index}
+              style={{
+                border: '1px solid #333',
+                backgroundImage: `url(${Image})`,
+                width: chieuNgang + 'cm',
+                height: chieuDoc + 'cm',
+                position: 'relative',
+                backgroundSize: 'cover',
+                margin: '0 auto'
+              }}
+            >
+              {Object.keys(positionConfig).map((field) => (
+                <p
+                  key={field}
+                  style={{
+                    position: 'absolute',
+                    top: `${positionConfig[field].top}px`,
+                    left: `${positionConfig[field].left}px`,
+                    fontWeight: `${positionConfig[field].fontWeight}`,
+                    fontSize: `${positionConfig[field].fontSize}px`,
+                    fontFamily: `${positionConfig[field].fontFamily}`,
+                    color: `${positionConfig[field].color}`,
+                    display: `${positionConfig[field].display}`
+                  }}
+                >
+                  {student[field]}
+                </p>
+              ))}
+            </div>
+          ))}
+        </Carousel>
+      </div>
+      <div ref={componentRef} style={{ margin: '10px 0px', overflow: 'auto' }}>
         {studentDataList.map((student, index) => (
           <div
             className="printpage"
@@ -79,7 +78,7 @@ const XuLyDuLieuIn = ({ studentDataList, positionConfig, componentRef, chieuDai,
               height: chieuDoc + 'cm',
               position: 'relative',
               backgroundSize: 'cover',
-              marginBottom: '5px',
+              margin: '0 auto',
               display: 'none'
             }}
           >

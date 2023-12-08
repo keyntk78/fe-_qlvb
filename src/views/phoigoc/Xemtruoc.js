@@ -42,7 +42,9 @@ const XemTruoc = ({ isSample = false }) => {
   const [size, setSize] = useState(1);
   const sizeOptions = [
     { value: 1, label: '100%' },
-    { value: 0.75, label: '75%' },
+    { value: 0.85, label: '85%' },
+    { value: 0.7, label: '70%' },
+    { value: 0.6, label: '60%' },
     { value: 0.5, label: '50%' }
   ];
   useEffect(() => {
