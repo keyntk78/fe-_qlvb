@@ -151,7 +151,7 @@ const ChuyenDoiSoGocCu = () => {
     params.append('FromDate', pageState.fromDate);
     params.append('ToDate', pageState.toDate);
     const response = await getLichSuChuyenDoiSoGoc(params);
-    const formattedData = response.data.map((item, index) => ({
+    const formattedData = response.data.hocSinhs.map((item, index) => ({
       STT: index + 1,
       'Người tạo': item.nguoiTao,
       'Tên trường cũ': item.tenTruongCu,

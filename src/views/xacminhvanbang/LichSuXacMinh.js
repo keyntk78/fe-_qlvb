@@ -135,7 +135,7 @@ const LichSuXacMinh = () => {
         if (data && data.XacMinhVanBang.lichSuXacMinhVanBangs.length > 0) {
           const dataWithIds = data.XacMinhVanBang.lichSuXacMinhVanBangs.map((row, index) => ({
             idx: index + 1,
-            NgayXacMinh_fm: convertISODateToFormattedDate(row.ngayTrenCongVan),
+            NgayXacMinh_fm: convertISODateToFormattedDate(row.ngayTao),
             ...row
           }));
           // Lưu trữ dữ liệu gốc vào state
