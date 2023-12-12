@@ -79,9 +79,6 @@ export default function TracuuDonyeucau() {
     setCCCD('');
     setNgaySinh('');
     setMaDon('');
-    document.getElementById('user_captcha_input').value = '';
-    setSuccessCapcha(false);
-    loadCaptchaEnginge(6);
     setError('');
   };
 
