@@ -59,7 +59,7 @@ const Decentralization = () => {
   }, [selectedRole]);
 
   const Submmit = async () => {
-    let idfunction = [0];
+    let idfunction = ['0'];
     pageState.data.map((value, index) => {
       const newData = [...pageState.data];
       newData[index].hasPermissions.map(async (value1, index1) => {

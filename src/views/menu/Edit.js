@@ -10,7 +10,7 @@ import { setReloadData, showAlert, setOpenPopup } from 'store/actions';
 import { openPopupSelector, selectedMenuSelector } from 'store/selectors';
 import InputForm from 'components/form/InputForm';
 import { reloadDataSelector } from 'store/selectors';
-import { getAllHedaotao } from 'services/hedaotaoService';
+//import { getAllHedaotao } from 'services/hedaotaoService';
 import FormControlComponent from 'components/form/FormControlComponent ';
 import SelectListIcon from 'components/form/SelectListIcon';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +32,7 @@ const EditMenu = () => {
   const [pageState, setPageState] = useState({
     isLoading: false,
     functionaction: [],
-    hedaotao: [],
+    // hedaotao: [],
     menucha: []
   });
   const formik = useFormik({
@@ -70,7 +70,7 @@ const EditMenu = () => {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
       const functionaction = await getAllFunctionAction();
-      const hedaotao = await getAllHedaotao();
+      //const hedaotao = await getAllHedaotao();
       const menuparent = await getAllMenu();
       const menubyid = await getMenuById(menu1.menuId);
       const datamenubyid = menubyid.data;
@@ -83,11 +83,11 @@ const EditMenu = () => {
         ...row
       }));
 
-      const datahedaotao = await hedaotao.data;
-      const dataWithhdt = datahedaotao.map((row, index) => ({
-        idindex: index + 1,
-        ...row
-      }));
+      // const datahedaotao = await hedaotao.data;
+      // const dataWithhdt = datahedaotao.map((row, index) => ({
+      //   idindex: index + 1,
+      //   ...row
+      // }));
 
       const datamenu = await menuparent.data;
       const dataWithmenu = datamenu.map((row, index) => ({
@@ -102,7 +102,7 @@ const EditMenu = () => {
         ...old,
         isLoading: false,
         functionaction: dataWithIds,
-        hedaotao: dataWithhdt,
+        //hedaotao: dataWithhdt,
         menucha: dataWithmenu
       }));
 
